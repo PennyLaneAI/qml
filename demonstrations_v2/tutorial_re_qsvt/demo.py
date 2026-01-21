@@ -1,7 +1,6 @@
 r"""
 Resource Estimation of QSVT for Matrix Inversion
 ================================================
-
 .. meta::
     :property="og:description": Learn how to estimate the cost of matrix inversion with QSVT for CFD applications
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/resource_estimation.jpeg
@@ -21,7 +20,7 @@ Simulations can only take us so far, and industrially relevant system sizes are 
 meaningfully simulate. Let's see how we can use PennyLane to gather insights for the problem in this regime.
 In this demo, we will use the :mod:`~.pennylane.estimator` module to answer the question:
 
-**What are the logical resource requirements for solving my *matrix inversion* problem on a quantum computer?**
+**What are the logical resource requirements for solving my matrix inversion problem on a quantum computer?**
 
 Estimating the cost of QSVT
 ---------------------------
@@ -40,9 +39,8 @@ polynomial transformation to the matrix :math:`A`:
 
 for :math:`a = 0.25` and :math:`b = 0.75`. Note that this matrix can be expressed as a linear combination of
 unitaries (LCU) :math:`A = 0.25 \cdot \hat{Z}_{1} + 0.75 \cdot \hat{X}_{0}\hat{X}_{1}`. We begin by building the
-**block encoding** operator using the standard method of LCUs. For a recap on this technique, see our
-`Linear combination of unitaries and block encodings <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`
-demo.
+**block encoding** operator using the standard method of LCUs. For a recap on this technique, see our demo on
+`linear combination of unitaries and block encodings <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_.
 """
 import pennylane.estimator as qre
 
@@ -66,12 +64,14 @@ resources = qre.estimate(Standard_BE(Prep, Select))
 print(resources)
 
 ##############################################################################
-# Here the :class:`~.pennylane.estimator.PauliHamiltonian` class is used to represent the LCU in a 
-# compact object for resource estimation, and the :class:`~.pennylane.estimator.ChangeOpBasis` class
-# uses the compute-uncompute pattern to implement the 
-# :math:`\hat{\text{Prep}}^{\dagger} \cdot \hat{\text{Select}} \cdot \hat{\text{Prep}}` operator.
+# Here the :class:`~.pennylane.estimator.compact_hamiltonian.PauliHamiltonian` class is used to
+# represent the LCU in a compact object for resource estimation, and the
+# :class:`~.pennylane.estimator.ops.op_math.symbolic.ChangeOpBasis` class uses the compute-uncompute
+# pattern to implement the :math:`\text{Prep}^{\dagger} \circ \text{Select} \circ \text{Prep}`
+# operator.
 #
-# The resources for :class:`~.pennylane.estimator.QSVT` can then be obtained using this block encoding:
+# The resources for :class:`~.pennylane.estimator.templates.qsp.QSVT` can then be obtained using
+# this block encoding:
 
 qsvt_op = qre.QSVT(
     block_encoding = Standard_BE(Prep, Select),
@@ -83,27 +83,27 @@ resources = qre.estimate(qsvt_op)
 print(resources)
 
 ##############################################################################
-# In the next sections we will explore how to optimize the *degree* and *block encoding*
+# In the next sections we will explore how to optimize the **degree** and **block encoding**
 # in order to minimize the resource requirements of QSVT for matrix inversion.
 #
 # Polynomial Approximations of the Inverse Function
 # -------------------------------------------------
 # The cost of QSVT is directly proportional to the degree of the polynomial transformation. More
 # specifically, the number of calls to the block encoding operator scales linearly with the degree.
-# For matrix inversion, we want to apply a polynomial transformation that :math:`f(x) \approx \frac{1}{x}`
+# For matrix inversion, we want to apply a polynomial transformation :math:`f(x) \approx \frac{1}{x}`
 # within some target error :math:`\epsilon`. In this case, the higher the degree, the better the
 # approximation will be in general.
 #
 # This creates a delicate balance, we want to reduce the degree of the transformation as much as
 # possible without compromising the accuracy of our matrix inversion. Luckily, this problem has 
-# been studied in the literature and there is an expression for the *optimal* polynomial approximation
-# of the inverse function that minimizes the target error given the maximum allowed degree[#sunderhauf2025]_.
+# been studied in the literature and there is an expression for an *optimal polynomial approximation*
+# of the inverse function that minimizes the target error given the maximum allowed degree [#sunderhauf2025]_.
 #
 # |
 #
 # .. figure:: ../_static/demonstration_assets/re_qsvt/optimal_polynomial_approx.png
 #     :align: center
-#     :width: 50%
+#     :width: 75%
 #     :target: javascript:void(0)
 #
 # |
@@ -111,10 +111,10 @@ print(resources)
 # The error in this polynomial approximation can be derived from the degree (:math:`d`) and the condition
 # number of the matrix (:math:`\kappa`) [#sunderhauf2025]_:
 #
-# .. math:: \epsilon_{d}(a) = \frac{(1 - a^{n})}{a(1 + a)^{n-1}} .
+# .. math:: \epsilon(a, n) = \frac{(1 - a^{n})}{a(1 + a)^{n-1}} .
 # 
-# Where :math:`a = \frac{1}{\kappa}` and :math:`n = 2(d + 1)`. We can use this expression to determine the
-# optimal degree needed to approximate :math:`\frac{1}{x}` within the target error :math:`\epsilon`.
+# Where :math:`a = \kappa^{-1}` and :math:`n = 2(d + 1)`. We can use this expression to determine the
+# minimum degree needed to approximate the inverse function within the target error :math:`\epsilon`.
 
 import numpy as np
 
@@ -160,9 +160,9 @@ print("Minimum degree:", optimal_degree_from_error(epsilon, kappa))
 #
 # Instead, we leverage the inherent patterns and *structure* of our matrix in order to implement
 # an efficient block encoding operator. Let's focus on a specific test case from CFD simulations,
-# the lid driven cavity[#lapworth2022]_. The pressure correction matrix that arises from simulating
+# the lid driven cavity [#lapworth2022]_. The pressure correction matrix that arises from simulating
 # flow within this cavity has a very sparse, structured diagonal form. The figure below highlights
-# the non-zero entries in this :math:`(64, 64)` matrix [#lapworth2022]_.
+# the non-zero entries in a :math:`(64, 64)` instance of this matrix [#lapworth2022]_.
 #
 # |
 #
@@ -173,7 +173,7 @@ print("Minimum degree:", optimal_degree_from_error(epsilon, kappa))
 #
 # |
 #
-# This matrix (:math:`A`) can be block encoded using a *d-diagonal encoding* technique[#linaje2025]_ developed
+# This matrix (:math:`A`) can be block encoded using a *d-diagonal encoding* technique [#linaje2025]_ developed
 # by my colleagues here at Xanadu. The method works by loading each diagonal in parallel and then
 # shiftting them to their respective ranks in the matrix. The quantum circit that implements the
 # d-diagonal block encoding is presented below, for more information checkout our paper
@@ -183,7 +183,7 @@ print("Minimum degree:", optimal_degree_from_error(epsilon, kappa))
 #
 # .. figure:: ../_static/demonstration_assets/re_qsvt/SparseBE.png
 #     :align: center
-#     :width: 50%
+#     :width: 80%
 #     :target: javascript:void(0)
 #
 # |
@@ -210,7 +210,7 @@ print("Minimum degree:", optimal_degree_from_error(epsilon, kappa))
 #
 # .. figure:: ../_static/demonstration_assets/re_qsvt/WH_a.png
 #     :align: center
-#     :width: 50%
+#     :width: 90%
 #     :target: javascript:void(0)
 #
 # |
@@ -244,17 +244,17 @@ def WalshHadamard_Dk(num_diags, size_diagonal, num_walsh_coeffs):
 # 
 # Shift Operator
 # ^^^^^^^^^^^^^^
-# Next we will implement the *Shift* operator. This is a product of three subroutines which
+# Next we will implement the Shift operator. This is a product of three subroutines which
 # shift the diagonal entries into the correct rank of the d-diagonal block encoding. Each rank
 # has an associated shift value, the main diagonal has shift value 0. Each diagonal going up
-# is labelled :math:`(+1, +2, \elipsis)` respectively and each diagonal going down is labelled
+# is labelled :math:`(+1, +2, \ldots)` respectively and each diagonal going down is labelled
 # with its negative counterpart. The Shift operator works in three steps: 
 #
-# 1. *Load* the binary representation of the shift value for each non-zero diagonal in :math:`A`.
+# 1. **Load** the binary representation of the shift value for each non-zero diagonal in :math:`A`.
 #
-# 2. *Shift* each of the diagonals in parallel using an :math:`Adder` subroutine.
+# 2. **Shift** each of the diagonals in parallel using an :math:`Adder` subroutine.
 #
-# 3. *Unload* the shift values to restore the quantum register.
+# 3. **Unload** the shift values to restore the quantum register.
 #
 
 def ShiftOp(num_shifts, num_load_wires, wires):
@@ -288,13 +288,13 @@ def ShiftOp(num_shifts, num_load_wires, wires):
 # d-Diagonal Block Encoding
 # ^^^^^^^^^^^^^^^^^^^^^^^^^
 # Now that we have developed all of the pieces, lets bring them together to implement
-# the full d-diagonal block encoding operator[#linaje2025]_.
+# the full d-diagonal block encoding operator [#linaje2025]_.
 #
 # |
 #
 # .. figure:: ../_static/demonstration_assets/re_qsvt/SparseBE.png
 #     :align: center
-#     :width: 50%
+#     :width: 80%
 #     :target: javascript:void(0)
 #
 # |
@@ -332,13 +332,12 @@ def WH_Diagonal_BE(num_diagonals, matrix_size, num_walsh_coeffs):
 # Application: Computational Fluid Dynamics
 # -----------------------------------------
 # In this section we use all of the tools we have developed to **estimate the resource requirements
-# for solving a practical matrix inversion problem**. Following the CFD simulations example
-# [linaje2025]_, we will estimate the resources required to invert a tri-diagonal matrix of size
-# :math:(2^{20}, 2^{20}). This system required a :math:`10^{8}`-degree polynomial approximation of the
-# inverse function.
+# for solving a practical matrix inversion problem**. Following the CFD example [#linaje2025]_, we
+# will estimate the resources required to invert a tri-diagonal matrix of size :math:`(2^{20}, 2^{20})`.
+# This system required a :math:`10^{8}`-degree polynomial approximation of the inverse function.
 # 
 # We will also restrict the gateset to Clifford plus T-gates. This will allows to generate results that
-# are faithful to the ones presented in [linaje2025]_.
+# are faithful to the ones presented in [#linaje2025]_.
 
 degree = 10**8
 matrix_size = 2**20  # 2^20 x 2^20
@@ -364,23 +363,23 @@ res = qre.estimate(matrix_inversion, gate_set)(degree, matrix_size, num_diagonal
 print(res)
 
 ##############################################################################
-# The T-cost of this matrix inversion workflow matche the reported results :math:`3 \cdot 10^{13}` from
+# The T-cost of this matrix inversion workflow matches the reported results :math:`3 \cdot 10^{13}` from
 # the reference.
 #
 # Challenge (Next Steps)
 # ----------------------
 # In this demo, you learned how to use PennyLane's :mod:`~.pennylane.estimator` module to determine the 
-# resource requirements for *matrix inversion* by QSVT. Along the way we explored the two major factors 
+# resource requirements for **matrix inversion by QSVT**. Along the way we explored the two major factors 
 # that impact the cost of QSVT (block encoding and degree of the approximation), as well as how they can
 # be optimized to reduce the overall cost of the algorithm. We showcased how complex circuits can be
-# built from our library of primatives, making resource estimation as simple as putting together Legos.
-# Finally, we applied all of these techniques to estimate the resources for a CDF matrix inversion workflow;
-# validating the results from the literature.
+# built from our library of primatives, making resource estimation as simple as putting together Lego
+# blocks. Finally, we applied all of these techniques to estimate the resources for a CDF matrix inversion
+# workflow; validating the results from literature.
 #
 # Now that you are armed with these tools for resource estimation, I challenge you to find another problem
 # of interest and answer the question:
 #
-# **What are the logical resource requirements for solving my *matrix inversion* problem on a quantum computer?**
+# **What are the logical resource requirements for solving your matrix inversion problem on a quantum computer?**
 #
 # References
 # ----------
@@ -391,17 +390,17 @@ print(res)
 #     "A Grand Unification of Quantum Algorithms"
 #     `arxiv.2105.02859 <https://arxiv.org/pdf/2105.02859>`__, 2021.
 #
-# .. [#sunderhauf2025]
-#
-#     Christoph Sunderhauf, Zalan Nemeth, Adnaan Walayat, Andrew Patterson, and Bjorn K. Berntson,
-#     "Matrix inversion polynomials for the quantum singular value transformation"
-#     `arxiv.2507.15537 <https://arxiv.org/pdf/2507.15537>`__, 2025.
-#
 # .. [#lapworth2022]
 #
 #     Leigh Lapworth
 #     "A HYBRID QUANTUM-CLASSICAL CFD METHODOLOGY WITH BENCHMARK HHL SOLUTIONS"
 #     `arxiv.2206.00419 <https://arxiv.org/pdf/2206.00419>`__, 2022.
+#
+# .. [#sunderhauf2025]
+#
+#     Christoph Sunderhauf, Zalan Nemeth, Adnaan Walayat, Andrew Patterson, and Bjorn K. Berntson,
+#     "Matrix inversion polynomials for the quantum singular value transformation"
+#     `arxiv.2507.15537 <https://arxiv.org/pdf/2507.15537>`__, 2025.
 #
 # .. [#linaje2025]
 #
