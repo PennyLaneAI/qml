@@ -42,7 +42,7 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 # .. figure:: ../_static/demonstration_assets/qubitization_re/pennylane-demo-image-circuit-batching-fig.png
 #    :align: center
 #    :width: 900px
-#    :height: 400px
+#    :height: 300px
 #    :target: javascript:void(0)
 #
 # In the left panel, we load all angles at once using a single call to QROM (pink), but this requires four ancilla registers.
