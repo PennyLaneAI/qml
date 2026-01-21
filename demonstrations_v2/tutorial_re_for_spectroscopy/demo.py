@@ -54,6 +54,9 @@ For this simulation, we follow the algorithm established in Fomichev et al. (202
 which utilizes the `Compressed Double Factorization (CDF) <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`_
 representation of the electronic Hamiltonian combined with Trotterization.
 
+Let's see how expensive it is to simulate the excited states of LiMn oxide clusters,
+which are critical cathode materials for next-generation batteries.
+
 The first step to determining the resources for this simulation is to define the Hamiltonian.
 Here, we must note that the resource requirements for the simulation are independent of the specific integral values,
 and depend rather on the structural parameters of the Hamiltonian, specifically
@@ -74,7 +77,8 @@ limno_ham = [qre.CDFHamiltonian(num_orbitals=i, num_fragments=i) for i in active
 # With the Hamiltonian defined, we move to the time evolution. This requires determining the total simulation time
 # and the number of Trotter steps needed to keep the error within bounds.
 #
-# Following the analysis in Fomichev et al. (2025) [#Fomichev2025]_, we adopt a :math:`2^{nd}` order Trotter-Suzuki product formula.
+# Following the analysis in Fomichev et al. (2025) [#Fomichev2025]_, we adopt a :math:`2^{nd}` order `Trotter-Suzuki product
+# formula <https://pennylane.ai/codebook/hamiltonian-simulation/trotterization>`_.
 # The total simulation time is determined by the desired spectral resolution, while the time step :math:`\Delta t`
 # is derived from the error budget.
 
@@ -156,9 +160,12 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
 # implementation utilizes the **phase gradient trick** proposed by Gidney (2018) [#Gidney2018]_ which implements rotations
 # using adder arithmetic, decomposing to **Toffoli gates**.
 #
-# Since the literature reports costs in Toffolis, we must configure our estimator to use the
-# adder-based synthesis. We resolve this by leveraging :class:`~.pennylane.resource.ResourceConfig` to register
-# a custom decomposition that models single-qubit rotations using the required phase gradient arithmetic.
+# The phase gradient trick is algorithmically superior for this application because it allows
+# us to implement rotations with deterministic cost using arithmetic, rather than relying on
+# probabilistic synthesis sequences. This results in better scaling as the precision requirements increase.
+#
+# To adopt this more efficient strategy, we configure the estimator to use the adder-based
+# synthesis by leveraging :class:`~.pennylane.resource.ResourceConfig`.
 #
 
 
@@ -209,15 +216,15 @@ plt.show()
 # Optimizing the Estimates
 # ^^^^^^^^^^^^^^^^^^^^^^^^
 # From the above plot, we observe that our resource estimates are significantly higher
-# than those reported in literature. This discrepancy is expected. While we aligned the rotation synthesis, the reference algorithm
-# employs several other specialized optimizations specific to this application and some of the decompositions used
-# in PennyLane are more general and hence have higher costs.
+# than those reported in literature. This indicates that the reference algorithm employs specialized,
+# high-efficiency subroutines that go beyond standard library defaults.
 #
-# Fortunately, we can bridge this gap by further customizing the :class:`~.pennylane.estimator.ResourceConfig`.
-# We can teach the estimator the specific cost models used in the paper by using custom decompositions for key
-# operations, similar to how we changed the rotation gate synthesis decomposition above.
+# To close this gap, we need to upgrade our algorithm. Instead of accepting the standard
+# implementations, we can inject specific high-performance subroutines directly into the
+# resource estimator.
 #
-# Let's start by customizing the basis rotation decomposition to use the one from `Kivlichan et al. (2018)
+# We start by optimizing the basis rotation step. We replace the standard decomposition
+# with the specialized, lower-cost circuit from `Kivlichan et al. (2018)
 # <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.120.110501>`_.
 
 
@@ -246,7 +253,6 @@ cfg.set_decomp(qre.BasisRotation, basis_rotation_cost)
 ##################################################################
 # Next, we use the double phase trick for CRZ decomposition as described in Section III A of Fomichev et al. (2025) [#Fomichev2025]_.
 # This optimization reduces the cost of the controlled rotations inside the Trotter steps.
-
 
 def custom_CRZ_decomposition(precision):
     """Decomposition of CRZ gate using double phase trick"""
@@ -292,10 +298,10 @@ plt.show()
 #
 # This application requires a fundamental shift in algorithmic strategy. While XAS simulates the system's time evolution to
 # observe dynamic changes (Trotterization), PDT employs a spectral filtering approach. Here, rather than resolving individual
-# eigenstates, we use **Generalized Quantum Signal Processing (GQSP)** to isolate and measure the total signal within a specific
+# eigenstates, we use Generalized Quantum Signal Processing (GQSP) to isolate and measure the total signal within a specific
 # therapeutic energy window (typically 700–850 nm).
 #
-# To achieve this efficiently, the algorithm utilizes a **Walk Operator** constructed from the **Tensor Hypercontraction (THC)**
+# To achieve this efficiently, the algorithm utilizes a walk operator constructed from the tensor hypercontracted
 # Hamiltonian, which allows for a highly compact block encoding. Similar to the XAS example, we can use the
 # `compact Hamiltonian <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.compact_hamiltonian.THCHamiltonian.html>`__
 # representation to skip the expensive Hamiltonian construction. Let's verify our model using the 11-orbital BODIPY system from the reference.
@@ -303,9 +309,10 @@ plt.show()
 bodipy_ham = qre.THCHamiltonian(num_orbitals=11, tensor_rank=22, one_norm=6.48)
 
 ##################################################################
-# We now construct the `Walk Operator from the Hamiltonian <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_
+# We now construct the `walk Operator from the Hamiltonian <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_
 # using the `~.pennylane.estimator.templates.QubitizeTHC` template. For comprehensive details on how to construct and configure this operator,
-# we recommend the `Resource Estimation for Qubitization <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_ demo.
+# we recommend the `Qubit and gate trade-offs in Qubitized Quantum Phase Estimation
+# <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_ demo.
 # Let's define the precision parameters based on the error budget from reference and construct the walk operator accordingly:
 
 error = 0.0016  # Error budget from Zhou et al. (2025)
@@ -328,26 +335,35 @@ def polynomial_degree(one_norm):
     """Calculate polynomial degree parameters from Zhou et al. (2025)"""
     e_hi = 0.0701  # Ha
     e_lo = 0.0507  # Ha
-    d_hi = 4.7571 * (one_norm + e_hi) / 0.01 + 321.2051
-    d_lo = 4.7571 * (one_norm + e_lo) / 0.01 + 321.2051
-    poly_degree = int(np.ceil(d_hi + d_lo))
-    return poly_degree
+    degree_hi = int(np.ceil(4.7571 * (one_norm + e_hi) / 0.01 + 321.2051))
+    degree_low = int(np.ceil(4.7571 * (one_norm + e_lo) / 0.01 + 321.2051))
+
+    return degree_hi, degree_low
 
 
 ##################################################################
-# We can now set up the resource estimation for the PDT algorithm by defining the circuit as shown in Figure 4
-# of our reference.
+# We can now set up the resource estimation for the PDT algorithm by defining the circuit as shown in Figure 2.
+
+#.. figure:: ../_static/demonstration_assets/xas_re/gqsp_circuit.png
+#  :alt: Illustration of Threshold Projection Circui
+#  :width: 70%
+#  :align: center
+#
+#  Figure 2: *Threshold Projection Circuit*.
 
 
-def pdt_circuit(walk_op, poly_degree, num_slaters=1e4):
+def pdt_circuit(walk_op, poly_degree_hi, poly_degree_low, num_slaters=1e4):
     num_qubits = int(np.ceil(np.log2(num_slaters)))
     qre.QROMStatePreparation(
         num_state_qubits=num_qubits,
         positive_and_real=False,
     )
     qre.QROM(num_bitstrings=2**num_qubits, size_bitstring=num_qubits, select_swap_depth=1)
+
     # GQSP Spectral Filter
-    qre.GQSP(walk_op, d_plus=poly_degree, d_minus=0)
+    qre.GQSP(walk_op, d_plus=poly_degree_hi)
+    qre.GQSP(walk_op, d_plus=poly_degree_low)
+
     # Multi-Controlled-X
     qre.MultiControlledX(
         num_ctrl_wires=2,
@@ -372,16 +388,17 @@ def pdt_circuit(walk_op, poly_degree, num_slaters=1e4):
 qubits_pdt = []
 toffolis_pdt = []
 
-poly_deg = polynomial_degree(bodipy_ham.one_norm)  # Calculate polynomial degree
-resource_counts = qre.estimate(pdt_circuit, config=cfg)(walk_op, poly_deg, num_slaters=1e4)
+poly_deg_hi, poly_deg_low = polynomial_degree(bodipy_ham.one_norm)  # Calculate polynomial degree
+resource_counts = qre.estimate(pdt_circuit, config=cfg)(walk_op, poly_deg_hi, poly_deg_low)
 print(resource_counts)
 
 ######################################################################
-# The estimated resources of **174 qubits** and **:math:`1.96 \times 10^7` Toffoli gates**.
-# align with the reference values of **177 qubits** and **:math:`2.72 \times 10^7` Toffoli gates**.
+# The estimated resources of 174 qubits and :math:`1.96 \times 10^7` Toffoli gates
+# align with the reference values of 177 qubits and :math:`2.72 \times 10^7` Toffoli gates.
 # The small differences can be attributed to different tunable parameters being used.
 # We encourage users to explore further by testing other systems from the reference or analyzing how the resources scale
-# with different error budgets, using the parameter tuning techniques detailed in our `Qubitization demo <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_.
+# with different error budgets, using the parameter tuning techniques detailed in our
+# `Qubitization demo <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_.
 #
 # Conclusion
 # ----------
@@ -390,10 +407,10 @@ print(resource_counts)
 # align closely with theoretical benchmarks across distinct algorithmic paradigms, ranging from standard
 # time-evolution to advanced spectral filtering.
 #
-# Beyond verification, a key takeaway is the flexibility of the estimation framework. We demonstrated how
-# differences in gate counts—often arising from differing compilation assumptions—can be resolved by
-# customizing the :class:`~.pennylane.resource.ResourceConfig`. This allows researchers to seamlessly
-# swap out decomposition rules to match specific
+# Beyond the numbers, this demo highlights the power of the resource estimator as a design tool.
+# It allowed us to move beyond a "black box" standard implementation and actively prototype advanced algorithmic
+# choices like the phase gradient trick and specialized basis rotations.
+# This allows researchers to seamlessly swap out decomposition rules to match specific
 # hardware constraints or theoretical models without needing to rewrite the high-level circuit logic.
 #
 # References
