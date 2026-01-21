@@ -336,7 +336,7 @@ oriented ZX-diagram for a single CNOT:
 This is a valid oriented ZX-diagram for a single CNOT gate. Note that the spiders we had
 to insert above directly correspond to additional information-processing steps, and will take up
 additional qubits in the execution of the CNOT. This may come as a surprise, given that
-CNOT is a simple two-qubit Clifford gate. However, note that the active volume computer
+a CNOT is a simple two-qubit Clifford gate. However, note that the active volume computer
 architecture operates with :doc:`lattice surgery <demos/tutorial_lattice_surgery>`, and
 executing a CNOT with lattice surgery also requires two additional logical qubits as intermediate
 bridge space. Thus, the oriented ZX-diagram simply reproduces the true cost for a CNOT in this
@@ -430,7 +430,7 @@ changes: first, change the shape of the spiders to hexagons, with each corner co
 to a port. Second, enumerate the hexagons for referencing. Any labels work, really. Third and last,
 cut the edges between hexagons and instead draw shortened legs, annotated by the label of the
 hexagon they connect to.
-For our example, we find the logical network
+For our example, we find the logical network:
 
 .. figure:: _static/demonstration_assets/active_volume/example-logical-network.png
     :align: center
@@ -630,7 +630,7 @@ additional space as brand new qubits, since each operation is assumed, in princi
 full width of a circuit (a characteristic that is reinforced by the techniques presented in the
 paper).
 Parallelization thus happens on the *layer structure*, where entire circuit layers are executed
-simultaneously using multiple times the original qubit count.
+simultaneously using the original qubit count multiple times.
 Meanwhile, active volume computation tries to reuse already available, but idle, qubit space at a
 fine-grained *operation level*, and in doing so maximizes the *efficiency* of the computer.
 
