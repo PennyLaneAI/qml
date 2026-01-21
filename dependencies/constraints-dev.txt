@@ -29,3 +29,4 @@ torchvision==0.24.0+cpu ; sys_platform != 'darwin'
 torchvision==0.24.0 ; sys_platform == 'darwin'
 
 optax==0.2.4
+numpy<2.4
