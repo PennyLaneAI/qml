@@ -41,8 +41,12 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 #
 # .. figure:: ../_static/demonstration_assets/qubitization_re/pennylane-demo-image-circuit-batching-fig.png
 #    :align: center
-#    :width: 70%
+#    :width: 100%
 #    :target: javascript:void(0)
+#
+# In the left panel, we load all angles at once using a single call to QROM (pink), but this requires four ancilla registers.
+# In the right panel, a single ancilla register is used, but we need four calls to QROM. The middle panel shows an
+# intermediate strategy with two ancilla registers and two QROM calls.
 #
 # Knob-2: QROM SelectSwap:
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -52,7 +56,7 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 #
 # .. figure:: ../_static/demonstration_assets/qubitization_re/selswap_combine.jpeg
 #    :align: center
-#    :width: 70%
+#    :width: 100%
 #    :target: javascript:void(0)
 #
 # The configuration on the right achieves lower gate complexity by employing auxiliary work wires to enable block-wise data loading.
@@ -77,6 +81,13 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 # useful for well-known benchmarks where these values are already reported in the literature. Furthermore, it allows
 # us to rapidly generate quick estimates for different ranges of one-norms, enabling sensitivity analysis without
 # needing to build the full operator for every case.
+#
+# .. note::
+#     It is important to acknowledge that while the reference used here represented a significant milestone, the
+#     current state-of-the-art for such simulations is achieved by methods utilizing Block-Invariant Symmetry Shift(BLISS)-THC
+#     Hamiltonians [#Caesura]_ or sum-of-squares spectral amplification(SOSSA) [#SOSSA]_. However, we focus on the
+#     THC implementation in this demo as it provides a cleaner and more intuitive framework for understanding
+#     the fundamental trade-offs between qubit and gate resources.
 #
 # Let's initialize the THC representation of the FeMoco Hamiltonian with a 76-orbital active space, with parameters obtained from the literature [#lee2021]_:
 
@@ -119,7 +130,7 @@ n_angle = 20
 # Estimating Qubitized QPE Cost
 # -----------------------------
 # With these parameters in hand, we can esimate the total resources. The full algorithm consists of the Walk Operator,
-# constructed via :class:`~.pennylane.templates.templates.QubitizeTHC`, running within a QPE routine.
+# constructed via :class:`~.pennylane.estimator.templates.QubitizeTHC`, running within a QPE routine.
 #
 # We  note that :class:`~.pennylane.estimator.templates.SelectTHC` oracle implementation is based on the description in
 # von Burg et al. [#vonburg]_. This work uses the phase gradient technique to implement Givens rotations, and thus requires an
@@ -140,7 +151,7 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 ######################################################################
 # Analyzing the Results
 # ---------------------
-# This version of QPE thus requires 2188 qubits and 8.8e10 trillion Toffoli gates (not to mention around 1e13 CNOT gates, which are often ignored). 
+# This version of QPE thus requires 2188 qubits and 8.8e10 trillion Toffoli gates (not to mention around 1e13 CNOT gates, which are often ignored).
 # But logical qubits are a precious resource. Could we implement a variant of the algorithm that uses only
 # 500 logical qubits? Yes!  We can actively trade qubits for gates by modifying the circuit architecture using the "tunable knobs" we discussed
 # earlier.
@@ -259,16 +270,23 @@ for depth in swap_depths:
 # Toffoli count decreases. However, moving to depth 8, the qubit count jumps as the swap network becomes too large to fit
 # entirely within the reused register, forcing the allocation of additional qubits. This marks
 # the point where the "free" optimization ends and the standard trade-off resumes.
-# Let's look at the exact resources for the optimized configuration (Batch Size = 10, Select-Swap Depth = 4):
-
-print(f"Optimized Configuration (Batch=10, Depth=4):")
-print(f"Logical Qubits: {qubit_counts[2]}")
-print(f"Toffoli Gates:  {toffoli_counts[2]:.2e}")
-
-#######################################################################
-# By applying these optimizations, we have successfully reduced the qubit requirements by a factor of 4,
-# bringing the count down from ~2200 to 466. Crucially, this massive spatial saving comes with a relatively
-# manageable cost: the Toffoli gate count increases from ~8.8e10 to ~3.5e11, which is also roughly a factor of 4.
+# To summarize the impact of our optimizations, let's compare the resources required for the naive implementation versus our
+# final optimized configuration (Batch Size = 10, Select-Swap Depth = 4):
+#
+# .. list-table::
+#    :widths: 30 35 35
+#    :header-rows: 1
+#    :align: center
+#
+#    * - Configuration
+#      - Naive Baseline
+#      - Optimized (Batch=10, Depth=4)
+#    * - Logical Qubits
+#      - 2200
+#      - 466
+#    * - Toffoli Gates
+#      - 8.8e10
+#      - 3.5e11
 #
 # Conclusion
 # ^^^^^^^^^^
@@ -295,6 +313,12 @@ print(f"Toffoli Gates:  {toffoli_counts[2]:.2e}")
 #    A Caesura et al.
 #    Faster quantum chemistry simulations on a quantum computer with improved tensor factorization and active volume compilation
 #    `arXiv:2501.06165 (2025), <https://arxiv.org/abs/2501.06165>`__
+#
+# .. [#SOSSA]
+#
+#    Robbie King et al.
+#    Quantum simulation with sum-of-squares spectral amplification
+#    `arXiv:2505.01528 (2025), <https://arxiv.org/abs/2505.01528>`__
 #
 # .. [#lee2021]
 #

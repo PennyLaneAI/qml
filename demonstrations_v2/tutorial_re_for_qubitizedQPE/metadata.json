@@ -37,6 +37,15 @@
             "url": "https://arxiv.org/abs/2501.06165"
         },
         {
+            "id": "SOSSA",
+            "type": "article",
+            "title": "Quantum simulation with sum-of-squares spectral amplification",
+            "authors": "Robbie King, Guang Hao Low, Ryan Babbush, Rolando D. Somma, Nicholas C. Rubin",
+            "journal": "arXiv",
+            "year": "2025",
+            "url": "https://arxiv.org/abs/2505.01528"
+        },
+        {
             "id": "lee2021",
             "type": "article",
             "title": "Even More Efficient Quantum Computations of Chemistry Through Tensor Hypercontraction.",
