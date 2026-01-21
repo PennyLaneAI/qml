@@ -275,12 +275,13 @@ for depth in swap_depths:
 #
 # .. list-table::
 #    :widths: 30 35 35
+#    :width: 80%
 #    :header-rows: 1
 #    :align: center
 #
 #    * - Configuration
 #      - Naive Baseline
-#      - Optimized (Batch=10, Depth=4)
+#      - Optimized
 #    * - Logical Qubits
 #      - 2200
 #      - 466
