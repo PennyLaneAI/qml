@@ -284,11 +284,11 @@ for depth in swap_depths:
 #      - Baseline
 #      - Optimized
 #    * - Logical Qubits
-#      - 2200
+#      - 2188
 #      - 466
 #    * - Toffoli Gates
-#      - 8.8e10
-#      - 3.5e11
+#      - 8.88e10
+#      - 3.45e11
 #
 # Conclusion
 # ^^^^^^^^^^
