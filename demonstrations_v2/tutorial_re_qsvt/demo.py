@@ -66,11 +66,11 @@ print(resources)
 ##############################################################################
 # Here the :class:`~.pennylane.estimator.compact_hamiltonian.PauliHamiltonian` class is used to
 # represent the LCU in a compact object for resource estimation, and the
-# :class:`~.pennylane.estimator.ops.op_math.symbolic.ChangeOpBasis` class uses the compute-uncompute
+# :class:`~.pennylane.estimator.ops.ChangeOpBasis` class uses the compute-uncompute
 # pattern to implement the :math:`\text{Prep}^{\dagger} \circ \text{Select} \circ \text{Prep}`
 # operator.
 #
-# The resources for :class:`~.pennylane.estimator.templates.qsp.QSVT` can then be obtained using
+# The resources for :class:`~.pennylane.estimator.templates.QSVT` can then be obtained using
 # this block encoding:
 
 qsvt_op = qre.QSVT(
@@ -96,7 +96,7 @@ print(resources)
 #
 # This creates a delicate balance, we want to reduce the degree of the transformation as much as
 # possible without compromising the accuracy of our matrix inversion. Luckily, this problem has 
-# been studied in the literature and there is an expression for an *optimal polynomial approximation*
+# been studied in the literature and there is an expression for an *optimal* polynomial approximation
 # of the inverse function that minimizes the target error given the maximum allowed degree [#sunderhauf2025]_.
 #
 # |
@@ -240,7 +240,8 @@ def WalshHadamard_Dk(num_diags, size_diagonal, num_walsh_coeffs):
     return list_of_diagonal_ops
 
 ##############################################################################
-# Here the :class:`~.pennylane.estimator.Prod` class is used to represent a product of operators.
+# Here the :class:`~.pennylane.estimator.ops.Prod` class is used to represent a product of operators,
+# and the :class:`~.pennylane.estimator.ops.Controlled` class represents the controlled operator.
 # 
 # Shift Operator
 # ^^^^^^^^^^^^^^
