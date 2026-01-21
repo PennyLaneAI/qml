@@ -6,7 +6,6 @@ h5py
 jax
 jaxlib
 matplotlib
-numpy
 pennylane-catalyst
 pennylane-lightning
 pennylane
