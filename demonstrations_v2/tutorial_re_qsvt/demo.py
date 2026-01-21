@@ -66,12 +66,12 @@ print(resources)
 ##############################################################################
 # Here the :class:`~.pennylane.estimator.compact_hamiltonian.PauliHamiltonian` class is used to
 # represent the LCU in a compact object for resource estimation, and the
-# :class:`~.pennylane.estimator.ops.ChangeOpBasis` class uses the compute-uncompute
-# pattern to implement the :math:`\text{Prep}^{\dagger} \circ \text{Select} \circ \text{Prep}`
-# operator.
+# `ChangeOpBasis <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.ops.ChangeOpBasis.html>`_
+# class uses the compute-uncompute pattern to implement the
+# :math:`\text{Prep}^{\dagger} \circ \text{Select} \circ \text{Prep}` operator.
 #
-# The resources for :class:`~.pennylane.estimator.templates.QSVT` can then be obtained using
-# this block encoding:
+# The resources for `QSVT <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.QSVT.html>`_
+# can then be obtained using this block encoding:
 
 qsvt_op = qre.QSVT(
     block_encoding = Standard_BE(Prep, Select),
@@ -240,8 +240,10 @@ def WalshHadamard_Dk(num_diags, size_diagonal, num_walsh_coeffs):
     return list_of_diagonal_ops
 
 ##############################################################################
-# Here the :class:`~.pennylane.estimator.ops.Prod` class is used to represent a product of operators,
-# and the :class:`~.pennylane.estimator.ops.Controlled` class represents the controlled operator.
+# Here the `Prod <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.ops.Prod.html>`_
+# class is used to represent a product of operators, and the
+# `Controlled <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.ops.Controlled.html>`_
+# class represents the controlled operator.
 # 
 # Shift Operator
 # ^^^^^^^^^^^^^^
