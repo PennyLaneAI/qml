@@ -41,7 +41,7 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 #
 # .. figure:: ../_static/demonstration_assets/qubitization_re/pennylane-demo-image-circuit-batching-fig.png
 #    :align: center
-#    :width: 500px
+#    :width: 300px
 #    :height: 900px
 #    :target: javascript:void(0)
 #
