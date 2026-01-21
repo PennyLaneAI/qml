@@ -657,8 +657,8 @@ Additionally, you may want to
 
 - dive into the background of :doc:`lattice surgery <demos/tutorial_lattice_surgery>`,
 - learn about Pauli-based computation without active volume considerations in the
-  :doc:`game of surface codes <demos/tutorial_game_of_surface_codes>`, and
-- understand Pauli frame tracking from the perspective
+  :doc:`game of surface codes <demos/tutorial_game_of_surface_codes>`,
+- and understand Pauli frame tracking from the perspective
   of :doc:`classical simulation <demos/tutorial_clifford_circuit_simulations>`.
 
 References
