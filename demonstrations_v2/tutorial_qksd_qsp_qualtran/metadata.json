@@ -15,7 +15,7 @@
         }
     ],
     "executable_stable": true,
-    "_comment_executable_latest": "Qualtran>0.6.1 needs to release in order to have compatibility with PL>=0.45.",
+    "_comment_executable_latest": "Qualtran>0.6.1 needs to release in order to have compatibility with OpenFermion 1.7.1 which is compatible with PL>=0.45 (due to cirq-core).",
     "executable_latest": false,
     "dateOfPublication": "2025-08-29T00:00:00+00:00",
     "dateOfLastModification": "2026-01-21T15:48:14+00:00",
