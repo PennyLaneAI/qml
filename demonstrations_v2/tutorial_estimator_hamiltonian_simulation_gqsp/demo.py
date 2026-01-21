@@ -15,9 +15,9 @@ on the modern framework of **generalized quantum signal processing (GQSP)** and 
 for a simple spin model and for a Heisenberg Hamiltonian for NMR spectral prediction. More information on QSP 
 can be found in our other demos:
 
-    - `Function Fitting using Quantum Signal Processing <https://pennylane.ai/qml/demos/tutorial_qksd_qsp_qualtran>`_
-    - `Using PennyLane and Qualtran to analyze how QSP can improve measurements of molecular properties <https://pennylane.ai/qml/demos/function_fitting_qsp>`_
-    - `Intro to QSVT <https://pennylane.ai/qml/demos/tutorial_intro_qsvt>`_
+- `Function Fitting using Quantum Signal Processing <https://pennylane.ai/qml/demos/tutorial_qksd_qsp_qualtran>`_
+- `Using PennyLane and Qualtran to analyze how QSP can improve measurements of molecular properties <https://pennylane.ai/qml/demos/function_fitting_qsp>`_
+- `Intro to QSVT <https://pennylane.ai/qml/demos/tutorial_intro_qsvt>`_
 
 
 Hamiltonian simulation with GQSP
@@ -36,9 +36,9 @@ GQSP solves this challenge by expressing the complex exponential :math:`e^{-iHt}
 truncated to a degree determined by :math:`t` and :math:`\varepsilon`. The corresponding 
 transformation is then implemented on a block-encoding of :math:`H`. 
 
-In practice it is customary to instead block-encode :math:`e^{-i\arccos (H)t}` and approximate the 
+In practice, it is customary to instead block-encode :math:`e^{-i\arccos (H)t}` and approximate the 
 function :math:`e^{-i\cos (H)t}` through the rapidly-converging Jacobi-Anger expansion [#gqsp]_. 
-This type of block-encoding is a **qubitization** of the Hamiltonian. It can be implemented by a 
+This type of block-encoding is a `qubitization <https://pennylane.ai/qml/demos/tutorial_qubitization>`_ of the Hamiltonian. It can be implemented by a 
 sequence of Prepare and Select operators that are induced by a `linear combination of unitaries 
 (LCU) decomposition <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_. 
 We refer to this block encoding as a **walk operator**.
@@ -136,13 +136,13 @@ print(qre.estimate(HamSim))
 
 ################################### 
 # This is a large system with non-trivial dynamics, yet we can analyze its requirements straightforardly using PennyLane. 
-# We now study a more practical example applying spin dynamics to NMR spectroscopy.
+# We will now study a more practical example applying spin dynamics to NMR spectroscopy.
 #
 #
 # Heisenberg model for NMR spectral prediction
 # --------------------------------------------
 # We follow work presented in Ref. [#nmr]_ describing quantum simulation of NMR in the zero-to-ultralow field regime. 
-# The main computational task is to simulate time evolution under a Heisienberg Hamiltonian of the form
+# The main computational task is to simulate time evolution under a Heisenberg Hamiltonian of the form
 #
 # .. math::
 #   H = \sum_{k\neq l} J_{kl}\vec{\sigma}_k\cdot \vec{\sigma}_l + D_{kl}^{\alpha \beta}\sigma^\alpha_k\sigma^\beta_l 
@@ -158,7 +158,7 @@ print(qre.estimate(HamSim))
 # each kind, which is straightforward from expanding the Hamiltonian. For :math:`N` spins, sums over :math:`k\neq l`
 # run over :math:`N(N-1)/2` terms, and there are 6 possible pairs of Pauli matrices when we account for 
 # anti-commutation. The last sum over :math:`k` contains :math:`N` terms of 3 different Paulis. 
-# We study a system of :math:`N=32` spins as in the paper, which gives the following compact Hamiltonian:
+# We study a system of :math:`N=32` spins, same as in the paper, which gives the following compact Hamiltonian:
 
 pauli_dictionary = {
     "XX": 496,  # 32*31/2 = 496
@@ -261,7 +261,7 @@ plt.show()
 # ----------
 # Hamiltonian simulation with GQSP is a well-established quantum algorithm with many useful applications. 
 # It consists of multiple subroutines that may require time to master, but PennyLane elegantly aggregates them into 
-# easy-to-use operations. These allows us to rapidly and accurately quantify
+# easy-to-use operations. This library of operations allows us to rapidly and accurately quantify
 # resources for specific use cases. Users also have the flexibility to customize the algorithm by leveraging
 # the full breadth of capabilities offered as part of PennyLane's `estimator` module, for example by constructing
 # custom Prepare and Select operators and studying other systems of interest, such as electronic structure, 
