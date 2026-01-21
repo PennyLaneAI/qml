@@ -6,7 +6,8 @@
         }
     ],
     "executable_stable": true,
-    "executable_latest": true,
+    "_comment_executable_latest": "Bug in installation of QML dependencies. Theoretically executable, requires NumPy<2.4.",
+    "executable_latest": false,
     "dateOfPublication": "2025-08-18T00:00:00+00:00",
     "dateOfLastModification": "2026-01-21T00:00:00+00:00",
     "categories": [
