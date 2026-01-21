@@ -54,13 +54,22 @@
             "url": "https://arxiv.org/pdf/2206.00419"
         },
         {
-            "id": "linaje2022",
+            "id": "linaje2025",
             "type": "article",
             "title": "Quantum compilation framework for data loading",
             "authors": "Guillermo Alonso-Linaje, Utkarsh Azad, Jay Soni, Jarrett Smalley, Leigh Lapworth, and Juan Miguel Arrazola",
             "year": "2025",
             "journal": "",
             "url": "https://arxiv.org/pdf/2512.05183"
+        },
+        {
+            "id": "zylberman2025",
+            "type": "article",
+            "title": "Efficient Quantum Circuits for Non-Unitary and Unitary Diagonal Operators with Space-Time-Accuracy trade-offs",
+            "authors": "Julien Zylberman, Ugo Nzongani, Andrea Simonetto, and Fabrice Debbasch",
+            "year": "2025",
+            "journal": "",
+            "url": "https://arxiv.org/pdf/2404.02819"
         }
     ],
     "basedOnPapers": [],
