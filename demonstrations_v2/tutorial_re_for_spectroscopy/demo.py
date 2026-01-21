@@ -1,30 +1,31 @@
 r"""Resource Estimation for Spectroscopy Applications
 =====================================================
-Spectroscopy is a cornerstone of chemistry and physics, providing fundamental insights into the structure and dynamics of matter.
-However, the task of accurately computing the excited states of a system pushes classical computational methods to their limits,
-making it an ideal application space for demonstrating quantum advantage.
-The transition to quantum computing is driven by the need to bypass the exponential scaling inherent in classical excited-state calculations.
-Given that fault-tolerant quantum hardware is a scarce resource,
-we must validate algorithms now to ensure they are viable when hardware becomes available.
-Resource estimation serves as the quantitative checkpoint for this validation.
-In this demo, we analyze the scalability of such key spectroscopy algorithms.
+Spectroscopy is a cornerstone of chemistry and physics, providing fundamental insights into the
+structure and dynamics of matter. But accurate simulations of excited states
+are notoriously expensive, often pushing classical supercomputers to their breaking point.
+
+Can quantum computers do better?
+
+In this demo, we'll find out. We will analyze the scalability of such key spectroscopy algorithms
+through PennyLane's resource estimator and calculate their actual resource requirements. By benchmarking
+these algorithms now, we can ensure they are ready for the fault-tolerant hardware of the future.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
     :align: center
     :width: 70%
     :target: javascript:void(0)
 
-Hadamard Test Circuit
----------------------
+Simulating Spectroscopy on a Quantum Computer
+---------------------------------------------
 
-To estimate resources, we must first identify the high-level quantum subroutine used to extract the spectroscopic data.
-The core challenge in spectroscopy is to calculate time-domain correlation function
-(or Green's function), :math:`\tilde{G}(t)`. This approach is universal for diverse
-spectroscopic techniques, like X-ray Absorption Spectroscopy
-(XAS) [#Fomichev2025]_, Vibrational Spectroscopy (NIR) [#Laoiza2025]_, Electron Energy Loss Spectroscopy (EELS) [#Kunitsa2025]_ etc.
+How do we translate a physical spectroscopy experiment into a quantum circuit?
 
-The `Hadamard test <https://en.wikipedia.org/wiki/Hadamard_test>`__ circuit as presented in Figure 1, serves as the structural template
-for measuring :math:`\tilde{G}(t)` across diverse applications.
+Regardless of the specific technique—whether it is X-ray Absorption (XAS) [#Fomichev2025]_,
+Vibrational Spectroscopy [#Laoiza2025]_, or Electron Energy Loss Spectroscopy [#Kunitsa2025]_—the
+core goal is the same: calculating the time-domain correlation function, :math:`\tilde{G}(t)`.
+
+To measure this property on a quantum computer, we rely on a standard algorithmic template called the
+**Hadamard Test**.
 
 .. figure:: ../_static/demonstration_assets/xas/global_circuit.png
   :alt: Illustration of full Hadamard test circuit with state prep, time evolution and measurement.
@@ -33,7 +34,7 @@ for measuring :math:`\tilde{G}(t)` across diverse applications.
 
   Figure 1: *Hadamard Test Circuit*.
 
-The major cost for this circuit comes from the controlled time evolution block, the efficiency of which
+The dominant cost for this circuit comes from the controlled time evolution block, the efficiency of which
 thus dictates the resource requirements for our algorithms. This cost is dictated by the intersection of
 the spectroscopic domain and our implementation strategy.
 
