@@ -28,7 +28,7 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 # which is constructed from two primary subroutines:
 # the ``Prepare`` oracle, which prepares a state encoding the Hamiltonian coefficients, and the
 # ``Select`` oracle, which applies the Hamiltonian terms controlled by that state. The implementation of these subroutines
-# offers the flexibility to trade off qubits for gates, and vice versa. Specifically, we can tune two algorithmic knobs to perform this trade-off:
+# offers the flexibility to trade off qubits for gates, and vice versa. Specifically, we can tune two algorithmic knobs to perform this trade-off: batched Givens rotations and QROM SelectSwap. Let's see these two in detail. 
 #
 # Knob-1: Batched Givens Rotations
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
