@@ -15,7 +15,7 @@ enable parity measurements of arbitrary Pauli operators, which unlock universal 
     :width: 50%
     :target: javascript:void(0)
 
-For self-consistency, we are going to briefly recap the basic concepts of the surface code and explain why `Pauli product measurements <https://pennylane.ai/compilation/pauli-product-measurement>`__ are sufficient 
+For self-consistency, we are going to briefly recap the basic concepts of the surface code and explain why `Pauli product measurements <https://pennylane.ai/compilation/pauli-based-computation>`__ are sufficient 
 for universal computing. We are then going to explain how to perform such 
 `homological measurements <https://arxiv.org/abs/2410.02753>`__ using lattice splitting and merging.
 
@@ -80,7 +80,7 @@ To achieve universal quantum computing, we need to be able to perform all Cliffo
 Furthermore, we need to be able to reliably inject states to enable `magic state injection <https://pennylane.ai/qml/glossary/what-are-magic-states>`__.
 This line of reasoning is a bottom-up way to show that lattice surgery enables universal quantum computing, which was done in its original introduction [#latticesurgery]_.
 
-Let us alternatively take a top-down approach here and show that we can perform arbitrary `Pauli product measurements <https://pennylane.ai/compilation/pauli-product-measurement>`__ (PPMs), 
+Let us alternatively take a top-down approach here and show that we can perform arbitrary `Pauli product measurements <https://pennylane.ai/compilation/pauli-based-computation>`__ (PPMs), 
 because we know this enables universal quantum computing, as illustrated in, e.g., the :doc:`Game of Surface Codes <demos/tutorial_game_of_surface_codes>` [#Litinski]_.
 The gist of it is that `Pauli product rotations <https://pennylane.ai/compilation/pauli-product-rotations>`__ (PPRs) like :math:`e^{-i \tfrac{\theta}{2} P}`, represented as
 
