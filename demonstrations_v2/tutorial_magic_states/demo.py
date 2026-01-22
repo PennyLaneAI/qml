@@ -147,6 +147,9 @@ print(magic_state_injection_circuit(np.pi / 3))
 # formulated by Gidney et al [#Gidney2024]_. Its primary objective is to synthesize magic states with the 
 # specific fidelities required for large-scale quantum computations as efficiently as possible; 
 # this technique prioritizes engineering efficiency over theoretical elegance or asymptotic behavior.
+# The authors state that their MSC protocol achieves error rates ranging from :math:`10^{-4}`
+# to :math:`10^{-9}` reducing the `spacetime <https://pennylane.ai/qml/demos/tutorial_active_volume>`__ 
+# costs by a factor of ten compared to previous preparation methods. 
 #
 # The protocol consists of four primary stages:
 #
