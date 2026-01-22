@@ -7,6 +7,9 @@
   <a href="https://github.com/PennyLaneAI/qml/actions?query=workflow%3Abuild-dev" title="Dev Branch Build Status">
     <img src="https://img.shields.io/github/actions/workflow/status/PennyLaneAI/qml/v2-build-branch-dev.yml?label=dev&logo=github&style=flat-square" alt="Dev Branch Build Status" />
   </a>
+  <a href="https://github.com/PennyLaneAI/qml/actions/workflows/v2-sync-objects-dot-inv.yml" title="objects.inv Sync Status">
+    <img src="https://img.shields.io/github/actions/workflow/status/PennyLaneAI/qml/v2-sync-objects-dot-inv.yml?label=objects.inv%20sync&logo=github&style=flat-square" alt="objects.inv Sync Status" />
+  </a>
   <img src="https://img.shields.io/badge/contributions-welcome-orange?style=flat-square" alt="Contributions Welcome"/>
 </p>
 
