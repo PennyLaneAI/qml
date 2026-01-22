@@ -24,11 +24,11 @@ allowing us to optimize our strategy before hardware becomes available.
 The Vibronic Hamiltonian
 ------------------------
 
-To perform this feasibility check, we must first define the system. We use the **Vibronic Coupling Hamiltonian**,
+To perform this feasibility check, we must first define the system. We use the vibronic coupling Hamiltonian,
 which describes a set of :math:`A` electronic states interacting with :math:`N` vibrational modes.
 
 Unlike standard electronic structure problems, this model mixes discrete electronic levels with continuous
-vibrational motion (bosons). The Hamiltonian takes the form:
+vibrational motion, and the Hamiltonian takes the form:
 
 .. math::
 
