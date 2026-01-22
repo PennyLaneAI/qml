@@ -299,7 +299,7 @@ for depth in swap_depths:
 #
 # However, these calculations tell only half the story. As we demonstrated later, these resource counts are not
 # immutable constants. By actively navigating the architectural trade-offs between logical qubits
-# and Toffoli gates we can significantly reshape the cost profile of the algorithm.
+# and Toffoli gates, we can significantly reshape the cost profile of the algorithm.
 #
 # This is where the flexibility of PennyLane's resource estimation framework becomes crucial. Rather than treating subroutines
 # like ``Prepare`` and ``Select`` as black boxes, PennyLane allows us to tune the internal circuit
