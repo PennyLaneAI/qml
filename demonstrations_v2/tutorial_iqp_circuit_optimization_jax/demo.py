@@ -107,13 +107,7 @@ gates = [[[0]], [[1]], [[2]], [[0,1]], [[0,2]], [[1,2]]]
 # Creating an IQP circuit with PennyLane
 # --------------------------------------
 #
-# To build a parameterized IQP circuit in PennyLane, we can use the :class:`~pennylane.MultiRZ` function, making use of
-# the identity
-#
-# .. math:: \text{exp}(i\theta_j X_j) = H^{\otimes n} \text{exp}(i\theta_j Z_j) H^{\otimes n},
-#
-# where :math:`H` is the Hadamard matrix and :math:`Z_j` is the operator obtained by replacing the
-# Pauli X operators by Pauli Z operators in :math:`X_j`. Our PennyLane circuit (with input state
+# To build a parameterized IQP circuit in PennyLane, we can use the :class:`~pennylane.IQP` template. Our PennyLane circuit (with input state
 # :math:`\vert 0 \rangle`) is therefore the following.
 #
 import pennylane as qml
@@ -134,15 +128,7 @@ def penn_iqp_gates(params: np.ndarray, gates: list, n_qubits: int):
         n_qubits (int): The total number of qubits in the circuit.
     """
 
-    for i in range(n_qubits):
-        qml.Hadamard(i)
-
-    for par, gate in zip(params, gates):
-        for gen in gate:
-            qml.MultiRZ(2*par, wires=gen)
-
-    for i in range(n_qubits):
-        qml.Hadamard(i)
+    qml.IQP(weights=params, num_wires=n_qubits, pattern=gates)
 
 
 ######################################################################
