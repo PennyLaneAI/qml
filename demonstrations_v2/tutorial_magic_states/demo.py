@@ -6,8 +6,8 @@ the rapid generation and propagation of errors. In order to scale and harness th
 of quantum computing, we must develop fault-tolerant quantum computers (FTQC). 
 
 To achieve universal quantum computing (UQC), we need to have access to a universal gate set, such as
-the :math:`\textrm{Clifford + T}` set, ``{H, S, CNOT, T}``, and it is crucial that all these gates are 
-executed in a fault-tolerant manner. 
+the `:math:`\textrm{Clifford + T}` set <https://pennylane.ai/compilation/clifford-t-gate-set>`__, 
+``{H, S, CNOT, T}``, and it is crucial that all these gates are executed in a fault-tolerant manner. 
 For most quantum error correction architectures, gates of the Clifford group are much 
 simpler to implement, often using `transversal operations <https://arthurpesah.me/blog/2023-12-25-transversal-gates/>`__, 
 than their non-Clifford counterparts. 
@@ -27,7 +27,7 @@ term "magic states" in [#Bravyi2005]_.
 In this work, they proved that the ability to prepare magic states, when combined with a set of ideal Clifford 
 gates, the preparation of :math:`|0\rangle` ancillas, and Z-basis measurement capabilities 
 on all qubits, is sufficient to enable UQC. Essentially, magic states are a class of states 
-that when injected into a circuit implement a specific non-Clifford gate. 
+that when injected into a circuit implement a specific non-Clifford gate, such as the T gate. 
 
 There are different types of magic states and their nomenclature often varies across the literature. 
 Let’s examine a specific state, which we will denote as :math:`|H\rangle`, to see it in action:
@@ -139,13 +139,12 @@ print(magic_state_injection_circuit(np.pi / 3))
 # Magic state cultivation
 # ~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Unlike distillation, which consumes numerous noisy states to filter out a clean one, magic state 
+# Unlike distillation, which consumes numerous noisy states to filter out a clean state, magic state 
 # cultivation (MSC) starts with a single *seed* state and improves it "in-place." The entire process 
 # occurs within a single code patch using physical-level operations.
 #
 # It is currently considered the state-of-the-art method for generating high-fidelity magic states, 
-# formulated by Gidney et al [#Gidney2024]_ to optimize preparation techniques with
-# practical purposes. In other words, the primary objective is to synthesize magic states with the 
+# formulated by Gidney et al [#Gidney2024]_. Its primary objective is to synthesize magic states with the 
 # specific fidelities required for large-scale quantum computations as efficiently as possible; 
 # this technique prioritizes engineering efficiency over theoretical elegance or asymptotic behavior.
 #
@@ -175,13 +174,13 @@ print(magic_state_injection_circuit(np.pi / 3))
 # Outlook and recent developments
 # -------------------------------
 #
-# Current research in the field focuses of magic states on developing more 
+# Current research in the field of magic states focuses on developing more 
 # efficient protocols for generating high-fidelity magic states and achieving robust experimental 
 # implementations across various qubit architectures.
 #
 # A 5-to-1 distillation protocol was recently implemented as a proof-of-principle at the logical level 
 # on a neutral-atom quantum computer [#QuEra2025]_. This achievement leverage the parallel control and 
-# reconfigurability offered by atom platforms. However, in order to run deep computations, 
+# reconfigurability offered by neutral atom platforms. However, in order to run deep computations, 
 # further improvements regarding both the fidelity and the speed of the distillation are required.  
 # Meanwhile, on the theoretical front, a pathway for optimizing MSD methods involves performing 
 # the protocol, or at least portions of it, at the physical level [#Ruiz2025]_, [#Itogawa2025]_, [#Hirano2024]_. 
