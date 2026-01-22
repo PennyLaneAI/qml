@@ -2,7 +2,7 @@ r"""Resource Estimation for Spectroscopy Applications
 =====================================================
 Spectroscopy is a cornerstone of chemistry and physics, providing fundamental insights into the
 structure and dynamics of matter. To predict these spectra theoretically, we must simulate
-how the molecule's quantum state evolves over time under the influence of its Hamiltonian simulation.
+how the molecule's quantum state evolves over time under the influence of its Hamiltonian.
 On classical computers, this is notoriously expensive. The computational resources required to
 accurately model the excited states of a complex molecule scale exponentially with system size,
 often pushing even the most powerful supercomputers to their breaking point.
@@ -155,13 +155,12 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
 ######################################################################
 # Resource Estimation
 # ^^^^^^^^^^^^^^^^^^^
-# We can now estimate resources for the full circuit. To ensure a valid comparison with
-# the reference, we must first align our gate synthesis strategy.
+# Now that we have a defined circuit, the next logical step is to estimate its cost.
+# However, before we run the numbers, we need to make a critical decision about how the different blocks are implemented.
 #
-# A major difference lies in how rotation gates are synthesized, PennyLane approximates rotation gates using the Repeat-Until-Success
-# circuits [#Alex2014]_ which decomposes rotations into **T-gates**, while the reference
-# implementation utilizes the **phase gradient trick** proposed by Gidney (2018) [#Gidney2018]_ which implements rotations
-# using adder arithmetic, decomposing to **Toffoli gates**.
+# PennyLane's default compiler synthesizes rotation gates using **Repeat-Until-Success circuits [#Alex2014],
+# which decompose rotations into sequences of probabilistic T-gates. While effective for general circuits,
+# the algorithm we are implementing specifically calls for the Phase Gradient Trick proposed by Craig Gidney [#Gidney2018]_,
 #
 # The phase gradient trick is algorithmically superior for this application because it allows
 # us to implement rotations with deterministic cost using arithmetic, rather than relying on
@@ -171,7 +170,6 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
 # synthesis by leveraging :class:`~.pennylane.resource.ResourceConfig`.
 #
 
-
 def single_qubit_rotation(precision=None):
     """Gidney-Adder based decomposition for single qubit rotations"""
     num_bits = int(np.ceil(np.log2(1 / precision)))
@@ -179,8 +177,8 @@ def single_qubit_rotation(precision=None):
 
 
 ######################################################
-# We can now set up the resource estimation with this custom decomposition using the ``set_decomp`` function and set the precision
-# for single-qubit rotations to :math:`10^{-3}` as used in the reference.
+# We can now set up the resource estimation with this custom decomposition using the ``set_decomp`` function
+# and also set the targeted precision:
 
 cfg = qre.ResourceConfig()
 cfg.set_decomp(qre.RX, single_qubit_rotation)
@@ -189,45 +187,46 @@ cfg.set_decomp(qre.RZ, single_qubit_rotation)
 cfg.set_single_qubit_rot_precision(1e-3)
 
 ##################################################################
-# With the configuration set, we run the resource estimation for each Hamiltonian.
+# With the configuration set, we run the resource estimation by sweeping over the different active-spaces
+# of our Hamiltonian.
 
 xas_resources = []
 toffolis = []
+qubits = []
 for ham in limno_ham:
     resource_counts = qre.estimate(xas_circuit, config=cfg)(
         hamiltonian=ham, num_trotter_steps=num_trotter_steps, measure_imaginary=False
     )
     xas_resources.append(resource_counts)
     toffolis.append(resource_counts.gate_counts["Toffoli"])
+    qubits.append(resource_counts.total_wires)
 
 ######################################################################
-# Let's visualize how these estimates compare to the results reported in the literature.
-
-import matplotlib.pyplot as plt
-
-toffolis_lit = [7.12e7, 1.46e8, 2.18e8, 3.11e8]  # From Fomichev et al. (2025) [#Fomichev2025]_
-plt.plot(active_spaces, toffolis, "o-", label="Estimated Resources", color="fuchsia")
-plt.plot(active_spaces, toffolis_lit, "s--", label="Literature Resources", color="gold")
-
-plt.xlabel("Number of Orbitals")
-plt.ylabel("Toffoli Count")
-plt.title("XAS Resource Estimation Comparison")
-plt.legend()
-plt.show()
-
-########################################################################
+# Let's visualize how these initial estimates scale with the system size.
+#
+# .. figure:: ../_static/demonstration_assets/xas_re/xas_base.jpeg
+#     :align: center
+#     :width: 80%
+#     :target: javascript:void(0)
+#
+# These results highlight that while qubit requirements (~90-100) are feasible for
+# early fault-tolerant devices, the gate complexity approaches :math:`10^9` Toffolis.
+#
+# Crucially, these estimates represent a single shot; the total cost for the full algorithm will scale
+# linearly with the number of samples required. This gate overhead is therefore the primary bottleneck we must
+# address. Let's see how we can optimize these gate counts further.
+#
 # Optimizing the Estimates
 # ^^^^^^^^^^^^^^^^^^^^^^^^
-# From the above plot, we observe that our resource estimates are significantly higher
-# than those reported in literature. This indicates that the reference algorithm employs specialized,
-# high-efficiency subroutines that go beyond standard library defaults.
 #
-# To close this gap, we need to upgrade our algorithm. Instead of accepting the standard
+# In order to optimize our algorithm, instead of accepting the standard
 # implementations, we can inject specific high-performance subroutines directly into the
 # resource estimator.
 #
-# We start by optimizing the basis rotation step. We replace the standard decomposition
-# with the specialized, lower-cost circuit from `Kivlichan et al. (2018)
+# Optimization 1: Efficient Basis Rotations
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# First, we target the basis rotation, and replace the generic standard decomposition
+# with the specialized, lower-cost circuit described in `Kivlichan et al. (2018)
 # <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.120.110501>`_.
 
 
@@ -250,12 +249,19 @@ def basis_rotation_cost(dim):
         qre.GateCount(qre.resource_rep(op, params or {}), count) for op, count, params in ops_data
     ]
 
-
 cfg.set_decomp(qre.BasisRotation, basis_rotation_cost)
 
+toffolis_opt1 = []
+for ham in limno_ham:
+    res = qre.estimate(xas_circuit, config=cfg)(hamiltonian=ham, num_trotter_steps=num_trotter_steps, measure_imaginary=False)
+    toffolis_opt1.append(res.gate_counts["Toffoli"])
+
 ##################################################################
-# Next, we use the double phase trick for CRZ decomposition as described in Section III A of Fomichev et al. (2025) [#Fomichev2025]_.
-# This optimization reduces the cost of the controlled rotations inside the Trotter steps.
+# Optimization 2: Double Phase Trick
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Second, we implement the double phase trick for the Controlled-RZ (CRZ) gates.
+# As described in Section III A of Fomichev et al. (2025) [#Fomichev2025]_, this optimization
+# reduces the cost of the controlled rotations inside the Trotter steps by combining phase shifts.
 
 def custom_CRZ_decomposition(precision):
     """Decomposition of CRZ gate using double phase trick"""
@@ -264,24 +270,19 @@ def custom_CRZ_decomposition(precision):
 
     return [qre.GateCount(cnot, 2), qre.GateCount(rz, 1)]
 
-
 cfg.set_decomp(qre.CRZ, custom_CRZ_decomposition)
 
-##################################################################
-# Finally, we can re-run and visualize the resource estimation with these customizations to see how the resources compare to literature now.
-
-xas_resources_custom = []
+toffolis_final = []
 for ham in limno_ham:
-    resource_counts = qre.estimate(xas_circuit, config=cfg)(
-        hamiltonian=ham, num_trotter_steps=num_trotter_steps, measure_imaginary=False
-    )
-    xas_resources_custom.append(resource_counts)
+    res = qre.estimate(xas_circuit, config=cfg)(hamiltonian=ham, num_trotter_steps=num_trotter_steps, measure_imaginary=False)
+    toffolis_final.append(res.gate_counts["Toffoli"])
 
-toffolis_custom = [
-    resource_counts.gate_counts["Toffoli"] for resource_counts in xas_resources_custom
-]
-plt.plot(active_spaces, toffolis_custom, "o-", label="Estimated Resources", color="fuchsia")
-plt.plot(active_spaces, toffolis_lit, "s--", label="Literature Resources", color="gold")
+# Let's visualize the cumulative impact of our optimizations:
+import matplotlib.pyplot as plt
+
+plt.plot(active_spaces, toffolis, "o-", label="Baseline", color="gray", linewidth=2.5)
+plt.plot(active_spaces, toffolis_opt1, "^-", label="Optimization 1 (Basis Rot.)", color="goldenrod", linewidth=2.5)
+plt.plot(active_spaces, toffolis_final, "*-", label="Fully Optimized", color="fuchsia", linewidth=2.5, markersize=8)
 
 plt.xlabel("Number of Orbitals")
 plt.ylabel("Toffoli Gate Count")
@@ -290,8 +291,12 @@ plt.legend()
 plt.show()
 
 ######################################################################
-# As shown in the final plot, our customized resource estimates now align closely with
-# the estimates in the literature.
+# The plot illustrates the effectiveness of our optimization strategy. The specialized basis rotation
+# (gold) delivers the most significant reduction, visibly correcting the slope of the cost
+# scaling compared to the baseline. The double phase trick then provides a final constant-factor
+# improvement (pink), bringing the total gate count even further down. This stepwise
+# reduction validates the importance of matching the gate synthesis strategy to specific algorithmic
+# requirements, effectively "engineering" a lower simulation cost by targeting dominant bottlenecks.
 #
 # Photodynamic Therapy Applications
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -348,7 +353,7 @@ def polynomial_degree(one_norm):
 # We can now set up the resource estimation for the PDT algorithm by defining the circuit as shown in Figure 2.
 #
 # .. figure:: ../_static/demonstration_assets/xas_re/gqsp_circuit.png
-#   :alt: Illustration of Threshold Projection Circui
+#   :alt: Illustration of Threshold Projection Circuit
 #   :width: 70%
 #   :align: center
 #
@@ -408,20 +413,19 @@ print(resource_counts)
 # The small differences can be attributed to different tunable parameters being used.
 # We encourage users to explore further by testing other systems from the reference or analyzing how the resources scale
 # with different error budgets, using the parameter tuning techniques detailed in our
-# `Qubitization demo <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_.
+# `qubitization demo <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_.
 #
 # Conclusion
 # ----------
-# In this demo, we successfully validated our resource estimation workflow by reproducing results from
-# cutting-edge spectroscopy literature. We showed that PennyLane provides logical resource counts that
-# align closely with theoretical benchmarks across distinct algorithmic paradigms, ranging from standard
-# time-evolution to advanced spectral filtering.
+# In this demo, we successfully performed end-to-end resource estimation for two distinct spectroscopic paradigms:
+# the time-domain simulation of X-ray Absorption (XAS) and the spectral filtering approach for Photodynamic Therapy (PDT).
 #
-# Beyond the numbers, this demo highlights the power of the resource estimator as a design tool.
-# It allowed us to move beyond a "black box" standard implementation and actively prototype advanced algorithmic
-# choices like the phase gradient trick and specialized basis rotations.
-# This allows researchers to seamlessly swap out decomposition rules to match specific
-# hardware constraints or theoretical models without needing to rewrite the high-level circuit logic.
+# Beyond providing specific resource counts, this demo highlights the flexibility of the resource estimator as a
+# programmable design tool. We showed how to move beyond "black box" standard implementations by actively
+# prototyping advanced algorithmic choices—such as the phase gradient trick and specialized basis rotations.
+# This flexibility empowers researchers to "engineer" their quantum algorithms, identifying cost bottlenecks
+# and seamlessly swapping out subroutines to optimize performance for future fault-tolerant hardware,
+# regardless of the underlying spectroscopic technique.
 #
 # References
 # ----------
