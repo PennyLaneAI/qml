@@ -32,7 +32,7 @@ To measure this property on a quantum computer, we rely on a standard algorithmi
   :width: 70%
   :align: center
 
-  Figure 1: *Hadamard Test Circuit*.
+  Figure 1: *Circuit for XAS Simulation*
 
 The dominant cost for this circuit comes from the controlled time evolution block, the efficiency of which
 thus dictates the resource requirements for our algorithms. This cost is dictated by the intersection of
@@ -360,6 +360,9 @@ def pdt_circuit(walk_op, poly_degree_hi, poly_degree_low, num_slaters=1e4):
     )
     qre.QROM(num_bitstrings=2**num_qubits, size_bitstring=num_qubits, select_swap_depth=1)
 
+    # Hadamard
+    qre.Hadamard()
+
     # GQSP Spectral Filter
     qre.GQSP(walk_op, d_plus=poly_degree_hi)
     qre.GQSP(walk_op, d_plus=poly_degree_low)
@@ -369,6 +372,10 @@ def pdt_circuit(walk_op, poly_degree_hi, poly_degree_low, num_slaters=1e4):
         num_ctrl_wires=2,
         num_zero_ctrl=1,
     )
+
+    # Hadamard
+    qre.Hadamard()
+
     # Uncompute state preparation
     qre.Adjoint(
         qre.QROMStatePreparation(
