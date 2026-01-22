@@ -117,7 +117,7 @@ femoco = qre.THCHamiltonian(num_orbitals=76, tensor_rank=450, one_norm=1201.5)
 #    n_{coeff} = \left\lceil 2.5 + \log_2\left(\frac{10 \lambda}{\epsilon_{QPE}}\right) \right\rceil, \quad
 #    n_{angle} = \left\lceil 5.652 + \log_2\left(\frac{20 \lambda N}{\epsilon_{QPE}}\right) \right\rceil.
 #
-# Since we are following the analysis in Lee et al. (2021), we use the same constants as the reference
+# Since we are following the analysis in Lee et al. (2021), we use the same constants as the reference:
 
 import numpy as np
 
