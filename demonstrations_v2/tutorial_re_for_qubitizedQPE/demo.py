@@ -30,7 +30,7 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 # ``Select`` oracle, which applies the Hamiltonian terms controlled by that state. The implementation of these subroutines
 # offers the flexibility to trade off qubits for gates, and vice versa. Specifically, we can tune two algorithmic knobs to perform this trade-off: batched Givens rotations and QROM SelectSwap. Let's see these two in detail. 
 #
-# Knob-1: Batched Givens Rotations
+# Knob #1: Batched Givens rotations
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # In the ``Select`` operator, we need to implement a series of Givens rotations to change the basis.
 # Naively, to store all angles simultaneously, we require a register size equal to the number of rotations times the bits of precision per angle.
