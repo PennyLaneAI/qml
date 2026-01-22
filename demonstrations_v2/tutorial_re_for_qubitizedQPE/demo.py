@@ -163,7 +163,7 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 #
 # Step 1: Reducing qubits with batching
 # -------------------------------------
-# Let's first explore the impact of **Batched Givens Rotations**, by varying the number of batches in which rotation angles
+# Let's first explore the impact of **batched Givens rotations** by varying the number of batches in which rotation angles
 # are loaded.
 #
 # .. note::
