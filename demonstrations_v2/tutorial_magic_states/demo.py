@@ -6,7 +6,7 @@ the rapid generation and propagation of errors. In order to scale and harness th
 of quantum computing, we must develop fault-tolerant quantum computers (FTQC). 
 
 To achieve universal quantum computing (UQC), we need to have access to a universal gate set, such as
-the `:math:`\textrm{Clifford + T}` set <https://pennylane.ai/compilation/clifford-t-gate-set>`__, 
+the :math:`\textrm{Clifford + T}` `set <https://pennylane.ai/compilation/clifford-t-gate-set>`__, 
 ``{H, S, CNOT, T}``, and it is crucial that all these gates are executed in a fault-tolerant manner. 
 For most quantum error correction architectures, gates of the Clifford group are much 
 simpler to implement, often using `transversal operations <https://arthurpesah.me/blog/2023-12-25-transversal-gates/>`__, 
