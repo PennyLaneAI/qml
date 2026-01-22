@@ -135,7 +135,7 @@ n_angle = 20
 # We  note that `SelectTHC <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.SelectTHC.html>`_
 # oracle implementation is based on the description in
 # von Burg et al. [#vonburg]_. This work uses the phase gradient technique to implement Givens rotations, and thus requires an
-# auxiliary resource state for addition of phase. The ``SelectTHC`` template doesn't include the cost of preparation of this
+# auxiliary resource state for phase addition. The ``SelectTHC`` template doesn't include the cost of preparation of this
 # phase gradient state, so we must explicitly estimate this overhead and add it to the final cost of the QPE circuit.
 #
 # Let's estimate the total resources for Qubitized QPE for FeMoco:
