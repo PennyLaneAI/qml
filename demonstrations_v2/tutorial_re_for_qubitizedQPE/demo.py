@@ -154,7 +154,7 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 # ---------------------
 # This version of QPE thus requires 2188 qubits and 8.8e10 trillion Toffoli gates (not to mention around 1e13 CNOT gates, which are often ignored).
 # But logical qubits are a precious resource. Could we implement a variant of the algorithm that uses only
-# 500 logical qubits? Yes!  We can actively trade qubits for gates by modifying the circuit architecture using the "tunable knobs" we discussed
+# 500 logical qubits? Yes, we can actively trade qubits for gates by modifying the circuit architecture using the "tunable knobs" we discussed
 # earlier.
 #
 #
