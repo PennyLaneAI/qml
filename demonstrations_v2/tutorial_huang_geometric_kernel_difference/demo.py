@@ -1,4 +1,4 @@
-r"""Before you train: pre-screening quantum kernels with geometric difference
+r"""Before you train: Pre-screening quantum kernels with geometric difference
 =============================================================================
 
 Can we predict---*before* investing a ton of research hours---whether a quantum kernel has the
