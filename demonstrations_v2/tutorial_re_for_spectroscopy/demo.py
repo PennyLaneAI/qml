@@ -329,7 +329,7 @@ walk_op = qre.QubitizeTHC(bodipy_ham, prep_op=prep_op, select_op=select_op)
 # Next, we need to set up the GQSP parameters to construct the spectral filter. The filter is defined by a polynomial
 # whose degree determines the sharpness of the filter. Following Zhou et al. (2025) [#Zhou2025]_, we set the polynomial
 # degree using Figure 7 from the paper, which relates the degree to the desired spectral resolution.
-
+#
 
 def polynomial_degree(one_norm):
     """Calculate polynomial degree parameters from Zhou et al. (2025)"""
@@ -343,14 +343,14 @@ def polynomial_degree(one_norm):
 
 ##################################################################
 # We can now set up the resource estimation for the PDT algorithm by defining the circuit as shown in Figure 2.
-
-#.. figure:: ../_static/demonstration_assets/xas_re/gqsp_circuit.png
-#  :alt: Illustration of Threshold Projection Circui
-#  :width: 70%
-#  :align: center
 #
-#  Figure 2: *Threshold Projection Circuit*.
-
+# .. figure:: ../_static/demonstration_assets/xas_re/gqsp_circuit.png
+#   :alt: Illustration of Threshold Projection Circui
+#   :width: 70%
+#   :align: center
+#
+#   Figure 2: *Threshold Projection Circuit*.
+#
 
 def pdt_circuit(walk_op, poly_degree_hi, poly_degree_low, num_slaters=1e4):
     num_qubits = int(np.ceil(np.log2(num_slaters)))
