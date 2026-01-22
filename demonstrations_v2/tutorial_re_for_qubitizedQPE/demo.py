@@ -48,7 +48,7 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 # In the right panel, a single ancilla register is used, but we need four calls to QROM. The middle panel shows an
 # intermediate strategy with two ancilla registers and two QROM calls.
 #
-# Knob-2: QROM SelectSwap:
+# Knob #2: QROM SelectSwap
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # The second major optimization strategy is through `QROM <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_ itself. Crucially, both ``Prepare`` and ``Select``
 # rely on QROM to access Hamiltonian coefficients and rotation angles respectively. We can use
