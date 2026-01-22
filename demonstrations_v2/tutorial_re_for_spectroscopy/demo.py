@@ -1,8 +1,11 @@
 r"""Resource Estimation for Spectroscopy Applications
 =====================================================
 Spectroscopy is a cornerstone of chemistry and physics, providing fundamental insights into the
-structure and dynamics of matter. But accurate simulations of excited states
-are notoriously expensive, often pushing classical supercomputers to their breaking point.
+structure and dynamics of matter. To predict these spectra theoretically, we must simulate
+how the molecule's quantum state evolves over time under the influence of its Hamiltonian simulation.
+On classical computers, this is notoriously expensive. The computational resources required to
+accurately model the excited states of a complex molecule scale exponentially with system size,
+often pushing even the most powerful supercomputers to their breaking point.
 
 Can quantum computers do better?
 
