@@ -69,7 +69,7 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 # tunable knobs of the circuit implementation, allowing us to actively navigate the circuit design and trade-off between gates and
 # logical qubits to suit different constraints. As a concrete example, let's perform resource estimation for the FeMoco molecule.
 #
-# Resource Estimation for FeMoco
+# Resource estimation for FeMoco
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # Estimating resources for large-scale chemical systems is often bottlenecked by the challenge of constructing and storing the full Hamiltonian tensor.
 # PennyLane's resource estimator allows us to sidestep this bottleneck by
