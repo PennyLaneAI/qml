@@ -28,11 +28,11 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 # which is constructed from two primary subroutines:
 # the ``Prepare`` oracle, which prepares a state encoding the Hamiltonian coefficients, and the
 # ``Select`` oracle, which applies the Hamiltonian terms controlled by that state. The implementation of these subroutines
-# offers the flexibility to trade off qubits for gates, and vice versa. Specifically, we can tune two algorithmic knobs to perform this trade-off: batched Givens rotations and QROM SelectSwap. Let's see these two in detail. 
+# offers the flexibility to trade off qubits for gates, and vice versa. Specifically, we can tune two algorithmic knobs to perform this trade-off: batched Givens rotations and QROM SelectSwap. Let's see these two in detail.
 #
 # Knob #1: Batched Givens rotations
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# In the ``Select`` operator, we need to implement a series of Givens rotations to change the basis.
+# In the ``Select`` operator, we need to implement a series of Givens rotations to change the single-particle basis.
 # Naively, to store all angles simultaneously, we require a register size equal to the number of rotations times the bits of precision per angle.
 # However, we can choose to load these angles in batches instead of loading all of them at once. [#Caesura]_
 # The tunable knob here is the **number of batches** in which the rotation angles are loaded. By increasing the number of batches,
@@ -67,7 +67,7 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 # However, our quantum resource :mod:`estimator <pennylane.estimator>` provides much more than a static cost report.
 # We demonstrate how PennyLane exposes these
 # tunable knobs of the circuit implementation, allowing us to actively navigate the circuit design and trade-off between gates and
-# logical qubits to suit different constraints. As a concrete example, let's perform resource estimation for the FeMoco molecule.
+# logical qubits to suit different constraints. As a concrete example, let's perform resource estimation for simulating the FeMoco molecule.
 #
 # Resource estimation for FeMoco
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -100,7 +100,7 @@ femoco = qre.THCHamiltonian(num_orbitals=76, tensor_rank=450, one_norm=1201.5)
 #
 # Defining the error budget
 # -------------------------
-# We begin by fixing the target accuracy for the Quantum Phase Estimation (QPE) routine to :math:`\epsilon_{QPE} = 0.001 \textrm{hartree}` ,
+# We begin by fixing the target accuracy for the Quantum Phase Estimation (QPE) routine to :math:`\epsilon_{QPE} = 0.001 \textrm{Ha}` ,
 # which dictates the total number of QPE iterations required:
 #
 # .. math::
@@ -272,7 +272,7 @@ for depth in swap_depths:
 # entirely within the reused register, forcing the allocation of additional qubits. This marks
 # the point where the "free" optimization ends and the standard trade-off resumes.
 # To summarize the impact of our optimizations, let's compare the resources required for the naive implementation versus our
-# final optimized configuration (Batch Size = 10, Select-Swap Depth = 4):
+# final optimized configuration (Number of Batches = 10, Select-Swap Depth = 4):
 #
 # .. list-table::
 #    :widths: 30 35 35
