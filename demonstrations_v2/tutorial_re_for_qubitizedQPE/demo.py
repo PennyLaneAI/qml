@@ -44,8 +44,8 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 #    :width: 1100px
 #    :target: javascript:void(0)
 #
-# In the left panel, we load all angles at once using a single call to QROM (pink), but this requires four ancilla registers.
-# In the right panel, a single ancilla register is used, but we need four calls to QROM. The middle panel shows an
+# In the left panel (a), we load all angles at once using a single call to QROM (pink), but this requires four ancilla registers.
+# In the right panel (c), a single ancilla register is used, but we need four calls to QROM. The middle panel (b) shows an
 # intermediate strategy with two ancilla registers and two QROM calls.
 #
 # Knob #2: QROM SelectSwap
