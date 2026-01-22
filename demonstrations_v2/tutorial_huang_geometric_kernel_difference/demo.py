@@ -1,5 +1,5 @@
-r"""Is a Quantum Kernel Worth Exploring? A ‘:math:`g`-first’ Reality Check
-======================================================================
+r"""Before you train: pre-screening quantum kernels with geometric difference
+=============================================================================
 
 Can we predict---*before* investing a ton of research hours---whether a quantum kernel has the
 potential to beat a classical one across all kernel methods?
