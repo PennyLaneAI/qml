@@ -1,0 +1,53 @@
+{
+    "title": "Quantifying Resource Requirements for Vibronic Dynamics Simulation",
+    "authors": [
+        {
+            "username": "ddhawan"
+        }
+    ],
+    "executable_stable": true,
+    "executable_latest": true,
+    "dateOfPublication": "2024-05-06T00:00:00+00:00",
+    "dateOfLastModification": "2025-09-22T15:48:14+00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Computing",
+        "Quantum Chemistry"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/mapping/thumbnail_mapping_2024-06-20.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_mapping_2024-06-20.png"
+        }
+    ],
+    "seoDescription": "Learn how to estimate resources for a vibronic dynamics algorithm",
+    "doi": "",
+    "references": [
+        {
+            "id": "Tranter",
+            "type": "article",
+            "title": "The Bravyi–Kitaev Transformation: Properties and Applications",
+            "authors": "A. Tranter, S. Sofia et al.",
+            "year": "2015",
+            "publisher": "International Journal of Quantum Chemistry",
+            "url": "https://onlinelibrary.wiley.com/doi/10.1002/qua.24969"
+        },
+        {
+            "id": "Yordanov",
+            "type": "article",
+            "title": "Efficient quantum circuits for quantum computational chemistry",
+            "authors": "Y. S. Yordanov et al.",
+            "year": "2020",
+            "publisher": "Physical Review A",
+            "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.102.062612"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": []
+}
