@@ -297,7 +297,7 @@ for depth in swap_depths:
 # biological nitrogen fixation. Our initial baseline for FeMoco revealed a requirement of ~2000 logical qubits, which
 # underscores the magnitude of the challenge facing early fault-tolerant hardware.
 #
-# However, naive calculations tell only half the story. As we demonstrated later, these resource counts are not
+# However, these calculations tell only half the story. As we demonstrated later, these resource counts are not
 # immutable constants. By actively navigating the architectural trade-offs between logical qubits
 # and Toffoli gates we can significantly reshape the cost profile of the algorithm.
 #
