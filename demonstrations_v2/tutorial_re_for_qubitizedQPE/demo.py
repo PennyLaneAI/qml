@@ -271,8 +271,8 @@ for depth in swap_depths:
 # Toffoli count decreases. However, moving to depth 8, the qubit count jumps as the swap network becomes too large to fit
 # entirely within the reused register, forcing the allocation of additional qubits. This marks
 # the point where the "free" optimization ends and the standard trade-off resumes.
-# To summarize the impact of our optimizations, let's compare the resources required for the naive implementation versus our
-# final optimized configuration (Number of Batches = 10, Select-Swap Depth = 4):
+# To summarize the impact of our optimizations, let's compare the resources required for the naive implementation and our
+# final configuration, optimized using a choice of 10 batches and a Select-Swap depth of 4:
 #
 # .. list-table::
 #    :widths: 30 35 35
