@@ -12,7 +12,7 @@ For most quantum error correction architectures, gates of the Clifford group are
 simpler to implement, often using `transversal operations <https://arthurpesah.me/blog/2023-12-25-transversal-gates/>`__, 
 than their non-Clifford counterparts. 
 
-This is where magic states enter the picture: they provide a mechanism to build non-Clifford gates in a 
+This is where magic states enter the picture: they provide a mechanism to implement non-Clifford gates in a 
 fault-tolerant manner. The idea is to effectively apply such a gate by consuming a special, pre-prepared 
 quantum state, called magic state, and teleporting its logical action into the circuit.
 
@@ -107,8 +107,8 @@ print(magic_state_injection_circuit(np.pi / 3))
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # As the name suggests, magic state distillation (MSD) relies on using multiple copies of noisy 
-# magic states to purify them. By consuming these noisy inputs, the protocol
-# produces a smaller number of higher-fidelity magic states. This cycle can be repeated to achieve 
+# magic states to purify them and, by consuming these noisy inputs, 
+# produce a single state of higher fidelity. This cycle can be repeated to achieve 
 # an arbitrarily low error rate. 
 #
 # A typical protocol follows these steps:
@@ -131,7 +131,7 @@ print(magic_state_injection_circuit(np.pi / 3))
 # logical, executed across multiple error-correcting blocks, resulting in a significant resource overhead. 
 # For instance, in a 15-to-1 distillation protocol [#Fowler]_, fifteen logical qubits---each already
 # protected by an inner surface code---are further encoded into a single block of a Reed-Muller 
-# code (outer code) to distill just one magic state of higher purity.
+# code (outer code) to distill just one improved magic state.
 #
 # See this `demo <https://pennylane.ai/qml/demos/tutorial_magic_state_distillation>`__ 
 # for an implementation of a distillation protocol using Catalyst. 
@@ -161,11 +161,11 @@ print(magic_state_injection_circuit(np.pi / 3))
 # 3. **Escape:** Rapidly expand the code hosting the state. Once the cultivation stage is complete, the magic state 
 #    reaches its target fidelity, and becomes "too good for the code". 
 #    To preserve this high fidelity, the state needs to *escape*
-#    into a much larger code as quickly as possible, typically via `grafting <https://arxiv.org/abs/2409.17595>`__
+#    into a much larger code as quickly as possible, typically via `grafting <https://arxiv.org/abs/2409.17595>`__, 
 #    `code morphing <https://arxiv.org/abs/2112.01446>`__ or 
 #    `lattice surgery <https://pennylane.ai/qml/demos/tutorial_lattice_surgery>`__.
 # 4. **Decoding:** Determine whether to accept the final state using standard error correction. Since the circuit 
-#    is now too large for efficient post-selection, a decoder computes a `complementary gap <https://arxiv.org/abs/2312.04522>`. 
+#    is now too large for efficient post-selection, a decoder computes a `complementary gap <https://arxiv.org/abs/2312.04522>`__. 
 #    This metric acts as a confidence score for the final state, allowing the system to accept or discard the state accordingly.
 #
 # 
