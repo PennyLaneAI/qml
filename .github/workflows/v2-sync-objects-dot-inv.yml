@@ -1,4 +1,9 @@
 name: V2 Sync objects.inv
+
+concurrency:
+  group: v2-sync-objects-inv-${{ inputs.branch || github.event.workflow_run.head_branch || github.ref }}
+  cancel-in-progress: true
+
 on:
   # Allow existing reusable use.
   workflow_call:
