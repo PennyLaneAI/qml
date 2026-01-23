@@ -36,7 +36,7 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 # Naively, to store all angles simultaneously, we require a register size equal to the number of rotations multiplied by the number of bits used for precision for each angle.
 # However, we can choose to load these angles in batches instead of loading all of them at once [#Caesura]_.
 # The tunable knob here is the **number of batches** in which the rotation angles are loaded. By increasing the number of batches,
-# we save qubits by reducing the register size, but need a longer repetition of the `Quantum Read-Only Memory (QROM) <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_
+# register size is decreased, leading to a reduction of qubit requirements, but in exchange we need more repetitions of the `Quantum Read-Only Memory (QROM) <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_
 # subroutine for each batch, which increases the Toffoli count.
 #
 # .. figure:: ../_static/demonstration_assets/qubitization_re/pennylane-demo-image-circuit-batching-fig.png
