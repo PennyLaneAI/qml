@@ -9,8 +9,11 @@ often pushing even the most powerful supercomputers to their breaking point.
 
 Can quantum computers do better?
 
-In this demo, we'll find out. We will analyze the scalability of such key spectroscopy algorithms
-through PennyLane's resource estimator and calculate their actual resource requirements. By benchmarking
+In this demo, we'll find out. Since quantum computers can represent and evolve quantum states
+using polynomial resources, they offer a promising path forward. we will analyze the scalability of
+such key spectroscopy algorithms
+through PennyLane's resource `estimator <https://docs.pennylane.ai/en/stable/code/qml_estimator.html>`_ and
+calculate their actual resource requirements. By benchmarking
 these algorithms now, we can ensure they are ready for the fault-tolerant hardware of the future.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
@@ -21,10 +24,10 @@ these algorithms now, we can ensure they are ready for the fault-tolerant hardwa
 Simulating Spectroscopy on a Quantum Computer
 ---------------------------------------------
 
-How do we translate a physical spectroscopy experiment into a quantum circuit?
+First challenge is translating a physical spectroscopy experiment into a quantum circuit.
 
-Regardless of the specific technique—whether it is X-ray Absorption (XAS) [#Fomichev2025]_,
-Vibrational Spectroscopy [#Laoiza2025]_, or Electron Energy Loss Spectroscopy [#Kunitsa2025]_—the
+Regardless of the specific technique, whether it is X-ray Absorption Spectroscopy(XAS) [#Fomichev2025]_,
+Vibrational Spectroscopy [#Laoiza2025]_, or Electron Energy Loss Spectroscopy [#Kunitsa2025]_, the
 core goal is the same: calculating the time-domain correlation function, :math:`\tilde{G}(t)`.
 
 To measure this property on a quantum computer, we rely on a standard algorithmic template called the
@@ -41,29 +44,28 @@ The dominant cost for this circuit comes from the controlled time evolution bloc
 thus dictates the resource requirements for our algorithms. This cost is dictated by the intersection of
 the spectroscopic domain and our implementation strategy.
 
-While the spectroscopic technique of interest determines the type of Hamiltonian (e.g., electronic, vibrational etc.),
+While the physical problem of interest dictates the type of Hamiltonian (e.g., electronic, vibrational etc.),
 we have significant freedom to optimize the implementation. We can select specific
 Hamiltonian representations and pair them with the time evolution algorithm of choice, i.e. Trotterization
-or Qubitization.
+or `Qubitization <https://pennylane.ai/qml/demos/tutorial_qubitization>`_.
 
-We begin with the example of X-ray Absorption Spectroscopy (XAS) to demonstrate how to use the
+We begin with the example of `X-ray Absorption Spectroscopy (XAS) <https://pennylane.ai/qml/demos/tutorial_xas>`_ to demonstrate how to use the
 PennyLane resource estimator to generate logical resource counts.
 
 X-Ray Absorption Spectroscopy
 -----------------------------
 `XAS <https://pennylane.ai/qml/demos/tutorial_xas>`_, is a critical spectroscopic method used to study the electronic
-and local structural environment of specific elements within a material, achieved by probing core-level electron transitions.
+and local structural environment of specific elements within a material, by probing core-level electron transitions.
 For this simulation, we follow the algorithm established in Fomichev et al. (2025) [#Fomichev2025]_,
 which utilizes the `Compressed Double Factorization (CDF) <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`_
 representation of the electronic Hamiltonian combined with Trotterization.
 
-Let's see how expensive it is to simulate the excited states of LiMn oxide clusters,
-which are critical cathode materials for next-generation batteries.
+To benchmark this approach, we focus on **Lithium Manganese (LiMn) oxide clusters**, which are
+widely studied as critical cathode materials for next-generation batteries.
 
 The first step to determining the resources for this simulation is to define the Hamiltonian.
-Here, we must note that the resource requirements for the simulation are independent of the specific integral values,
-and depend rather on the structural parameters of the Hamiltonian, specifically
-the number of orbitals and the number of fragments. We leverage this by utilizing the specialized
+Here, we must note that the resource requirements for the simulation depend on the structural parameters of the Hamiltonian, specifically
+the number of orbitals and the number of fragments, rather than the exact integral values. We leverage this by utilizing the specialized
 `compact Hamiltonian <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.compact_hamiltonian.CDFHamiltonian.html>`__ representation feature
 offered by PennyLane, skipping the expensive Hamiltonian construction while retaining the exact cost topology required for analysis.
 """
@@ -102,18 +104,17 @@ num_trotter_steps = int(np.ceil(2 * jmax + 1) * tau / delta)  # Number of Trotte
 # Having established the Hamiltonian structure and the Trotter step count, we are now
 # ready to estimate resources for the complete algorithm.
 #
-# We now assemble the complete XAS algorithm as shown in the Hadamard test circuit,
+# We assemble the complete XAS workflow as shown in the Hadamard test circuit, by
 # integrating state preparation, the Hadamard test structure, and controlled time evolution.
-# This function can then be passed to the PennyLane resource estimator to obtain logical resource counts.
+# The resulting function is then passed to the PennyLane resource estimator to obtain logical resource counts.
 #
-# Note that we model the initial state using the **Sum of Slaters** method [#SOSStatePrep2024]_, which
+# For the initial state preparation, we adopt the **Sum of Slaters** method [#SOSStatePrep2024]_, which
 # approximates the wavefunction by discarding determinants below a coefficient tolerance.
 # For this demo, we assume a truncation level that yields 1e4 surviving determinants (`num_slaters=1e4`).
 # The cost of this approach depends on two major subroutines: :class:`~.pennylane.estimator.templates.QROM` to load the determinants,
 # and :class:`~.pennylane.estimator.templates.QROMStatePreparation` to prepare the
 # superposition.
 #
-
 
 def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_slaters=1e4):
 
@@ -155,8 +156,9 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
 ######################################################################
 # Resource Estimation
 # ^^^^^^^^^^^^^^^^^^^
-# Now that we have a defined circuit, the next logical step is to estimate its cost.
-# However, before we run the numbers, we need to make a critical decision about how the different blocks are implemented.
+# With the circuit fully defined, we turn to cost estimation. Before generating counts, however,
+# we must select an implementation strategy for the rotation gates, as this choice heavily influences
+# the final resource overhead.
 #
 # PennyLane's default compiler synthesizes rotation gates using **Repeat-Until-Success circuits [#Alex2014],
 # which decompose rotations into sequences of probabilistic T-gates. While effective for general circuits,
@@ -299,10 +301,10 @@ plt.show()
 # requirements, effectively "engineering" a lower simulation cost by targeting dominant bottlenecks.
 #
 # Photodynamic Therapy Applications
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# ---------------------------------
 # Having validated our resource estimation workflow against the XAS benchmarks, let's see how we can
 # apply these tools to a different application, i.e. **Photodynamic Therapy (PDT)**, where we need to
-# estimate the cumulative absorption rates for a transition-metal photosensitizer.[#Zhou2025]_
+# estimate the cumulative absorption rates for a transition-metal photosensitizer. [#Zhou2025]_
 #
 # This application requires a fundamental shift in algorithmic strategy. While XAS simulates the system's time evolution to
 # observe dynamic changes (Trotterization), PDT employs a spectral filtering approach. Here, rather than resolving individual
