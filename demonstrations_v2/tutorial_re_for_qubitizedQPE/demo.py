@@ -4,7 +4,7 @@ r"""Qubit and gate trade-offs in Qubitized Quantum Phase Estimation
 
 `Quantum Phase Estimation (QPE) <https://pennylane.ai/qml/demos/tutorial_qpe>`_ is a powerful quantum algorithm
 that allows us to estimate the eigenvalues of a Hamiltonian with high precision.
-The most advanced versions of QPE rely on
+The most advanced variants of QPE rely on
 `qubitization <https://pennylane.ai/qml/demos/tutorial_qubitization>`_  to encode chemical Hamiltonians  as unitary operators. This leverages a `linear combination of unitaries (LCU) <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_ decomposition to create a
 `block encoding <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_ of the Hamiltonian , which is then used to construct a "quantum walk" operator that is used as input to QPE.
 
