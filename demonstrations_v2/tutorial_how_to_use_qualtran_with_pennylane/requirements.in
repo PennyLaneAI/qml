@@ -1,3 +1,5 @@
 qualtran
+# 0.4 added NumPy 2.x support
+galois>=0.4
 cairosvg
 Pillow

@@ -1,5 +1,5 @@
 qualtran
-openfermion
-openfermionpyscf
-scipy
-numpy<2.0
+# 0.4 added NumPy 2.x support
+galois>=0.4
+# 1.7.1 added NumPy 2.x support
+openfermion>=1.7.1
