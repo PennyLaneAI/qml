@@ -51,7 +51,7 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 # Knob #2: QROM SelectSwap
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # The second major optimization strategy is through `QROM <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_ itself. Crucially, both ``Prepare`` and ``Select``
-# rely on QROM to access Hamiltonian coefficients and rotation angles respectively. We can use
+# rely on QROM to access Hamiltonian coefficients and rotation angles, respectively. We can use
 # the select-swap variant of QROM, which allows us to trade the depth of the circuit for width, as shown in the diagrams below:
 #
 # .. figure:: ../_static/demonstration_assets/qubitization_re/selswap_combine.jpeg
