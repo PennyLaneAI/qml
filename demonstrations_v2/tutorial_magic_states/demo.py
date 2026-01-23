@@ -170,7 +170,7 @@ print(magic_state_injection_circuit(np.pi / 3))
 #
 # 
 # An important detail is that, as one might suspect, there is a strict threshold fidelity for these preparation
-# protocols: the initial noisy state(s) :math:`\rho` must have a fidelity above a certain limit for the process 
+# protocols: the initial noisy state(s) must have a fidelity above a certain limit for the process 
 # to converge toward a pure state [#Bravyi2005]_. If the initial states are too noisy, the protocol will 
 # fail to improve them.
 #      
