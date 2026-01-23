@@ -106,7 +106,7 @@ print(magic_state_injection_circuit(np.pi / 3))
 # Magic state distillation
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# As the name suggests, magic state distillation (MSD) rely on using multiple copies of noisy 
+# As the name suggests, magic state distillation (MSD) relies on using multiple copies of noisy 
 # magic states to purify them. By consuming these noisy inputs, the protocol
 # produces a smaller number of higher-fidelity magic states. This cycle can be repeated to achieve 
 # an arbitrarily low error rate. 
@@ -121,7 +121,7 @@ print(magic_state_injection_circuit(np.pi / 3))
 #    error-correcting (outer) code.
 # 3. **Check:** Perform a syndrome measurement by measuring certain `stabilizers <https://pennylane.ai/qml/demos/tutorial_stabilizer_codes>`__
 #    across this multi-block structure.
-# 4. **Results:** Decide whether to keep or discard the state by looking at the measurement results that indicate 
+# 4. **Results:** Decide whether to keep or discard the state based on the check results, which indicate 
 #    if the state remains in the "clean" codespace.
 #    If the syndrome is trivial, the reduced state is kept as a higher-purity state; if an error is 
 #    detected, the state is discarded.
@@ -153,20 +153,20 @@ print(magic_state_injection_circuit(np.pi / 3))
 #
 # The protocol consists of four primary stages:
 #
-# 1. **Injection:** prepare an initial, noisy magic state encoded in a small code of distance 3 or slightly better.
-# 2. **Cultivation:** gradually improve the state through repeated Clifford checks and postselection.
+# 1. **Injection:** Prepare an initial, noisy magic state encoded in a small code of distance 3 or slightly better.
+# 2. **Cultivation:** Gradually improve the state through repeated Clifford checks and postselection.
 #    To reach higher fidelities, the code distance must be increased; otherwise, the noise floor 
 #    of the small code would limit the state's purity. This stage then involves cycles of growing
 #    the code, stabilizing it, and checking the magic state. 
-# 3. **Escape:** rapidly expand the code hosting the state. Once the cultivation stage is complete, the magic state 
+# 3. **Escape:** Rapidly expand the code hosting the state. Once the cultivation stage is complete, the magic state 
 #    reaches its target fidelity, and becomes "too good for the code". 
 #    To preserve this high fidelity, the state needs to *escape*
 #    into a much larger code as quickly as possible, typically via `grafting <https://arxiv.org/abs/2409.17595>`__
 #    `code morphing <https://arxiv.org/abs/2112.01446>`__ or 
 #    `lattice surgery <https://pennylane.ai/qml/demos/tutorial_lattice_surgery>`__.
-# 4. **Decoding:** determine whether to accept the final state using standard error correction. Since the circuit 
-#    is now too large for efficient post-selection, a decoder computes a complementary gap. This metric acts as 
-#    a confidence score for the final state, allowing the system to accept or discard the state accordingly.
+# 4. **Decoding:** Determine whether to accept the final state using standard error correction. Since the circuit 
+#    is now too large for efficient post-selection, a decoder computes a `complementary gap <https://arxiv.org/abs/2312.04522>`. 
+#    This metric acts as a confidence score for the final state, allowing the system to accept or discard the state accordingly.
 #
 # 
 # An important detail is that, as one might suspect, there is a strict threshold fidelity for these preparation
