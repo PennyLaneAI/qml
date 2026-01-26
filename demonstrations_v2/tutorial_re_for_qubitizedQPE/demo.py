@@ -83,7 +83,7 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 # the need to build the full operator for every case, which would be computationally expensive.
 #
 # .. note::
-#     It is important to acknowledge that while the reference used here represented a significant milestone, the
+#     It is important to acknowledge that while the reference used here represents a significant milestone in algorithmic development, the
 #     current state-of-the-art for such simulations is achieved by methods utilizing Block-Invariant Symmetry Shift (BLISS)-THC
 #     Hamiltonians [#Caesura]_ or sum-of-squares spectral amplification (SOSSA) [#SOSSA]_. However, we focus on the
 #     THC implementation in this demo as it provides a cleaner and more intuitive framework for understanding
