@@ -102,7 +102,7 @@ femoco = qre.THCHamiltonian(num_orbitals=76, tensor_rank=450, one_norm=1201.5)
 #
 # Defining the error budget
 # -------------------------
-# We begin by fixing the target accuracy for the Quantum Phase Estimation (QPE) routine to :math:`\epsilon_{QPE} = 0.001 \textrm{Ha}` ,
+# We begin by fixing the target accuracy for the Quantum Phase Estimation (QPE) routine to :math:`\epsilon_{QPE} = 0.0016 \textrm{Ha}` ,
 # which dictates the total number of QPE iterations required:
 #
 # .. math::
