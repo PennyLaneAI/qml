@@ -1,5 +1,5 @@
 {
-  "title": "Before You Train: Pre-screening Quantum Kernels with Geometric Difference",
+  "title": "Before you train: Pre-screening quantum kernels with geometric difference",
   "authors": [
     {
       "username": "andynader"
@@ -8,7 +8,7 @@
   "executable_stable": true,
   "executable_latest": false,
   "dateOfPublication": "2026-01-20T10:00:00+00:00",
-  "dateOfLastModification": "2026-01-20T10:00:00+00:01",
+  "dateOfLastModification": "2026-01-22T10:00:00+00:01",
   "categories": [
     "Quantum Machine Learning"
   ],
