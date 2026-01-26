@@ -130,7 +130,7 @@ n_angle = 20
 ########################################################################
 # Estimating the cost of qubitized QPE
 # -----------------------------
-# With these parameters in hand, we can esimate the total resources. The full algorithm consists of the Walk Operator,
+# With these parameters in hand, we can estimate the total resources required by our algorithm. The full algorithm consists of the Walk Operator,
 # constructed via `QubitizeTHC <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.QubitizeTHC.html>`_, running within a QPE routine.
 #
 # We  note that `SelectTHC <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.SelectTHC.html>`_
