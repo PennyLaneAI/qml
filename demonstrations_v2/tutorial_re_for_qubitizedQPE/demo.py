@@ -220,7 +220,7 @@ print(f"  Toffolis: {toffoli_counts[-1]:.3e}\n")
 
 ######################################################################
 #
-# Crucially, while the qubit requirements drop by nearly a factor of 5, the Toffoli count stays in the same order of magnitude.
+# **Crucially, while the qubit requirements are reduced by nearly a factor of 5, the Toffoli count remains in the same order of magnitude.**
 # This favorable trade-off allows us to fit the algorithm on constrained hardware without
 # making the runtime prohibitively long.
 #
