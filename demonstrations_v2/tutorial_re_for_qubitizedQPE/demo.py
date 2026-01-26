@@ -79,8 +79,8 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 #
 # While calculating the exact one-norm typically requires full Hamiltonian construction, this compact form is particularly
 # useful for well-known benchmarks where these values are already reported in the literature. Furthermore, it allows
-# us to rapidly generate quick estimates for different ranges of one-norms, enabling sensitivity analysis without
-# needing to build the full operator for every case.
+# us to rapidly generate estimates for different ranges of one-norms, enabling sensitivity analysis without
+# the need to build the full operator for every case, which would be computationally expensive.
 #
 # .. note::
 #     It is important to acknowledge that while the reference used here represented a significant milestone, the
