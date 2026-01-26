@@ -219,7 +219,7 @@ print("Expectation value: ", penn_op_expval)
 # - :math:`\theta_{j}` are the trainable parameters.
 # - :math:`\boldsymbol{g}_{j}` are the different generators, also represented as bitstrings.
 #
-# Although this expression is exact, computing the expectation exactly requires an infinite number of samples :math:`\boldsymbol{z}`. Instead, we can
+# Although this expression is exact, computing the expectation exactly requires an exponential number of samples :math:`\boldsymbol{z}`. Instead, we can
 # replace the expectation with an empirical mean and compute an unbiased estimate of
 # :math:`\langle Z_{\boldsymbol{a}} \rangle` efficiently. That is, if we sample a batch of :math:`s`
 # bitstrings :math:`\{\boldsymbol{z}_i\}` from the uniform distribution and compute the sample mean
