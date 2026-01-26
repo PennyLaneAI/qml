@@ -293,9 +293,9 @@ for depth in swap_depths:
 # Conclusion
 # ^^^^^^^^^^
 #
-# In this demo, we tackled the logical resource estimation for FeMoco, a complex molecule central to understanding
-# biological nitrogen fixation. Our initial baseline for FeMoco revealed a requirement of ~2000 logical qubits, which
-# underscores the magnitude of the challenge facing early fault-tolerant hardware.
+# In this demo, we estimated the logical resources needed to simulate FeMoco, a complex molecule central to understanding
+# biological nitrogen fixation. Our baseline estimate revealed a requirement of nearly 2000 logical qubits,
+# which underscores the magnitude of the challenge facing early fault-tolerant hardware.
 #
 # However, these calculations tell only half the story. As we demonstrated, these resource requirements are not
 # immutable constants. By actively navigating the architectural trade-offs between logical qubits
