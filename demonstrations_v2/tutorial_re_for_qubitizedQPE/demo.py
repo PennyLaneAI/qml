@@ -77,7 +77,7 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 # Hamiltonian, where we capture only the essential structural parameters: the number of spatial orbitals :math:`(N)`,
 # the THC factorization rank :math:`(M)`, and the Hamiltonian one-norm :math:`(\lambda)`.
 #
-# While calculating the exact one-norm typically requires constructing the Hamiltonian, this compact form is particularly
+# While calculating the exact one-norm typically requires full Hamiltonian construction, this compact form is particularly
 # useful for well-known benchmarks where these values are already reported in the literature. Furthermore, it allows
 # us to rapidly generate quick estimates for different ranges of one-norms, enabling sensitivity analysis without
 # needing to build the full operator for every case.
