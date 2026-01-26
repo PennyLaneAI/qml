@@ -153,7 +153,7 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 ######################################################################
 # Analyzing the results
 # ---------------------
-# This version of QPE thus requires 2188 qubits and :math:`8.8 \times 10^10 Toffoli gates (not to mention around :math:`1 \times 10^13`
+# This version of QPE thus requires 2188 qubits and :math:`8.8 \times 10^{10}` Toffoli gates (not to mention around :math:`1 \times 10^{13}`
 # CNOT gates, which are often overlooked).
 # But logical qubits are a precious resource. Could we implement a variant of the algorithm that uses only
 # 500 logical qubits? Yes, we can actively trade qubits for gates by modifying the circuit architecture using the "tunable knobs" we discussed
@@ -304,9 +304,9 @@ for depth in swap_depths:
 # immutable constants. By actively navigating the architectural trade-offs between logical qubits
 # and Toffoli gates, we can reshape the cost profile of the algorithm.
 #
-# This is where the flexibility of PennyLane's resource :mod:`estimator <~.pennylane.estimator>`
-# shines. Rather than treating subroutines like :mod:`~.pennylane.estimator.templates.PrepTHC`
-# and `:mod:~.pennylane.estimator.SelectTHC` as black boxes,
+# This is where the flexibility of PennyLane's resource :mod:`~.pennylane.estimator`
+# shines. Rather than treating subroutines like :class:`~.pennylane.estimator.templates.PrepTHC`
+# and :class:`~.pennylane.estimator.SelectTHC` as black boxes,
 # PennyLane allows us to tune the internal circuit configurations.
 # This transforms resource estimation from a passive reporting tool into an active design process,
 # enabling researchers to optimize their algorithmic implementations even before the hardware is available.
