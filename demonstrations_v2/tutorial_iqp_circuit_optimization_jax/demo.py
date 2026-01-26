@@ -204,7 +204,7 @@ print("Expectation value: ", penn_op_expval)
 # Estimating expectation values with IQPopt
 # -----------------------------------------
 #
-# We can perform the same operations our PennyLane circuit above, although using approximations instead of exact values. The benefit is that we can work with very
+# We can perform the same operations as our PennyLane circuit above, although using approximations instead of exact values. The benefit is that we can work with very
 # large circuits.
 #
 # Starting from a paper on simulating quantum computers with probabilistic methods [#nest]_ from Van den Nest (Theorem 3), one can arrive at the following expression
