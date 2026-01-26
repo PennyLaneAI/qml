@@ -304,11 +304,17 @@ for depth in swap_depths:
 # immutable constants. By actively navigating the architectural trade-offs between logical qubits
 # and Toffoli gates, we can reshape the cost profile of the algorithm.
 #
-# This is where the flexibility of PennyLane's resource :mod:`estimator <pennylane.estimator>`
-# shines. Rather than treating subroutines like ``Prepare`` and ``Select`` as black boxes,
+# This is where the flexibility of PennyLane's resource :mod:`estimator <~.pennylane.estimator>`
+# shines. Rather than treating subroutines like :mod:`~.pennylane.estimator.templates.PrepTHC`
+# and `:mod:~.pennylane.estimator.SelectTHC` as black boxes,
 # PennyLane allows us to tune the internal circuit configurations.
 # This transforms resource estimation from a passive reporting tool into an active design process,
 # enabling researchers to optimize their algorithmic implementations even before the hardware is available.
+#
+# Now it is your turn! Try plugging in the parameters for a molecule of your interest,
+# and experiment with different architectural choices to see if you can simulate your system
+# on the near-term hardware. With just a few lines of code, you can start building the blueprint for the
+# fault-tolerant algorithms of tomorrow.
 #
 #
 # References
