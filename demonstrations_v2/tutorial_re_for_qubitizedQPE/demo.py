@@ -24,11 +24,12 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 """
 
 ######################################################################
-# The key to this optimization lies in the specific method to build the Walk operator,
+# The key to this optimization lies in the specific method to build the quantum walk operator,
 # which is constructed from two primary subroutines:
 # the ``Prepare`` oracle, which prepares a state encoding the Hamiltonian coefficients, and the
 # ``Select`` oracle, which applies the Hamiltonian terms controlled by that state. The implementation of these subroutines
-# offers the flexibility to trade off qubits for gates, and vice versa. Specifically, we can tune two algorithmic knobs to perform this trade-off: batched Givens rotations and QROM SelectSwap. Let's see these two in detail.
+# offers the flexibility to trade off qubits for gates, and vice versa. Specifically, we can tune two algorithmic knobs to perform this trade-off: batched Givens rotations and
+# `Quantum Read-Only Memory (QROM) <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_ Select-Swap. Let's see these two in detail.
 #
 # Knob #1: Batched Givens rotations
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -36,7 +37,7 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 # Naively, to store all angles simultaneously, we require a register size equal to the number of rotations multiplied by the number of bits used for precision for each angle.
 # However, we can choose to load these angles in batches instead of loading all of them at once [#Caesura]_.
 # The tunable knob here is the **number of batches** in which the rotation angles are loaded. By increasing the number of batches,
-# register size is decreased, leading to a reduction of qubit requirements, but in exchange we need more repetitions of the `Quantum Read-Only Memory (QROM) <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_
+# register size is decreased, leading to a reduction of qubit requirements, but in exchange we need more repetitions of the QROM
 # subroutine for each batch, which increases the Toffoli count.
 #
 # .. figure:: ../_static/demonstration_assets/qubitization_re/pennylane-demo-image-circuit-batching-fig.png
@@ -118,7 +119,7 @@ femoco = qre.THCHamiltonian(num_orbitals=76, tensor_rank=450, one_norm=1201.5)
 #    n_{coeff} = \left\lceil 2.5 + \log_2\left(\frac{10 \lambda}{\epsilon_{QPE}}\right) \right\rceil, \quad
 #    n_{angle} = \left\lceil 5.652 + \log_2\left(\frac{20 \lambda N}{\epsilon_{QPE}}\right) \right\rceil.
 #
-# Since we are following the analysis in Lee et al. (2021), we use the same constants as the reference:
+# Since we are following the analysis in Lee et al. (2021) [#lee2021]_, we use the same constants as the reference:
 
 import numpy as np
 
@@ -152,7 +153,8 @@ print(f"Resources for Qubitized QPE for FeMoco(76): \n {total_cost}\n")
 ######################################################################
 # Analyzing the results
 # ---------------------
-# This version of QPE thus requires 2188 qubits and 8.8e10 trillion Toffoli gates (not to mention around 1e13 CNOT gates, which are often ignored).
+# This version of QPE thus requires 2188 qubits and :math:`8.8 \times 10^10 Toffoli gates (not to mention around :math:`1 \times 10^13`
+# CNOT gates, which are often overlooked).
 # But logical qubits are a precious resource. Could we implement a variant of the algorithm that uses only
 # 500 logical qubits? Yes, we can actively trade qubits for gates by modifying the circuit architecture using the "tunable knobs" we discussed
 # earlier.
@@ -259,6 +261,7 @@ for depth in swap_depths:
 
     qubit_counts.append(total_cost.total_wires)
     toffoli_counts.append(total_cost.gate_counts["Toffoli"])
+
 
 ######################################################################
 #
