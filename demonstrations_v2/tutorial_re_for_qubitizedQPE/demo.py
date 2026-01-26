@@ -128,7 +128,7 @@ n_coeff = 10
 n_angle = 20
 
 ########################################################################
-# Estimating qubitized QPE cost
+# Estimating the cost of qubitized QPE
 # -----------------------------
 # With these parameters in hand, we can esimate the total resources. The full algorithm consists of the Walk Operator,
 # constructed via `QubitizeTHC <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.QubitizeTHC.html>`_, running within a QPE routine.
