@@ -229,8 +229,8 @@ print(f"  Toffolis: {toffoli_counts[-1]:.3e}\n")
 # -----------------------------------------------
 # We have successfully brought the qubit count down using batching. Now, can we optimize the gate count
 # without incurring extra qubit costs?
-# To do this, we use the **Select-Swap QROM** strategy. Normally, this involves trading qubits for Toffoli gates.
-# But here is the trick: the register used to store rotation angles in the :class:`~.pennylane.resource.SelectTHC`
+# To do this, we use the **Select-Swap QROM** strategy. Normally, this involves trading qubits for Toffoli gates -
+# but we have a useful trick: the register used to store rotation angles in the :class:`~.pennylane.resource.SelectTHC`
 # operator is idle during the Prepare step. We can reuse these idle qubits to implement the
 # ``QROM`` for the :class:`~.pennylane.resource.PrepareTHC` operator.
 # This should allow us to decrease the Toffoli gates without increasing the logical
