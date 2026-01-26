@@ -204,12 +204,12 @@ for i in batch_sizes:
 #    :target: javascript:void(0)
 #
 # The plot illustrates a clear crossover in resource requirements. At the left extreme (a single batch),
-# we minimize Toffoli counts but pay a massive penalty in qubits, requiring around 1800 logical qubits, which far exceeds
-# our hypothetical 500-qubit limit.
+# we minimize Toffoli counts but require over 1800 logical qubits, which far exceeds
+# our hypothetical 500 qubit limit.
 # As we increase the number of batches, the qubit count plummets, eventually dipping below
-# the 500-qubit limit. However, there is no free lunch: the Toffoli count rises steadily because we must
-# repeat the QROM readout for every additional batch. To verify the feasibility, let's print the
-# concrete numbers for the two extremes:
+# the 500 qubit limit. However, there is no free lunch: the Toffoli count rises steadily as qubits decrease,
+# because we must repeat the QROM readout for every additional batch.
+# To verify feasibility, let's examine the resource requirements of the two extremes:
 #
 print("Resource counts with batch size: 1")
 print(f"  Qubits: {qubit_counts[0]}")
