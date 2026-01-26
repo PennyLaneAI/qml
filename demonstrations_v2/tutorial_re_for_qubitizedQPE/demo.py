@@ -89,7 +89,8 @@ a few hundred logical qubits. In particular, we show how to implement **QPE for 
 #     Here we focus on the THC implementation as it provides a straightforward and intuitive framework
 #     for understanding the fundamental trade-offs between qubit and gate resource requirements.
 #
-# Let's initialize the THC representation of the FeMoco Hamiltonian with a 76-orbital active space, with parameters obtained from the literature [#lee2021]_:
+# Using parameters obtained from the literature, let's compactly describe the THC representation
+# of the FeMoco Hamiltonian with a 76-orbital active space [#lee2021]_:
 
 from pennylane import estimator as qre
 
