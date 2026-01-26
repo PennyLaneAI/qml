@@ -267,7 +267,7 @@ for depth in swap_depths:
 #    :width: 90%
 #    :target: javascript:void(0)
 #
-# The plot confirms our intuition. For depths 1, 2, and 4, the logical qubit count stays exactly the same, while the
+# The data confirms our intuition. For depths 1, 2, and 4, the logical qubit count stays exactly the same, while the
 # Toffoli count decreases. However, moving to depth 8, the qubit count jumps as the swap network becomes too large to fit
 # entirely within the reused register, forcing the allocation of additional qubits. This marks
 # the point where the "free" optimization ends and the standard trade-off resumes.
