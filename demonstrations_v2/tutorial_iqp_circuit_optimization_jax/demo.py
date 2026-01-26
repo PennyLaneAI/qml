@@ -239,7 +239,7 @@ print("Expectation value: ", penn_op_expval)
 # where :math:`s` is the number of samples.
 #
 # Let's see now how to use the :func:`~pennylane.qnn.iqp_expval` function in PennyLane to calculate expectation values, based on the same
-# arguments in the previous example. First, we create the circuit object with ``IqpSimulator``,
+# arguments in the previous example (note that this functionality is also available in IQPopt via the class method ``IqpSimulator.op_expval``). First, we create the circuit object with ``IqpSimulator``,
 # which takes in the number of qubits ``n_qubits`` and the ``gates`` in our usual format:
 #
 import iqpopt as iqp
