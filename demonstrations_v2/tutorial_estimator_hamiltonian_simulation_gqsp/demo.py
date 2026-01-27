@@ -37,7 +37,7 @@ truncated to a degree determined by :math:`t` and :math:`\varepsilon`. The corre
 transformation is then implemented on a block-encoding of :math:`H`. 
 
 In practice, it is customary to instead encode :math:`\hat{W} \approx \arccos{H}` and approximate the 
-function :math:`e^{-i\cos (\hat{W})t}` through the rapidly-converging Jacobi-Anger expansion [#gqsp]_. 
+function :math:`e^{-i\cos (\hat{W})t}` through the rapidly-converging Jacobi-Anger expansion [#gqsp2024]_. 
 This type of block-encoding is a `qubitization <https://pennylane.ai/qml/demos/tutorial_qubitization>`_ of the Hamiltonian. It can be implemented by a 
 sequence of Prepare and Select operators that are induced by a `linear combination of unitaries 
 (LCU) decomposition <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_. 
