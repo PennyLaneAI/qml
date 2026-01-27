@@ -690,6 +690,6 @@ plt.show()
 # 
 #    Classiq. 
 #    “Decoded Quantum Interferometry Algorithm.”
-#    `<https://docs.classiq.io/latest/explore/algorithms/dqi/dqi_max_xorsat/>`__, 2025.
+#    `<https://docs.classiq.io/latest/explore/algorithms/search_and_optimization/dqi/dqi_max_xorsat/>`__, 2025.
 #
 
