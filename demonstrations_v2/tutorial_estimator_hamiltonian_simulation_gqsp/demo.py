@@ -27,7 +27,7 @@ block-encoded operators. It consists of a (i) sequence of interleaving *signal* 
 block-encoding, and (ii) single-qubit *signal-processing* operators that define the polynomial.
 GQSP expands on the original approach by considering signal-processing operators that are general 
 :math:`SU(2)` transformations; this removes restrictions on available polynomial transformations
-and facilitates solving for the :math:`SU(2)` *phase factors*, making it the modern method of choice [#gqsp]_.
+and facilitates solving for the :math:`SU(2)` *phase factors*, making it the modern method of choice [#gqsp2024]_.
  
 Hamiltonian simulation is the task of implementing the time-evolution operator :math:`e^{-iHt}`.
 We do this for an input Hamiltonian :math:`H` and a target evolution time :math:`t`, subject to a target error 
@@ -265,7 +265,7 @@ plt.show()
 #     `Quantum, 3, 163 <https://quantum-journal.org/papers/q-2019-07-12-163/>`__, 2019
 #
 #
-# .. [#gqsp]
+# .. [#gqsp2024]
 #
 #     Danial Motlagh, Nathan Wiebe,
 #     "Generalized quantum signal processing",
