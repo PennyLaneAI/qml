@@ -672,24 +672,24 @@ plt.show()
 #
 #    Stephen P. Jordan, Noah Shutty, Mary Wootters, Adam Zalcman, Alexander Schmidhuber, Robbie King, Sergei V. Isakov, Tanuj Khattar, and Ryan Babbush.
 #    "Optimization by Decoded Quantum Interferometry.",
-#    `<https://arxiv.org/abs/2408.08292>`__, 2024.
+#    `arXiv:2408.08292v5 <https://arxiv.org/abs/2408.08292v5>`__, 2025.
 #
 # .. [#Bartschi2019]
 #
 #    Andreas Bärtschi, and Stephan Eidenbenz.
 #    "Deterministic Preparation of Dicke States.",
-#    `<https://arxiv.org/abs/1904.07358>`__, 2019.
+#    `arXiv:1904.07358v1 <https://arxiv.org/abs/1904.07358v1>`__, 2019.
 #
 # .. [#Patamawisut2025]
 #
 #    Natchapol Patamawisut, Naphan Benchasattabuse, Michal Hajdušek, and Rodney Van Meter.
 #    "Quantum Circuit Design for Decoded Quantum Interferometry."
-#    `<https://arxiv.org/abs/2504.18334>`__, 2025.
+#    `arXiv:2504.18334v2 <https://arxiv.org/abs/2504.18334v2>`__, 2025.
 #
 # .. [#Classiq2025]
 # 
 #    Classiq. 
 #    “Decoded Quantum Interferometry Algorithm.”
-#    `<https://docs.classiq.io/latest/explore/algorithms/search_and_optimization/dqi/dqi_max_xorsat/>`__, 2025.
+#    `Classiq library <https://docs.classiq.io/latest/explore/algorithms/search_and_optimization/dqi/dqi_max_xorsat/>`__, 2025.
 #
 
