@@ -196,7 +196,6 @@ for i in batch_sizes:
     qubit_counts.append(total_cost.total_wires)
     toffoli_counts.append(total_cost.gate_counts["Toffoli"])
 
-
 ######################################################################
 # Let's visualize the results by plotting the qubit and Toffoli counts against the batch size:
 #
