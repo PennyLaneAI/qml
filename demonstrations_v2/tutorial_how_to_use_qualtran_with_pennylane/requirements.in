@@ -3,3 +3,6 @@ qualtran
 galois>=0.4
 cairosvg
 Pillow
+# Conflicts between numba and numpy.
+# Revisit this constraint once numba supports numpy 2.4.
+numba>0.55
