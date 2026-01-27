@@ -672,7 +672,7 @@ plt.show()
 #
 #    Stephen P. Jordan, Noah Shutty, Mary Wootters, Adam Zalcman, Alexander Schmidhuber, Robbie King, Sergei V. Isakov, Tanuj Khattar, and Ryan Babbush.
 #    "Optimization by Decoded Quantum Interferometry.",
-#    `arXiv:2408.08292v5 <https://arxiv.org/abs/2408.08292v5>`__, 2025.
+#    `arXiv:2408.08292 <https://arxiv.org/abs/2408.08292>`__, 2024.
 #
 # .. [#Bartschi2019]
 #
