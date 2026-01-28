@@ -86,7 +86,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ env.TARGET_REF }}
-          fetch-depth: 2
+          fetch-depth: 1
 
       - name: Install pandoc and opencl
         run: |
