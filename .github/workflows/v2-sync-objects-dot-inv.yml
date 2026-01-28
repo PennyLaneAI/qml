@@ -71,6 +71,7 @@ jobs:
           base_sha: ${{ steps.base-sha.outputs.base_sha }}
           sha: ${{ github.event.workflow_run.head_sha }}
 
+      # For workflow_run, output the changed demos for debugging purposes.
       - name: Output changed demos
         if: github.event_name == 'workflow_run'
         run: |
