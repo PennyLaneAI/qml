@@ -90,7 +90,7 @@ def gate2_noise(op, **metadata):
 rmeas_fcond = qml.noise.meas_eq(qml.counts)
 def rmeas_noise(op, **metadata):
     for wire in op.wires:
-        qml.GeneralizedAmplitudeDamping(prob_ampl_damp[wire], 1 - exc_population, wire)
+        qml.GeneralizedAmplitudeDamping(prob_ampl_damp[wire], exc_population, wire)
 
 # Building the PennyLane noise model
 model_pl = qml.NoiseModel(

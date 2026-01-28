@@ -356,6 +356,12 @@ optimizer = qml.AdagradOptimizer(stepsize=0.01)
 # the number of QAOA layers.
 #
 # .. warning::
+#
+#     The following demo fails due to a bug in the PennyLane-Braket plugin. Details about this bug can be found
+#     in `this issue <https://github.com/amazon-braket/amazon-braket-pennylane-plugin-python/issues/285>`__ in
+#     the plugin's GitHub repository. The code output is shown for historical reference.
+#
+# .. warning::
 #     The following lines are computationally intensive. Remember that running it will result in
 #     simulation fees charged to your AWS account. We recommend monitoring your usage on the AWS
 #     dashboard.
@@ -451,7 +457,9 @@ print("Parameters saved to params.npy")
 # :doc:`getting started with hybrid jobs <demos/getting_started_with_hybrid_jobs>`.
 #
 # .. warning::
-#     The following demo is only compatible with Python version 3.10.
+#
+#     The remaining demo is only compatible with Python version 3.10. Consequently, the latest supported
+#     PennyLane version is ``pennylane==0.42``.
 #
 # In the following code, we run the same QAOA optimization as before, but this time on an
 # `Amazon EC2 ml.c5.xlarge instance <https://aws.amazon.com/ec2/instance-types/c5/>`__
@@ -571,8 +579,8 @@ metrics = job.metrics()
 # We use the pandas library to load the metrics into a DataFrame, and plot the loss as a function of
 # iteration number.
 
-import pandas as pd
 import matplotlib.pyplot as plt
+import pandas as pd
 
 plt.style.use("pennylane.drawer.plot")
 

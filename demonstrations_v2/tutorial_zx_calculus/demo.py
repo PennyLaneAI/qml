@@ -774,7 +774,7 @@ qscript_opt = qml.transforms.from_zx(g)
 
 wires = qml.wires.Wires([4, 3, 0, 2, 1])
 wires_map = dict(zip(qscript_opt.wires, wires))
-qscript_opt_reorder, processing = qml.map_wires(input=qscript_opt, wire_map=wires_map)
+qscript_opt_reorder, processing = qml.map_wires(qscript_opt, wire_map=wires_map)
 
 @qml.qnode(device=dev)
 def mod_5_4():

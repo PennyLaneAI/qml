@@ -1,5 +1,4 @@
-r""".. _trapped_ions:
-
+r"""
 Trapped ion quantum computers
 =============================
 
@@ -11,8 +10,6 @@ Trapped ion quantum computers
    tutorial_pasqal Quantum computation with neutral atoms
    tutorial_sc_qubits Quantum computing with superconducting qubits
    tutorial_photonics Photonic quantum computers
-
-*Author: Alvaro Ballon — Posted: 10 November 2021. Last updated: 26 August 2022.*
 
 The race for quantum advantage is on! 
 A host of competitors are using different technologies to build a useful quantum

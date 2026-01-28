@@ -4,3 +4,4 @@ dwave-ocean-sdk==7.1.0
 openqaoa-core
 pandas
 ipython
+numpy<2.0.0

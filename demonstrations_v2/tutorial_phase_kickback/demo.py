@@ -35,7 +35,7 @@ world and learn how to create an unbreakable lock? Let’s go!
 #    :align: center
 #    :width: 50%
 #
-# If you want to know more about the details, do not hesitate to consult the node `[P.1] </codebook/09-quantum-phase-estimation/01-catch-the-phase/>`_ of the PennyLane Codebook.
+# If you want to know more about the details, do not hesitate to consult the node `[P.1] <https://pennylane.ai/codebook/quantum-phase-estimation/catch-the-phase>`_ of the PennyLane Codebook.
 
 ######################################################################
 # Setting up PennyLane

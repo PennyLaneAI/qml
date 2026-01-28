@@ -401,7 +401,7 @@ def plot_decision_boundaries(classifier, ax, N_gridpoints=14):
 
     _zz = np.zeros_like(_xx)
     for idx in np.ndindex(*_xx.shape):
-        _zz[idx] = classifier.predict(np.array([_xx[idx], _yy[idx]])[np.newaxis, :])
+        _zz[idx] = classifier.predict(np.array([_xx[idx], _yy[idx]])[np.newaxis, :]).item()
 
     plot_data = {"_xx": _xx, "_yy": _yy, "_zz": _zz}
     ax.contourf(

@@ -169,6 +169,7 @@ jobs:
 
       - name: Install pandoc, opencl, and graphviz
         run: |
+          sudo apt-get update
           sudo apt-get install -y \
             ocl-icd-opencl-dev \
             pandoc \
