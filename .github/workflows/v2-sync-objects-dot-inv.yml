@@ -40,11 +40,47 @@ on:
 
 
 jobs:
-  build-and-upload:
-    # For workflow_run, only run on success; for workflow_call, always run.
+  changed-demos:
+    # For workflow_run, only run when the triggering workflow succeeded.
     if: |
       github.event_name != 'workflow_run' ||
       github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    outputs:
+      updated: ${{ steps.get-changed-demos.outputs.updated }}
+      deleted: ${{ steps.get-changed-demos.outputs.deleted }}
+      # workflow_call: always proceed to build; workflow_run: only if there are changed demos
+      any_changed: ${{ github.event_name == 'workflow_call' || steps.get-changed-demos.outputs.updated != '' || steps.get-changed-demos.outputs.deleted != '' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch || github.event.workflow_run.head_sha }}
+          fetch-depth: ${{ github.event_name == 'workflow_run' && 2 || 1 }}
+
+      - name: Get base SHA
+        if: github.event_name == 'workflow_run'
+        id: base-sha
+        run: echo "base_sha=$(git rev-parse ${{ github.event.workflow_run.head_sha }}^)" >> "$GITHUB_OUTPUT"
+
+      - name: Get changed demos
+        id: get-changed-demos
+        if: github.event_name == 'workflow_run'
+        uses: ./.github/actions/get-changed-demos
+        with:
+          base_sha: ${{ steps.base-sha.outputs.base_sha }}
+          sha: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Output changed demos
+        if: github.event_name == 'workflow_run'
+        run: |
+          echo "Updated: ${{ steps.get-changed-demos.outputs.updated }}"
+          echo "Deleted: ${{ steps.get-changed-demos.outputs.deleted }}"
+
+  build-and-upload:
+    # Run when changed-demos says there are changes (or we were invoked via workflow_call).
+    if: needs.changed-demos.outputs.any_changed == 'true'
+    needs: [changed-demos]
     runs-on: ubuntu-latest
     env:
       # Defaults for workflow_call usage
