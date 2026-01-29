@@ -2,8 +2,8 @@ r"""Resource estimation for Hamiltonian simulation with GQSP
 ============================================================
 
 Simulating the time evolution of a quantum system is the most useful problem with an exponential quantum speedup. 
-This task is known as **Hamiltonian simulation**, and it is the main subroutine in quantum algorithms for chemistry,
-materials science, and condensed matter physics. Multiple strategies exist
+This task is known as **Hamiltonian simulation**, and it is the most common subroutine used in quantum algorithms
+for chemistry, materials science, and condensed matter physics. Multiple strategies exist
 with unique strengths and weaknesses, but the best asymptotic scaling is achieved by methods based on quantum
 signal processing (QSP) [#qsp]_. Quantifying the precise constant-factor cost of these algorithms is challenging, 
 as we need to compute the cost of block encoding Hamiltonians and determine the correct number of phase factors as
@@ -15,9 +15,9 @@ on the modern framework of **generalized quantum signal processing (GQSP)** and 
 for a simple spin model and for a Heisenberg Hamiltonian for NMR spectral prediction. More information on QSP 
 can be found in our other demos:
 
-- `Function Fitting using Quantum Signal Processing <https://pennylane.ai/qml/demos/function_fitting_qsp>`_
-- `Using PennyLane and Qualtran to analyze how QSP can improve measurements of molecular properties <https://pennylane.ai/qml/demos/tutorial_qksd_qsp_qualtran>`_
-- `Intro to QSVT <https://pennylane.ai/qml/demos/tutorial_intro_qsvt>`_
+- :doc:`Function Fitting using Quantum Signal Processing <function_fitting_qsp>`
+- :doc:`Using PennyLane and Qualtran to analyze how QSP can improve measurements of molecular properties <tutorial_qksd_qsp_qualtran>`
+- :doc:`Intro to QSVT <tutorial_intro_qsvt>`
 
 
 Hamiltonian simulation with GQSP
@@ -38,9 +38,9 @@ transformation is then implemented on a block-encoding of :math:`H`.
 
 In practice, it is customary to instead encode the Hamiltonian as a walk operator :math:`\hat{W}`, and
 approximate the function :math:`e^{-i\cos (\hat{W})t}` through the rapidly-converging Jacobi-Anger expansion
-[#gqsp2024]_. This type of block-encoding is a `qubitization <https://pennylane.ai/qml/demos/tutorial_qubitization>`_
-of the Hamiltonian. It can be implemented by a sequence of Prepare and Select operators that are induced by a
-`linear combination of unitaries (LCU) decomposition <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_.
+[#gqsp2024]_. This type of block-encoding is a `qubitization <tutorial_qubitization>`of the Hamiltonian.
+# It can be implemented by a sequence of Prepare and Select operators that are induced by a
+`linear combination of unitaries (LCU) decomposition <tutorial_lcu_blockencoding>`.
 
 
 Let's explore how to use PennyLane to estimate the cost of Hamiltonian simulation with GQSP.
@@ -85,8 +85,7 @@ xx_hamiltonian = qre.PauliHamiltonian(
 # We now construct the walk operator, which consists of a sequence
 # of Prepare and Select operators. For Prepare, we need extra qubits to load the coefficients, and will employ a 
 # standard state preparation algorithm called `QROMStatePreparation <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.QROMStatePreparation.html>`_,
-# based on `QROM <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_,
-# which is natively supported in PennyLane:
+# based on `QROM <tutorial_intro_qrom>`_, which is natively supported in PennyLane:
 
 
 num_terms = xx_hamiltonian.num_terms  # number of terms in the Hamiltonian
