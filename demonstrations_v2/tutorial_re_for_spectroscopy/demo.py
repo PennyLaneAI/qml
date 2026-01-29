@@ -26,7 +26,7 @@ Simulating Spectroscopy on a Quantum Computer
 
 Our first challenge is to translate a physical spectroscopy experiment into a simulation performed with a quantum circuit.
 
-Regardless of the specific technique, whether it is X-ray Absorption Spectroscopy(XAS) [#Fomichev2025]_,
+Regardless of the specific technique, whether it is X-ray Absorption Spectroscopy (XAS) [#Fomichev2025]_,
 Vibrational Spectroscopy [#Laoiza2025]_, or Electron Energy Loss Spectroscopy [#Kunitsa2025]_, the
 core goal is the same: calculating the time-domain correlation function, :math:`\tilde{G}(t)`.
 
