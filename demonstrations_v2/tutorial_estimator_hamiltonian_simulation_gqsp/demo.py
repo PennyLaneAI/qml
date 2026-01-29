@@ -15,9 +15,9 @@ on the modern framework of **generalized quantum signal processing (GQSP)** and 
 for a simple spin model and for a Heisenberg Hamiltonian for NMR spectral prediction. More information on QSP 
 can be found in our other demos:
 
-- Learn about the fundamentals of QSP through :doc:`Function Fitting using Quantum Signal Processing <function_fitting_qsp>`_,
-- start estimating resources for QSP by :doc:`Using PennyLane and Qualtran to analyze how QSP can improve measurements of molecular properties <tutorial_qksd_qsp_qualtran>`_,
-- and explore the extensions of QSP in :doc:`Intro to QSVT <tutorial_intro_qsvt>`_.
+- `Function Fitting using Quantum Signal Processing <function_fitting_qsp>`_
+- `Using PennyLane and Qualtran to analyze how QSP can improve measurements of molecular properties <tutorial_qksd_qsp_qualtran>`_
+- `Intro to QSVT <tutorial_intro_qsvt>`_
 
 Hamiltonian simulation with GQSP
 --------------------------------
