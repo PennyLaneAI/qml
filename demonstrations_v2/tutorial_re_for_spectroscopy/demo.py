@@ -24,7 +24,7 @@ these algorithms now, we can ensure they are ready for the fault-tolerant hardwa
 Simulating Spectroscopy on a Quantum Computer
 ---------------------------------------------
 
-First challenge is translating a physical spectroscopy experiment into a quantum circuit.
+Our first challenge is to translate a physical spectroscopy experiment into a simulation performed with a quantum circuit.
 
 Regardless of the specific technique, whether it is X-ray Absorption Spectroscopy(XAS) [#Fomichev2025]_,
 Vibrational Spectroscopy [#Laoiza2025]_, or Electron Energy Loss Spectroscopy [#Kunitsa2025]_, the
