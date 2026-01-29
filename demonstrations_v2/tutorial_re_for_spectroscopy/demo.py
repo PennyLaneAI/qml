@@ -49,8 +49,8 @@ we have significant freedom to optimize the implementation. We can select specif
 Hamiltonian representations and pair them with the time evolution algorithm of choice, i.e. Trotterization
 or `Qubitization <https://pennylane.ai/qml/demos/tutorial_qubitization>`_.
 
-We begin with the example of `X-ray Absorption Spectroscopy (XAS) <https://pennylane.ai/qml/demos/tutorial_xas>`_ to demonstrate how to use the
-PennyLane resource estimator to generate logical resource counts.
+We begin with the example of `X-ray Absorption Spectroscopy (XAS) <https://pennylane.ai/qml/demos/tutorial_xas>`_, using
+PennyLane's resource :mod:`estimator <pennylane.estimator>` to quantify the resource requirements.
 
 X-Ray Absorption Spectroscopy
 -----------------------------
