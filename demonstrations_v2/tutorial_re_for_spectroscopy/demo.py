@@ -12,7 +12,7 @@ Can quantum computers do better?
 In this demo, we'll find out. Since quantum computers can represent and evolve quantum states
 using polynomial resources, they offer a promising path forward. we will analyze the scalability of
 such key spectroscopy algorithms
-through PennyLane's resource `estimator <https://docs.pennylane.ai/en/stable/code/qml_estimator.html>`_ and
+through PennyLane's resource :mod:`estimator <pennylane.estimator>`_ and
 calculate their actual resource requirements. By benchmarking
 these algorithms now, we can ensure they are ready for the fault-tolerant hardware of the future.
 
@@ -30,7 +30,7 @@ Regardless of the specific technique, whether it is X-ray Absorption Spectroscop
 Vibrational Spectroscopy [#Laoiza2025]_, or Electron Energy Loss Spectroscopy [#Kunitsa2025]_, the
 core goal is the same: calculating the time-domain correlation function, :math:`\tilde{G}(t)`.
 
-To measure this property on a quantum computer, we rely on a standard algorithmic template called the
+To measure this observable on a quantum computer, we rely on a standard algorithmic template called the
 **Hadamard Test**.
 
 .. figure:: ../_static/demonstration_assets/xas/global_circuit.png
@@ -79,7 +79,7 @@ limno_ham = [qre.CDFHamiltonian(num_orbitals=i, num_fragments=i) for i in active
 ######################################################################
 # Trotterization
 # ^^^^^^^^^^^^^^
-# With the Hamiltonian defined, we move to the time evolution. This requires determining the total simulation time
+# With the Hamiltonian defined, we move to the time evolution. This requires determining the total time of evolution
 # and the number of Trotter steps needed to keep the error within bounds.
 #
 # Following the analysis in Fomichev et al. (2025) [#Fomichev2025]_, we adopt a :math:`2^{nd}` order `Trotter-Suzuki product
