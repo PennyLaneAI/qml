@@ -66,8 +66,8 @@ widely studied as critical cathode materials for next-generation batteries.
 The first step to determining the resources for this simulation is to define the Hamiltonian.
 Here, we must note that the resource requirements for the simulation depend on the structural parameters of the Hamiltonian, specifically
 the number of orbitals and the number of fragments, rather than the exact integral values. We leverage this by utilizing the specialized
-`compact Hamiltonian <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.compact_hamiltonian.CDFHamiltonian.html>`__ representation feature
-offered by PennyLane, skipping the expensive Hamiltonian construction while retaining the exact cost topology required for analysis.
+`compact Hamiltonian <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.compact_hamiltonian.CDFHamiltonian.html>`__ representation
+offered by PennyLane, bypassing the need for expensive Hamiltonian construction while retaining the exact cost topology required for our analysis.
 """
 
 import pennylane.estimator as qre
