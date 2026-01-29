@@ -40,8 +40,8 @@ To measure this property on a quantum computer, we rely on a standard algorithmi
 
   Figure 1: *Circuit for XAS Simulation*
 
-The dominant cost for this circuit comes from the controlled time evolution block, the efficiency of which
-thus dictates the resource requirements for our algorithms. This cost is dictated by the intersection of
+As we will see, the dominant cost in this circuit comes from the controlled time evolution block, the efficiency of which
+thus dictates the feasibility of our algorithm. This cost is dictated by the intersection of
 the spectroscopic domain and our implementation strategy.
 
 While the physical problem of interest dictates the type of Hamiltonian (e.g., electronic, vibrational etc.),
