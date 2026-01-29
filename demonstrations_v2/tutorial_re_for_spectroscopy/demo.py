@@ -213,7 +213,7 @@ for ham in limno_ham:
 # These results highlight that while qubit requirements (~90-100) are feasible for
 # early fault-tolerant devices, the gate complexity approaches :math:`10^9` Toffolis.
 #
-# Crucially, these estimates represent a single shot; the total cost for the full algorithm will scale
+# Crucially, these are estimates for a single shot; the total cost for the full algorithm will scale
 # linearly with the number of samples required. This gate overhead is therefore the primary bottleneck we must
 # address. Let's see how we can optimize these gate counts further.
 #
