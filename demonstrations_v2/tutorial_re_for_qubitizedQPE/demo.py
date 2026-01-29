@@ -317,7 +317,7 @@ for depth in swap_depths:
 #
 #
 # References
-# ----------
+# ^^^^^^^^^^
 #
 # .. [#Caesura]
 #
