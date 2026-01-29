@@ -44,7 +44,7 @@ As we will see, the dominant cost in this circuit comes from the controlled time
 thus dictates the feasibility of our algorithm. This cost is dictated by the intersection of
 the spectroscopic domain and our implementation strategy.
 
-While the physical problem of interest dictates the type of Hamiltonian (e.g., electronic, vibrational etc.),
+While the physical problem of interest dictates the type of Hamiltonian (e.g., electronic, vibrational, etc.),
 we have significant freedom to optimize the implementation. We can select specific
 Hamiltonian representations and pair them with the time evolution algorithm of choice, i.e. Trotterization
 or `Qubitization <https://pennylane.ai/qml/demos/tutorial_qubitization>`_.
