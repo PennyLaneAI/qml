@@ -323,13 +323,13 @@ for depth in swap_depths:
 #
 #    A Caesura et al.
 #    Faster quantum chemistry simulations on a quantum computer with improved tensor factorization and active volume compilation
-#    `arXiv:2501.06165 (2025), <https://arxiv.org/abs/2501.06165>`__
+#    `arXiv:2501.06165 (2025). <https://arxiv.org/abs/2501.06165>`__
 #
 # .. [#SOSSA]
 #
 #    Robbie King et al.
 #    Quantum simulation with sum-of-squares spectral amplification
-#    `arXiv:2505.01528 (2025), <https://arxiv.org/abs/2505.01528>`__
+#    `arXiv:2505.01528 (2025). <https://arxiv.org/abs/2505.01528>`__
 #
 # .. [#lee2021]
 #
