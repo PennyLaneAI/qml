@@ -7,9 +7,9 @@ materials science, and condensed matter physics. Multiple strategies exist
 with unique strengths and weaknesses, but the best asymptotic scaling is achieved by methods based on quantum
 signal processing (QSP) [#qsp]_. Quantifying the precise constant-factor cost of these algorithms is challenging, 
 as we need to compute the cost of block encoding Hamiltonians and determine the correct number of phase factors as
-a function of evolution time and target errors. Well, at least it used to be challenging.
+a function of evolution time and target errors. Well, at least it *used* to be challenging.
 
-In this demo, we showcase how to use PennyLane's :mod:`~.pennylane.estimator` module to compute the cost of Hamiltonian
+In this demo, we use PennyLane's :mod:`~.pennylane.estimator` module to compute the cost of Hamiltonian
 simulation with QSP, making it simple to determine how useful it is for your application of interest. We focus 
 on the modern framework of **generalized quantum signal processing (GQSP)** and study examples of resource estimation
 for a simple spin model and for a Heisenberg Hamiltonian for NMR spectral prediction. More information on QSP 
@@ -36,18 +36,18 @@ GQSP solves this challenge by expressing the complex exponential :math:`e^{-iHt}
 truncated to a degree determined by :math:`t` and :math:`\varepsilon`. The corresponding 
 transformation is then implemented on a block-encoding of :math:`H`. 
 
-In practice, it is customary to instead encode :math:`\hat{W} \approx \arccos{H}` and approximate the 
-function :math:`e^{-i\cos (\hat{W})t}` through the rapidly-converging Jacobi-Anger expansion [#gqsp2024]_. 
-This type of block-encoding is a `qubitization <https://pennylane.ai/qml/demos/tutorial_qubitization>`_ of the Hamiltonian. It can be implemented by a 
-sequence of Prepare and Select operators that are induced by a `linear combination of unitaries 
-(LCU) decomposition <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_. 
-We refer to this block encoding as a **walk operator**.
+In practice, it is customary to instead encode the Hamiltonian as a walk operator :math:`\hat{W}`, and
+approximate the function :math:`e^{-i\cos (\hat{W})t}` through the rapidly-converging Jacobi-Anger expansion
+[#gqsp2024]_. This type of block-encoding is a `qubitization <https://pennylane.ai/qml/demos/tutorial_qubitization>`_
+of the Hamiltonian. It can be implemented by a sequence of Prepare and Select operators that are induced by a
+`linear combination of unitaries (LCU) decomposition <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_.
+
 
 Let's explore how to use PennyLane to estimate the cost of Hamiltonian simulation with GQSP.
 
 Spin dynamics
 -------------
-We focus on the XX model Hamiltonian with no external field, defined as
+We focus on the :math:`XX` model Hamiltonian with no external field, defined as
 
 .. math::
 
@@ -57,16 +57,15 @@ where :math:`X,Y` are Pauli matrices acting on a given spin site and :math:`N` i
 The coefficients :math:`J_{ij}` can be interpreted as the adjacency matrix of a graph that defines the
 coupling between spins. Generating samples from a time-evolved state under this Hamiltonian (as well as 
 many other spin models) is widely believed to be an intractable classical problem [#spin]_. **But what is 
-the cost of performing this simulation on a quantum computer?** More specifically: how many qubits 
-and gates are needed to perform Hamiltonian simulation with GQSP on a square 
-grid of :math:`100\times 100` spins?
+the cost of performing this simulation on a quantum computer?** For example: how many qubits and gates are
+needed to perform Hamiltonian simulation with GQSP on a square grid of :math:`100\times 100` spins?
 
 To answer this, we first define the Hamiltonian. For the purpose of resource estimation, the specific coupling coefficients are
 unimportant since the algorithm works identically regardless of their concrete value. This allows us to define 
 **compact Hamiltonians** that are easy to instantiate by specifying only the type and number of Pauli operators.
 With periodic boundary conditions, each spin site on the lattice is coupled to four nearest neighbours, so
-we have 10,000 qubits with 40,000 XX and YY couplings respectively. This information is defined as a
-dictionary and passed directly to the :class:`~.pennylane.estimator.PauliHamiltonian` resource operator:
+we have 10,000 qubits with 40,000 :math:`XX` and :math:`YY` couplings respectively. This information is defined as a
+dictionary and passed directly to the compact :class:`~.pennylane.estimator.compact_hamiltonian.PauliHamiltonian` class:
 """
 
 import pennylane.estimator as qre
@@ -102,7 +101,9 @@ print(qre.estimate(Prep))
 
 
 ################################### 
-# For Select, PennyLane directly supports a resource operator, `SelectPauli <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.SelectPauli.html>`_, tailored to Pauli Hamiltonians.
+# For Select, PennyLane provides the
+# `SelectPauli <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.SelectPauli.html>`_
+# resource operator, tailored to Pauli Hamiltonians.
 
 Sel = qre.SelectPauli(xx_hamiltonian) 
 print(f"Resources for Select")
@@ -110,22 +111,22 @@ print(qre.estimate(Sel))
 
 ################################### 
 # We use Prepare and Select to construct the walk operator, which can be built directly using the dedicated 
-# `Qubitization <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.Qubitization.html>`_ operation
+# `Qubitization <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.Qubitization.html>`_ operator:
 
-W = qre.Qubitization(Prep, Sel)
+Walk = qre.Qubitization(Prep, Sel)
 print(f"Resources for Walk operator")
-print(qre.estimate(W))
+print(qre.estimate(Walk))
 
 ################################### 
 # Finally, these pieces are brought together to estimate the cost of performing Hamiltonian simulation with GQSP. 
-# This can be calculated with the built-in PennyLane function `GQSPTimeEvolution <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.GQSPTimeEvolution.html>`_.
-# Under the hood, it constructs the `GQSP <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.GQSP.html>`_
-# sequence and determines the required polynomial degree to simulate the desired dynamics. 
+# This can be calculated directly with the `GQSPTimeEvolution <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.GQSPTimeEvolution.html>`_
+# operator. Under the hood, it constructs the `GQSP <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.GQSP.html>`_
+# sequence and determines the required polynomial degree to simulate the desired dynamics.
 # 
 # As an example, we assume the Hamiltonian is normalized and calculate the degree needed to evolve for
 #  :math:`t=100` and a target error of :math:`\epsilon=0.1\%`.
 
-HamSim = qre.GQSPTimeEvolution(W, time=100, one_norm=1, poly_approx_precision=0.001)
+HamSim = qre.GQSPTimeEvolution(Walk, time=100, one_norm=1, poly_approx_precision=0.001)
 
 print(f"Resources for Hamiltonian simulation with GQSP")
 print(qre.estimate(HamSim))
@@ -154,8 +155,8 @@ print(qre.estimate(HamSim))
 # As before, we build a compact Hamiltonian representation by counting the number of Pauli operators of
 # each kind, which is straightforward from expanding the Hamiltonian. For :math:`N` spins, sums over :math:`k\neq l`
 # run over :math:`N(N-1)/2` terms, and there are 9 possible pairs of Pauli matrices.
-# The last sum over :math:`k` contains :math:`N` terms of 3 different Paulis. 
-# We study a system of :math:`N=32` spins, same as in the paper, which gives the following compact Hamiltonian:
+# The last sum over :math:`k` contains :math:`N` terms of 3 different Paulis.
+# We study a system of :math:`N=32` spins as in the paper, which gives the following description of the Hamiltonian:
 
 pauli_dictionary = {
     "XX": 496,  # 32*31/2 = 496
@@ -174,9 +175,9 @@ nmr_hamiltonian = qre.PauliHamiltonian(
     pauli_terms = pauli_dictionary,
 )
 #################################### 
-# We build Prepare and Select operators that are used to define the walk operator. For Prepare,
-# PennyLane defaults to choices that minimize gate count at the expense of extra qubits, but this time
-# we enforce a minimal use of auxiliary qubits through the :code:`select_swap_depths` argument. 
+# We build Prepare and Select operators that are used to define the walk operator.
+# For `QROMStatePreparation <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.QROMStatePreparation.html>`_,
+# we enforce a minimal use of auxiliary qubits via the :code:`select_swap_depths` argument.
 
 num_terms = nmr_hamiltonian.num_terms  # number of terms in the Hamiltonian
 num_state_prep_qubits = int(np.ceil(np.log2(num_terms)))
@@ -188,20 +189,19 @@ Prep_nmr = qre.QROMStatePreparation(
     select_swap_depths= 1  # this minimizes auxiliary qubits
 )
 
-W_nmr = qre.Qubitization(Prep_nmr, Sel_nmr)
+Walk_nmr = qre.Qubitization(Prep_nmr, Sel_nmr)
 
 print(f"Resources for NMR Walk operator")
-print(qre.estimate(W_nmr))
+print(qre.estimate(Walk_nmr))
 
 ##################################### 
 # Let's explore how different choices of evolution time and error affect cost. From theoretical arguments,
-# we expect linear growth in cost with time, and logarithmic increase in inverse error. We build a dedicated 
-# function that computes the total number of non-Clifford gates (T+Toffoli) depending on the choice of these parameters.
-# The attribute :code:`gate_counts` is a dictionary that can be used to extract specific gates.
+# one would expect linear growth in cost with time, and logarithmic growth with inverse error.
+# We analyze the total number of non-Clifford gates (T+Toffoli) as a function of these parameters:
 
 def nmr_resources(time, one_norm, error):
 
-    gqsp = qre.GQSPTimeEvolution(W_nmr, time, one_norm, error)
+    gqsp = qre.GQSPTimeEvolution(Walk_nmr, time, one_norm, error)
     resources = qre.estimate(gqsp)
     T_gates = resources.gate_counts['T'] 
     Toffoli_gates = resources.gate_counts['Toffoli']
@@ -221,11 +221,12 @@ time_array = np.linspace(1, 1000, 100)  # time from 1 to 1,000
 gates = [nmr_resources(t, one_norm, 0.001) for t in time_array]
 gates2 = [nmr_resources(t, 2*one_norm, 0.001) for t in time_array] # double the one-norm
 
-plt.plot(time_array, gates)
-plt.plot(time_array, gates2)
+plt.plot(time_array, gates, label=f"one_norm: {one_norm}")
+plt.plot(time_array, gates2, label=f"one_norm: {2*one_norm}")
 plt.xlabel("Time")
 plt.ylabel("Non-Clifford gates")
 plt.grid(True, which='both', linestyle='--')
+plt.legend()
 plt.show()
 
 ##################################### 
@@ -248,12 +249,11 @@ plt.show()
 # Conclusion
 # ----------
 # Hamiltonian simulation with GQSP is a well-established quantum algorithm with many useful applications. 
-# It consists of multiple subroutines that may require time to master, but PennyLane elegantly aggregates them into 
-# easy-to-use operations. This library of operations allows us to rapidly and accurately quantify
-# resources for specific use cases. Users also have the flexibility to customize the algorithm by leveraging
-# the full breadth of capabilities offered as part of PennyLane's :mod:`~.pennylane.estimator` module, for example by constructing
-# custom Prepare and Select operators and studying other systems of interest, such as electronic structure, 
-# vibrational, and vibronic Hamiltonians. 
+# It consists of multiple subroutines that may require time to master, but PennyLane's quantum resource
+# :mod:`~.pennylane.estimator` elegantly aggregates them into easy-to-use operations. This library of
+# operations allows us to both rapidly and accurately quantify resources for specific use cases, and assess
+# their hardware-readiness. Try using :mod:`~.pennylane.estimator` yourself, and see how much it would cost
+# for you to study other systems on a quantum computer, such as electronic structure, vibrational, and vibronic Hamiltonians. 
 #
 # References
 # ----------
