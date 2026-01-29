@@ -106,7 +106,6 @@ num_trotter_steps = int(np.ceil(2 * jmax + 1) * tau / delta)  # Number of Trotte
 #
 # We assemble the complete XAS workflow as shown in the Hadamard test circuit, by
 # integrating state preparation, the Hadamard test structure, and controlled time evolution.
-# The resulting function is then passed to the PennyLane resource estimator to obtain logical resource counts.
 #
 # For the initial state preparation, we adopt the **Sum of Slaters** method [#SOSStatePrep2024]_, which
 # approximates the wavefunction by discarding determinants below a coefficient tolerance.
