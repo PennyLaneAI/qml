@@ -54,7 +54,7 @@ PennyLane's resource :mod:`estimator <pennylane.estimator>` to quantify the reso
 
 X-Ray Absorption Spectroscopy
 -----------------------------
-`XAS <https://pennylane.ai/qml/demos/tutorial_xas>`_, is a critical spectroscopic method used to study the electronic
+`XAS <https://pennylane.ai/qml/demos/tutorial_xas>`_ is a critical spectroscopic method used to study the electronic
 and local structural environment of specific elements within a material, by probing core-level electron transitions.
 For this simulation, we follow the algorithm established in Fomichev et al. (2025) [#Fomichev2025]_,
 which utilizes the `Compressed Double Factorization (CDF) <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`_
