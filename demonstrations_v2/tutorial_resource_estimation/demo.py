@@ -46,7 +46,7 @@ corresponding eigenvalue of the Hamiltonian. A conceptual QPE circuit diagram is
 
 For most cases of interest, this algorithm requires more qubits and longer circuit depths than what
 can be implemented on existing hardware. The PennyLane functionality in the
-:mod:`qml.resource <pennylane.resource>` module allows us to estimate the number of logical qubits
+:mod:`qml.estimator <pennylane.estimator>` module allows us to estimate the number of logical qubits
 and the number of non-Clifford gates that are needed to implement the algorithm. We can estimate
 these resources by simply defining system specifications and a target error for estimation. Let's
 see how!
@@ -81,9 +81,9 @@ mol = qml.qchem.Molecule(symbols, geometry, basis_name='6-31g')
 core, one, two = qml.qchem.electron_integrals(mol)()
 
 ##############################################################################
-# We now create an instance of the :class:`~.pennylane.resource.DoubleFactorization` class
+# We now create an instance of the :class:`~.pennylane.estimator.qpe_resources.DoubleFactorization` class
 
-algo = qml.resource.DoubleFactorization(one, two)
+algo = qml.estimator.DoubleFactorization(one, two)
 
 ##############################################################################
 # and obtain the estimated number of non-Clifford gates and logical qubits.
@@ -97,7 +97,7 @@ print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 
 chemical_accuracy = 0.0016
 error = chemical_accuracy * 10
-algo = qml.resource.DoubleFactorization(one, two, error=error)
+algo = qml.estimator.DoubleFactorization(one, two, error=error)
 print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 
 ##############################################################################
@@ -110,7 +110,7 @@ n_gates = []
 n_qubits = []
 
 for tol in threshold:
-    algo_ = qml.resource.DoubleFactorization(one, two, tol_factor=tol, tol_eigval=tol)
+    algo_ = qml.estimator.DoubleFactorization(one, two, tol_factor=tol, tol_eigval=tol)
     n_gates.append(algo_.gates)
     n_qubits.append(algo_.qubits)
 
@@ -142,8 +142,8 @@ vectors = np.array([[9.49,  0.00,  0.00],
                     [0.00,  0.00, 11.83]])
 
 ##############################################################################
-# We now create an instance of the :class:`~.pennylane.resource.FirstQuantization` class
-algo = qml.resource.FirstQuantization(planewaves, electrons, vectors=vectors)
+# We now create an instance of the :class:`~.pennylane.estimator.qpe_resources.FirstQuantization` class
+algo = qml.estimator.FirstQuantization(planewaves, electrons, vectors=vectors)
 
 ##############################################################################
 # and obtain the estimated number of non-Clifford gates and logical qubits.
@@ -163,7 +163,7 @@ for er in error:
     n_qubits_ = []
 
     for pw in planewaves:
-        algo_ = qml.resource.FirstQuantization(pw, electrons, vectors=vectors, error=er)
+        algo_ = qml.estimator.FirstQuantization(pw, electrons, vectors=vectors, error=er)
         n_gates_.append(algo_.gates)
         n_qubits_.append(algo_.qubits)
     n_gates.append(n_gates_)
@@ -200,8 +200,8 @@ print(f'1-norm of the Hamiltonian: {algo.lamb}')
 
 ##############################################################################
 # PennyLane allows you to get more detailed information about the cost of the algorithms as
-# explained in the documentation of :class:`~.pennylane.resource.FirstQuantization`
-# and :class:`~.pennylane.resource.DoubleFactorization` classes.
+# explained in the documentation of :class:`~.pennylane.estimator.qpe_resources.FirstQuantization`
+# and :class:`~.pennylane.estimator.qpe_resources.DoubleFactorization` classes.
 #
 # Variational quantum eigensolver
 # ------------------------------------------
@@ -225,12 +225,12 @@ H_coeffs, H_ops = H.terms()
 
 ##############################################################################
 # The number of measurements needed to compute :math:`\left \langle H \right \rangle` can be
-# obtained with the :func:`~.pennylane.resource.estimate_shots` function, which requires the
+# obtained with the :func:`~.pennylane.estimator.measurement.estimate_shots` function, which requires the
 # Hamiltonian coefficients as input. The number of measurements required to compute
 # :math:`\left \langle H \right \rangle` with a target error set to the chemical accuracy, 0.0016
 # :math:`\text{Ha},` is obtained as follows.
 
-m = qml.resource.estimate_shots(H_coeffs)
+m = qml.estimator.estimate_shots(H_coeffs)
 print(f'Shots : {m:.2e}')
 
 ##############################################################################
@@ -242,14 +242,14 @@ print(f'Shots : {m:.2e}')
 ops, coeffs = qml.pauli.group_observables(H_ops, H_coeffs)
 coeffs = [np.array(c) for c in coeffs] # cast as numpy array
 
-m = qml.resource.estimate_shots(coeffs)
+m = qml.estimator.estimate_shots(coeffs)
 print(f'Shots : {m:.2e}')
 
 ##############################################################################
 # It is also interesting to illustrate how the number of shots depends on the target error.
 
 error = np.array([0.02, 0.015, 0.01, 0.005, 0.001])
-m = [qml.resource.estimate_shots(H_coeffs, error=er) for er in error]
+m = [qml.estimator.estimate_shots(H_coeffs, error=er) for er in error]
 
 e_ = np.linspace(error[0], error[-1], num=50)
 m_ = 1.4e4 / np.linspace(error[0], error[-1], num=50)**2

@@ -219,7 +219,7 @@ print(cost(init_params))
 #
 # This can also be verified directly using PennyLane:
 
-dphoton_redirection = qml.grad(photon_redirection, argnum=0)
+dphoton_redirection = qml.grad(photon_redirection, argnums=0)
 print(dphoton_redirection([0.0, 0.0]))
 
 ##############################################################################

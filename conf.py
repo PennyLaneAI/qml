@@ -16,9 +16,6 @@ import os
 import sys
 import warnings
 import numpy as np
-from jinja2 import FileSystemLoader, Environment
-import yaml
-from pathlib import Path
 
 sys.path.insert(0, os.path.abspath("."))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
@@ -55,6 +52,9 @@ extensions = [
     "sphinx_gallery.gen_gallery",
     "extension",
 ]
+
+dev = os.getenv("DEV", "False")
+dev = True if dev == "True" else False
 
 html_baseurl = "https://pennylane.ai/qml/"
 demo_staging_dir = os.getenv("DEMO_STAGING_DIR", "demonstrations")
@@ -114,11 +114,6 @@ warnings.filterwarnings(
     "ignore",
     category=FutureWarning,
     message=r"Passing \(type, 1\) or '1type' as a synonym of type is deprecated.+"
-)
-warnings.filterwarnings(
-    "ignore",
-    category=np.VisibleDeprecationWarning,
-    message=r"Creating an ndarray from ragged"
 )
 
 # Raise PennyLane deprecation warnings as errors
@@ -214,8 +209,8 @@ htmlhelp_basename = "QMLdoc"
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    "pennylane": ("https://docs.pennylane.ai/en/stable/", None),
-    "catalyst": ("https://docs.pennylane.ai/projects/catalyst/en/stable", None),
+    "pennylane": ("https://docs.pennylane.ai/en/" + ("latest/" if dev else "stable/"), None),
+    "catalyst": ("https://docs.pennylane.ai/projects/catalyst/en/" + ("latest/" if dev else "stable/"), None),
     "demo": ("https://pennylane.ai/qml", None),
 }
 

@@ -102,7 +102,7 @@ def init_state(x):
 #
 
 shots = 100
-dev = qml.device("default.qubit")
+dev = qml.device("default.qubit", seed=0)
 
 
 @qml.set_shots(shots)

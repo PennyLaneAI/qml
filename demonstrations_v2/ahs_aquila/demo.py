@@ -224,8 +224,8 @@ aquila = qml.device(
 #
 #  .. code-block:: none
 #
-#      pennylane/pennylane/__init__.py:201: PennyLaneDeprecationWarning: pennylane.QuantumFunctionError is no longer accessible at top-level
-#      and must be imported as pennylane.exceptions.QuantumFunctionError. Support for top-level access will be removed in v0.43.
+#      pennylane/devices/legacy_facade.py:194: PennyLaneDeprecationWarning: Setting shots on device is deprecated.
+#      Please use the `set_shots` transform on the respective QNode instead.
 #        warnings.warn(
 #
 
@@ -276,8 +276,8 @@ aquila.hardware_capabilities["lattice"].dict()
 # the blockade radius:
 #
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 a = 5
 
@@ -555,7 +555,7 @@ def circuit(params):
     return qml.counts()
 
 
-circuit_qml = qml.set_shots(qml.QNode(circuit, default_qubit, interface="jax"), shots = 1000)
+circuit_qml = qml.set_shots(qml.QNode(circuit, default_qubit, interface="jax"), shots=1000)
 circuit_ahs = qml.QNode(circuit, rydberg_simulator)
 
 print(f"PennyLane simulation: {circuit_qml(params)}")
@@ -744,8 +744,14 @@ plt.show()
 # Otherwise, the task will be sent to the remote hardware; it will be run when the hardware is online and we
 # reach the front of the queue.
 #
-# To run this without connecting to the hardware, switch the aquila device out with the ``rydberg_simulator`` below.
-# Note that running on hardware is a paid service and will incur a fee.
+#
+#  .. note:: To run this without connecting to the hardware, switch the aquila device out with the ``rydberg_simulator`` below.
+#
+#  .. warning::
+#
+#      Note that running on hardware is a paid service and running the below code on hardware will result in
+#      fees charged to your AWS account. We recommend monitoring your usage on the AWS Braket dashboard.
+#
 
 
 # @qml.qnode(rydberg_simulator)
