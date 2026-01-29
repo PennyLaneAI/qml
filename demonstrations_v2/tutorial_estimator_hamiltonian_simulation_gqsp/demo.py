@@ -15,9 +15,9 @@ on the modern framework of **generalized quantum signal processing (GQSP)** and 
 for a simple spin model and for a Heisenberg Hamiltonian for NMR spectral prediction. More information on QSP 
 can be found in our other demos:
 
-- :doc:`Function Fitting using Quantum Signal Processing <function_fitting_qsp>`
-- :doc:`Using PennyLane and Qualtran to analyze how QSP can improve measurements of molecular properties <tutorial_qksd_qsp_qualtran>`
-- :doc:`Intro to QSVT <tutorial_intro_qsvt>`
+- :doc:`Function Fitting using Quantum Signal Processing <function_fitting_qsp>`_
+- :doc:`Using PennyLane and Qualtran to analyze how QSP can improve measurements of molecular properties <tutorial_qksd_qsp_qualtran>`_
+- :doc:`Intro to QSVT <tutorial_intro_qsvt>`_
 
 
 Hamiltonian simulation with GQSP
@@ -38,9 +38,9 @@ transformation is then implemented on a block-encoding of :math:`H`.
 
 In practice, it is customary to instead encode the Hamiltonian as a walk operator :math:`\hat{W}`, and
 approximate the function :math:`e^{-i\cos (\hat{W})t}` through the rapidly-converging Jacobi-Anger expansion
-[#gqsp2024]_. This type of block-encoding is a `qubitization <tutorial_qubitization>`of the Hamiltonian.
+[#gqsp2024]_. This type of block-encoding is a `qubitization <tutorial_qubitization>`_ of the Hamiltonian.
 # It can be implemented by a sequence of Prepare and Select operators that are induced by a
-`linear combination of unitaries (LCU) decomposition <tutorial_lcu_blockencoding>`.
+`linear combination of unitaries (LCU) decomposition <tutorial_lcu_blockencoding>`_.
 
 
 Let's explore how to use PennyLane to estimate the cost of Hamiltonian simulation with GQSP.
