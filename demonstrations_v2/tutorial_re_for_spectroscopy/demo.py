@@ -109,7 +109,7 @@ num_trotter_steps = int(np.ceil(2 * jmax + 1) * tau / delta)  # Number of Trotte
 #
 # For the initial state preparation, we adopt the **Sum of Slaters** method [#SOSStatePrep2024]_, which
 # approximates the wavefunction by discarding determinants below a coefficient tolerance.
-# For this demo, we assume a truncation level that yields 1e4 surviving determinants (`num_slaters=1e4`).
+# For this demo, we assume a truncation level that yields :math:`1 \times 10^4` surviving determinants (`num_slaters=1e4`).
 # The cost of this approach depends on two major subroutines: :class:`~.pennylane.estimator.templates.QROM` to load the determinants,
 # and :class:`~.pennylane.estimator.templates.QROMStatePreparation` to prepare the
 # superposition.
