@@ -25,7 +25,7 @@ In this demo, we will use the :mod:`~.pennylane.estimator` module to answer the 
 Estimating the cost of QSVT
 ---------------------------
 The logical cost of QSVT depends primarily on two factors, the **block encoding** operator and the **degree** of
-the polynomial transformation. For example let's estimate the cost of performing a quintic (:code:`poly_deg = 5`)
+the polynomial transformation. For example let's estimate the cost of performing a quintic (5th degree)
 polynomial transformation to the matrix :math:`A`:
 
 .. math::
@@ -37,7 +37,7 @@ polynomial transformation to the matrix :math:`A`:
         b & 0 & 0 & -a \\
         \end{bmatrix},
 
-for :math:`a = 0.25` and :math:`b = 0.75`. Note that this matrix can be expressed as a linear combination of
+for :math:`a = 0.25` and :math:`b = 0.75`. This particular matrix can be expressed as a linear combination of
 unitaries (LCU) :math:`A = 0.25 \cdot \hat{Z}_{1} + 0.75 \cdot \hat{X}_{0}\hat{X}_{1}`. We begin by building the
 **block encoding** operator using the standard method of LCUs. For a recap on this technique, see our demo on
 `linear combination of unitaries and block encodings <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_.
@@ -50,6 +50,7 @@ lcu_A = qre.PauliHamiltonian(
 )  # represents A = 0.25 * Z(1) + 0.75 * X(0)X(1)
 
 def Standard_BE(prep, sel):
+    """Standard block-encoding of the Hamiltonian """
     return qre.ChangeOpBasis(prep, sel)
 
 # Preparing a qubit in the state (√0.25)|0> + (√0.75)|1>
@@ -76,7 +77,7 @@ print(resources)
 qsvt_op = qre.QSVT(
     block_encoding = Standard_BE(Prep, Select),
     encoding_dims = (4, 4),  # The shape of matrix A
-    poly_deg = 5,
+    poly_deg = 5,  # quintic
 )
 
 resources = qre.estimate(qsvt_op)
@@ -152,7 +153,7 @@ print("Minimum degree:", optimal_degree_from_error(epsilon, kappa))
 # the strategy of decomposing :math:`A` into an LCU of Pauli operators works for any (square)
 # matrix in general, it suffers from a few fatal flaws (try saying that five times fast).
 # 
-# The number of terms in the LCU scales like :math:`O(4^{n})` in the number of qubits, and thus
+# The number of terms in the LCU scales as :math:`O(4^{n})` in the number of qubits, and thus
 # the cost of the block encoding also scales exponentially. Even computing the LCU decomposition
 # becomes a computational bottleneck. Furthermore, there is no way of knowing a priori how many
 # terms there will be in the LCU. For these reasons, a general "one size fits all" block encoding
@@ -175,8 +176,8 @@ print("Minimum degree:", optimal_degree_from_error(epsilon, kappa))
 #
 # This matrix (:math:`A`) can be block encoded using a *d-diagonal encoding* technique [#linaje2025]_ developed
 # by my colleagues here at Xanadu. The method works by loading each diagonal in parallel and then
-# shiftting them to their respective ranks in the matrix. The quantum circit that implements the
-# d-diagonal block encoding is presented below, for more information checkout our paper
+# shifting them to their respective ranks in the matrix. The quantum circit that implements the
+# d-diagonal block encoding is presented below. To learn more, read our paper:
 # `"Quantum compilation framework for data loading" <https://arxiv.org/abs/2512.05183>`_.
 #
 # |
@@ -189,7 +190,7 @@ print("Minimum degree:", optimal_degree_from_error(epsilon, kappa))
 # |
 #
 # Estimating the resource cost for this circuit may seem like a daunting task, but we have
-# the :mod:`~.pennylane.estimator` module to help us construct each piece!
+# PennyLane's quantum resource :mod:`~.pennylane.estimator` to help us construct each piece!
 #
 # Diagonal Matrices & the Walsh-Hadamard Transform
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -200,10 +201,10 @@ print("Minimum degree:", optimal_degree_from_error(epsilon, kappa))
 # in this case we will be leveraging the Walsh-Hadamard transformation ([#linaje2025]_, [#zylberman2025]_).
 # 
 # The Walsh-Hadamard transform allows us to naturally optimize the cost of our block encoding by tuning the
-# :code:`num_walsh_coeffs` parameter. This parameter takes values from :math:`[1, N]` where :math:`N` is the
+# number of Walsh coefficients within :math:`[1, N]`, where :math:`N` is the
 # the size of the matrix. If the entries in our diagonal are sparse in the Walsh basis, as is the case for
-# the CFD example, then we can get away with much fewer :code:`num_walsh_coeffs`. This results in a much more
-# efficient encoding. The circuit below prepares a single such Walsh-Hadamard diagonal operator, ultimately
+# the CFD example, then we can get away with far fewer Walsh coefficients. This results in a much more
+# efficient encoding. The circuit below prepares a single such Walsh-Hadamard diagonal block encoding, ultimately
 # we need to prepare as many operators as non-zero diagonals in :math:`A`.
 #
 # |
@@ -290,7 +291,7 @@ def ShiftOp(num_shifts, num_load_wires, wires):
 ##############################################################################
 # d-Diagonal Block Encoding
 # ^^^^^^^^^^^^^^^^^^^^^^^^^
-# Now that we have developed all of the pieces, lets bring them together to implement
+# Now that we have developed all of the pieces, we'll bring them together to implement
 # the full d-diagonal block encoding operator [#linaje2025]_.
 #
 # |
@@ -337,9 +338,9 @@ def WH_Diagonal_BE(num_diagonals, matrix_size, num_walsh_coeffs):
 # In this section we use all of the tools we have developed to **estimate the resource requirements
 # for solving a practical matrix inversion problem**. Following the CFD example [#linaje2025]_, we
 # will estimate the resources required to invert a tri-diagonal matrix of size :math:`(2^{20}, 2^{20})`.
-# This system required a :math:`10^{8}`-degree polynomial approximation of the inverse function.
+# This system requires a :math:`10^{8}`-degree polynomial approximation of the inverse function.
 # 
-# We will also restrict the gateset to Clifford plus T-gates. This will allows to generate results that
+# We will also restrict the gateset to Clifford + T gates, to generate results that
 # are faithful to the ones presented in [#linaje2025]_.
 
 degree = 10**8
@@ -366,8 +367,8 @@ res = qre.estimate(matrix_inversion, gate_set)(degree, matrix_size, num_diagonal
 print(res)
 
 ##############################################################################
-# The T-cost of this matrix inversion workflow matches the reported results :math:`3 \cdot 10^{13}` from
-# the reference.
+# The estimated T gate count of this matrix inversion workflow matches
+# the reported :math:`3 \cdot 10^{13}` from the reference.
 #
 # Challenge (Next Steps)
 # ----------------------
@@ -375,14 +376,13 @@ print(res)
 # resource requirements for **matrix inversion by QSVT**. Along the way we explored the two major factors 
 # that impact the cost of QSVT (block encoding and degree of the approximation), as well as how they can
 # be optimized to reduce the overall cost of the algorithm. We showcased how complex circuits can be
-# built from our library of primatives, making resource estimation as simple as putting together Lego
-# blocks. Finally, we applied all of these techniques to estimate the resources for a CDF matrix inversion
+# built from our library of primitives, making resource estimation as simple as putting together Lego
+# blocks. Finally, we applied all of these techniques to estimate the resources for a CFD matrix inversion
 # workflow; validating the results from literature.
 #
-# Now that you are armed with these tools for resource estimation, I challenge you to find another problem
-# of interest and answer the question:
-#
-# **What are the logical resource requirements for solving your matrix inversion problem on a quantum computer?**
+# Now that you are armed with these tools for resource estimation, I challenge you to find another
+# problem where polynomial transformations may be helpful, and figure out:
+# what are the logical resource requirements of solving this on a quantum computer?
 #
 # References
 # ----------
@@ -391,30 +391,30 @@ print(res)
 #
 #     John M. Martyn, Zane M. Rossi, Andrew K. Tan, and Isaac L. Chuang,
 #     "A Grand Unification of Quantum Algorithms"
-#     `arxiv.2105.02859 <https://arxiv.org/pdf/2105.02859>`__, 2021.
+#     `arxiv.2105.02859 <https://arxiv.org/abs/2105.02859>`__, 2021.
 #
 # .. [#lapworth2022]
 #
 #     Leigh Lapworth
-#     "A HYBRID QUANTUM-CLASSICAL CFD METHODOLOGY WITH BENCHMARK HHL SOLUTIONS"
-#     `arxiv.2206.00419 <https://arxiv.org/pdf/2206.00419>`__, 2022.
+#     "A Hybrid Quantum-Classical CFD Methodology with Benchmark HHL Solutions"
+#     `arxiv.2206.00419 <https://arxiv.org/abs/2206.00419>`__, 2022.
 #
 # .. [#sunderhauf2025]
 #
 #     Christoph Sunderhauf, Zalan Nemeth, Adnaan Walayat, Andrew Patterson, and Bjorn K. Berntson,
 #     "Matrix inversion polynomials for the quantum singular value transformation"
-#     `arxiv.2507.15537 <https://arxiv.org/pdf/2507.15537>`__, 2025.
+#     `arxiv.2507.15537 <https://arxiv.org/abs/2507.15537>`__, 2025.
 #
 # .. [#linaje2025]
 #
 #     Guillermo Alonso-Linaje, Utkarsh Azad, Jay Soni, Jarrett Smalley,
 #     Leigh Lapworth, and Juan Miguel Arrazola,
 #     "Quantum compilation framework for data loading"
-#     `arxiv.2512.05183 <https://arxiv.org/pdf/2512.05183>`__, 2025.
+#     `arxiv.2512.05183 <https://arxiv.org/abs/2512.05183>`__, 2025.
 #
 # .. [#zylberman2025]
 #
 #     Julien Zylberman, Ugo Nzongani, Andrea Simonetto, and Fabrice Debbasch,
 #     "Efficient Quantum Circuits for Non-Unitary and Unitary Diagonal Operators with Space-Time-Accuracy trade-offs"
-#     `arxiv.2404.02819 <https://arxiv.org/pdf/2404.02819>`__, 2025.
+#     `arxiv.2404.02819 <https://arxiv.org/abs/2404.02819>`__, 2025.
 #
