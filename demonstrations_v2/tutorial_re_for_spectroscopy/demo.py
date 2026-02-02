@@ -399,8 +399,8 @@ def pdt_circuit(walk_op, poly_degree_hi, poly_degree_low, num_slaters=1e4):
 
 
 ##################################################################
-# Now, that we have all the components set up, we can run the resource estimation for the PDT algorithm
-# to calculate cumulative absorption:
+# Now, that we have all the components set up, we can estimate the resources necessary
+# to calculate cumulative absorption via the PDT algorithm:
 
 qubits_pdt = []
 toffolis_pdt = []
