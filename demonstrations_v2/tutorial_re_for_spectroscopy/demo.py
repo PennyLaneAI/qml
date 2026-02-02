@@ -323,7 +323,7 @@ bodipy_ham = qre.THCHamiltonian(num_orbitals=11, tensor_rank=22, one_norm=6.48)
 # using the `~.pennylane.estimator.templates.QubitizeTHC` template. For comprehensive details on how to construct and configure this operator,
 # we recommend the `Qubit and gate trade-offs in Qubitized Quantum Phase Estimation
 # <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_ demo.
-# Let's define the precision parameters based on the error budget from reference and construct the walk operator accordingly:
+# Let's define the precision parameters based on the error budget from the reference, and construct the walk operator accordingly:
 
 error = 0.0016  # Error budget from Zhou et al. (2025)
 n_coeff = int(np.ceil(2.5 + np.log2(10 * bodipy_ham.one_norm / error)))  # Coeff precision
