@@ -425,7 +425,7 @@ print(resource_counts)
 # Beyond providing specific resource counts, this demo highlights the flexibility of the resource estimator as a
 # programmable design tool. We showed how to move beyond "black box" standard implementations by actively
 # prototyping advanced algorithmic choices—such as the phase gradient trick and specialized basis rotations.
-# This flexibility empowers researchers to "engineer" their quantum algorithms, identifying cost bottlenecks
+# This flexibility empowers researchers to engineer their quantum algorithms, identifying cost bottlenecks
 # and seamlessly swapping out subroutines to optimize performance for future fault-tolerant hardware,
 # regardless of the underlying spectroscopic technique.
 #
