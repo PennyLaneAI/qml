@@ -298,7 +298,7 @@ plt.show()
 # scaling compared to the baseline. The double phase trick then provides a final constant-factor
 # improvement (pink), bringing the total gate count even further down. This stepwise
 # reduction validates the importance of matching the gate synthesis strategy to specific algorithmic
-# requirements, effectively "engineering" a lower simulation cost by targeting dominant bottlenecks.
+# requirements, engineering a lower simulation cost by targeting dominant bottlenecks.
 #
 # Photodynamic Therapy Applications
 # ---------------------------------
