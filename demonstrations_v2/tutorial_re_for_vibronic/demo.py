@@ -54,35 +54,105 @@ Defining the Hamiltonian
 With the algorithmic approach defined, the next step is to instantiate the system we wish to benchmark.
 
 While access to the full Hamiltonian coefficients would allow us to further optimize costs by leveraging the commutativity of electronic parts,
-we can still derive a reliable baseline using only structural parameters. By defining the number of modes, states, and coupling order,
-we can construct a :class:`~.pennylane.estimator.VibronicHamiltonian` that mimics the cost topology of a real system without needing full
-integral data.
+we can still derive a reliable baseline using only structural parameters. By defining the number of modes, electronic states, and grid size,
+we can map out the cost topology of a real system without needing full integral data.
 
-Let's take the example of Anthracene dimer, a system critical for understanding singlet fission in organic solar cells [#Motlagh2025]_.
+Let's take the example of Anthracene dimer, a system critical for understanding singlet fission in organic solar cells [#Motlagh2025]_ and
+define these key parameters:
 """
 
-from pennylane import estimator as qre
-anthracene_ham = qre.VibronicHamiltonian(num_states=6, num_modes=21, grid_size=4, taylor_degree=2)
+num_modes = 21       # Number of vibrational modes
+num_states = 6       # Number of electronic states
+grid_size = 4        # Number of qubits per mode (discretization)
+taylor_degree = 2    # Truncate to Quadratic Vibronic Coupling (Linear + Quadratic terms)
 
-#####################################################################
-# Constructing Circuits for one Time-Step
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#################################################################################
+# In our model, we truncate the interaction terms for potential energy fragment to linear and quadratic terms only.
+# This approximation, known as the QVC model, captures the dominant physical effects while simplifying the potential
+# energy circuits significantly.
+
+# Constructing Circuits for Single Time-Step
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# Next step is to define what the circuit will look like for evolving a single time step.
 # Based on the term-based fragmentation scheme, the single Trotter step is composed of two distinct types of
 # quantum circuits interleaved together:
 #
 # 1.  **Potential Energy Fragments:** These implement the interaction terms. For each fragment, the algorithm
-#     loads coefficients using a `QROM (Quantum Read-Only Memory) <>`_, computes the vibrational monomial product
-#     using quantum arithmetic, and applies a phase gradient.
-# 2.  **Kinetic Energy Fragments:** These implement the nuclear kinetic energy. Since the kinetic operator depends
-#     on momentum :math:`P`, this circuit uses the `Quantum Fourier Transform (QFT) <>`_ to switch to the momentum basis,
-#     applies a phase rotation, and then switches back.
+#     loads coefficients using a `QROM (Quantum Read-Only Memory) <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_,
+#     computes the vibrational monomial product using quantum arithmetic, and applies a phase gradient.
+# 2.  **Kinetic Energy Fragment:** This implements the nuclear kinetic energy. Since the kinetic operator depends
+#     on momentum :math:`P`, this circuit uses the `Quantum Fourier Transform (QFT) <https://pennylane.ai/qml/demos/tutorial_qft>`_
+#     to switch to the momentum basis, applies a phase rotation, and then switches back.
 #
+# Let's first see what the circuit will look for the kinetic energy fragment, it implements the time evolution by diagonalizing the
+# momentum operator:
+
+def kinetic_circuit(num_modes, grid_size, phase_grad_wires):
+
+    qre.Pow(qre.AQFT(num_wires= grid_size), pow_z= num_modes)
+
+    for i in range(num_modes):
+        qre.OutOfPlaceSquare(register_size=grid_size)
+
+        for j in range(2*grid_size):
+            qre.Controlled(qre.SemiAdder(max_register_size=phase_grad_wires - j), num_ctrl_wires=1, num_zero_ctrl=0)
+
+        qre.Adjoint(qre.OutOfPlaceSquare(register_size=grid_size))
+
+    qre.Pow(qre.Adjoint(qre.AQFT(num_wires=grid_size)), num_modes)
 
 ######################################################################
-# With the Hamiltonian defined, we can move to defining the rest of the parameters needed for Trotterization, that is the number of Trotter
+# Similarly, we can define the structure for the Potential Energy Fragments. For a QVC model truncated to quadratic terms,
+# each fragment will implement a monomial of degree up to 2
+#
+# ..math::
+#     V_{ji}^{m} = \sum_{r}c_r Q_r + \sum_{r} \tilde{c}_{r} Q_r^2
+#
+# where :math:`c_r` and :math:`\tilde{c}_{r}` are the linear and quadratic coupling coefficients respectively. The exponential
+# of each term is implemented by:
+# * Loading the coefficients from QROM controlled by the electronic state.
+# * Computing the monomial product by using a square operation for quadratic terms.
+# * Multiplying with the coefficients and adding to the resource register to accumulate the phase.
+# * Uncomputing the intermediate steps to clean up ancilla wires.
+#
+# We can define this circuit using two different segments, one for linear terms and one for quadratic terms:
+#
+def linear_circuit(num_states, grid_size, phase_grad_wires):
+    qre.QROM(num_bitstrings=num_states, size_bitstring=phase_grad_wires, restored=False)
+
+    for i in range(grid_size):
+        qre.Controlled(qre.SemiAdder(max_register_size=phase_grad_wires - i), num_ctrl_wires=1, num_zero_ctrl=0)
+
+    qre.Adjoint(qre.QROM(num_bitstrings=num_states, size_bitstring=phase_grad_wires, restored=False))
+
+def quadratic_circuit(num_states, grid_size, phase_grad_wires):
+    qre.QROM(num_bitstrings=num_states, size_bitstring=phase_grad_wires, restored=False)
+
+    qre.OutOfPlaceSquare(register_size=grid_size)
+    for i in range(2*grid_size):
+        qre.Controlled(qre.SemiAdder(max_register_size=phase_grad_wires - i), num_ctrl_wires=1, num_zero_ctrl=0)
+
+    qre.Adjoint(qre.OutOfPlaceSquare(register_size=grid_size))
+    qre.Adjoint(qre.QROM(num_bitstrings=num_states, size_bitstring=phase_grad_wires, restored=False))
+
+######################################################################
+# Finally, we combine these fragments to define the full Second-Order Trotter Step:
+# :math:`U(\Delta t) \approx e^{-iV \Delta t/2} e^{-iT \Delta t} e^{-iV \Delta t/2}`.
+
+def trotter_step_circuit(num_modes, num_states, grid_size, phase_grad_wires, taylor_degree):
+    # Potential Energy Fragments
+    for mode in range(num_modes):
+        if taylor_degree >= 1:
+            linear_circuit(num_states, grid_size, phase_grad_wires)
+        if taylor_degree >= 2:
+            quadratic_circuit(num_states, grid_size, phase_grad_wires)
+
+    # Kinetic Energy Fragment
+    kinetic_circuit(num_modes, grid_size, phase_grad_wires)
+
+#################################################################################
+# With the single Trotter step defined, we can move to defining the rest of the parameters needed for Trotterization, that is the number of Trotter
 # steps and order of the Suzuki-Trotter expansion. For the sake of brevity, we take these numbers directly from the reference. [#Motlagh2025]_
-
-
 #
 # References
 # ----------
