@@ -312,7 +312,7 @@ plt.show()
 # therapeutic energy window (typically 700–850 nm).
 #
 # To achieve this efficiently, the algorithm utilizes a walk operator constructed from the tensor hypercontracted
-# Hamiltonian, which allows for a highly compact block encoding. Similar to the XAS example, we can use the
+# Hamiltonian, which allows for a highly compact block encoding. As with XAS, we can use the
 # `compact Hamiltonian <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.compact_hamiltonian.THCHamiltonian.html>`__
 # representation to skip the expensive Hamiltonian construction. Let's verify our model using the 11-orbital BODIPY system from the reference.
 
