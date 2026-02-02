@@ -159,7 +159,7 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
 # we must select an implementation strategy for the rotation gates, as this choice heavily influences
 # the final resource overhead.
 #
-# PennyLane's default compiler synthesizes rotation gates using **Repeat-Until-Success circuits [#Alex2014],
+# PennyLane's default compiler synthesizes rotation gates using Repeat-Until-Success circuits [#Alex2014]_,
 # which decompose rotations into sequences of probabilistic T-gates. While effective for general circuits,
 # the algorithm we are implementing specifically calls for the Phase Gradient Trick proposed by Craig Gidney [#Gidney2018]_,
 #
@@ -320,7 +320,8 @@ bodipy_ham = qre.THCHamiltonian(num_orbitals=11, tensor_rank=22, one_norm=6.48)
 
 ##################################################################
 # We now construct the `walk Operator from the Hamiltonian <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_
-# using the `~.pennylane.estimator.templates.QubitizeTHC` template. For comprehensive details on how to construct and configure this operator,
+# using the `QubitizeTHC <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.QubitizeTHC.html>`_ template.
+# For comprehensive details on how to construct and configure this operator,
 # we recommend the `Qubit and gate trade-offs in Qubitized Quantum Phase Estimation
 # <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_ demo.
 # Let's define the precision parameters based on the error budget from the reference, and construct the walk operator accordingly:
