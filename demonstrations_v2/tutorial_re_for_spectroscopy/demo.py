@@ -12,7 +12,7 @@ Can quantum computers do better?
 In this demo, we'll find out. Since quantum computers can represent and evolve quantum states
 using polynomial resources, they offer a promising path forward. we will analyze the scalability of
 such key spectroscopy algorithms
-through PennyLane's resource :mod:`estimator <pennylane.estimator>`_ and
+through PennyLane's resource :mod:`estimator <pennylane.estimator>` and
 calculate their actual resource requirements. By benchmarking
 these algorithms now, we can ensure they are ready for the fault-tolerant hardware of the future.
 
