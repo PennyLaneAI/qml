@@ -422,8 +422,9 @@ print(resource_counts)
 # In this demo, we successfully performed end-to-end resource estimation for two distinct spectroscopic paradigms:
 # the time-domain simulation of X-ray Absorption (XAS) and the spectral filtering approach for Photodynamic Therapy (PDT).
 #
-# Beyond providing specific resource counts, this demo highlights the flexibility of the resource estimator as a
-# programmable design tool. We showed how to move beyond "black box" standard implementations by actively
+# Beyond providing specific resource counts, PennyLane's resource :mod:`estimator <pennylane.estimator>`
+# served as a versatile design tool.
+# We showed how to move beyond "black box" standard implementations by actively
 # prototyping advanced algorithmic choices—such as the phase gradient trick and specialized basis rotations.
 # This flexibility empowers researchers to engineer their quantum algorithms, identifying cost bottlenecks
 # and seamlessly swapping out subroutines to optimize performance for future fault-tolerant hardware,
