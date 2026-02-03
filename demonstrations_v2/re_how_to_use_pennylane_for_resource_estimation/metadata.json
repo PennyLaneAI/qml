@@ -1,5 +1,5 @@
 {
-    "title": "How to use PennyLane for Resource Estimation",
+    "title": "How to estimate the resource requirements of quantum algorithms",
     "authors": [
         {
             "username": "Jay"
