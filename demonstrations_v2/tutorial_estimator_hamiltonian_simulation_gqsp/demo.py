@@ -1,7 +1,7 @@
 r"""Resource estimation for Hamiltonian simulation with GQSP
 ============================================================
 
-Simulating the time evolution of a quantum system is the most useful problem with an exponential quantum speedup.
+Simulating the time evolution of a quantum system is arguably the most useful problem with an exponential quantum speedup.
 This task is known as **Hamiltonian simulation**, and it is the most common subroutine used in quantum algorithms
 for chemistry, materials science, and condensed matter physics. Multiple strategies exist
 with unique strengths and weaknesses, but the best asymptotic scaling is achieved by methods based on quantum
@@ -143,10 +143,7 @@ print(qre.estimate(HamSim))
 #   - \sum_k\vec{h}_k\cdot \vec{\sigma}_k,
 #
 # where the sums over :math:`k,l` run over spin sites, and the sum over :math:`\alpha, \beta` run through
-# spatial directions :math:`x,y`, and :math:`z`. We're using the notation
-#
-# .. math::
-#   \vec{\sigma}\cdot \vec{\sigma} = \sigma_{x}\sigma_{x}+\sigma_{y}\sigma_{y}+\sigma_{z}\sigma_{z}.
+# spatial directions :math:`x,y`, and :math:`z`. We're using the notation :math:`\vec{\sigma}\cdot \vec{\sigma} = \sigma_{x}\sigma_{x}+\sigma_{y}\sigma_{y}+\sigma_{z}\sigma_{z}`.
 #
 # As before, we build a compact Hamiltonian representation by counting the number of Pauli operators of
 # each kind, which is straightforward from expanding the Hamiltonian. For :math:`N` spins, sums over :math:`k\neq l`

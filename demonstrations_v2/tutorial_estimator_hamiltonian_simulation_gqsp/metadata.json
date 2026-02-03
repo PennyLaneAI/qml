@@ -7,8 +7,8 @@
     ],
     "executable_stable": true,
     "executable_latest": true,
-    "dateOfPublication": "2026-01-27T00:00:00+00:00",
-    "dateOfLastModification": "2026-01-27T15:48:14+00:00",
+    "dateOfPublication": "2026-02-03T00:00:00+00:00",
+    "dateOfLastModification": "2026-02-03T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Chemistry",
@@ -58,6 +58,11 @@
         {
             "type": "demonstration",
             "id": "tutorial_intro_qsvt",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_re_for_qubitizedQPE",
             "weight": 1.0
         }
     ]
