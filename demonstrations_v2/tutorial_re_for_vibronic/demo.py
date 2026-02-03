@@ -37,7 +37,7 @@ vibrational motion, and the Hamiltonian takes the form:
 where :math:`T` represents the kinetic energy of the nuclei, and is diagonal while :math:`V` contains off-diagonal
 electronic couplings.
 
-To simulate the time evolution :math:U(t) = e^{-iHt}, we employ a product formula (Trotterization) approach as outlined in
+To simulate the time evolution :math:`U(t) = e^{-iHt}`, we employ a product formula (Trotterization) approach as outlined in
 D. Motlagh et al. [#Motlagh2025]_. A key challenge in Trotterization is decomposing the Hamiltonian efficiently.
 Here, we utilize a term-based fragmentation scheme, where terms are grouped by their vibrational monomial
 (e.g., collecting all electronic terms coupled to :math:\hat{q}_1^2). For each fragment, the electronic component is
