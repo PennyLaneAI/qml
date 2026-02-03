@@ -5,7 +5,6 @@ pennylane-cirq==0.44.*
 pennylane-qiskit==0.44.*
 pennylane-qulacs==0.44.*
 pennylane-catalyst==0.14.*
-pennylane-qrack==0.11.*
 
 # Install external packages
 matplotlib==3.10.0
