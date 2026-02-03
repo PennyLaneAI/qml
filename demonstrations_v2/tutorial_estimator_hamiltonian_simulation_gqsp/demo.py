@@ -60,7 +60,7 @@ the cost of performing this simulation on a quantum computer?** For example: how
 needed to perform Hamiltonian simulation with GQSP on a square grid of :math:`100\times 100` spins?
 
 To answer this, we first define the Hamiltonian. For the purpose of resource estimation, the specific coupling coefficients are
-unimportant since the algorithm works identically regardless of their concrete value. This allows us to define
+unimportant since the algorithm works identically regardless of their concrete values. This allows us to define
 **compact Hamiltonians** that are easy to instantiate by specifying only the type and number of Pauli operators.
 With periodic boundary conditions, each spin site on the lattice is coupled to four nearest neighbours, so
 we have 10,000 qubits with 40,000 :math:`XX` and :math:`YY` couplings respectively. This information is defined as a
@@ -128,7 +128,8 @@ print(qre.estimate(HamSim))
 
 
 ###################################
-# This is a large system with non-trivial dynamics, yet we can analyze its requirements straightforardly using PennyLane.
+# This is a large system with non-trivial dynamics, yet we can analyze its requirements
+# in a straightforward manner using PennyLane.
 # We will now study a more practical example applying spin dynamics to NMR spectroscopy.
 #
 #
@@ -208,7 +209,7 @@ def nmr_resources(time, one_norm, error):
 #####################################
 # We plot the non-Clifford gate cost of the algorithm for different values of total evolution time. This includes
 # two cases where the one-norm differs by a factor of 2, to illustrate the linear increase in cost
-# as a function of one-norm. This is equivalent to rescaling the units of time by a factor of 1/2.
+# as a function of one-norm. This is equivalent to rescaling the units of time by a factor of :math:`\frac{1}{2}`.
 
 import matplotlib.pyplot as plt
 
@@ -250,7 +251,7 @@ plt.show()
 # :mod:`~.pennylane.estimator` elegantly aggregates them into easy-to-use operations. This library of
 # operations allows us to both rapidly and accurately quantify resources for specific use cases, and assess
 # their hardware-readiness. Try using :mod:`~.pennylane.estimator` yourself, and see how much it would cost
-# for you to study other systems on a quantum computer, such as electronic structure, vibrational, and vibronic Hamiltonians.
+# for you to study other systems using a quantum computer, such as electronic structure, vibrational, and vibronic Hamiltonians.
 #
 # References
 # ----------
