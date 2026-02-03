@@ -68,7 +68,7 @@ import pennylane.estimator as qre
 
 num_terms = len(A)
 num_encoding_wires = int(qnp.ceil(qnp.log2(num_terms)))
-encoding_wires = [f"q_{i}" for i in range(num_encoding_wires)]
+encoding_wires = [f"e_{i}" for i in range(num_encoding_wires)]
 
 poly = (0, 0, 0, 0, 0, 1)  # f(x) = x^5
 
@@ -107,12 +107,21 @@ lcu_A = qre.PauliHamiltonian(
     num_qubits=2,
     pauli_terms={"ZZ": 1, "XX": 1, "XZ": 1},
 )  # represents A = 0.1*ZZ + 0.2*XX + 0.3*XZ
-
 num_terms = lcu_A.num_terms
-num_encoding_wires = int(qnp.ceil(qnp.log2(num_terms)))
+num_qubits = lcu_A.num_qubits
 
-Prep = qre.QubitUnitary(num_encoding_wires)  # Prep the coeffs of the LCU
-Select = qre.SelectPauli(lcu_A)  # Select over ops in the LCU
+num_encoding_wires = int(qnp.ceil(qnp.log2(num_terms)))
+encoding_wires = [f"e_{i}" for i in range(num_encoding_wires)]
+lcu_wires = [f"t_{i}" for i in range(num_qubits)]
+
+Prep = qre.QubitUnitary(
+    num_encoding_wires,
+    wires=encoding_wires,
+)  # Prep the coeffs of the LCU
+Select = qre.SelectPauli(
+    lcu_A,
+    wires=lcu_wires + encoding_wires,
+)  # Select over ops in the LCU
 BlockEncoding = qre.ChangeOpBasis(Prep, Select)  # Prep ○ Sel Prep^t
 
 
@@ -135,12 +144,21 @@ lcu_A = qre.PauliHamiltonian(
     num_qubits=50,
     pauli_terms={"ZZ": 250, "XX": 750, "XZ": 1000},
 )  # 2000 terms !
-
 num_terms = lcu_A.num_terms
-num_encoding_wires = int(qnp.ceil(qnp.log2(num_terms)))
+num_qubits = lcu_A.num_qubits
 
-Prep = qre.QROMStatePreparation(num_encoding_wires)  # More efficient Prep
-Select = qre.SelectPauli(lcu_A)  # Select over ops in the LCU
+num_encoding_wires = int(qnp.ceil(qnp.log2(num_terms)))
+encoding_wires = [f"e_{i}" for i in range(num_encoding_wires)]
+lcu_wires = [f"t_{i}" for i in range(num_qubits)]
+
+Prep = qre.QROMStatePreparation(
+    num_encoding_wires,
+    wires=encoding_wires,
+)  # More efficient Prep
+Select = qre.SelectPauli(
+    lcu_A,
+    wires=lcu_wires + encoding_wires,
+)  # Select over ops in the LCU
 BlockEncoding = qre.ChangeOpBasis(Prep, Select)  #  Prep ○ Sel Prep^t
 
 qsvt_op = qre.QSVT(
