@@ -57,10 +57,10 @@ As a case study, we select (NO):math:`_4`-Anth, a molecule created by introducin
 anthracene. Proposed for its theoretically record-breaking singlet fission speed [#Motlagh2025]_, we use this system to define our simulation parameters:
 """
 
-num_modes = 19       # Number of vibrational modes
-num_states = 5       # Number of electronic states
-grid_size = 4        # Number of qubits per mode (discretization)
-taylor_degree = 2    # Truncate to Quadratic Vibronic Coupling (Linear + Quadratic terms)
+num_modes = 19  # Number of vibrational modes
+num_states = 5  # Number of electronic states
+grid_size = 4  # Number of qubits per mode (discretization)
+taylor_degree = 2  # Truncate to Quadratic Vibronic Coupling (Linear + Quadratic terms)
 
 #################################################################################
 # In our model, we truncate the interaction terms for potential energy fragment to linear and quadratic terms only.
@@ -68,7 +68,7 @@ taylor_degree = 2    # Truncate to Quadratic Vibronic Coupling (Linear + Quadrat
 # energy circuits significantly.
 #
 # Constructing Circuits for Single Time-Step
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# ------------------------------------------
 # Next step is to define what the circuit will look like for evolving a single time step.
 # Based on the term-based fragmentation scheme, the single Trotter step is composed of two distinct types of
 # quantum circuits interleaved together:
@@ -84,27 +84,43 @@ taylor_degree = 2    # Truncate to Quadratic Vibronic Coupling (Linear + Quadrat
 # momentum operator:
 
 import pennylane.estimator as qre
+
+
 def kinetic_circuit(mode_wires, phase_wires, scratch_wires, coeff_wires):
     ops = []
     num_phase_wires = len(phase_wires)
     grid_size = len(mode_wires[0])
     for mode in range(num_modes):
-        ops.append(qre.AQFT(order=1, num_wires= grid_size, wires=mode_wires[mode]))
+        ops.append(qre.AQFT(order=1, num_wires=grid_size, wires=mode_wires[mode]))
 
     for i in range(num_modes):
-        ops.append(qre.OutOfPlaceSquare(register_size=grid_size, wires=scratch_wires + mode_wires[i]))
+        ops.append(
+            qre.OutOfPlaceSquare(register_size=grid_size, wires=scratch_wires + mode_wires[i])
+        )
 
-        for j in range(2*grid_size):
+        for j in range(2 * grid_size):
             ctrl_wire = [scratch_wires[j]]
-            target_wires = coeff_wires[:len(phase_wires)-j] + phase_wires[:len(phase_wires)-j]
-            ops.append(qre.Controlled(qre.SemiAdder(max_register_size=num_phase_wires - j), num_ctrl_wires=1, num_zero_ctrl=0, wires=target_wires + ctrl_wire))
+            target_wires = coeff_wires[: len(phase_wires) - j] + phase_wires[: len(phase_wires) - j]
+            ops.append(
+                qre.Controlled(
+                    qre.SemiAdder(max_register_size=num_phase_wires - j),
+                    num_ctrl_wires=1,
+                    num_zero_ctrl=0,
+                    wires=target_wires + ctrl_wire,
+                )
+            )
 
-        ops.append(qre.Adjoint(qre.OutOfPlaceSquare(register_size=grid_size, wires=scratch_wires + mode_wires[i])))
+        ops.append(
+            qre.Adjoint(
+                qre.OutOfPlaceSquare(register_size=grid_size, wires=scratch_wires + mode_wires[i])
+            )
+        )
 
     for mode in range(num_modes):
-        ops.append(qre.Adjoint(qre.AQFT(order=1, num_wires=grid_size, wires = mode_wires[mode])))
+        ops.append(qre.Adjoint(qre.AQFT(order=1, num_wires=grid_size, wires=mode_wires[mode])))
 
     return qre.Prod(ops)
+
 
 ######################################################################
 # Similarly, we can define the structure for the Potential Energy Fragments. For a QVC model truncated to quadratic terms,
@@ -124,37 +140,87 @@ def kinetic_circuit(mode_wires, phase_wires, scratch_wires, coeff_wires):
 #
 # We can define this circuit using two different segments, one for linear terms and one for quadratic terms:
 
+
 def linear_circuit(num_states, elec_wires, phase_wires, coeff_wires, scratch_wires):
     ops = []
-    ops.append(qre.QROM(num_bitstrings= num_states, size_bitstring=len(phase_wires), restored=False, wires=elec_wires + coeff_wires))
+    ops.append(
+        qre.QROM(
+            num_bitstrings=num_states,
+            size_bitstring=len(phase_wires),
+            restored=False,
+            wires=elec_wires + coeff_wires,
+        )
+    )
 
     for i in range(grid_size):
         ctrl_wire = [scratch_wires[i]]
-        target_wires = coeff_wires[:len(phase_wires)-i] + phase_wires[:len(phase_wires)-i]
-        ops.append(qre.Controlled(qre.SemiAdder(max_register_size=len(phase_wires) - i), num_ctrl_wires=1, num_zero_ctrl=0, wires=target_wires + ctrl_wire))
+        target_wires = coeff_wires[: len(phase_wires) - i] + phase_wires[: len(phase_wires) - i]
+        ops.append(
+            qre.Controlled(
+                qre.SemiAdder(max_register_size=len(phase_wires) - i),
+                num_ctrl_wires=1,
+                num_zero_ctrl=0,
+                wires=target_wires + ctrl_wire,
+            )
+        )
 
-    ops.append(qre.Adjoint(qre.QROM(num_bitstrings= num_states, size_bitstring=len(phase_wires), restored=False, wires=elec_wires + coeff_wires)))
+    ops.append(
+        qre.Adjoint(
+            qre.QROM(
+                num_bitstrings=num_states,
+                size_bitstring=len(phase_wires),
+                restored=False,
+                wires=elec_wires + coeff_wires,
+            )
+        )
+    )
     return qre.Prod(ops)
+
 
 def quadratic_circuit(num_states, elec_wires, phase_wires, coeff_wires, mode_wires, scratch_wires):
     ops = []
     grid_size = len(mode_wires)
-    ops.append(qre.QROM(num_bitstrings=num_states, size_bitstring=len(phase_wires), restored=False, wires=elec_wires + coeff_wires))
+    ops.append(
+        qre.QROM(
+            num_bitstrings=num_states,
+            size_bitstring=len(phase_wires),
+            restored=False,
+            wires=elec_wires + coeff_wires,
+        )
+    )
 
     qre.OutOfPlaceSquare(register_size=grid_size, wires=mode_wires + scratch_wires)
-    for i in range(2*grid_size):
+    for i in range(2 * grid_size):
         ctrl_wire = [scratch_wires[i]]
-        target_wires = coeff_wires[:len(phase_wires)-i] + phase_wires[:len(phase_wires)-i]
-        ops.append(qre.Controlled(qre.SemiAdder(max_register_size=len(phase_wires) - i), num_ctrl_wires=1, num_zero_ctrl=0, wires=target_wires + ctrl_wire))
+        target_wires = coeff_wires[: len(phase_wires) - i] + phase_wires[: len(phase_wires) - i]
+        ops.append(
+            qre.Controlled(
+                qre.SemiAdder(max_register_size=len(phase_wires) - i),
+                num_ctrl_wires=1,
+                num_zero_ctrl=0,
+                wires=target_wires + ctrl_wire,
+            )
+        )
 
-    ops.append(qre.Adjoint(qre.OutOfPlaceSquare(register_size=grid_size, wires=mode_wires + scratch_wires)))
-    ops.append(qre.Adjoint(qre.QROM(num_bitstrings=num_states, size_bitstring=len(phase_wires), restored=False, wires=elec_wires + coeff_wires)))
+    ops.append(
+        qre.Adjoint(qre.OutOfPlaceSquare(register_size=grid_size, wires=mode_wires + scratch_wires))
+    )
+    ops.append(
+        qre.Adjoint(
+            qre.QROM(
+                num_bitstrings=num_states,
+                size_bitstring=len(phase_wires),
+                restored=False,
+                wires=elec_wires + coeff_wires,
+            )
+        )
+    )
     return qre.Prod(ops)
 
 
 #################################################################################
 # Estimating the Number of Trotter Steps
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# --------------------------------------
 # With the Hamiltonian fragments defined, the next step is to combine them into a full time-evolution
 # simulation. However, the feasibility of this simulation depends heavily on the total number of
 # Trotter steps required to reach the target time :math:`T`.
@@ -174,15 +240,17 @@ def quadratic_circuit(num_states, elec_wires, phase_wires, coeff_wires, mode_wir
 
 import math
 
+
 def calculate_trotter_steps(target_error, ref_error, ref_dt, total_time):
     """Calculates total steps required using second-order error scaling."""
     required_dt = ref_dt * math.sqrt(target_error / ref_error)
     return math.ceil(total_time / required_dt)
 
+
 # Benchmarks for Anthracene Dimer from Motlagh et al. [#Motlagh2025]
-ref_error = 0.00263   # Reference error at dt=0.1 fs
-ref_dt = 0.1         # Reference time step (fs)
-total_time = 100.0   # Total simulation time (fs)
+ref_error = 0.00263  # Reference error at dt=0.1 fs
+ref_dt = 0.1  # Reference time step (fs)
+total_time = 100.0  # Total simulation time (fs)
 target_error = 0.01  # Target: 1% error
 
 num_steps = calculate_trotter_steps(target_error, ref_error, ref_dt, total_time)
@@ -191,40 +259,57 @@ num_steps = calculate_trotter_steps(target_error, ref_error, ref_dt, total_time)
 # Finally, to ensure precise resource tracking, we explicitly label our wire registers. This avoids ambiguity
 # about which qubits are active and ensures the resource estimator captures the full width of the circuit.
 
+
 def get_wire_labels(num_modes, num_states, grid_size, phase_prec):
     """Generates the wire map for the full system."""
     num_elec_qubits = (num_states - 1).bit_length()
-    elec_wires = [f"e_{i}" for i in range(num_elec_qubits)] # Electronic State Register
+    elec_wires = [f"e_{i}" for i in range(num_elec_qubits)]  # Electronic State Register
 
-    phase_wires = [f"pg_{i}" for i in range(phase_prec)] # Resource State For Phase Gradients
-    coeff_wires = [f"c_{i}" for i in range(phase_prec)] # Coefficient Register
+    phase_wires = [f"pg_{i}" for i in range(phase_prec)]  # Resource State For Phase Gradients
+    coeff_wires = [f"c_{i}" for i in range(phase_prec)]  # Coefficient Register
 
     mode_wires = []
     for m in range(num_modes):
-        mode_wires.append([f"m{m}_{w}" for w in range(grid_size)]) # Mode m Register
+        mode_wires.append([f"m{m}_{w}" for w in range(grid_size)])  # Mode m Register
 
-    scratch_wires = [f"s_{i}" for i in range(2 * grid_size)] # Scratch Space for Arithmetic
+    scratch_wires = [f"s_{i}" for i in range(2 * grid_size)]  # Scratch Space for Arithmetic
 
     return elec_wires, phase_wires, coeff_wires, mode_wires, scratch_wires
+
 
 #################################################################################
 # We now combine these fragments to define the full Second-Order Trotter circuit using PennyLane's
 # `TrotterProduct <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.TrotterProduct.html>`_ class.
 #
 
+
 def circuit(num_modes, num_states, grid_size, taylor_degree, phase_grad_wires=20):
     fragments = []
-    elec_wires, phase_wires, coeff_wires, mode_wires, scratch_wires = get_wire_labels(num_modes, num_states, grid_size, phase_grad_wires)
+    elec_wires, phase_wires, coeff_wires, mode_wires, scratch_wires = get_wire_labels(
+        num_modes, num_states, grid_size, phase_grad_wires
+    )
     kinetic_fragment = kinetic_circuit(mode_wires, phase_wires, scratch_wires, coeff_wires)
     fragments.append(kinetic_fragment)
 
     for mode in range(num_modes):
         if taylor_degree >= 1:
-            fragments.append(linear_circuit(num_states, elec_wires, phase_wires, coeff_wires, scratch_wires))
+            fragments.append(
+                linear_circuit(num_states, elec_wires, phase_wires, coeff_wires, scratch_wires)
+            )
         if taylor_degree >= 2:
-            fragments.append(quadratic_circuit(num_states, elec_wires, phase_wires, coeff_wires, mode_wires[mode], scratch_wires))
+            fragments.append(
+                quadratic_circuit(
+                    num_states,
+                    elec_wires,
+                    phase_wires,
+                    coeff_wires,
+                    mode_wires[mode],
+                    scratch_wires,
+                )
+            )
 
     qre.TrotterProduct(first_order_expansion=fragments, num_steps=num_steps, order=2)
+
 
 #################################################################################
 # Finally, we can estimate the resource requirements for this full circuit using the estimate function:
@@ -236,7 +321,7 @@ print(qre.estimate(circuit)(num_modes, num_states, grid_size, taylor_degree))
 # correctly captures the resource requirements of the vibronic simulation algorithm.
 #
 # Conclusions
-# ^^^^^^^^^^^
+# -----------
 # By constructing the full simulation workflow for vibronic dynamics from the ground up, we have gained critical insights into
 # the resource requirements for simulating these complex processes on future quantum hardware.
 # This approach allows us to break down complex algorithms into manageable building blocks, providing a transparent view of how
