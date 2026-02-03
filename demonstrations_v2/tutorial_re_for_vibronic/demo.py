@@ -61,8 +61,8 @@ Let's take the example of Anthracene dimer, a system critical for understanding 
 define these key parameters:
 """
 
-num_modes = 21       # Number of vibrational modes
-num_states = 6       # Number of electronic states
+num_modes = 19       # Number of vibrational modes
+num_states = 5       # Number of electronic states
 grid_size = 4        # Number of qubits per mode (discretization)
 taylor_degree = 2    # Truncate to Quadratic Vibronic Coupling (Linear + Quadratic terms)
 
@@ -88,19 +88,25 @@ taylor_degree = 2    # Truncate to Quadratic Vibronic Coupling (Linear + Quadrat
 # momentum operator:
 
 import pennylane.estimator as qre
-def kinetic_circuit(num_modes, grid_size, phase_grad_wires):
+def kinetic_circuit(mode_wires, phase_wires, scratch_wires, coeff_wires):
 
-    qre.Pow(qre.AQFT(order=1, num_wires= grid_size), pow_z= num_modes)
+    num_phase_wires = len(phase_wires)
+    grid_size = len(mode_wires[0])
+    for mode in range(num_modes):
+        qre.AQFT(order=1, num_wires= grid_size, wires=mode_wires[mode])
 
     for i in range(num_modes):
-        qre.OutOfPlaceSquare(register_size=grid_size)
+        qre.OutOfPlaceSquare(register_size=grid_size, wires=scratch_wires + mode_wires[i])
 
         for j in range(2*grid_size):
-            qre.Controlled(qre.SemiAdder(max_register_size=phase_grad_wires - j), num_ctrl_wires=1, num_zero_ctrl=0)
+            ctrl_wire = [scratch_wires[j]]
+            target_wires = coeff_wires[:len(phase_wires)-j] + phase_wires[:len(phase_wires)-j]
+            qre.Controlled(qre.SemiAdder(max_register_size=num_phase_wires - j), num_ctrl_wires=1, num_zero_ctrl=0, wires=target_wires + ctrl_wire)
 
-        qre.Adjoint(qre.OutOfPlaceSquare(register_size=grid_size))
+        qre.Adjoint(qre.OutOfPlaceSquare(register_size=grid_size, wires=scratch_wires + mode_wires[i]))
 
-    qre.Pow(qre.Adjoint(qre.AQFT(order=1, num_wires=grid_size)), num_modes)
+    for mode in range(num_modes):
+        qre.Adjoint(qre.AQFT(order=1, num_wires=grid_size, wires = mode_wires[mode]))
 
 ######################################################################
 # Similarly, we can define the structure for the Potential Energy Fragments. For a QVC model truncated to quadratic terms,
@@ -119,47 +125,75 @@ def kinetic_circuit(num_modes, grid_size, phase_grad_wires):
 #
 # We can define this circuit using two different segments, one for linear terms and one for quadratic terms:
 #
-def linear_circuit(num_states, grid_size, phase_grad_wires):
-    qre.QROM(num_bitstrings=num_states, size_bitstring=phase_grad_wires, restored=False)
+def linear_circuit(num_states, elec_wires, phase_wires, coeff_wires, mode_wires, scratch_wires):
+    qre.QROM(num_bitstrings= len(elec_wires), size_bitstring=len(phase_wires), restored=False, wires=elec_wires + coeff_wires)
 
     for i in range(grid_size):
-        qre.Controlled(qre.SemiAdder(max_register_size=phase_grad_wires - i), num_ctrl_wires=1, num_zero_ctrl=0)
+        ctrl_wire = [scratch_wires[i]]
+        target_wires = coeff_wires[:len(phase_wires)-i] + phase_wires[:len(phase_wires)-i]
+        qre.Controlled(qre.SemiAdder(max_register_size=len(phase_wires) - i), num_ctrl_wires=1, num_zero_ctrl=0, wires=target_wires + ctrl_wire)
 
-    qre.Adjoint(qre.QROM(num_bitstrings=num_states, size_bitstring=phase_grad_wires, restored=False))
+    qre.Adjoint(qre.QROM(num_bitstrings= len(elec_wires), size_bitstring=len(phase_wires), restored=False, wires=elec_wires + coeff_wires))
 
-def quadratic_circuit(num_states, grid_size, phase_grad_wires):
-    qre.QROM(num_bitstrings=num_states, size_bitstring=phase_grad_wires, restored=False)
+def quadratic_circuit(num_states, elec_wires, phase_wires, coeff_wires, mode_wires, scratch_wires):
+    grid_size = len(mode_wires)
+    qre.QROM(num_bitstrings=len(elec_wires), size_bitstring=len(phase_wires), restored=False, wires=elec_wires + coeff_wires)
 
-    qre.OutOfPlaceSquare(register_size=grid_size)
+    qre.OutOfPlaceSquare(register_size=grid_size, wires=mode_wires + scratch_wires)
     for i in range(2*grid_size):
-        qre.Controlled(qre.SemiAdder(max_register_size=phase_grad_wires - i), num_ctrl_wires=1, num_zero_ctrl=0)
+        ctrl_wire = [scratch_wires[i]]
+        target_wires = coeff_wires[:len(phase_wires)-i] + phase_wires[:len(phase_wires)-i]
+        qre.Controlled(qre.SemiAdder(max_register_size=len(phase_wires) - i), num_ctrl_wires=1, num_zero_ctrl=0, wires=target_wires + ctrl_wire)
 
-    qre.Adjoint(qre.OutOfPlaceSquare(register_size=grid_size))
-    qre.Adjoint(qre.QROM(num_bitstrings=num_states, size_bitstring=phase_grad_wires, restored=False))
+    qre.Adjoint(qre.OutOfPlaceSquare(register_size=grid_size, wires=mode_wires + scratch_wires))
+    qre.Adjoint(qre.QROM(num_bitstrings=len(elec_wires), size_bitstring=len(phase_wires), restored=False, wires=elec_wires + coeff_wires))
 
 ######################################################################
-# Finally, we combine these fragments to define the full Second-Order Trotter Step:
+# Finally, to ensure precise resource tracking, we explicitly label our wire registers. This avoids ambiguity
+# about which qubits are active and ensures the resource estimator captures the full width of the circuit.
+
+def get_wire_labels(num_modes, num_states, grid_size, phase_prec):
+    """Generates the wire map for the full system."""
+    num_elec_qubits = (num_states - 1).bit_length()
+    elec_wires = [f"e_{i}" for i in range(num_elec_qubits)] # Electronic State Register
+
+    phase_wires = [f"pg_{i}" for i in range(phase_prec)] # Resource State For Phase Gradients
+    coeff_wires = [f"c_{i}" for i in range(phase_prec)] # Coefficient Register
+
+    print("wire labels grid size: ", grid_size)
+    mode_wires = []
+    for m in range(num_modes):
+        mode_wires.append([f"m{m}_{w}" for w in range(grid_size)]) # Mode m Register
+
+    scratch_wires = [f"s_{i}" for i in range(2 * grid_size)] # Scratch Space for Arithmetic
+
+    return elec_wires, phase_wires, coeff_wires, mode_wires, scratch_wires
+
+###########################################################################
+# We now combine these fragments to define the full Second-Order Trotter Step:
 # :math:`U(\Delta t) \approx e^{-iV \Delta t/2} e^{-iT \Delta t} e^{-iV \Delta t/2}`.
 # For each second order Trotter step, all potential energy fragments
-# are applied twice, each for half the time, and the kinetic energy fragment
+# are applied twice, each for half the time, and the kinetic energy fragments
 # is applied once.
 
-def apply_potential(num_states, num_modes, grid_size, phase_grad_wires, taylor_degree):
+
+def apply_potential(num_states, elec_wires, phase_wires, coeff_wires, mode_wires, scratch_wires, taylor_degree):
     for mode in range(num_modes):
         if taylor_degree >= 1:
-            linear_circuit(num_states, grid_size, phase_grad_wires)
+            linear_circuit(num_states, elec_wires, phase_wires, coeff_wires, mode_wires[mode], scratch_wires)
         if taylor_degree >= 2:
-            quadratic_circuit(num_states, grid_size, phase_grad_wires)
+            quadratic_circuit(num_states, elec_wires, phase_wires, coeff_wires, mode_wires[mode], scratch_wires)
 
 def trotter_step_circuit(num_modes, num_states, grid_size, phase_grad_wires, taylor_degree):
+    elec_wires, phase_wires, coeff_wires, mode_wires, scratch_wires = get_wire_labels(num_modes, num_states, grid_size, phase_grad_wires)
     # Potential Energy Fragments
-    apply_potential(num_states, num_modes, grid_size, phase_grad_wires, taylor_degree)
+    apply_potential(num_states, elec_wires, phase_wires, coeff_wires, mode_wires, scratch_wires, taylor_degree)
 
     # Kinetic Energy Fragment
-    kinetic_circuit(num_modes, grid_size, phase_grad_wires)
+    kinetic_circuit(mode_wires, phase_wires, scratch_wires, coeff_wires)
 
     # Potential Energy Fragments
-    apply_potential(num_states, num_modes, grid_size, phase_grad_wires, taylor_degree)
+    apply_potential(num_states, elec_wires, phase_wires, coeff_wires, mode_wires, scratch_wires, taylor_degree)
 
 #################################################################################
 # With the single Trotter step defined, we can move to defining the rest of the parameters needed for Trotterization, that is the number of Trotter
@@ -167,6 +201,7 @@ def trotter_step_circuit(num_modes, num_states, grid_size, phase_grad_wires, tay
 
 print(qre.estimate(trotter_step_circuit)(num_modes, num_states, grid_size, phase_grad_wires=20, taylor_degree=taylor_degree))
 
+#################################################################################
 # Conclusions
 # ^^^^^^^^^^^
 # By constructing the full simulation workflow for vibronic dynamics from the ground up, we have gained critical insights into
