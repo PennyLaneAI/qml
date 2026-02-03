@@ -116,6 +116,7 @@ def kinetic_circuit(mode_wires, phase_wires, scratch_wires, coeff_wires):
 #
 # where :math:`c_r` and :math:`\tilde{c}_{r}` are the linear and quadratic coupling coefficients respectively. The exponential
 # of each term is implemented by:
+#
 # * Loading the coefficients from QROM controlled by the electronic state.
 # * Computing the monomial product by using a square operation for quadratic terms.
 # * Multiplying with the coefficients and adding to the resource register to accumulate the phase.
@@ -208,8 +209,7 @@ def get_wire_labels(num_modes, num_states, grid_size, phase_prec):
 
 #################################################################################
 # We now combine these fragments to define the full Second-Order Trotter circuit using PennyLane's
-# `TrotterProduct <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.TrotterProduct.html>`_
-#  class.
+# `TrotterProduct <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.TrotterProduct.html>`_ class.
 #
 
 def circuit(num_modes, num_states, grid_size, taylor_degree, phase_grad_wires=20):
