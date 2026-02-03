@@ -95,12 +95,16 @@ def kinetic_circuit(mode_wires, phase_wires, scratch_wires, coeff_wires):
 
     for i in range(num_modes):
         ops.append(
-            qre.OutOfPlaceSquare(register_size=grid_size, wires=scratch_wires + mode_wires[i])
+            qre.OutOfPlaceSquare(
+                register_size=grid_size, wires=scratch_wires + mode_wires[i]
+            )
         )
 
         for j in range(2 * grid_size):
             ctrl_wire = [scratch_wires[j]]
-            target_wires = coeff_wires[: len(phase_wires) - j] + phase_wires[: len(phase_wires) - j]
+            target_wires = (
+                coeff_wires[: len(phase_wires) - j] + phase_wires[: len(phase_wires) - j]
+            )
             ops.append(
                 qre.Controlled(
                     qre.SemiAdder(max_register_size=num_phase_wires - j),
@@ -112,12 +116,16 @@ def kinetic_circuit(mode_wires, phase_wires, scratch_wires, coeff_wires):
 
         ops.append(
             qre.Adjoint(
-                qre.OutOfPlaceSquare(register_size=grid_size, wires=scratch_wires + mode_wires[i])
+                qre.OutOfPlaceSquare(
+                    register_size=grid_size, wires=scratch_wires + mode_wires[i]
+                )
             )
         )
 
     for mode in range(num_modes):
-        ops.append(qre.Adjoint(qre.AQFT(order=1, num_wires=grid_size, wires=mode_wires[mode])))
+        ops.append(
+            qre.Adjoint(qre.AQFT(order=1, num_wires=grid_size, wires=mode_wires[mode]))
+        )
 
     return qre.Prod(ops)
 
@@ -154,7 +162,9 @@ def linear_circuit(num_states, elec_wires, phase_wires, coeff_wires, scratch_wir
 
     for i in range(grid_size):
         ctrl_wire = [scratch_wires[i]]
-        target_wires = coeff_wires[: len(phase_wires) - i] + phase_wires[: len(phase_wires) - i]
+        target_wires = (
+            coeff_wires[: len(phase_wires) - i] + phase_wires[: len(phase_wires) - i]
+        )
         ops.append(
             qre.Controlled(
                 qre.SemiAdder(max_register_size=len(phase_wires) - i),
@@ -177,7 +187,9 @@ def linear_circuit(num_states, elec_wires, phase_wires, coeff_wires, scratch_wir
     return qre.Prod(ops)
 
 
-def quadratic_circuit(num_states, elec_wires, phase_wires, coeff_wires, mode_wires, scratch_wires):
+def quadratic_circuit(
+    num_states, elec_wires, phase_wires, coeff_wires, mode_wires, scratch_wires
+):
     ops = []
     grid_size = len(mode_wires)
     ops.append(
@@ -192,7 +204,9 @@ def quadratic_circuit(num_states, elec_wires, phase_wires, coeff_wires, mode_wir
     qre.OutOfPlaceSquare(register_size=grid_size, wires=mode_wires + scratch_wires)
     for i in range(2 * grid_size):
         ctrl_wire = [scratch_wires[i]]
-        target_wires = coeff_wires[: len(phase_wires) - i] + phase_wires[: len(phase_wires) - i]
+        target_wires = (
+            coeff_wires[: len(phase_wires) - i] + phase_wires[: len(phase_wires) - i]
+        )
         ops.append(
             qre.Controlled(
                 qre.SemiAdder(max_register_size=len(phase_wires) - i),
@@ -203,7 +217,11 @@ def quadratic_circuit(num_states, elec_wires, phase_wires, coeff_wires, mode_wir
         )
 
     ops.append(
-        qre.Adjoint(qre.OutOfPlaceSquare(register_size=grid_size, wires=mode_wires + scratch_wires))
+        qre.Adjoint(
+            qre.OutOfPlaceSquare(
+                register_size=grid_size, wires=mode_wires + scratch_wires
+            )
+        )
     )
     ops.append(
         qre.Adjoint(
@@ -265,14 +283,18 @@ def get_wire_labels(num_modes, num_states, grid_size, phase_prec):
     num_elec_qubits = (num_states - 1).bit_length()
     elec_wires = [f"e_{i}" for i in range(num_elec_qubits)]  # Electronic State Register
 
-    phase_wires = [f"pg_{i}" for i in range(phase_prec)]  # Resource State For Phase Gradients
+    phase_wires = [
+        f"pg_{i}" for i in range(phase_prec)
+    ]  # Resource State For Phase Gradients
     coeff_wires = [f"c_{i}" for i in range(phase_prec)]  # Coefficient Register
 
     mode_wires = []
     for m in range(num_modes):
         mode_wires.append([f"m{m}_{w}" for w in range(grid_size)])  # Mode m Register
 
-    scratch_wires = [f"s_{i}" for i in range(2 * grid_size)]  # Scratch Space for Arithmetic
+    scratch_wires = [
+        f"s_{i}" for i in range(2 * grid_size)
+    ]  # Scratch Space for Arithmetic
 
     return elec_wires, phase_wires, coeff_wires, mode_wires, scratch_wires
 
@@ -288,13 +310,17 @@ def circuit(num_modes, num_states, grid_size, taylor_degree, phase_grad_wires=20
     elec_wires, phase_wires, coeff_wires, mode_wires, scratch_wires = get_wire_labels(
         num_modes, num_states, grid_size, phase_grad_wires
     )
-    kinetic_fragment = kinetic_circuit(mode_wires, phase_wires, scratch_wires, coeff_wires)
+    kinetic_fragment = kinetic_circuit(
+        mode_wires, phase_wires, scratch_wires, coeff_wires
+    )
     fragments.append(kinetic_fragment)
 
     for mode in range(num_modes):
         if taylor_degree >= 1:
             fragments.append(
-                linear_circuit(num_states, elec_wires, phase_wires, coeff_wires, scratch_wires)
+                linear_circuit(
+                    num_states, elec_wires, phase_wires, coeff_wires, scratch_wires
+                )
             )
         if taylor_degree >= 2:
             fragments.append(
