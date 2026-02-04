@@ -257,25 +257,25 @@ plt.show()
 #
 #     Guang Hao Low, Isaac L. Chuang,
 #     "Hamiltonian simulation by qubitization",
-#     `Quantum, 3, 163 <https://quantum-journal.org/papers/q-2019-07-12-163/>`__, 2019
+#     `Quantum, 3, 163 <https://quantum-journal.org/papers/q-2019-07-12-163/>`__, 2019.
 #
 #
 # .. [#gqsp2024]
 #
 #     Danial Motlagh, Nathan Wiebe,
 #     "Generalized quantum signal processing",
-#     `PRX Quantum 5.2, 020368 <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.5.020368>`__, 2024
+#     `PRX Quantum 5.2, 020368 <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.5.020368>`__, 2024.
 #
 #
 # .. [#nmr]
 #
 #     Justin Elenewski, Christina Camara, Amir Kalev,
 #     "Prospects for NMR spectral prediction on fault-tolerant quantum computers",
-#     `arXiv:2406.09340 <https://arxiv.org/abs/2406.09340>`__, 2024
+#     `arXiv:2406.09340 <https://arxiv.org/abs/2406.09340>`__, 2024.
 #
 # .. [#spin]
 #
 #     Chae-Yeun Park, Pablo A.M. Casares, Juan Miguel Arrazola, Joonsuk Huh,
 #     "The hardness of quantum spin dynamics",
-#     `arXiv:2312.07658 <https://arxiv.org/abs/2312.07658>`__, 2023
+#     `arXiv:2312.07658 <https://arxiv.org/abs/2312.07658>`__, 2023.
 #
