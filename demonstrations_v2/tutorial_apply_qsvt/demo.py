@@ -79,7 +79,7 @@ print(qml.draw(my_circuit)())
 # .. note::
 #     Follow the notation in this section carefully. 
 #     :math:`x` is a scalar and :math:`\vec{x}` is a vector. Sometimes we talk about the scalar
-#     function :math:`P(x) = s \cdot \frac{1}{x}` and sometimes we talk about the matrix-vector
+#     function :math:`P(x) = s \cdot \frac{1}{x}` and sometimes we talk about the vector
 #     function :math:`A \cdot \vec{x} = \vec{b}.` 
 #
 # :math:`A^{-1}` can be constructed directly by inverting the singular values of :math:`A^{T}.` We can
