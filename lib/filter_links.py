@@ -22,7 +22,9 @@ def load_inventory_with_retry(url: str, retries: int = 3, delay: float = 1.0) ->
         except requests_exceptions.HTTPError:
             if attempt == retries:
                 raise
+            print(f"Error loading inventory from {url}. Retrying...")
             time.sleep(delay * attempt)
+            print(f"Retrying... {attempt} of {retries}")
 
 def make_named_inventory(inv: soi.Inventory) -> Dict[str, Any]:
     """Make a dictionary of objects from an inventory."""
@@ -95,6 +97,6 @@ def filter_links(key, value, format, _):
                 return Link(["",[],[]], pandocify_string(name), [link.removesuffix("$"),""])
 
 if __name__ == '__main__':
-    pl_obj_inv = make_named_inventory(load_inventory_with_retry(PL_OBJ_INV_URL+"objects.inv"))
     cat_obj_inv = make_named_inventory(load_inventory_with_retry(CAT_OBJ_INV_URL+"objects.inv"))
+    pl_obj_inv = make_named_inventory(load_inventory_with_retry(PL_OBJ_INV_URL+"objects.inv"))
     toJSONFilter(filter_links)
