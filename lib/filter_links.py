@@ -17,6 +17,7 @@ DEMOS_URL = "https://pennylane.ai/qml/demos/"
 PL_OBJ_INV_URL = "https://docs.pennylane.ai/en/stable/"
 CAT_OBJ_INV_URL = "https://docs.pennylane.ai/projects/catalyst/en/stable/"
 
+# Readthedocs has started rate limiting requests without proper User-Agent.
 # Mirror Sphinx's sphinx.util.requests: use GET with User-Agent and timeout.
 # Sphinx uses requests.get()/head() via sphinx.util.requests.get(), which sets
 # User-Agent (Firefox-like + Sphinx version) and intersphinx_timeout.
