@@ -170,9 +170,6 @@ def build(
     done = 0
     logger.info("Building %d demos", len(demos))
 
-    logger.info("Try to install objects.inv first...")
-    soi.Inventory(url="https://docs.pennylane.ai/en/stable/objects.inv")
-
     build_venv = Virtualenv(ctx.repo_root / venv) if venv else Virtualenv(ctx.build_venv_path)
     logger.info("Using build environment: %s", build_venv.path)
     cmds.pip_install(

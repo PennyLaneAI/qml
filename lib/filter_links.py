@@ -3,28 +3,46 @@
 """
 Pandoc filter to process intersphinx links.
 """
+import tempfile
 import time
+from pathlib import Path
 from typing import Any, Dict
 
 import sphobjinv as soi
 from pandocfilters import toJSONFilter, Link, RawInline
+import requests
 from requests import exceptions as requests_exceptions
 
 DEMOS_URL = "https://pennylane.ai/qml/demos/"
 PL_OBJ_INV_URL = "https://docs.pennylane.ai/en/stable/"
 CAT_OBJ_INV_URL = "https://docs.pennylane.ai/projects/catalyst/en/stable/"
 
+# Mirror Sphinx's sphinx.util.requests: use GET with User-Agent and timeout.
+# Sphinx uses requests.get()/head() via sphinx.util.requests.get(), which sets
+# User-Agent (Firefox-like + Sphinx version) and intersphinx_timeout.
+# See: sphinx/util/requests.py (get/head), intersphinx_timeout in conf.py.
+REQUEST_TIMEOUT = 5  # seconds, analogous to intersphinx_timeout
+USER_AGENT = "Mozilla/5.0 (compatible; QML-Pandoc-Filter; +https://github.com/PennyLaneAI/qml)"
+
 def load_inventory_with_retry(url: str, retries: int = 3, delay: float = 1.0) -> soi.Inventory:
-    """Fetch an inventory with simple retry logic for transient HTTP errors."""
+    """Download objects.inv from URL and load inventory with retry logic for transient HTTP errors."""
+    headers = {"User-Agent": USER_AGENT}
     for attempt in range(1, retries + 1):
         try:
-            return soi.Inventory(url=url)
+            response = requests.get(url, headers=headers, timeout=REQUEST_TIMEOUT)
+            response.raise_for_status()
+            break
         except requests_exceptions.HTTPError:
             if attempt == retries:
                 raise
-            print(f"Error loading inventory from {url}. Retrying...")
             time.sleep(delay * attempt)
-            print(f"Retrying... {attempt} of {retries}")
+    with tempfile.NamedTemporaryFile(suffix=".inv", delete=False) as f:
+        f.write(response.content)
+        path = Path(f.name)
+    try:
+        return soi.Inventory(path)
+    finally:
+        path.unlink(missing_ok=True)
 
 def make_named_inventory(inv: soi.Inventory) -> Dict[str, Any]:
     """Make a dictionary of objects from an inventory."""
@@ -97,6 +115,6 @@ def filter_links(key, value, format, _):
                 return Link(["",[],[]], pandocify_string(name), [link.removesuffix("$"),""])
 
 if __name__ == '__main__':
-    cat_obj_inv = make_named_inventory(load_inventory_with_retry(CAT_OBJ_INV_URL+"objects.inv"))
     pl_obj_inv = make_named_inventory(load_inventory_with_retry(PL_OBJ_INV_URL+"objects.inv"))
+    cat_obj_inv = make_named_inventory(load_inventory_with_retry(CAT_OBJ_INV_URL+"objects.inv"))
     toJSONFilter(filter_links)
