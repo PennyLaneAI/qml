@@ -153,6 +153,7 @@ def kinetic_circuit(mode_wires, phase_wires, scratch_wires, coeff_wires):
 #     :align: center
 #     :width: 80%
 #     :target: javascript:void(0)
+#
 #     Figure 2: Circuit for implementing the exponential of a monomial term in the potential energy fragment.
 #
 # The circuit executes the following steps:
