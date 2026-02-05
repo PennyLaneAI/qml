@@ -255,43 +255,6 @@ def quadratic_circuit(
 
 
 #################################################################################
-# Estimating the Number of Trotter Steps
-# --------------------------------------
-# With the circuits for different fragments defined, the next step is to combine them into a full Hamiltonian
-# simulation. However, the feasibility of this simulation depends heavily on the total number of
-# Trotter steps required to reach the target time :math:`T`.
-#
-# Since we employ a second-order Trotter-Suzuki product formula, the algorithmic error scales
-# quadratically with the time step (:math:`\text{Error} \propto T \Delta t^2`). This predictable scaling allows us
-# to determine the required step count using benchmark values from the reference literature.
-#
-# If a reference step size :math:`\Delta t_{\text{ref}}` is known to produce an error :math:`\epsilon_{\text{ref}}`,
-# the step size :math:`\Delta t_{\text{req}}` needed to meet a strict target error :math:`\epsilon_{\text{req}}` is:
-#
-# .. math::
-#
-#     \Delta t_{\text{req}} = \Delta t_{\text{ref}} \sqrt{\frac{\epsilon_{\text{req}}}{\epsilon_{\text{ref}}}}
-#
-# The total number of steps is then simply :math:`N = T / \Delta t_{\text{req}}`.
-
-import math
-
-
-def calculate_trotter_steps(target_error, ref_error, ref_dt, total_time):
-    """Calculates total steps required using second-order error scaling."""
-    required_dt = ref_dt * math.sqrt(target_error / ref_error)
-    return math.ceil(total_time / required_dt)
-
-
-# Benchmarks for Anthracene Dimer from Motlagh et al. [#Motlagh2025]
-ref_error = 0.00263  # Reference error at dt=0.1 fs
-ref_dt = 0.1  # Reference time step (fs)
-total_time = 100.0  # Total simulation time (fs)
-target_error = 0.01  # Target: 1% error
-
-num_steps = calculate_trotter_steps(target_error, ref_error, ref_dt, total_time)
-
-#################################################################################
 # Finally, to ensure precise resource tracking, we explicitly label our wire registers. This avoids ambiguity
 # about which circuit operations are mapped to which quantum registers and ensures the resource estimator captures the
 # full width of the circuit.
@@ -333,7 +296,8 @@ def get_wire_labels(num_modes, num_states, k_grid, phase_prec):
 # potential and kinetic steps, directly influencing the simulation's accuracy.
 #
 
-def circuit(num_modes, num_states, k_grid, taylor_degree, phase_grad_prec=1e-6):
+import math
+def circuit(num_modes, num_states, k_grid, taylor_degree, num_steps, phase_grad_prec=1e-6):
     fragments = []
     phase_grad_wires = int(math.ceil(math.log2(1 / phase_grad_prec)))
     elec_wires, phase_wires, coeff_wires, mode_wires, scratch_wires = (
@@ -372,15 +336,19 @@ def circuit(num_modes, num_states, k_grid, taylor_degree, phase_grad_prec=1e-6):
 
 
 #################################################################################
-# Finally, we can estimate the resource requirements for this full circuit using the estimate function:
+# Finally, we can estimate the resource requirements for this full circuit using the estimate function.
+# To ensure the simulation reaches a total time of 100 fs with sufficient accuracy, we set the number of
+# Trotter steps to 500. This value is chosen based on benchmark data from Motlagh et al. [#Motlagh2025]_,
+# where this step count was shown to maintain reliable accuracy for a 100 fs simulation of the (NO)$_4$-Anth system.
 
-print(qre.estimate(circuit)(num_modes, num_states, k_grid, taylor_degree))
+print(qre.estimate(circuit)(num_modes, num_states, k_grid, taylor_degree, num_steps=500))
 
 #################################################################################
-# These numbers align closely with the findings in Motlagh et al., confirming that our resource estimation pipeline
-# correctly captures the resource requirements of the vibronic simulation algorithm. We observe that the cost is not
-# exactly the same due to the assumption that our Hamiltonian is dense, while the reference work leverages sparsity in
-# the Hamiltonian by only working with non-zero coupling terms.
+# We observe that while our results follow the same scaling and orders of magnitude reported in Motlagh et al. [#Motlagh2025]_,
+# the Toffoli gate count is slightly higher.
+# The higher gate counts in this estimation occur because we assume a dense Hamiltonian, whereas the reference work
+# leverages system-specific sparsity by only implementing non-zero coupling terms. These numbers can therefore be viewed as
+# a reliable upper bound for the cost of simulating (NO):math:`_4`-Anth dynamics.
 #
 # Conclusions
 # -----------
