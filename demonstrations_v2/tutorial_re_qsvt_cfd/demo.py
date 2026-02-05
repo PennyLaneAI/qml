@@ -33,7 +33,7 @@ uses the sparsity of the matrix to significantly reduce the cost of QSVT. We wil
 inversion problem that arises in computation fluid dynamics (CFD) [#lapworth2022]_.
 
 Problem Setup
-^^^^^^^^^^^^^
+-------------
 The two-dimensional lid-driven cavity flow (2D-LDC) is a classical benchmark in computational fluid dynamics
 (CFD) for validating numerical schemes that solve the incompressible Navier–Stokes equations. Determining the
 fluid flow within the cavity requires solving the pressure correction equations by inverting the associated
@@ -83,7 +83,7 @@ Estimating the resource cost for this circuit may seem like a daunting task, but
 PennyLane's quantum resource :mod:`~.pennylane.estimator` to help us construct each piece!
 
 Diagonal Matrices & the Walsh-Hadamard Transform
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------------------------------
 Let's start with the :math:`D_{k}` operators. These are a list of diagonal operators where
 each operator stores the normalized entries from one of the diagonals of our d-diagonal matrix :math:`A`.
 By multiplexing over the :math:`D_{k}` operators, we can load all of the diagonals in *parallel*.
@@ -143,7 +143,7 @@ def WalshHadamard_Dk(num_diags, size_diagonal, num_walsh_coeffs):
 # class represents the controlled operator.
 #
 # Shift Operator
-# ^^^^^^^^^^^^^^
+# --------------
 # Next we will implement the Shift operator. This is a product of three subroutines which
 # shift the diagonal entries into the correct rank of the d-diagonal block encoding. Each rank
 # has an associated shift value, the main diagonal has shift value 0. Each diagonal going up
@@ -188,7 +188,7 @@ def ShiftOp(num_shifts, num_load_wires, wires):
 
 ##############################################################################
 # d-Diagonal Block Encoding
-# ^^^^^^^^^^^^^^^^^^^^^^^^^
+# -------------------------
 # Now that we have developed all of the pieces, we'll bring them together to implement
 # the full d-diagonal block encoding operator [#linaje2025]_.
 #
