@@ -43,7 +43,7 @@ this cavity has a very sparse, structured diagonal form. The figure below highli
 
 |
 
-.. figure:: ../_static/demonstration_assets/re_qsvt/sparse_diagonal_matrix.png
+.. figure:: ../_static/demonstration_assets/re_qsvt_cfd/sparse_diagonal_matrix.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -72,7 +72,7 @@ d-diagonal block encoding is presented below. To learn more, read our paper:
 
 |
 
-.. figure:: ../_static/demonstration_assets/re_qsvt/SparseBE.png
+.. figure:: ../_static/demonstration_assets/re_qsvt_cfd/SparseBE.png
     :align: center
     :width: 80%
     :target: javascript:void(0)
@@ -99,7 +99,7 @@ we need to prepare as many operators as non-zero diagonals in :math:`A`.
 
 |
 
-.. figure:: ../_static/demonstration_assets/re_qsvt/WH_a.png
+.. figure:: ../_static/demonstration_assets/re_qsvt_cfd/WH_a.png
     :align: center
     :width: 90%
     :target: javascript:void(0)
@@ -194,7 +194,7 @@ def ShiftOp(num_shifts, num_load_wires, wires):
 #
 # |
 #
-# .. figure:: ../_static/demonstration_assets/re_qsvt/SparseBE.png
+# .. figure:: ../_static/demonstration_assets/re_qsvt_cfd/SparseBE.png
 #     :align: center
 #     :width: 80%
 #     :target: javascript:void(0)
