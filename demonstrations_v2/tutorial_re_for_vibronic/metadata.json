@@ -36,6 +36,15 @@
             "year": "2025",
             "publisher": "arXiv:2411.13669",
             "url": "https://arxiv.org/abs/2411.13669"
+        },
+        {
+            "id": "Pradhan2022",
+            "type": "article",
+            "title": "Design of the Smallest Intramolecular Singlet Fission Chromophore with the Fastest Singlet Fission",
+            "authors": "E. Pradhan, T. Zeng"
+            "year": "2022",
+            "publisher": "Journal of Physical Chemistry Letters 13.48 (2022)",
+            "url": "https://pubs.acs.org/doi/10.1021/acs.jpclett.2c03131"
         }
     ],
     "basedOnPapers": [],

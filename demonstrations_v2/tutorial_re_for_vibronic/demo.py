@@ -60,7 +60,7 @@ we can still derive a reliable baseline using only structural parameters. By def
 we can map out the cost topology of a real system without needing to generate and store the full Hamiltonian.
 
 As a case study, we select (NO):math:`_4`-Anth, a molecule created by introducing four N-oxyl radical fragments to
-anthracene. Proposed for its theoretically record-breaking singlet fission speed [#Motlagh2025]_, we use this system to define our simulation parameters:
+anthracene. Proposed for its theoretically record-breaking singlet fission speed [#Pradhan2022]_, we use this system to define our simulation parameters:
 """
 
 num_modes = 19  # Number of vibrational modes
@@ -153,12 +153,14 @@ def kinetic_circuit(mode_wires, phase_wires, scratch_wires, coeff_wires):
 #     :align: center
 #     :width: 80%
 #     :target: javascript:void(0)
+#     Figure 2: Circuit for implementing the exponential of a monomial term in the potential energy fragment.
 #
 # The circuit executes the following steps:
 #
 # * Loading the coefficients from QROM controlled by the electronic state.
 # * Computing the monomial product by using a square operation for quadratic terms.
-# * Multiplying with the coefficients and adding to the phase gradient register to accumulate the phase.
+# * Accumulating the phase by decomposing the multiplication into a series of controlled adders that
+#   add the product directly onto the phase gradient register.
 # * Uncomputing the intermediate steps to clean up ancilla wires.
 #
 # We can define this circuit using two different segments, one for linear terms and one for quadratic terms:
@@ -398,4 +400,8 @@ print(qre.estimate(circuit)(num_modes, num_states, grid_size, taylor_degree))
 #      Danial Motlagh et al., "Quantum Algorithm for Vibronic Dynamics: Case Study on Singlet Fission Solar Cell Design".
 #      `arXiv preprint arXiv:2411.13669 (2014) <https://arxiv.org/abs/2411.13669>`__.
 #
+# .. [#Pradhan2022]
+#
+#     E. Pradhan et al., "Design of the Smallest Intramolecular Singlet Fission Chromophore with the Fastest Singlet Fission".
+#     `Journal of Physical Chemistry Letters 13.48 (2022) <https://pubs.acs.org/doi/10.1021/acs.jpclett.2c03131>`__.
 #
