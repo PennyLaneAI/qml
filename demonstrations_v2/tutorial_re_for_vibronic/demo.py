@@ -34,16 +34,22 @@ vibrational motion, and the Hamiltonian takes the form:
 
     H = T + V,
 
-where :math:`T` represents the kinetic energy of the nuclei, and is diagonal while :math:`V` contains off-diagonal
-electronic couplings.
+where :math:`T` represents the kinetic energy of the nuclei, and is diagonal in the electronic subspace while :math:`V`
+contains off-diagonal electronic couplings.
 
 To simulate the time evolution :math:`U(t) = e^{-iHt}`, we employ a product formula (Trotterization) approach as outlined in
 D. Motlagh et al. [#Motlagh2025]_. A key challenge in Trotterization is decomposing the Hamiltonian efficiently.
-Here, we utilize a term-based fragmentation scheme, where terms are grouped by their vibrational monomial
-(e.g., collecting all electronic terms coupled to :math:\hat{q}_1^2). For each fragment, the electronic component is
-merely a small Hermitian matrix; by rotating this component into its eigenbasis, the complex potential simplifies to
-a single vibrational monomial. This structure is central to the algorithm's feasibility, as simulating isolated monomials
-is significantly more efficient than simulating the complex polynomial sums found in naive decompositions.
+Here, we use the fragmentation scheme proposed in the reference, grouping the terms :math:`\ket{j} \bra{i} \otimes V_{ji}` such
+that they differ by a fixed bitstring :math:`m`. The original grouping method results in N different fragments, which can be viewed as
+blocks of the potential energy matrix as shown in Figure:1. Each of these fragments can then be block-diagonalized by using only
+Clifford gates and implemented as a sequence of evolutions controlled by the corresponding electronic states.
+
+.. figure:: ../_static/demonstration_assets/vibronic_re/vibronic_fragments.png
+    :align: center
+    :width: 80%
+    :target: javascript:void(0)
+
+    Figure 1: Fragmentation of the Vibronic Hamiltonian into N blocks based on bitstring.
 
 Defining the Hamiltonian
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -51,7 +57,7 @@ With the algorithmic approach defined, the next step is to instantiate the syste
 
 While access to the full Hamiltonian coefficients would allow us to further optimize costs by leveraging the commutativity of electronic parts,
 we can still derive a reliable baseline using only structural parameters. By defining the number of modes, electronic states, and grid size,
-we can map out the cost topology of a real system without needing full integral data.
+we can map out the cost topology of a real system without needing to generate and store the full Hamiltonian.
 
 As a case study, we select (NO):math:`_4`-Anth, a molecule created by introducing four N-oxyl radical fragments to
 anthracene. Proposed for its theoretically record-breaking singlet fission speed [#Motlagh2025]_, we use this system to define our simulation parameters:
@@ -60,9 +66,7 @@ anthracene. Proposed for its theoretically record-breaking singlet fission speed
 num_modes = 19  # Number of vibrational modes
 num_states = 5  # Number of electronic states
 grid_size = 4  # Number of qubits per mode (discretization)
-taylor_degree = (
-    2  # Truncate to Quadratic Vibronic Coupling (Linear + Quadratic terms)
-)
+taylor_degree = 2  # Truncate to Quadratic Vibronic Coupling
 
 #################################################################################
 # In our model, we truncate the interaction terms for potential energy fragment to linear and quadratic terms only.
@@ -82,8 +86,7 @@ taylor_degree = (
 #     loads coefficients using a `QROM (Quantum Read-Only Memory) <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_,
 #     computes the vibrational monomial product using quantum arithmetic, and applies a phase gradient.
 #
-# Let's first see what the circuit will look for the kinetic energy fragment, it implements the time evolution by diagonalizing the
-# momentum operator:
+# Let's first see what the circuit will look for the kinetic energy fragment:
 
 import pennylane.estimator as qre
 
@@ -136,19 +139,26 @@ def kinetic_circuit(mode_wires, phase_wires, scratch_wires, coeff_wires):
 
 
 ######################################################################
-# Similarly, we can define the structure for the Potential Energy Fragments. For a QVC model truncated to quadratic terms,
+# Similarly, we can define the structure for the potential energy fragments. For a QVC model truncated to quadratic terms,
 # each fragment will implement a monomial of degree up to 2
 #
 # .. math::
 #
-#     V_{ji}^{m} = \sum_{r}c_r Q_r + \sum_{r} \tilde{c}_{r} Q_r^2
+#     V_{ji} = \sum_{r} c_{r} Q_{r} + \sum_{r} \tilde{c}_{r} Q_{r}^2,
 #
 # where :math:`c_r` and :math:`\tilde{c}_{r}` are the linear and quadratic coupling coefficients respectively. The exponential
-# of each term is implemented by:
+# of each term is implemented by the modular circuit shown in Figure 2.
+#
+# .. figure:: ../_static/demonstration_assets/vibronic_re/circuit_diagram.png
+#     :align: center
+#     :width: 80%
+#     :target: javascript:void(0)
+#
+# The circuit executes the following steps:
 #
 # * Loading the coefficients from QROM controlled by the electronic state.
 # * Computing the monomial product by using a square operation for quadratic terms.
-# * Multiplying with the coefficients and adding to the resource register to accumulate the phase.
+# * Multiplying with the coefficients and adding to the phase gradient register to accumulate the phase.
 # * Uncomputing the intermediate steps to clean up ancilla wires.
 #
 # We can define this circuit using two different segments, one for linear terms and one for quadratic terms:
@@ -244,12 +254,12 @@ def quadratic_circuit(
 #################################################################################
 # Estimating the Number of Trotter Steps
 # --------------------------------------
-# With the Hamiltonian fragments defined, the next step is to combine them into a full time-evolution
+# With the circuits for different fragments defined, the next step is to combine them into a full Hamiltonian
 # simulation. However, the feasibility of this simulation depends heavily on the total number of
 # Trotter steps required to reach the target time :math:`T`.
 #
 # Since we employ a second-order Trotter-Suzuki product formula, the algorithmic error scales
-# quadratically with the time step (:math:`\text{Error} \propto \Delta t^2`). This predictable scaling allows us
+# quadratically with the time step (:math:`\text{Error} \propto T \Delta t^2`). This predictable scaling allows us
 # to determine the required step count using benchmark values from the reference literature.
 #
 # If a reference step size :math:`\Delta t_{\text{ref}}` is known to produce an error :math:`\epsilon_{\text{ref}}`,
@@ -280,8 +290,8 @@ num_steps = calculate_trotter_steps(target_error, ref_error, ref_dt, total_time)
 
 #################################################################################
 # Finally, to ensure precise resource tracking, we explicitly label our wire registers. This avoids ambiguity
-# about which qubits are active and ensures the resource estimator captures the full width of the circuit.
-
+# about which circuit operations are mapped to which quantum registers and ensures the resource estimator captures the
+# full width of the circuit.
 
 def get_wire_labels(num_modes, num_states, grid_size, phase_prec):
     """Generates the wire map for the full system."""
@@ -307,39 +317,53 @@ def get_wire_labels(num_modes, num_states, grid_size, phase_prec):
 
 
 #################################################################################
-# We now combine these fragments to define the full Second-Order Trotter circuit using PennyLane's
-# `TrotterProduct <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.TrotterProduct.html>`_ class.
+# We now define the full circuit by assembling our fragments into
+# a second-order `Suzuki-Trotter expansion <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.TrotterProduct.html>`_
+#
+# To construct the expansion, we loop over all fragments: the kinetic fragment is added once, while the
+# number of potential fragments is determined by the size of the electronic register.
+# This ensures that every block of the Hamiltonian identified in our fragmentation
+# scheme (Figure 1) is accounted for in the simulation.
+#
+# Additionally, an important part of the algorithm is the preparation of phase gradient register. The size of this register
+# is dictated by the desired precision for phase rotations in both the
+# potential and kinetic steps, directly influencing the simulation's accuracy.
 #
 
-
-def circuit(num_modes, num_states, grid_size, taylor_degree, phase_grad_wires=20):
+def circuit(num_modes, num_states, grid_size, taylor_degree, phase_grad_prec=1e-6):
     fragments = []
+    phase_grad_wires = int(math.ceil(math.log2(1 / phase_grad_prec)))
     elec_wires, phase_wires, coeff_wires, mode_wires, scratch_wires = (
         get_wire_labels(num_modes, num_states, grid_size, phase_grad_wires)
     )
+    qre.PhaseGradient(num_wires=len(phase_wires), wires=phase_wires) # Prepare Phase Gradient State
     kinetic_fragment = kinetic_circuit(
         mode_wires, phase_wires, scratch_wires, coeff_wires
     )
-    fragments.append(kinetic_fragment)
+    fragments.append(kinetic_fragment) # Add Kinetic Fragment
 
-    for mode in range(num_modes):
-        if taylor_degree >= 1:
-            fragments.append(
-                linear_circuit(
-                    num_states, elec_wires, phase_wires, coeff_wires, scratch_wires
+    num_fragments = 2**len(elec_wires)
+    for i in range(num_fragments):
+        frag_op = []
+        for mode in range(num_modes):
+            if taylor_degree >= 1:
+                frag_op.append(
+                    linear_circuit(
+                        num_states, elec_wires, phase_wires, coeff_wires, scratch_wires
+                    )
                 )
-            )
-        if taylor_degree >= 2:
-            fragments.append(
-                quadratic_circuit(
-                    num_states,
-                    elec_wires,
-                    phase_wires,
-                    coeff_wires,
-                    mode_wires[mode],
-                    scratch_wires,
+            if taylor_degree >= 2:
+                frag_op.append(
+                    quadratic_circuit(
+                        num_states,
+                        elec_wires,
+                        phase_wires,
+                        coeff_wires,
+                        mode_wires[mode],
+                        scratch_wires,
+                    )
                 )
-            )
+        fragments.append(qre.Prod(frag_op))
 
     qre.TrotterProduct(first_order_expansion=fragments, num_steps=num_steps, order=2)
 
@@ -351,7 +375,9 @@ print(qre.estimate(circuit)(num_modes, num_states, grid_size, taylor_degree))
 
 #################################################################################
 # These numbers align closely with the findings in Motlagh et al., confirming that our resource estimation pipeline
-# correctly captures the resource requirements of the vibronic simulation algorithm.
+# correctly captures the resource requirements of the vibronic simulation algorithm. We observe that the cost is not
+# exactly the same due to the assumption that our Hamiltonian is dense, while the reference work leverages sparsity in
+# the Hamiltonian by only working with non-zero coupling terms.
 #
 # Conclusions
 # -----------
