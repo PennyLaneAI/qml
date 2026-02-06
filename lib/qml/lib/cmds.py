@@ -1,7 +1,9 @@
+import json
 import subprocess
+from packaging.version import Version
 from pathlib import Path
 from collections.abc import Iterable
-from typing import Literal
+from typing import Literal, Dict
 
 
 def poetry_export(
@@ -141,3 +143,27 @@ def pip_compile(
     cmd.extend((str(arg) for arg in args))
 
     subprocess.run(cmd).check_returncode()
+
+
+def pip_get_versions(
+    python: str | Path,
+    package: str,
+    index_url: str | None = None,
+    pre: bool = True,
+) -> Dict[str, str]:
+    """Get the versions of a package from the index."""
+    cmd = [
+        str(python), 
+        "-m", 
+        "pip", 
+        "index", 
+        "versions", 
+        package,
+        "--json",
+    ]
+    if index_url:
+        cmd.extend(("--index-url", index_url))
+    if pre:
+        cmd.append("--pre")
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    return json.loads(result.stdout)
