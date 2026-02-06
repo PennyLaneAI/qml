@@ -166,5 +166,9 @@ def pip_get_versions(
         cmd.extend(("--index-url", index_url))
     if pre:
         cmd.append("--pre")
+
     result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-    return json.loads(result.stdout)
+    
+    result_dict = json.loads(result.stdout)
+    
+    return sorted(result_dict["versions"], key=Version, reverse=True)
