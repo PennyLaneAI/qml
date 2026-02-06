@@ -152,12 +152,13 @@ def pip_get_versions(
     pre: bool = True,
 ) -> Dict[str, str]:
     """Get the versions of a package from the index."""
+    package = package.strip()
     cmd = [
-        str(python), 
-        "-m", 
-        "pip", 
-        "index", 
-        "versions", 
+        str(python),
+        "-m",
+        "pip",
+        "index",
+        "versions",
         package,
         "--json",
     ]
@@ -165,5 +166,5 @@ def pip_get_versions(
         cmd.extend(("--index-url", index_url))
     if pre:
         cmd.append("--pre")
-    result = subprocess.run(cmd, capture_output=True, text=True)
+    result = subprocess.run(cmd, capture_output=True, text=True, check=True)
     return json.loads(result.stdout)
