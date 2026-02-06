@@ -57,12 +57,12 @@
         },
         {
             "type": "demonstration",
-            "id": "tutorial_intro_qsvt",
+            "id": "tutorial_re_for_qubitizedQPE",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "tutorial_re_for_qubitizedQPE",
+            "id": "tutorial_intro_qsvt",
             "weight": 1.0
         }
     ]
