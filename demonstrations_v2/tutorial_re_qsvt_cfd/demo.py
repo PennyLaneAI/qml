@@ -1,0 +1,320 @@
+r"""
+Efficient block encoding for QSVT applied to matrix inversion for CFD problems
+==============================================================================
+.. meta::
+    :property="og:description": Learn how to estimate the cost of matrix inversion with QSVT for CFD applications
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/resource_estimation.jpeg
+
+.. related::
+    tutorial_apply_qsvt QSVT in Practice
+    tutorial_lcu_blockencoding Linear combination of unitaries and block encodings
+
+Systems of linear equations are remarkably ubiquitous, appearing in almost every industry from healthcare,
+transportation, finance, chemistry and even quantum computing. Solving systems of linear equations is a
+fundamental pillar of modern science and industry. It has been shown that QSVT can be used for matrix inversion
+on a quantum computer [#chuang2021]_. For more information on how to use PennyLane's :func:`~.pennylane.qsvt`
+functionality to run matrix inversion on a quantum computer see our demo on `QSVT in Practice
+<tutorial_apply_qsvt>`_.
+
+**Do you know what the logical resource requirements are to invert a matrix on a quantum computer?**
+
+It turns out that the quantum compute cost can get quite large due to **data loading**. Simply put, if we want
+to invert a large matrix, we are constrained by the cost of encoding that matrix onto the quantum computer.
+While this cost is significant for any general matrix, in real life our problems often have patterns and
+structure!
+
+By exploiting the structure of a problem, we can significantly reduce the quantum resource cost of the algorithm.
+Thereby making QSVT based matrix inversion more accessible to implement on nearer term fault-tolerant quantum
+hardware.
+
+This demo, based on our recent paper `Quantum compilation framework for data loading
+<https://arxiv.org/abs/2512.05183>`_ [#linaje2025]_, will showcase an optimized block encoding strategy that
+uses the sparsity of the matrix to significantly reduce the cost of QSVT. We will focus on a particular matrix
+inversion problem that arises in computation fluid dynamics (CFD) [#lapworth2022]_.
+
+Problem Setup
+-------------
+The two-dimensional lid-driven cavity flow (2D-LDC) is a classical benchmark in computational fluid dynamics
+(CFD) for validating numerical schemes that solve the incompressible Navier–Stokes equations. Determining the
+fluid flow within the cavity requires solving the pressure correction equations by inverting the associated
+pressure correction matrix (:math:`A`). The pressure correction matrix  that arises from simulating flow within
+this cavity has a very sparse, structured diagonal form. The figure below highlights the non-zero entries a
+:math:`(64, 64)` instance of this matrix [#lapworth2022]_.
+
+|
+
+.. figure:: ../_static/demonstration_assets/re_qsvt_cfd/sparse_diagonal_matrix.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+|
+
+In order to invert this matrix we will need to **load** it into the quantum computer using a block encoding.
+The standard technique for block encoding any (square) matrix :math:`A` is the method of `linear combination of
+unitaries (LCUs) <tutorial_lcu_blockencoding>`_. However, it suffers from a few fatal flaws (try saying that five
+times fast).
+
+The number of terms in the LCU scales as :math:`O(4^{n})` in the number of qubits, and thus the cost of the block
+encoding also scales exponentially. Even computing the LCU decomposition becomes a computational bottleneck.
+Furthermore, there is no way of knowing a priori how many terms there will be in the LCU. For these reasons, a
+general "one size fits all" block encoding scheme is usually too expensive for our systems of interest. Instead,
+we leverage the inherent patterns and **structure** of our matrix in order to implement an efficient block
+encoding operator.
+
+Exploiting structure in the block encoding
+------------------------------------------
+This matrix (:math:`A`) can be block encoded using a *d-diagonal encoding* technique [#linaje2025]_ developed
+by my colleagues here at Xanadu. The method works by loading each diagonal in parallel and then
+shifting them to their respective ranks in the matrix. The quantum circit that implements the
+d-diagonal block encoding is presented below. To learn more, read our paper:
+`"Quantum compilation framework for data loading" <https://arxiv.org/abs/2512.05183>`_.
+
+|
+
+.. figure:: ../_static/demonstration_assets/re_qsvt_cfd/SparseBE.png
+    :align: center
+    :width: 80%
+    :target: javascript:void(0)
+
+|
+
+Estimating the resource cost for this circuit may seem like a daunting task, but we have
+PennyLane's quantum resource :mod:`~.pennylane.estimator` to help us construct each piece!
+
+Diagonal Matrices & the Walsh-Hadamard Transform
+------------------------------------------------
+Let's start with the :math:`D_{k}` operators. These are a list of diagonal operators where
+each operator stores the normalized entries from one of the diagonals of our d-diagonal matrix :math:`A`.
+By multiplexing over the :math:`D_{k}` operators, we can load all of the diagonals in *parallel*.
+Typically, each diagonal operator is implemented using a product of Controlled PhaseShift gates,
+in this case we will be leveraging the Walsh-Hadamard transformation ([#linaje2025]_, [#zylberman2025]_).
+
+The Walsh-Hadamard transform allows us to naturally optimize the cost of our block encoding by tuning the
+number of Walsh coefficients within :math:`[1, N]`, where :math:`N` is the
+the size of the matrix. If the entries in our diagonal are sparse in the Walsh basis, as is the case for
+the CFD example, then we can get away with far fewer Walsh coefficients. This results in a much more
+efficient encoding. The circuit below prepares a single such Walsh-Hadamard diagonal block encoding, ultimately
+we need to prepare as many operators as non-zero diagonals in :math:`A`.
+
+|
+
+.. figure:: ../_static/demonstration_assets/re_qsvt_cfd/WH_a.png
+    :align: center
+    :width: 90%
+    :target: javascript:void(0)
+
+|
+
+"""
+
+import pennylane.numpy as qnp
+import pennylane.estimator as qre
+
+
+def WalshHadamard_Dk(num_diags, size_diagonal, num_walsh_coeffs):
+    num_diag_wires = int(qnp.ceil(qnp.log2(size_diagonal)))
+    list_of_diagonal_ops = []
+
+    for _ in range(num_diags):
+        compute_op = qre.Prod([qre.Hadamard(), qre.S()])
+
+        zero_ctrl_wh = qre.Controlled(
+            qre.Prod(((qre.MultiRZ(num_diag_wires // 2), num_walsh_coeffs),)),
+            num_ctrl_wires=1,
+            num_zero_ctrl=1,
+        )
+        one_ctrl_wh = qre.Controlled(
+            qre.Prod(((qre.MultiRZ(num_diag_wires // 2), num_walsh_coeffs),)),
+            num_ctrl_wires=1,
+            num_zero_ctrl=0,
+        )
+        target_op = qre.Prod([zero_ctrl_wh, one_ctrl_wh])
+
+        list_of_diagonal_ops.append(qre.ChangeOpBasis(compute_op, target_op))
+
+    return list_of_diagonal_ops
+
+
+##############################################################################
+# Here the `Prod <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.ops.Prod.html>`_
+# class is used to represent a product of operators, and the
+# `Controlled <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.ops.Controlled.html>`_
+# class represents the controlled operator.
+#
+# Shift Operator
+# --------------
+# Next we will implement the Shift operator. This is a product of three subroutines which
+# shift the diagonal entries into the correct rank of the d-diagonal block encoding. Each rank
+# has an associated shift value, the main diagonal has shift value 0. Each diagonal going up
+# is labelled :math:`(+1, +2, \ldots)` respectively and each diagonal going down is labelled
+# with its negative counterpart. The Shift operator works in three steps:
+#
+# 1. **Load** the binary representation of the shift value for each non-zero diagonal in :math:`A`.
+#
+# 2. **Shift** each of the diagonals in parallel using an :math:`Adder` subroutine.
+#
+# 3. **Unload** the shift values to restore the quantum register.
+#
+
+
+def ShiftOp(num_shifts, num_load_wires, wires):
+    prep_wires, load_shift_wires, load_diag_wires = wires
+
+    Load = qre.QROM(
+        num_bitstrings=num_shifts,
+        size_bitstring=num_load_wires,
+        restored=False,
+        select_swap_depth=1,
+        wires=prep_wires + load_shift_wires,
+    )
+
+    Adder = qre.SemiAdder(
+        max_register_size=num_load_wires,
+        wires=load_shift_wires + load_diag_wires,
+    )
+
+    Unload = qre.Adjoint(
+        qre.QROM(
+            num_bitstrings=num_shifts,
+            size_bitstring=num_load_wires,
+            restored=False,
+            select_swap_depth=1,
+            wires=prep_wires + load_shift_wires,
+        )
+    )
+    return qre.Prod([Load, Adder, Unload])
+
+
+##############################################################################
+# d-Diagonal Block Encoding
+# -------------------------
+# Now that we have developed all of the pieces, we'll bring them together to implement
+# the full d-diagonal block encoding operator [#linaje2025]_.
+#
+# |
+#
+# .. figure:: ../_static/demonstration_assets/re_qsvt_cfd/SparseBE.png
+#     :align: center
+#     :width: 80%
+#     :target: javascript:void(0)
+#
+# |
+#
+
+
+def WH_Diagonal_BE(num_diagonals, matrix_size, num_walsh_coeffs):
+    # Initialize qubit registers:
+    num_prep_wires = int(qnp.ceil(qnp.log2(num_diagonals)))
+    num_diag_wires = int(qnp.ceil(qnp.log2(matrix_size)))
+
+    prep_wires = [f"prep{i}" for i in range(num_prep_wires)]
+    load_diag_wires = [f"load_d{i}" for i in range(num_diag_wires)]
+    load_shift_wires = [f"load_s{i}" for i in range(num_diag_wires)]
+
+    # Prep:
+    Prep = qre.QROMStatePreparation(num_prep_wires, wires=prep_wires)
+
+    # Shift:
+    Shift = ShiftOp(
+        num_shifts=num_diagonals,
+        num_load_wires=num_diag_wires,
+        wires=(prep_wires, load_diag_wires, load_shift_wires),
+    )
+
+    # Multiplexed - Dk:
+    diagonal_ops = WalshHadamard_Dk(num_diagonals, matrix_size, num_walsh_coeffs)
+    Dk = qre.Select(diagonal_ops, wires=load_diag_wires + prep_wires + ["target"])
+
+    # Prep^t:
+    Prep_dagger = qre.Adjoint(qre.QROMStatePreparation(num_prep_wires, wires=prep_wires))
+
+    return qre.Prod([Prep, Shift, Dk, Prep_dagger])
+
+
+##############################################################################
+# Putting it all together: QSVT for matrix inversion
+# --------------------------------------------------
+# In this section we use all of the tools we have developed to **estimate the resource requirements
+# for solving a practical matrix inversion problem**. Following the CFD example [#linaje2025]_, we
+# will estimate the resources required to invert a tri-diagonal matrix of size :math:`(2^{20}, 2^{20})`.
+# This system requires a :math:`10^{8}`-degree polynomial approximation of the inverse function.
+#
+# We will also restrict the gateset to Clifford + T gates, to generate results that
+# are faithful to the ones presented in [#linaje2025]_.
+
+degree = 10**8
+matrix_size = 2**20  # 2^20 x 2^20
+num_diagonals = 3
+num_walsh_coeffs = 512  # imperically determined
+
+
+def matrix_inversion(degree, matrix_size, num_diagonals):
+    num_state_wires = int(qnp.ceil(qnp.log2(matrix_size)))  # 20 qubits
+    b_wires = [f"load_d{i}" for i in range(num_state_wires)]
+
+    # Prepare |b> vector:
+    qre.MPSPrep(
+        num_state_wires,
+        max_bond_dim=2**5,  # bond dimension = 2**5
+        wires=b_wires,
+    )
+
+    # Apply A^-1:
+    qre.QSVT(
+        block_encoding=WH_Diagonal_BE(num_diagonals, matrix_size, num_walsh_coeffs),
+        encoding_dims=(matrix_size, matrix_size),
+        poly_deg=degree,
+    )
+    return
+
+
+gate_set = {"X", "Y", "Z", "Hadamard", "T", "S", "CNOT"}
+res = qre.estimate(matrix_inversion, gate_set)(degree, matrix_size, num_diagonals)
+print(res)
+
+##############################################################################
+# The estimated T gate count of this matrix inversion workflow matches
+# the reported :math:`3 \cdot 10^{13}` from the reference.
+#
+# Conclusion
+# ----------
+# In this demo we used knowledge about the structure of our matricies to build a more efficient block encoding.
+# This work brings us one step closer to implementing quantum linear solvers on near term quantum hardware.
+# If you are interested in other subroutines for data loading and how to optimize them, checkout our paper on
+# a `Quantum compilation framework for data loading <https://arxiv.org/abs/2512.05183>`_.
+#
+# Along the way we showcased PennyLane's :mod:`~.pennylane.estimator` module to determine the resource
+# requirements for **matrix inversion by QSVT**. You learned how to build complex circuits from our library of
+# primitives, making resource estimation as simple as putting together Lego blocks. Ofcourse QSVT has many other
+# applications, from unstructured search, phase estimation and even Hamiltonian simulation. We challenge you to
+# think of smart data loading techniques to reduce the quantum cost of QSVT for these applications as well!
+#
+# References
+# ----------
+#
+# .. [#chuang2021]
+#
+#     John M. Martyn, Zane M. Rossi, Andrew K. Tan, and Isaac L. Chuang,
+#     "A Grand Unification of Quantum Algorithms"
+#     `arxiv.2105.02859 <https://arxiv.org/abs/2105.02859>`__, 2021.
+#
+# .. [#linaje2025]
+#
+#     Guillermo Alonso-Linaje, Utkarsh Azad, Jay Soni, Jarrett Smalley,
+#     Leigh Lapworth, and Juan Miguel Arrazola,
+#     "Quantum compilation framework for data loading"
+#     `arxiv.2512.05183 <https://arxiv.org/abs/2512.05183>`__, 2025.
+#
+# .. [#lapworth2022]
+#
+#     Leigh Lapworth
+#     "A Hybrid Quantum-Classical CFD Methodology with Benchmark HHL Solutions"
+#     `arxiv.2206.00419 <https://arxiv.org/abs/2206.00419>`__, 2022.
+#
+# .. [#zylberman2025]
+#
+#     Julien Zylberman, Ugo Nzongani, Andrea Simonetto, and Fabrice Debbasch,
+#     "Efficient Quantum Circuits for Non-Unitary and Unitary Diagonal Operators with Space-Time-Accuracy trade-offs"
+#     `arxiv.2404.02819 <https://arxiv.org/abs/2404.02819>`__, 2025.
+#
