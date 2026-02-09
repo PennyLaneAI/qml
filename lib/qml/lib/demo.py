@@ -303,17 +303,27 @@ def _build_demo(
                 for package in packages:
                     package = package.strip()
                     if package and not package.startswith("#"):
-                        cmds.pip_install(
-                            build_venv.python,
-                            "--no-cache-dir",
-                            "--upgrade",
-                            "--extra-index-url",
-                            "https://test.pypi.org/simple/",
-                            package,
-                            use_uv=False,
-                            quiet=False,
-                            pre=True,
-                        )
+                        logger.info("Getting versions for %s", package)
+                        try:
+                            package_name, constraint = package.split("<", maxsplit=1)
+                        except:
+                            logger.error("Malformed constraints file for PLC dev.")
+                            raise
+                        package_versions = cmds.pip_get_versions(build_venv.python, package_name, index_url="https://test.pypi.org/simple/")
+                        for version in package_versions:
+                            if version < constraint:
+                                logger.info("Installing %s==%s", package_name, version)
+                                cmds.pip_install(
+                                    build_venv.python,
+                                    "--no-cache-dir",
+                                    "--upgrade",
+                                    "--extra-index-url",
+                                    "https://test.pypi.org/simple/",
+                                    f"{package_name}=={version}",
+                                    use_uv=False,
+                                    quiet=False,
+                                )
+                                break
 
     elif dev:
         # Need latest version of PennyLane to build, whether or not we're executing
