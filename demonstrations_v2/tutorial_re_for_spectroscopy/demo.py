@@ -3,11 +3,11 @@ r"""Resource Estimation for Simulating Spectroscopy
 Spectroscopy is an indispensible measurement technique in chemistry and physics,
 providing fundamental insights into the structure and dynamics of molecules and materials. However,
 to extract these insights, it is often necessary to use simulations to interpret the experimentally
-measured spectra. In practice, this requires exciting the system with an external electromagnetic 
+measured spectra. In practice, this requires exciting the system with an external electromagnetic
 field -- for example, visible light, or X-rays -- and then simulating how the system's quantum state
-evolves over time in response to that, under the influence of its Hamiltonian. On classical computers, 
-this is notoriously expensive. The computational resources required to accurately model the excited 
-states of a complex molecule or material scale exponentially with system size, often pushing even 
+evolves over time in response to that, under the influence of its Hamiltonian. On classical computers,
+this is notoriously expensive. The computational resources required to accurately model the excited
+states of a complex molecule or material scale exponentially with system size, often pushing even
 the most powerful supercomputers to their breaking point.
 
 Can quantum computers do better?
@@ -65,15 +65,15 @@ To benchmark this approach, we focus on **Lithium Manganese (LiMn) oxide cluster
 widely studied as critical cathode materials for next-generation batteries.
 
 The first step to determining the resources for this simulation is to define the Hamiltonian.
-Luckily, it turns out that the resource requirements for the simulation only depend on high-level attributes of 
-the Hamiltonian, specifically the number of orbitals and the number of CDF fragments it was factorized into, rather 
+Luckily, it turns out that the resource requirements for the simulation only depend on high-level attributes of
+the Hamiltonian, specifically the number of orbitals and the number of CDF fragments it was factorized into, rather
 than on the values of the one- and two-electron integrals themselves. This makes our job considerably simpler! It means
-that we can bypass the tedious construction of the exact Hamiltonian, and instead use those two high-level attributes to 
-define a specialized 
-`compact Hamiltonian <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.compact_hamiltonian.CDFHamiltonian.html>`__ 
-representation offered by PennyLane. Creating and using the compact Hamiltonian is a lot simpler, but it still 
-retains the high accuracy we need for our resource estimation. In this case, we adopt the commonly used rule of thumb that 
-the number of fragments needed for a high-fidelity CDF factorization is roughly equal to the number of spatial orbitals 
+that we can bypass the tedious construction of the exact Hamiltonian, and instead use those two high-level attributes to
+define a specialized
+`compact Hamiltonian <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.compact_hamiltonian.CDFHamiltonian.html>`__
+representation offered by PennyLane. Creating and using the compact Hamiltonian is a lot simpler, but it still
+retains the high accuracy we need for our resource estimation. In this case, we adopt the commonly used rule of thumb that
+the number of fragments needed for a high-fidelity CDF factorization is roughly equal to the number of spatial orbitals
 in the Hamiltonian.
 """
 
@@ -102,8 +102,12 @@ Hnorm = 2.0  # The effective spectral range over which our Hamiltonian has a non
 
 tau = np.pi / (2 * Hnorm)  # Sampling interval
 trotter_error = 1  # Our preset Trotter error constraint, in Hartree
-delta = np.sqrt(eta / trotter_error)  # Trotter step size from perturbation theory based error bounds
-num_trotter_steps = int(np.ceil(2 * jmax + 1) * tau / delta)  # Number of Trotter steps for the longest time evolution
+delta = np.sqrt(
+    eta / trotter_error
+)  # Trotter step size from perturbation theory based error bounds
+num_trotter_steps = int(
+    np.ceil(2 * jmax + 1) * tau / delta
+)  # Number of Trotter steps for the longest time evolution
 
 ######################################################################
 # XAS Circuit Construction
@@ -115,13 +119,14 @@ num_trotter_steps = int(np.ceil(2 * jmax + 1) * tau / delta)  # Number of Trotte
 # combining state preparation, the Hadamard test structure, and controlled time evolution.
 #
 # For the initial state preparation, we adopt the **Sum of Slaters** method [#SOSStatePrep2024]_, which
-# prepares in the quantum register an approximation to the ground-state wavefunction, obtained by 
+# prepares in the quantum register an approximation to the ground-state wavefunction, obtained by
 # discarding Slater determinants below a coefficient tolerance.
 # For this demo, we assume a truncation level that yields :math:`1 \times 10^4` surviving determinants (`num_slaters=1e4`).
 # The cost of this approach depends on two major subroutines: :class:`~.pennylane.estimator.templates.QROM` to load the determinants,
 # and :class:`~.pennylane.estimator.templates.QROMStatePreparation` to prepare the
 # superposition.
 #
+
 
 def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_slaters=1e4):
 
@@ -169,7 +174,7 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
 #
 # PennyLane's default compiler synthesizes rotation gates using Repeat-Until-Success circuits [#Alex2014]_,
 # which decompose rotations into sequences of probabilistic T-gates. While effective for general circuits,
-# the algorithm in Fomichev et al. (2025) [#Fomichev2025]_ used instead the phase gradient trick proposed 
+# the algorithm in Fomichev et al. (2025) [#Fomichev2025]_ used instead the phase gradient trick proposed
 # by Craig Gidney [#Gidney2018]_.
 #
 # The phase gradient trick is algorithmically superior for this application because it allows
@@ -179,6 +184,7 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
 # To adopt this more efficient strategy, we configure the estimator to use the phase gradient trick
 # by leveraging :class:`~.pennylane.resource.ResourceConfig`.
 #
+
 
 def single_qubit_rotation(precision=None):
     """Gidney-Adder based decomposition for single qubit rotations"""
@@ -224,7 +230,7 @@ for ham in limno_ham:
 # as the complexity approaches :math:`10^9` Toffolis.
 #
 # Crucially, these are estimates for a single shot; the total cost for the full algorithm will scale
-# linearly with the number of samples required, amplifying the gate costs even further. 
+# linearly with the number of samples required, amplifying the gate costs even further.
 #
 # Can we do better?
 #
@@ -261,11 +267,14 @@ def basis_rotation_cost(dim):
         qre.GateCount(qre.resource_rep(op, params or {}), count) for op, count, params in ops_data
     ]
 
+
 cfg.set_decomp(qre.BasisRotation, basis_rotation_cost)
 
 toffolis_opt1 = []
 for ham in limno_ham:
-    res = qre.estimate(xas_circuit, config=cfg)(hamiltonian=ham, num_trotter_steps=num_trotter_steps, measure_imaginary=False)
+    res = qre.estimate(xas_circuit, config=cfg)(
+        hamiltonian=ham, num_trotter_steps=num_trotter_steps, measure_imaginary=False
+    )
     toffolis_opt1.append(res.gate_counts["Toffoli"])
 
 ##################################################################
@@ -273,8 +282,9 @@ for ham in limno_ham:
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Second, we implement the double phase trick for the Controlled-RZ (CRZ) gates.
 # As described in Section III A of Fomichev et al. (2025) [#Fomichev2025]_, this optimization
-# reduces the cost of the controlled rotations inside the Trotter steps by replacing each controlled 
+# reduces the cost of the controlled rotations inside the Trotter steps by replacing each controlled
 # rotation by an un-controlled one plus two CNOT gates.
+
 
 def custom_CRZ_decomposition(precision):
     """Decomposition of CRZ gate using double phase trick"""
@@ -283,19 +293,37 @@ def custom_CRZ_decomposition(precision):
 
     return [qre.GateCount(cnot, 2), qre.GateCount(rz, 1)]
 
+
 cfg.set_decomp(qre.CRZ, custom_CRZ_decomposition)
 
 toffolis_final = []
 for ham in limno_ham:
-    res = qre.estimate(xas_circuit, config=cfg)(hamiltonian=ham, num_trotter_steps=num_trotter_steps, measure_imaginary=False)
+    res = qre.estimate(xas_circuit, config=cfg)(
+        hamiltonian=ham, num_trotter_steps=num_trotter_steps, measure_imaginary=False
+    )
     toffolis_final.append(res.gate_counts["Toffoli"])
 
 # Let's visualize the cumulative impact of our optimizations:
 import matplotlib.pyplot as plt
 
 plt.plot(active_spaces, toffolis, "o-", label="Baseline", color="gray", linewidth=2.5)
-plt.plot(active_spaces, toffolis_opt1, "^-", label="Optimization 1 (Basis Rot.)", color="goldenrod", linewidth=2.5)
-plt.plot(active_spaces, toffolis_final, "*-", label="Fully Optimized", color="fuchsia", linewidth=2.5, markersize=8)
+plt.plot(
+    active_spaces,
+    toffolis_opt1,
+    "^-",
+    label="Optimization 1 (Basis Rot.)",
+    color="goldenrod",
+    linewidth=2.5,
+)
+plt.plot(
+    active_spaces,
+    toffolis_final,
+    "*-",
+    label="Fully Optimized",
+    color="fuchsia",
+    linewidth=2.5,
+    markersize=8,
+)
 
 plt.xlabel("Number of Orbitals", fontsize=14)
 plt.ylabel("Toffoli Gate Count", fontsize=14)
@@ -321,14 +349,14 @@ plt.show()
 # estimate the cumulative absorption for a strongly correlated photosensitizer molecule. [#Zhou2025]_
 #
 # This application requires a different algorithmic approach. In XAS, we simulated the system's time evolution
-# using Trotterization to recover the full spectrum. In PDT, we will instead employ a spectral filtering approach 
-# to directly read out how much of the spectral internsity falls within a predetermined window (typically 700–850 nm). 
+# using Trotterization to recover the full spectrum. In PDT, we will instead employ a spectral filtering approach
+# to directly read out how much of the spectral internsity falls within a predetermined window (typically 700–850 nm).
 #
-# To do the filtering, we will use generalized quantum signal processing (GQSP), combining it with a qubitization-based 
+# To do the filtering, we will use generalized quantum signal processing (GQSP), combining it with a qubitization-based
 # time evolution implementation. Specifically, we will use a walk operator constructed from the tensor hypercontracted
 # Hamiltonian, which allows for a highly compact block encoding. As with XAS, we can use the
 # `compact Hamiltonian <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.compact_hamiltonian.THCHamiltonian.html>`__
-# representation to skip the expensive Hamiltonian construction. As an example, let's use the 11-orbital BODIPY system studied 
+# representation to skip the expensive Hamiltonian construction. As an example, let's use the 11-orbital BODIPY system studied
 # in Zhou et al. (2025) [#Zhou2025]_,
 
 bodipy_ham = qre.THCHamiltonian(num_orbitals=11, tensor_rank=22, one_norm=6.48)
@@ -353,9 +381,10 @@ walk_op = qre.QubitizeTHC(bodipy_ham, prep_op=prep_op, select_op=select_op)
 
 ##################################################################
 # Next, we need to set up the GQSP parameters to construct the spectral filter. The filter is defined by a polynomial,
-# the degree of which determines the sharpness of the filter. We set the polynomial degree using Figure 7 from 
+# the degree of which determines the sharpness of the filter. We set the polynomial degree using Figure 7 from
 # Zhou et al. (2025) [#Zhou2025]_, which relates the degree to the desired spectral resolution.
 #
+
 
 def polynomial_degree(one_norm):
     """Calculate polynomial degree parameters from Zhou et al. (2025)"""
@@ -377,6 +406,7 @@ def polynomial_degree(one_norm):
 #
 #   Figure 2: *Threshold Projection Circuit*.
 #
+
 
 def pdt_circuit(walk_op, poly_degree_hi, poly_degree_low, num_slaters=1e4):
     num_qubits = int(np.ceil(np.log2(num_slaters)))
@@ -431,7 +461,7 @@ print(resource_counts)
 # The small differences can be attributed to different tunable parameters being used.
 # We encourage users to explore further by testing other systems from the reference or analyzing how the resources scale
 # with different error budgets, using the parameter tuning techniques detailed in our
-# `qubitization demo <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_, or even by trying to use 
+# `qubitization demo <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_, or even by trying to use
 # Trotterization instead.
 #
 # Conclusion
@@ -439,9 +469,9 @@ print(resource_counts)
 # In this demo, we showed how to perform end-to-end resource estimation for two distinct spectroscopic paradigms:
 # the time-domain simulation of X-ray absorption (XAS) and the spectral filtering approach for photodynamic therapy (PDT).
 #
-# While PennyLane's resource :mod:`estimator <pennylane.estimator>` was able to give us initial estimates with 
+# While PennyLane's resource :mod:`estimator <pennylane.estimator>` was able to give us initial estimates with
 # minimum input information -- including with only a high-level description of the Hamiltonian! -- we also showed how
-# versatile it can be. Moving beyond the standard implementations, we were able to quickly and easily implement 
+# versatile it can be. Moving beyond the standard implementations, we were able to quickly and easily implement
 # algorithmic optimizations from the literature, namely the phase gradient trick and a specialized basis rotation implementation,
 # and immediately see their impact on the resource counts.
 #
