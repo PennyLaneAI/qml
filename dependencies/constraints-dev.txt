@@ -16,7 +16,7 @@ aiohttp==3.9.5
 fastapi<1.0.0
 fsspec==2024.6.1
 h5py==3.11.0
-ibm-platform-services>=0.73
+#ibm-platform-services>=0.73
 ipython==8.16.1
 
 chex<1.0.0
