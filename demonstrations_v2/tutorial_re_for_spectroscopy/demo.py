@@ -174,7 +174,7 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
 #
 # PennyLane's default compiler synthesizes rotation gates using Repeat-Until-Success circuits [#Alex2014]_,
 # which decompose rotations into sequences of probabilistic T-gates. While effective for general circuits,
-# the algorithm in Fomichev et al. (2025) [#Fomichev2025]_ used instead the phase gradient trick proposed
+# the algorithm in Fomichev et al. (2025) [#Fomichev2025]_ used instead the `phase gradient method <https://pennylane.ai/compilation/phase-gradient/>`__ proposed
 # by Craig Gidney [#Gidney2018]_.
 #
 # The phase gradient trick is algorithmically superior for this application because it allows
