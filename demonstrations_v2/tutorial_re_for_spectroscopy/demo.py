@@ -79,7 +79,7 @@ in the Hamiltonian.
 
 import pennylane.estimator as qre
 
-active_spaces = [11, 14, 16, 18]
+active_spaces = [11, 14, 16, 18, 24, 28]
 limno_ham = [qre.CDFHamiltonian(num_orbitals=i, num_fragments=i) for i in active_spaces]
 
 
@@ -134,8 +134,6 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
     num_qubits = int(np.ceil(np.log2(num_slaters)))
     qre.QROMStatePreparation(
         num_state_qubits=num_qubits,
-        positive_and_real=False,
-        select_swap_depths=1,
     )
     qre.QROM(num_bitstrings=2**num_qubits, size_bitstring=num_qubits, select_swap_depth=1)
 
@@ -156,8 +154,6 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
     qre.Adjoint(
         qre.QROMStatePreparation(
             num_state_qubits=num_qubits,
-            positive_and_real=False,
-            select_swap_depths=1,
         )
     )
     qre.Adjoint(
