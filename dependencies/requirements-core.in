@@ -7,7 +7,7 @@ jax
 jaxlib
 jaxopt
 matplotlib
+optax
 pennylane-catalyst
 pennylane-lightning
 pennylane
-optax
