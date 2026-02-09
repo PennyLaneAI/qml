@@ -59,7 +59,7 @@ While access to the full Hamiltonian coefficients would allow us to further opti
 we can still derive a reliable baseline using only structural parameters. By defining the number of modes, electronic states, and grid size,
 we can map out the cost topology of a real system without needing to generate and store the full Hamiltonian.
 
-As a case study, we select (NO):math:`_4`-Anth, a molecule created by introducing four N-oxyl radical fragments to
+As a case study, we select (NO) :math:`_4`-Anth, a molecule created by introducing four N-oxyl radical fragments to
 anthracene. Proposed for its theoretically record-breaking singlet fission speed [#Pradhan2022]_, we use this system to define our simulation parameters:
 """
 
