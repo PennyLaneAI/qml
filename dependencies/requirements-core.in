@@ -5,6 +5,7 @@ fsspec
 h5py
 jax
 jaxlib
+jaxopt
 matplotlib
 pennylane-catalyst
 pennylane-lightning
