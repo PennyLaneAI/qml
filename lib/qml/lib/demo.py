@@ -294,7 +294,6 @@ def _build_demo(
             quiet=False,
             pre=False,
         )
-
         # If dev, we need to re-install the latest Catalyst, then Lightning, then PennyLane
         # in that order, regardless of conflicts/warnings. 
         if dev:
@@ -313,17 +312,50 @@ def _build_demo(
                         for version in package_versions:
                             if version < constraint:
                                 logger.info("Installing %s==%s", package_name, version)
-                                cmds.pip_install(
-                                    build_venv.python,
-                                    "--no-cache-dir",
-                                    "--upgrade",
-                                    "--extra-index-url",
-                                    "https://test.pypi.org/simple/",
-                                    f"{package_name}=={version}",
-                                    use_uv=False,
-                                    quiet=False,
-                                )
+                                #Testing. Refactor this later if successful
+                                if package_name == "pennylane-catalyst":
+                                    cmds.pip_install(
+                                        build_venv.python,
+                                        "--no-cache-dir",
+                                        "--extra-index-url",
+                                        "https://test.pypi.org/simple/",
+                                        f"{package_name}=={version}",
+                                        use_uv=False,
+                                        quiet=False,
+                                    )
+                                elif package_name == "pennylane-lightning":
+                                    cmds.pip_install(
+                                        build_venv.python,
+                                        "--no-cache-dir",
+                                        "--force-reinstall",
+                                        "--extra-index-url",
+                                        "https://test.pypi.org/simple/",
+                                        f"{package_name}=={version}",
+                                        use_uv=False,
+                                        quiet=False,
+                                    )
+                                elif package_name == "pennylane":
+                                    cmds.pip_install(
+                                        build_venv.python,
+                                        "--no-cache-dir",
+                                        "--force-reinstall",
+                                        "--no-deps",
+                                        "--extra-index-url",
+                                        "https://test.pypi.org/simple/",
+                                        f"{package_name}=={version}",
+                                        use_uv=False,
+                                        quiet=False,
+                                    )
                                 break
+            # Need to reinstall the demo's requirements file to ensure the correct versions are installed
+            if demo.requirements_file:
+                cmds.pip_install(
+                    build_venv.python,
+                    "--upgrade",
+                    requirements=demo.requirements_file,
+                    quiet=False,
+                    pre=False,
+                )
 
     elif dev:
         # Need latest version of PennyLane to build, whether or not we're executing
