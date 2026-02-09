@@ -1,8 +1,8 @@
 r"""
-How to use PennyLane’s quantum resource estimator module for QSVT
-=================================================================
+How to estimate the resource cost of QSVT
+=========================================
 .. meta::
-    :property="og:description": Learn how to use PennyLane's estimator module to estimate the cost of QSVT
+    :property="og:description": Learn how to estimate the resource cost of QSVT
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/resource_estimation.jpeg
 
 .. related::
@@ -24,14 +24,13 @@ meaningfully simulate. Fortunately, PennyLane's resource :mod:`~.pennylane.estim
 gather meaningful insights in this regime. If you are new to resource estimation in PennyLane or need a quick
 refresher, checkout this demo on `how to use PennyLane for Resource Estimation <re_how_to_use_pennylane_for_resource_estimation>`_.
 
-In this demo, you will learn how to use PennyLane's :mod:`~.pennylane.estimator` module to estimate the cost of a
-QSVT workflow.
+In this demo, you will learn how to use PennyLane's :mod:`~.pennylane.estimator` module to easily estimate the
+cost of a QSVT workflow.
 
 Estimating the cost of QSVT
 ---------------------------
-The logical cost of QSVT depends primarily on two factors, the **block encoding** operator and the **degree** of
-the polynomial transformation. For example let's estimate the cost of performing a quintic (5th degree)
-polynomial transformation to the matrix :math:`A`:
+Let's estimate the cost of performing a quintic (5th degree) polynomial transformation to the matrix
+:math:`A`:
 
 .. math::
 
@@ -43,7 +42,7 @@ polynomial transformation to the matrix :math:`A`:
         \end{bmatrix},
 
 
-This particular matrix can be expressed as a linear combination of unitaries (LCU) :math:`A = 0.1 \cdot \hat{Z}_{0}\hat{Z}_{1} + 0.2 \cdot \hat{X}_{0}\hat{X}_{1} + 0.3 \cdot \hat{X}_{0}\hat{Z}_{1}`.
+This particular matrix can be expressed as a linear combination of unitaries (LCU) :math:`A = 0.1 \cdot Z_{0}Z_{1} + 0.2 \cdot X_{0}X_{1} + 0.3 \cdot X_{0}Z_{1}`.
 The LCU representation is crucial for building the **block encoding** operator using the standard method of LCUs.
 For a recap on this technique, see our demo on `linear combination of unitaries and block encodings <tutorial_lcu_blockencoding>`_.
 """
@@ -59,25 +58,24 @@ print(qml.matrix(A, wire_order=[0, 1]))
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # Suppose we already had a PennyLane circuit which used QSVT to apply the quintic polynomial transformation to
-# :math:`A`. Here we can use `estimate() <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.estimate.estimate.html>`_
-# on the circuit directly to obtain the resource estimate.
+# :math:`A`. We can obtain the resource estimate with only a couple of lines of code with
+# `estimate() <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.estimate.estimate.html>`_.
 #
 
 import pennylane.numpy as qnp
 import pennylane.estimator as qre
 
+## --- QSVT Workflow: ---
 num_terms = len(A)
 num_encoding_wires = int(qnp.ceil(qnp.log2(num_terms)))
 encoding_wires = [f"e_{i}" for i in range(num_encoding_wires)]
 
 poly = (0, 0, 0, 0, 0, 1)  # f(x) = x^5
-
-
 def circ():
     qml.qsvt(A, poly, encoding_wires=encoding_wires)
     return
 
-
+## --- Resource Estimation: ---
 gs = {"X", "Y", "Z", "S", "T", "Hadamard", "CNOT", "Toffoli"}
 resources = qre.estimate(circ, gate_set=gs)()
 print(resources)
@@ -89,20 +87,18 @@ print(resources)
 #
 # Resources from an Estimator Workflow
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# First we use the :class:`~.pennylane.estimator.compact_hamiltonian.PauliHamiltonian` class to efficiently
-# capture the LCU representation of :math:`A`. This produces a compact object specifically for resource
-# estimation.
-#
-# First we build the block encoding operator by efficiently capturing the LCU representation of :math:`A` using
-# the :class:`~.pennylane.estimator.compact_hamiltonian.PauliHamiltonian` class. This produces a compact object
+# The LCU representation of :math:`A` is efficiently stored using the
+# :class:`~.pennylane.estimator.compact_hamiltonian.PauliHamiltonian` class. This produces a compact object
 # specifically for resource estimation. The block encoding operator is built with the
 # `ChangeOpBasis <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.ops.ChangeOpBasis.html>`_
 # class which uses the compute-uncompute pattern to implement the
 # :math:`\text{Prep}^{\dagger} \circ \text{Select} \circ \text{Prep}` operator.
 #
 # The resources for `QSVT <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.QSVT.html>`_
-# can then be obtained using this block encoding:
+# can then be obtained using this block encoding. Note that these operators are specifically designed for resource
+# estimation and are *not supported* for execution or simulation in a circuit.
 
+## --- LCU representation of A: ---
 lcu_A = qre.PauliHamiltonian(
     num_qubits=2,
     pauli_terms={"ZZ": 1, "XX": 1, "XZ": 1},
@@ -110,36 +106,42 @@ lcu_A = qre.PauliHamiltonian(
 num_terms = lcu_A.num_terms
 num_qubits = lcu_A.num_qubits
 
+## --- Block Encoding operator: ---
 num_encoding_wires = int(qnp.ceil(qnp.log2(num_terms)))
 encoding_wires = [f"e_{i}" for i in range(num_encoding_wires)]
 lcu_wires = [f"t_{i}" for i in range(num_qubits)]
 
-Prep = qre.QubitUnitary(
+Prep = qre.QubitUnitary(  # Prep the coeffs of the LCU
     num_encoding_wires,
     wires=encoding_wires,
-)  # Prep the coeffs of the LCU
-Select = qre.SelectPauli(
+)
+
+Select = qre.SelectPauli(  # Select over ops in the LCU
     lcu_A,
     wires=lcu_wires + encoding_wires,
-)  # Select over ops in the LCU
+)
+
 BlockEncoding = qre.ChangeOpBasis(Prep, Select)  # Prep ○ Sel Prep^t
 
-
+## --- QSVT operator: ---
 qsvt_op = qre.QSVT(
     block_encoding=BlockEncoding,
     encoding_dims=(4, 4),  # The shape of matrix A
     poly_deg=5,  # quintic
 )
 
+## --- Resource Estimation: ---
+gs = {"X", "Y", "Z", "S", "T", "Hadamard", "CNOT", "Toffoli"}
 resources = qre.estimate(qsvt_op, gate_set=gs)
 print(resources)
 
 ##############################################################################
-# Representing the QSVT workflow like this allows us to easily upscale it to larger system sizes without
-# any computational overheads. Let's extend this example to a **50 qubit** system with an LCU of **2000
+# Representing the QSVT workflow like this allows us to easily perform resource estimation larger system sizes
+# without any computational overheads. Let's extend this example to a **50 qubit** system with an LCU of **2000
 # terms** and a **100th degree** polynomial transformation. Notice how simple it is to update the code
 # and obtain the cost of this larger system:
 
+## --- LCU representation of A: ---
 lcu_A = qre.PauliHamiltonian(
     num_qubits=50,
     pauli_terms={"ZZ": 250, "XX": 750, "XZ": 1000},
@@ -147,26 +149,32 @@ lcu_A = qre.PauliHamiltonian(
 num_terms = lcu_A.num_terms
 num_qubits = lcu_A.num_qubits
 
+## --- Block Encoding operator: ---
 num_encoding_wires = int(qnp.ceil(qnp.log2(num_terms)))
 encoding_wires = [f"e_{i}" for i in range(num_encoding_wires)]
 lcu_wires = [f"t_{i}" for i in range(num_qubits)]
 
-Prep = qre.QROMStatePreparation(
+Prep = qre.QROMStatePreparation(  # Efficient Prep for large systems
     num_encoding_wires,
     wires=encoding_wires,
-)  # More efficient Prep
-Select = qre.SelectPauli(
+)
+
+Select = qre.SelectPauli(  # Select over ops in the LCU
     lcu_A,
     wires=lcu_wires + encoding_wires,
-)  # Select over ops in the LCU
+)
+
 BlockEncoding = qre.ChangeOpBasis(Prep, Select)  #  Prep ○ Sel Prep^t
 
+## --- QSVT operator: ---
 qsvt_op = qre.QSVT(
     block_encoding=BlockEncoding,
     encoding_dims=(2**50, 2**50),  # The shape of matrix A
     poly_deg=100,
 )
 
+## --- Resource Estimation: ---
+gs = {"X", "Y", "Z", "S", "T", "Hadamard", "CNOT", "Toffoli"}
 resources = qre.estimate(qsvt_op, gate_set=gs)
 print(resources)
 
