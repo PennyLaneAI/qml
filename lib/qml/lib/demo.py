@@ -314,6 +314,16 @@ def _build_demo(
                             quiet=False,
                             pre=True,
                         )
+            # If there are demo-specific constraints, we need
+            # to reinstall them now in case PLC dev versions wiped them out.
+            if demo.requirements_file:
+                cmds.pip_install(
+                    build_venv.python,
+                    "--upgrade",
+                    requirements=demo.requirements_file,
+                    quiet=False,
+                    pre=False,
+                )
 
     elif dev:
         # Need latest version of PennyLane to build, whether or not we're executing
