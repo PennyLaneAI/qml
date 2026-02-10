@@ -7,7 +7,7 @@ This directory houses the files that specify and constrain the dependencies requ
 *   [Overview](#overview)
 *   [Dependency Files](#dependency-files)
     *   [`constraints-dev.txt`](#constraints-devtxt)
-    *   [`constraints-plc-dev.txt`](#constraints-plc-devtxt)
+    *   [`constraints-plc-dev.json`](#constraints-plc-devjson)
     *   [`constraints-stable.txt`](#constraints-stabletxt)
     *   [`requirements-build.txt`](#requirements-buildtxt)
     *   [`requirements-core.in`](#requirements-corein)
@@ -31,12 +31,13 @@ This file specifies the allowed versions of dependencies for building and runnin
 *   **Location:** `./constraints-dev.txt`
 *   **Purpose:** Defines dependencies for the `qml build --dev` command.
 
-### `constraints-plc-dev.txt`
+### `constraints-plc-dev.json`
 
-This file specifies the allowed versions of PennyLane, Lightning, and Catalyst for **development builds**. These files are currently installed **onyl if the demo is set to be executed** (`qml build --execute --dev`). These versions are pulled from test-pypi so that the release candidate versions are used during feature freeze. Unless you're a release manager, you likely don't need to modify this file. 
+This file specifies the allowed release versions of PennyLane, Lightning, and Catalyst for **development builds**. These packages are currently installed **only if the demo is set to be executed** (`qml build --execute --dev`). The latest version available on test-pypi, whose release version matches the constraint, is what gets installed (e.g. 0.45.0.dev15 == 0.45.0, 0.45.0rc7 == 0.45.0, 0.46.0.dev3 != 0.45.0, etc.). Only update this constraint after a new release, so that the release candidate versions continue to be used during feature freeze. Unless you're a release manager, you likely don't need to modify this file.
 
-*   **Location:** `./constraints-plc-dev.txt`
+*   **Location:** `./constraints-plc-dev.json`
 *   **Purpose:** Defines PennyLane, Lightning, and Catalyst versions for the `qml build --execute --dev` command.
+*   **Format:** JSON array of objects with the package names as keys. Order of entries must be preserved (Catalyst, then Lightning, then PennyLane).
 
 ### `constraints-stable.txt`
 

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 from collections.abc import Sequence, Iterator
+from packaging.version import Version
 import shutil
 from qml.lib import fs, cmds
 from qml.lib.virtual_env import Virtualenv
@@ -297,57 +298,28 @@ def _build_demo(
         # If dev, we need to re-install the latest Catalyst, then Lightning, then PennyLane
         # in that order, regardless of conflicts/warnings. 
         if dev:
-            with open(ctx.plc_dev_constraints_file, "r") as f:
-                packages = f.readlines()
-                for package in packages:
-                    package = package.strip()
-                    if package and not package.startswith("#"):
-                        logger.info("Getting versions for %s", package)
-                        try:
-                            package_name, constraint = package.split("<", maxsplit=1)
-                        except:
-                            logger.error("Malformed constraints file for PLC dev.")
-                            raise
-                        package_versions = cmds.pip_get_versions(build_venv.python, package_name, index_url="https://test.pypi.org/simple/")
-                        for version in package_versions:
-                            if version < constraint:
-                                logger.info("Installing %s==%s", package_name, version)
-                                #Testing. Refactor this later if successful
-                                if package_name == "pennylane-catalyst":
-                                    cmds.pip_install(
-                                        build_venv.python,
-                                        "--no-cache-dir",
-                                        "--extra-index-url",
-                                        "https://test.pypi.org/simple/",
-                                        f"{package_name}=={version}",
-                                        use_uv=False,
-                                        quiet=False,
-                                    )
-                                elif package_name == "pennylane-lightning":
-                                    cmds.pip_install(
-                                        build_venv.python,
-                                        "--no-cache-dir",
-                                        "--force-reinstall",
-                                        "--no-deps",
-                                        "--extra-index-url",
-                                        "https://test.pypi.org/simple/",
-                                        f"{package_name}=={version}",
-                                        use_uv=False,
-                                        quiet=False,
-                                    )
-                                elif package_name == "pennylane":
-                                    cmds.pip_install(
-                                        build_venv.python,
-                                        "--no-cache-dir",
-                                        "--force-reinstall",
-                                        "--no-deps",
-                                        "--extra-index-url",
-                                        "https://test.pypi.org/simple/",
-                                        f"{package_name}=={version}",
-                                        use_uv=False,
-                                        quiet=False,
-                                    )
-                                break
+            base_install_args = [
+                build_venv.python,
+                "--no-cache-dir",
+                "--extra-index-url",
+                "https://test.pypi.org/simple/",
+            ]
+            with open(ctx.plc_dev_constraints_file) as f:
+                constraints = json.load(f)
+            for package in constraints:
+                logger.info("Getting versions for %s", package["name"])
+                package_versions = cmds.pip_get_versions(build_venv.python, package["name"], index_url="https://test.pypi.org/simple/")
+                # These are ruturned newest to oldest, so we can break when we find the first match
+                for version in package_versions:
+                    if Version(version).release == Version(package["version"]).release:
+                        logger.info("Installing %s==%s", package["name"], version)
+                        install_args = base_install_args.copy()
+                        if package["name"] != "pennylane-catalyst":
+                            install_args.append("--force-reinstall")
+                            install_args.append("--no-deps")
+                        install_args.append(f"{package['name']}=={version}")
+                        cmds.pip_install(*install_args, use_uv=False, quiet=False)
+                        break
             # Need to reinstall the demo's requirements file to ensure the correct versions are installed
             if demo.requirements_file:
                 cmds.pip_install(
