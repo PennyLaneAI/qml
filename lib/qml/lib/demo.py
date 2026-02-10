@@ -306,7 +306,7 @@ def _build_demo(
                             install_args.append("--force-reinstall")
                             install_args.append("--no-deps")
                         install_args.append(f"{package['name']}=={version}")
-                        cmds.pip_install(*install_args, quiet=quiet)
+                        cmds.pip_install(*install_args, quiet=quiet, pre=True)
                         break
 
             # Need to reinstall the demo's requirements file to ensure the correct versions are installed
