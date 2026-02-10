@@ -150,16 +150,6 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
 
     qre.Hadamard()
 
-    # Uncompute state preparation
-    qre.Adjoint(
-        qre.QROMStatePreparation(
-            num_state_qubits=num_qubits,
-        )
-    )
-    qre.Adjoint(
-        qre.QROM(num_bitstrings=2**num_qubits, size_bitstring=num_qubits, select_swap_depth=1)
-    )
-
 
 ######################################################################
 # Estimating the Resources
@@ -176,6 +166,12 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
 # The phase gradient trick is algorithmically superior for this application because it allows
 # us to implement rotations with deterministic cost using arithmetic, rather than relying on
 # probabilistic synthesis sequences. This results in better scaling as the precision requirements increase.
+#
+# The phase gradient method relies on a specific
+# resource state (the phase gradient state) that encodes phase information in its amplitudes.
+# A unique mathematical property of this state is that adding an integer $k$ to the register
+# mathematically induces a phase rotation of angle :math`\theta \propto k`.
+# Therefore, the cost of a rotation becomes identical to the cost of a quantum adder.
 #
 # To adopt this more efficient strategy, we configure the estimator to use the phase gradient trick
 # by leveraging :class:`~.pennylane.resource.ResourceConfig`.
@@ -233,13 +229,20 @@ for ham in limno_ham:
 # Optimizing the Estimates
 # ^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# In order to optimize our algorithm, instead of accepting the standard
-# implementations, we can inject specific high-performance subroutines directly into the
-# resource estimator.
+# We optimize the resource estimation by overriding the default decompositions
+# in :mod:~.pennylane.estimator with specialized, high-performance subroutines tailored for this algorithm.
 #
-# Optimization 1: Efficient Basis Rotations
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# First, we target the basis rotation, and replace the generic standard decomposition
+# Optimization 1: Efficient Orbital Basis Transformation
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# In the Compressed Double Factorization (CDF) framework, the Hamiltonian is decomposed
+# into a sum of terms, where each term is diagonal in a specific, rotated orbital basis.
+# To simulate time evolution, the quantum circuit must repeatedly transform the system's
+# state into these different bases.
+#
+# In PennyLane, this basis change is modeled by the :class:`~.pennylane.resource.BasisRotation`
+# class. By default, the estimator decomposes this operation using a generic, standard decomposition strategy,
+#
+# Here, we replace the generic standard decomposition
 # with the specialized, lower-cost circuit described in `Kivlichan et al. (2018)
 # <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.120.110501>`_.
 
@@ -361,9 +364,9 @@ bodipy_ham = qre.THCHamiltonian(num_orbitals=11, tensor_rank=22, one_norm=6.48)
 # We now construct the `walk operator from the Hamiltonian <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_
 # using the `QubitizeTHC <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.QubitizeTHC.html>`_ template.
 # For comprehensive details on how to construct and configure this operator,
-# we recommend the `Qubit and gate trade-offs in Qubitized Quantum Phase Estimation
+# we recommend the `Qubit and Gate Trade-offs in Qubitized Quantum Phase Estimation
 # <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_ demo.
-# Let's define the precision parameters based on the error budget from the reference, and construct the walk operator accordingly:
+# Let's define the precision parameters based on the error budget from Zhou et al., and construct the walk operator accordingly:
 
 error = 0.0016  # Error budget from Zhou et al. (2025), in Hartree (chemical accuracy)
 n_coeff = int(np.ceil(2.5 + np.log2(10 * bodipy_ham.one_norm / error)))  # Coefficient precision
@@ -427,17 +430,6 @@ def pdt_circuit(walk_op, poly_degree_hi, poly_degree_low, num_slaters=1e4):
 
     # Hadamard
     qre.Hadamard()
-
-    # Uncompute state preparation
-    qre.Adjoint(
-        qre.QROMStatePreparation(
-            num_state_qubits=num_qubits,
-            positive_and_real=False,
-        )
-    )
-    qre.Adjoint(
-        qre.QROM(num_bitstrings=2**num_qubits, size_bitstring=num_qubits, select_swap_depth=1)
-    )
 
 
 ##################################################################
