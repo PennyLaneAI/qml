@@ -282,15 +282,13 @@ def _build_demo(
             build_venv.python,
             "--upgrade",
             requirements=out_dir / "requirements.txt",
-            quiet=False,
-            pre=False,
+            quiet=quiet,
         )
         # If dev, we need to re-install the latest Catalyst, then Lightning, then PennyLane
         # in that order, regardless of conflicts/warnings. 
         if dev:
             base_install_args = [
                 build_venv.python,
-                "--no-cache-dir",
                 "--extra-index-url",
                 "https://test.pypi.org/simple/",
             ]
@@ -308,7 +306,7 @@ def _build_demo(
                             install_args.append("--force-reinstall")
                             install_args.append("--no-deps")
                         install_args.append(f"{package['name']}=={version}")
-                        cmds.pip_install(*install_args, use_uv=False, quiet=False)
+                        cmds.pip_install(*install_args, quiet=quiet)
                         break
 
             # Need to reinstall the demo's requirements file to ensure the correct versions are installed
@@ -317,8 +315,7 @@ def _build_demo(
                     build_venv.python,
                     "--upgrade",
                     requirements=demo.requirements_file,
-                    quiet=False,
-                    pre=False,
+                    quiet=quiet,
                 )
 
     elif dev:
@@ -327,8 +324,7 @@ def _build_demo(
             build_venv.python,
             "--upgrade",
             "git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane",
-            use_uv=False,
-            quiet=False,
+            quiet=quiet,
         )
 
     stage_dir = ctx.build_dir / "demonstrations"
