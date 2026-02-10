@@ -178,7 +178,7 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
 #
 
 
-def single_qubit_rotation(precision=None):
+def single_qubit_rotation(precision):
     """Gidney-Adder based decomposition for single qubit rotations"""
     num_bits = int(np.ceil(np.log2(1 / precision)))
     return [qre.GateCount(qre.resource_rep(qre.SemiAdder, {"max_register_size": num_bits + 1}))]
