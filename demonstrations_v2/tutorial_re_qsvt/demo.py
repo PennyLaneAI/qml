@@ -10,8 +10,8 @@ How to estimate the resource cost of QSVT
     re_how_to_use_pennylane_for_resource_estimation How to use PennyLane for Resource Estimation
     tutorial_apply_qsvt QSVT in Practice
 
-The Quantum Singular Value Transformation (QSVT) is a versatile algorithm, applicable to a wide range of
-problems including unstructured search, Hamiltonian simulation, matrix inversion and many more [#chuang2021]_.
+The Quantum Singular Value Transformation (QSVT) is a versatile algorithm that is applicable to a wide range of
+problems, including unstructured search, Hamiltonian simulation, matrix inversion, and many more [#chuang2021]_.
 PennyLane makes it easy to build circuits and experiment with QSVT using the :func:`~.pennylane.qsvt` function.
 For more information on how to use PennyLane's QSVT functionality checkout our other demos:
 
@@ -19,10 +19,10 @@ For more information on how to use PennyLane's QSVT functionality checkout our o
 - `QSVT in Practice <tutorial_apply_qsvt>`_
 - `How to implement QSVT on hardware <tutorial_qsvt_hardware>`_
 
-However, simulations can only take us so far, and industrially relevant system sizes are often too large to
-meaningfully simulate. Fortunately, PennyLane's resource :mod:`~.pennylane.estimator` module can help us
-gather meaningful insights in this regime. If you are new to resource estimation in PennyLane or need a quick
-refresher, checkout this demo on `how to use PennyLane for Resource Estimation <re_how_to_use_pennylane_for_resource_estimation>`_.
+It's important to estimate the quantum resource cost of running the QSVT algorithm, for any system size.
+Fortunately, PennyLane's resource :mod:`~.pennylane.estimator` module makes that easy, even if the QSVT problem
+you're interested in is too big to simulate right now. If you are new to resource estimation in PennyLane or need
+a quick refresher, checkout this demo on `how to use PennyLane for Resource Estimation <re_how_to_use_pennylane_for_resource_estimation>`_.
 
 In this demo, you will learn how to use PennyLane's :mod:`~.pennylane.estimator` module to easily estimate the
 cost of a QSVT workflow.
@@ -81,9 +81,8 @@ resources = qre.estimate(circ, gate_set=gs)()
 print(resources)
 
 ##############################################################################
-# This works great for small systems and toy models. However, it suffers from performance bottlenecks when we
-# scale to larger system sizes. In this case we can use some of the other functionality from the
-# :mod:`~.pennylane.estimator` module to estimate the cost of QSVT.
+# This works great for small systems. For larger system sizes, we can use some of the other functionality
+# from the :mod:`~.pennylane.estimator` module designed for scale to estimate the cost of QSVT.
 #
 # Resources from an Estimator Workflow
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
