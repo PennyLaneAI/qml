@@ -328,6 +328,7 @@ def _build_demo(
                                         build_venv.python,
                                         "--no-cache-dir",
                                         "--force-reinstall",
+                                        "--no-deps",
                                         "--extra-index-url",
                                         "https://test.pypi.org/simple/",
                                         f"{package_name}=={version}",
