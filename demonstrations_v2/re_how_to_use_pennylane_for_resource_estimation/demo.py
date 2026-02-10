@@ -1,5 +1,5 @@
-r"""How to use PennyLane for Resource Estimation
-============================================
+r"""How to estimate the resource requirements of quantum algorithms
+===============================================================
 
 Fault-tolerant quantum computers are on their way. However, how do we ensure that useful algorithms can
 actually run on them? An algorithm is hardly helpful when it cannot be executed.
