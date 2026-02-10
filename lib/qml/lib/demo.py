@@ -309,7 +309,7 @@ def _build_demo(
             for package in constraints:
                 logger.info("Getting versions for %s", package["name"])
                 package_versions = cmds.pip_get_versions(build_venv.python, package["name"], index_url="https://test.pypi.org/simple/")
-                # These are ruturned newest to oldest, so we can break when we find the first match
+                # These are returned newest to oldest, so we can break when we find the first match
                 for version in package_versions:
                     if Version(version).release == Version(package["version"]).release:
                         logger.info("Installing %s==%s", package["name"], version)
@@ -320,6 +320,7 @@ def _build_demo(
                         install_args.append(f"{package['name']}=={version}")
                         cmds.pip_install(*install_args, use_uv=False, quiet=False)
                         break
+
             # Need to reinstall the demo's requirements file to ensure the correct versions are installed
             if demo.requirements_file:
                 cmds.pip_install(
