@@ -25,8 +25,4 @@ class Virtualenv:
         """Initialize a virtual environment."""
         self.path.parent.mkdir(exist_ok=True)
 
-        subprocess.run([sys.executable, "-m", "venv", "--clear", self.path]).check_returncode()
-        subprocess.run(
-            [str(self.python), "-m", "pip", "install", "--upgrade", "pip"],
-            check=True,
-        )
+        subprocess.run([sys.executable, "-m", "venv", "--clear", "--upgrade-deps", self.path]).check_returncode()
