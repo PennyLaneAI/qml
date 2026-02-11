@@ -3,7 +3,7 @@ import subprocess
 from packaging.version import Version
 from pathlib import Path
 from collections.abc import Iterable
-from typing import Literal, Dict
+from typing import Literal
 
 
 def poetry_export(
@@ -150,8 +150,21 @@ def pip_get_versions(
     package: str,
     index_url: str | None = None,
     pre: bool = True,
-) -> Dict[str, str]:
-    """Get the versions of a package from the index."""
+) -> list[str]:
+    """Get the versions of a package from the index.
+    
+    Args:
+        python: Path to python interpreter
+        package: Name of package to get versions for
+        index_url: URL of index to use
+        pre: Whether to include pre-release versions
+
+    Returns:
+        List of versions of the package, sorted from newest to oldest
+
+    Raises:
+        CalledProcessError: The command does not complete successfully
+    """
     package = package.strip()
     cmd = [
         str(python),
