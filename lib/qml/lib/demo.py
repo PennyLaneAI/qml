@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 from collections.abc import Sequence, Iterator
+from packaging.version import Version
 import shutil
 from qml.lib import fs, cmds
 from qml.lib.virtual_env import Virtualenv
@@ -170,15 +171,6 @@ def build(
     done = 0
     logger.info("Building %d demos", len(demos))
 
-    build_venv = Virtualenv(ctx.repo_root / venv) if venv else Virtualenv(ctx.build_venv_path)
-    logger.info("Using build environment: %s", build_venv.path)
-    cmds.pip_install(
-        build_venv.python,
-        requirements=ctx.build_requirements_file,
-        use_uv=False,
-        quiet=False,
-    )
-
     for demo in demos:
         execute_demo = execute and (demo.executable_latest if dev else demo.executable_stable)
         done += 1
@@ -189,12 +181,11 @@ def build(
             len(demos),
             execute_demo,
         )
-        build_venv = Virtualenv(ctx.build_venv_path)
+        build_venv = Virtualenv(ctx.repo_root / venv) if venv else Virtualenv(ctx.build_venv_path)
         cmds.pip_install(
             build_venv.python,
             requirements=ctx.build_requirements_file,
-            use_uv=False,
-            quiet=False,
+            quiet=quiet,
         )
         try:
             _build_demo(
@@ -291,29 +282,41 @@ def _build_demo(
             build_venv.python,
             "--upgrade",
             requirements=out_dir / "requirements.txt",
-            quiet=False,
-            pre=False,
+            quiet=quiet,
         )
-
         # If dev, we need to re-install the latest Catalyst, then Lightning, then PennyLane
         # in that order, regardless of conflicts/warnings. 
         if dev:
-            with open(ctx.plc_dev_constraints_file, "r") as f:
-                packages = f.readlines()
-                for package in packages:
-                    package = package.strip()
-                    if package and not package.startswith("#"):
-                        cmds.pip_install(
-                            build_venv.python,
-                            "--no-cache-dir",
-                            "--upgrade",
-                            "--extra-index-url",
-                            "https://test.pypi.org/simple/",
-                            package,
-                            use_uv=False,
-                            quiet=False,
-                            pre=True,
-                        )
+            base_install_args = [
+                build_venv.python,
+                "--extra-index-url",
+                "https://test.pypi.org/simple/",
+            ]
+            with open(ctx.plc_dev_constraints_file) as f:
+                constraints = json.load(f)
+            for package in constraints:
+                logger.info("Getting versions for %s", package["name"])
+                package_versions = cmds.pip_get_versions(build_venv.python, package["name"], index_url="https://test.pypi.org/simple/")
+                # These are returned newest to oldest, so we can break when we find the first match
+                for version in package_versions:
+                    if Version(version).release == Version(package["version"]).release:
+                        logger.info("Installing %s==%s", package["name"], version)
+                        install_args = base_install_args.copy()
+                        if package["name"] != "pennylane-catalyst":
+                            install_args.append("--force-reinstall")
+                            install_args.append("--no-deps")
+                        install_args.append(f"{package['name']}=={version}")
+                        cmds.pip_install(*install_args, quiet=quiet, pre=True)
+                        break
+
+            # Need to reinstall the demo's requirements file to ensure the correct versions are installed
+            if demo.requirements_file:
+                cmds.pip_install(
+                    build_venv.python,
+                    "--upgrade",
+                    requirements=demo.requirements_file,
+                    quiet=quiet,
+                )
 
     elif dev:
         # Need latest version of PennyLane to build, whether or not we're executing
@@ -321,8 +324,7 @@ def _build_demo(
             build_venv.python,
             "--upgrade",
             "git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane",
-            use_uv=False,
-            quiet=False,
+            quiet=quiet,
         )
 
     stage_dir = ctx.build_dir / "demonstrations"
