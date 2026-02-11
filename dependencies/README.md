@@ -37,7 +37,7 @@ This file specifies the allowed release versions of PennyLane, Lightning, and Ca
 
 *   **Location:** `./constraints-plc-dev.json`
 *   **Purpose:** Defines PennyLane, Lightning, and Catalyst versions for the `qml build --execute --dev` command.
-*   **Format:** JSON array of objects with the package names as keys. Order of entries must be preserved (Catalyst, then Lightning, then PennyLane).
+*   **Format:** JSON array of package objects, with the package name as it appears on PyPi, and the major version of the upcoming release. Order of entries must be preserved (Catalyst, then Lightning, then PennyLane).
 
 ### `constraints-stable.txt`
 
