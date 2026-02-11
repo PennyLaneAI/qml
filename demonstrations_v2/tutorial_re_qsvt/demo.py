@@ -30,6 +30,7 @@ Estimator workflow involves expressing our QSVT circuit using :mod:`~.pennylane.
 workflow scales for *any* system size, has a simpler UI and produces tighter resource estimates. For users
 who have already built a standard PennyLane circuit, the Executable workflow allows for resource estimation
 with only one extra line of code.
+
 Estimating the cost of QSVT
 ---------------------------
 Let's estimate the cost of performing a quintic (5th degree) polynomial transformation to the matrix
