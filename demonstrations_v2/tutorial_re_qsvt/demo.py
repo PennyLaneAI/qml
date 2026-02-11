@@ -25,8 +25,11 @@ you're interested in is too big to simulate right now. If you are new to resourc
 a quick refresher, checkout this demo on `how to use PennyLane for Resource Estimation <re_how_to_use_pennylane_for_resource_estimation>`_.
 
 In this demo, you will learn how to use PennyLane's :mod:`~.pennylane.estimator` module to easily estimate the
-cost of a QSVT workflow.
-
+cost of QSVT. There are two ways of doing so: the Executable workflow and the Estimator workflow. The
+Estimator workflow involves expressing our QSVT circuit using :mod:`~.pennylane.estimator` operators. This
+workflow scales for *any* system size, has a simpler UI and produces tighter resource estimates. For users
+who have already built a standard PennyLane circuit, the Executable workflow allows for resource estimation
+with only one extra line of code.
 Estimating the cost of QSVT
 ---------------------------
 Let's estimate the cost of performing a quintic (5th degree) polynomial transformation to the matrix
