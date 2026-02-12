@@ -62,13 +62,20 @@ class IntersphinxInventories:
     and .catalyst_base_url.
     """
 
-    pennylane_base_url = "https://docs.pennylane.ai/en/"
-    catalyst_base_url = "https://docs.pennylane.ai/projects/catalyst/en/"
-
     @property
     def dev(self) -> bool:
         """True if the DEV environment variable is the string \"True\"; False otherwise."""
         return os.environ.get("DEV", "") == "True"
+
+    @property
+    def pennylane_base_url(self) -> str:
+        """Base URL for PennyLane documentation links."""
+        return "https://docs.pennylane.ai/en/" + ("latest/" if self.dev else "stable/")
+
+    @property
+    def catalyst_base_url(self) -> str:
+        """Base URL for Catalyst documentation links."""
+        return "https://docs.pennylane.ai/projects/catalyst/en/" + ("latest/" if self.dev else "stable/")
 
     def __init__(
         self,
@@ -89,7 +96,7 @@ class IntersphinxInventories:
         cache_path = self._cache_dir / f"pennylane_objects{'_dev' if self.dev else ''}.inv"
         inv = _load_inventory_from_path(cache_path)
         if inv is None:
-            URL = self.pennylane_base_url + ("latest/" if self.dev else "stable/") + "objects.inv"
+            URL = self.pennylane_base_url + "objects.inv"
             inv, raw = _load_inventory_from_url(URL)
             cache_path.write_bytes(raw)
         self._pennylane = _make_named_inventory(inv)
@@ -98,7 +105,7 @@ class IntersphinxInventories:
         cache_path = self._cache_dir / f"catalyst_objects{'_dev' if self.dev else ''}.inv"
         inv = _load_inventory_from_path(cache_path)
         if inv is None:
-            URL = self.catalyst_base_url + ("latest/" if self.dev else "stable/") + "objects.inv"
+            URL = self.catalyst_base_url + "objects.inv"
             inv, raw = _load_inventory_from_url(URL)
             cache_path.write_bytes(raw)
         self._catalyst = _make_named_inventory(inv)
