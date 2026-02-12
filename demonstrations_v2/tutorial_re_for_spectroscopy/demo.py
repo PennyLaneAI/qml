@@ -356,7 +356,7 @@ plt.show()
 # Hamiltonian, which allows for a highly compact block encoding. As with XAS, we can use the
 # `compact Hamiltonian <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.compact_hamiltonian.THCHamiltonian.html>`__
 # representation to skip the expensive Hamiltonian construction. As an example, let's use the 11-orbital BODIPY system studied
-# in Zhou et al. (2025) [#Zhou2025]_,
+# in Zhou et al. (2025) [#Zhou2025]_.
 
 bodipy_ham = qre.THCHamiltonian(num_orbitals=11, tensor_rank=22, one_norm=6.48)
 
