@@ -121,7 +121,7 @@ num_trotter_steps = int(
 # For the initial state preparation, we adopt the **Sum of Slaters** method [#SOSStatePrep2024]_, which
 # prepares in the quantum register an approximation to the ground state wavefunction, obtained by
 # discarding Slater determinants below a coefficient tolerance.
-# For this demo, we assume a truncation level that yields :math:`1 \times 10^4` surviving determinants (`num_slaters=1e4`).
+# For this demo, we assume a truncation level that yields :math:`1 \times 10^4` surviving determinants (``num_slaters=1e4``).
 # The cost of this approach depends on two major subroutines: :class:`~.pennylane.estimator.templates.QROM` to load the determinants,
 # and :class:`~.pennylane.estimator.templates.QROMStatePreparation` to prepare the
 # superposition.
