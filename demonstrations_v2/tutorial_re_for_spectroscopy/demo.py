@@ -12,7 +12,7 @@ the most powerful supercomputers to their breaking point.
 
 Can quantum computers do better?
 
-In this demo, we will show you how to use PennyLane to answer that question -- by directly
+In this demo, we will show you how to use PennyLane to answer that question, by directly
 calculating the actual resource requirements of key spectroscopy quantum algorithms through PennyLane's
 resource :mod:`estimator <pennylane.estimator>`. By estimating the costs of these algorithms now, we can
 ensure they can feasibly be executed on fault-tolerant hardware of the future.
