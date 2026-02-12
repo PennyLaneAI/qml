@@ -170,7 +170,7 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
 # The phase gradient method relies on a specific
 # resource state (the phase gradient state) that encodes phase information in its amplitudes.
 # A unique mathematical property of this state is that adding an integer $k$ to the register
-# mathematically induces a phase rotation of angle :math`\theta \propto k`.
+# mathematically induces a phase rotation of angle :math:`\theta \propto k`.
 # Therefore, the cost of a rotation becomes identical to the cost of a quantum adder.
 #
 # To adopt this more efficient strategy, we configure the estimator to use the phase gradient trick
