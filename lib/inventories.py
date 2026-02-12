@@ -13,10 +13,6 @@ import sphobjinv as soi
 import requests
 from requests import exceptions as requests_exceptions
 
-# Base URLs for objects.inv (same as filter_links.py)
-PENNYLANE_OBJ_INV_URL = "https://docs.pennylane.ai/en/"
-CATALYST_OBJ_INV_URL = "https://docs.pennylane.ai/projects/catalyst/en/"
-
 REQUEST_TIMEOUT = 5  # seconds
 USER_AGENT = "Mozilla/5.0 (compatible; QML-Pandoc-Filter; +https://github.com/PennyLaneAI/qml)"
 
@@ -51,7 +47,7 @@ def _load_inventory_from_url(
 
 
 def _make_named_inventory(inv: soi.Inventory) -> dict[str, Any]:
-    """Build a name -> item dict for easy lookup (same shape as filter_links)."""
+    """Build a name -> item dict for easy lookup of inventory items."""
     return {item.name: item for item in inv.objects}
 
 
@@ -67,8 +63,8 @@ class IntersphinxInventories:
     and .catalyst_base_url.
     """
 
-    pennylane_base_url = "https://docs.pennylane.ai/en/stable/"
-    catalyst_base_url = "https://docs.pennylane.ai/projects/catalyst/en/stable/"
+    pennylane_base_url = "https://docs.pennylane.ai/en/"
+    catalyst_base_url = "https://docs.pennylane.ai/projects/catalyst/en/"
 
     @property
     def dev(self) -> bool:
@@ -96,7 +92,7 @@ class IntersphinxInventories:
         cache_path = self._cache_dir / f"pennylane_objects{'_dev' if self.dev else ''}.inv"
         inv = _load_inventory_from_path(cache_path)
         if inv is None:
-            URL = PENNYLANE_OBJ_INV_URL + ("latest/" if self.dev else "stable/") + "objects.inv"
+            URL = self.pennylane_base_url + ("latest/" if self.dev else "stable/") + "objects.inv"
             inv, raw = _load_inventory_from_url(URL)
             cache_path.write_bytes(raw)
         self._pennylane_inventory = inv
@@ -106,7 +102,7 @@ class IntersphinxInventories:
         cache_path = self._cache_dir / f"catalyst_objects{'_dev' if self.dev else ''}.inv"
         inv = _load_inventory_from_path(cache_path)
         if inv is None:
-            URL = CATALYST_OBJ_INV_URL + ("latest/" if self.dev else "stable/") + "objects.inv"
+            URL = self.catalyst_base_url + ("latest/" if self.dev else "stable/") + "objects.inv"
             inv, raw = _load_inventory_from_url(URL)
             cache_path.write_bytes(raw)
         self._catalyst_inventory = inv
@@ -124,10 +120,10 @@ class IntersphinxInventories:
 
     @property
     def pennylane_inventory(self) -> soi.Inventory | None:
-        """Raw PennyLane sphobjinv Inventory."""
+        """Raw PennyLane objects.inv Inventory."""
         return self._pennylane_inventory
 
     @property
     def catalyst_inventory(self) -> soi.Inventory | None:
-        """Raw Catalyst sphobjinv Inventory."""
+        """Raw Catalyst objects.inv Inventory."""
         return self._catalyst_inventory
