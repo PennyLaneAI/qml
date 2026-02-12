@@ -4,7 +4,7 @@ Spectroscopy is an indispensible measurement technique in chemistry and physics,
 providing fundamental insights into the structure and dynamics of molecules and materials. However,
 to extract these insights, it is often necessary to use simulations to interpret the experimentally
 measured spectra. In practice, this requires exciting the system with an external electromagnetic
-field -- for example, visible light, or X-rays -- and then simulating how the system's quantum state
+field---for example, visible light, or X-rays---and then simulating how the system's quantum state
 evolves over time in response to that, under the influence of its Hamiltonian. On classical computers,
 this is notoriously expensive. The computational resources required to accurately model the excited
 states of a complex molecule or material scale exponentially with system size, often pushing even
