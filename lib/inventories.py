@@ -4,6 +4,7 @@ Load and cache intersphinx objects.inv files for PennyLane and Catalyst.
 Tries to load from disk first; if missing or unusable, fetches from the web
 and persists to disk for next time.
 """
+import os
 import time
 from pathlib import Path
 from typing import Any
@@ -13,8 +14,8 @@ import requests
 from requests import exceptions as requests_exceptions
 
 # Base URLs for objects.inv (same as filter_links.py)
-PENNYLANE_OBJ_INV_URL = "https://docs.pennylane.ai/en/stable/objects.inv"
-CATALYST_OBJ_INV_URL = "https://docs.pennylane.ai/projects/catalyst/en/stable/objects.inv"
+PENNYLANE_OBJ_INV_URL = "https://docs.pennylane.ai/en/"
+CATALYST_OBJ_INV_URL = "https://docs.pennylane.ai/projects/catalyst/en/"
 
 REQUEST_TIMEOUT = 5  # seconds
 USER_AGENT = "Mozilla/5.0 (compatible; QML-Pandoc-Filter; +https://github.com/PennyLaneAI/qml)"
@@ -69,6 +70,11 @@ class IntersphinxInventories:
     pennylane_base_url = "https://docs.pennylane.ai/en/stable/"
     catalyst_base_url = "https://docs.pennylane.ai/projects/catalyst/en/stable/"
 
+    @property
+    def dev(self) -> bool:
+        """True if the DEV environment variable is the string \"True\"; False otherwise."""
+        return os.environ.get("DEV", "") == "True"
+
     def __init__(
         self,
         cache_dir: Path | str | None = None,
@@ -87,19 +93,21 @@ class IntersphinxInventories:
         self._load_catalyst()
 
     def _load_pennylane(self) -> None:
-        cache_path = self._cache_dir / "pennylane_objects.inv"
+        cache_path = self._cache_dir / f"pennylane_objects{'_dev' if self.dev else ''}.inv"
         inv = _load_inventory_from_path(cache_path)
         if inv is None:
-            inv, raw = _load_inventory_from_url(PENNYLANE_OBJ_INV_URL)
+            URL = PENNYLANE_OBJ_INV_URL + ("latest/" if self.dev else "stable/") + "objects.inv"
+            inv, raw = _load_inventory_from_url(URL)
             cache_path.write_bytes(raw)
         self._pennylane_inventory = inv
         self._pennylane = _make_named_inventory(inv)
 
     def _load_catalyst(self) -> None:
-        cache_path = self._cache_dir / "catalyst_objects.inv"
+        cache_path = self._cache_dir / f"catalyst_objects{'_dev' if self.dev else ''}.inv"
         inv = _load_inventory_from_path(cache_path)
         if inv is None:
-            inv, raw = _load_inventory_from_url(CATALYST_OBJ_INV_URL)
+            URL = CATALYST_OBJ_INV_URL + ("latest/" if self.dev else "stable/") + "objects.inv"
+            inv, raw = _load_inventory_from_url(URL)
             cache_path.write_bytes(raw)
         self._catalyst_inventory = inv
         self._catalyst = _make_named_inventory(inv)
