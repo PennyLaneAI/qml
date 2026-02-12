@@ -15,7 +15,7 @@ Can quantum computers do better?
 In this demo, we will show you how to use PennyLane to answer that question, by directly
 calculating the actual resource requirements of key spectroscopy quantum algorithms through PennyLane's
 resource :mod:`estimator <pennylane.estimator>`. By estimating the costs of these algorithms now, we can
-ensure they can feasibly be executed on fault-tolerant hardware of the future.
+ensure they can feasibly be executed on fault-tolerant hardware in the future.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
     :align: center
