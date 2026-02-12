@@ -58,8 +58,7 @@ class IntersphinxInventories:
     On initialization, each inventory is loaded from disk if present in
     cache_dir; otherwise it is fetched from the web and then saved to disk.
     The parsed contents are exposed as .pennylane and .catalyst (name -> item
-    dicts) and as .pennylane_inventory / .catalyst_inventory (raw sphobjinv
-    Inventory objects). Base URLs for building doc links are in .pennylane_base_url
+    dicts). Base URLs for building doc links are in .pennylane_base_url
     and .catalyst_base_url.
     """
 
@@ -80,8 +79,6 @@ class IntersphinxInventories:
         self._cache_dir = Path(cache_dir)
         self._cache_dir.mkdir(parents=True, exist_ok=True)
 
-        self._pennylane_inventory: soi.Inventory | None = None
-        self._catalyst_inventory: soi.Inventory | None = None
         self._pennylane: dict[str, Any] = {}
         self._catalyst: dict[str, Any] = {}
 
@@ -95,7 +92,6 @@ class IntersphinxInventories:
             URL = self.pennylane_base_url + ("latest/" if self.dev else "stable/") + "objects.inv"
             inv, raw = _load_inventory_from_url(URL)
             cache_path.write_bytes(raw)
-        self._pennylane_inventory = inv
         self._pennylane = _make_named_inventory(inv)
 
     def _load_catalyst(self) -> None:
@@ -105,7 +101,6 @@ class IntersphinxInventories:
             URL = self.catalyst_base_url + ("latest/" if self.dev else "stable/") + "objects.inv"
             inv, raw = _load_inventory_from_url(URL)
             cache_path.write_bytes(raw)
-        self._catalyst_inventory = inv
         self._catalyst = _make_named_inventory(inv)
 
     @property
@@ -117,13 +112,3 @@ class IntersphinxInventories:
     def catalyst(self) -> dict[str, Any]:
         """Catalyst inventory as name -> item dict for link resolution."""
         return self._catalyst
-
-    @property
-    def pennylane_inventory(self) -> soi.Inventory | None:
-        """Raw PennyLane objects.inv Inventory."""
-        return self._pennylane_inventory
-
-    @property
-    def catalyst_inventory(self) -> soi.Inventory | None:
-        """Raw Catalyst objects.inv Inventory."""
-        return self._catalyst_inventory
