@@ -458,7 +458,7 @@ print(resource_counts)
 # the time-domain simulation of X-ray absorption (XAS) and the spectral filtering approach for photodynamic therapy (PDT).
 #
 # While PennyLane's resource :mod:`estimator <pennylane.estimator>` was able to give us initial estimates with
-# minimum input information -- including with only a high-level description of the Hamiltonian! -- we also showed how
+# minimum input information---including with only a high-level description of the Hamiltonian!---we also showed how
 # versatile it can be. Moving beyond the standard implementations, we were able to quickly and easily implement
 # algorithmic optimizations from the literature, namely the phase gradient trick and a specialized basis rotation implementation,
 # and immediately see their impact on the resource counts.
