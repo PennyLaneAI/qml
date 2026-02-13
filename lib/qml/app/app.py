@@ -1,6 +1,6 @@
 import typer
 from qml.context import Context
-from qml.lib import demo, cli, template
+from qml.lib import demo, cli, template, fs
 import shutil
 import logging
 from typing import Annotated
@@ -56,6 +56,7 @@ def build(
     ] = False,
     dev: Annotated[bool, typer.Option(help="Whether to use dev dependencies")] = False,
     venv: Annotated[str | None, typer.Option(help="Name of the virtual environment to install build dependencies")] = None,
+    clear_cache: Annotated[bool, typer.Option(help="Clear the intersphinx cache")] = False,
 ) -> None:
     """
     Build the named demos.
@@ -68,11 +69,15 @@ def build(
         keep_going: Continue building even if some demos fail.
         dev: Use development dependencies.
         venv: Name of the virtual environment to install build dependencies.
+        clear_cache: Clear the intersphinx cache.
     Raises:
         typer.Exit: If build process fails.
     """
     try:
         ctx = Context()
+        if clear_cache:
+            fs.clean_dir(ctx.intersphinx_cache_path)
+            logger.info(f"Cleared intersphinx cache at {ctx.intersphinx_cache_path}")
         demo_names = demo_names or []
 
         # Validate demo names exist before processing

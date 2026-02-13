@@ -27,6 +27,11 @@ class Context:
         """Path to virtual environment for building demos."""
         return self.repo_root / ".venv-build"
 
+    @property
+    def intersphinx_cache_path(self) -> Path:
+        """Path to intersphinx cache."""
+        return self.repo_root / ".intersphinx_cache"
+
     @functools.cached_property
     def cwd(self) -> Path:
         """Current working directory of the process."""
