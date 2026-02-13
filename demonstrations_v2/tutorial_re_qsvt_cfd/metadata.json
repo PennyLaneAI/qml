@@ -1,5 +1,5 @@
 {
-    "title": "Efficient block encoding for QSVT applied to matrix inversion for CFD problems",
+    "title": "Optimising QSVT data loading by exploiting structure",
     "authors": [
         {
             "username": "Jay"

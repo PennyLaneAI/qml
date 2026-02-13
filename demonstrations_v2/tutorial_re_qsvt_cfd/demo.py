@@ -1,6 +1,6 @@
 r"""
-Efficient block encoding for QSVT applied to matrix inversion for CFD problems
-==============================================================================
+Optimising QSVT data loading by exploiting structure
+====================================================
 .. meta::
     :property="og:description": Learn how to estimate the cost of matrix inversion with QSVT for CFD applications
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/resource_estimation.jpeg
@@ -9,19 +9,15 @@ Efficient block encoding for QSVT applied to matrix inversion for CFD problems
     tutorial_apply_qsvt QSVT in Practice
     tutorial_lcu_blockencoding Linear combination of unitaries and block encodings
 
-Systems of linear equations are remarkably ubiquitous, appearing in almost every industry from healthcare,
-transportation, finance, chemistry and even quantum computing. Solving systems of linear equations is a
-fundamental pillar of modern science and industry. It has been shown that QSVT can be used for matrix inversion
-on a quantum computer [#chuang2021]_. For more information on how to use PennyLane's :func:`~.pennylane.qsvt`
-functionality to run matrix inversion on a quantum computer see our demo on `QSVT in Practice
-<tutorial_apply_qsvt>`_.
+Solving systems of linear equations is important for a wide range of industries, such as healthcare,
+transportation, finance, chemistry, and even quantum computing. QSVT can implement matrix inversion to solve such
+equations on a quantum computer [#chuang2021]_. For more information on how to use PennyLane's
+:func:`~.pennylane.qsvt` functionality to run matrix inversion on a quantum computer see our demo on `QSVT in
+Practice <tutorial_apply_qsvt>`_.
 
-**Do you know what the logical resource requirements are to invert a matrix on a quantum computer?**
-
-It turns out that the quantum compute cost can get quite large due to **data loading**. Simply put, if we want
-to invert a large matrix, we are constrained by the cost of encoding that matrix onto the quantum computer.
-While this cost is significant for any general matrix, in real life our problems often have patterns and
-structure!
+It turns out that the quantum compute cost can get quite large due to **data loading**. The bottleneck of QSVT is
+typically the cost of encoding the matrix onto a quantum computer in the first place! While this cost is
+significant for any general matrix, in real life our problems often have patterns and structure!
 
 By exploiting the structure of a problem, we can significantly reduce the quantum resource cost of the algorithm.
 Thereby making QSVT based matrix inversion more accessible to implement on nearer term fault-tolerant quantum
@@ -30,16 +26,16 @@ hardware.
 This demo, based on our recent paper `Quantum compilation framework for data loading
 <https://arxiv.org/abs/2512.05183>`_ [#linaje2025]_, will showcase an optimized block encoding strategy that
 uses the sparsity of the matrix to significantly reduce the cost of QSVT. We will focus on a particular matrix
-inversion problem that arises in computation fluid dynamics (CFD) [#lapworth2022]_.
+inversion problem that arises in computational fluid dynamics (CFD) [#lapworth2022]_.
 
 Problem Setup
 -------------
-The two-dimensional lid-driven cavity flow (2D-LDC) is a classical benchmark in computational fluid dynamics
-(CFD) for validating numerical schemes that solve the incompressible Navier–Stokes equations. Determining the
+The two-dimensional lid-driven cavity flow (2D-LDC) is a canonical benchmark in CFD for verifying numerical
+schemes that solve the incompressible Navier–Stokes equations. Determining the
 fluid flow within the cavity requires solving the pressure correction equations by inverting the associated
-pressure correction matrix (:math:`A`). The pressure correction matrix  that arises from simulating flow within
-this cavity has a very sparse, structured diagonal form. The figure below highlights the non-zero entries a
-:math:`(64, 64)` instance of this matrix [#lapworth2022]_.
+pressure correction matrix (:math:`A`). A key observation is that :math:`A` is highly structured and sparse.
+The figure below highlights the non-zero entries of :math:`A` with a dimensionality of :math:`(64 \times 64)`
+[#lapworth2022]_.
 
 |
 
@@ -50,7 +46,7 @@ this cavity has a very sparse, structured diagonal form. The figure below highli
 
 |
 
-In order to invert this matrix we will need to **load** it into the quantum computer using a block encoding.
+To invert this matrix using QSVT, we will need to **load** it onto the quantum computer using a block encoding.
 The standard technique for block encoding any (square) matrix :math:`A` is the method of `linear combination of
 unitaries (LCUs) <tutorial_lcu_blockencoding>`_. However, it suffers from a few fatal flaws (try saying that five
 times fast).
@@ -58,17 +54,18 @@ times fast).
 The number of terms in the LCU scales as :math:`O(4^{n})` in the number of qubits, and thus the cost of the block
 encoding also scales exponentially. Even computing the LCU decomposition becomes a computational bottleneck.
 Furthermore, there is no way of knowing a priori how many terms there will be in the LCU. For these reasons, a
-general "one size fits all" block encoding scheme is usually too expensive for our systems of interest. Instead,
-we leverage the inherent patterns and **structure** of our matrix in order to implement an efficient block
-encoding operator.
+general "one size fits all" block encoding scheme is usually too expensive for our systems of interest.
+
+Instead, we leverage the **structure** of our matrix to implement a much more efficient block encoding operator.
 
 Exploiting structure in the block encoding
 ------------------------------------------
 This matrix (:math:`A`) can be block encoded using a *d-diagonal encoding* technique [#linaje2025]_ developed
-by my colleagues here at Xanadu. The method works by loading each diagonal in parallel and then
-shifting them to their respective ranks in the matrix. The quantum circit that implements the
-d-diagonal block encoding is presented below. To learn more, read our paper:
-`"Quantum compilation framework for data loading" <https://arxiv.org/abs/2512.05183>`_.
+by my colleagues here at Xanadu. The method loads each diagonal in parallel, then shifts them to their respective
+ranks in the matrix. The values along each diagonal can be sparsely represented in a different basis, which
+further reduces resources than existing state-of-the-art methods. The quantum circuit that implements the
+d-diagonal block encoding is presented below. To learn more, read our paper: `"Quantum compilation framework for
+data loading" <https://arxiv.org/abs/2512.05183>`_.
 
 |
 
@@ -82,20 +79,19 @@ d-diagonal block encoding is presented below. To learn more, read our paper:
 Estimating the resource cost for this circuit may seem like a daunting task, but we have
 PennyLane's quantum resource :mod:`~.pennylane.estimator` to help us construct each piece!
 
-Diagonal Matrices & the Walsh-Hadamard Transform
+Diagonal Matrices & the Walsh Transform
 ------------------------------------------------
-Let's start with the :math:`D_{k}` operators. These are a list of diagonal operators where
-each operator stores the normalized entries from one of the diagonals of our d-diagonal matrix :math:`A`.
-By multiplexing over the :math:`D_{k}` operators, we can load all of the diagonals in *parallel*.
-Typically, each diagonal operator is implemented using a product of Controlled PhaseShift gates,
-in this case we will be leveraging the Walsh-Hadamard transformation ([#linaje2025]_, [#zylberman2025]_).
+Each :math:`D_{k}` is a block-diagonal operator that contains the normalised entries from the :math:`k^{\text{th}}`
+diagonal of our d-diagonal matrix :math:`A`. By multiplexing over the :math:`D_{k}` operators, we can load all of
+the diagonals in *parallel*.
 
-The Walsh-Hadamard transform allows us to naturally optimize the cost of our block encoding by tuning the
-number of Walsh coefficients within :math:`[1, N]`, where :math:`N` is the
-the size of the matrix. If the entries in our diagonal are sparse in the Walsh basis, as is the case for
-the CFD example, then we can get away with far fewer Walsh coefficients. This results in a much more
-efficient encoding. The circuit below prepares a single such Walsh-Hadamard diagonal block encoding, ultimately
-we need to prepare as many operators as non-zero diagonals in :math:`A`.
+Instead of implementing each :math:`D_{k}` as a product of :class:`~.pennylane.ControlledPhaseShift` gates,
+we leverage the Walsh transformation [#zylberman2025]_. The Walsh transform allows us to naturally
+optimize the cost of our block encoding by tuning the number of Walsh coefficients within :math:`[1, N]`,
+where :math:`N` is the size of the matrix. If the entries in our diagonal are sparse in the Walsh basis,
+as is the case for the CFD example, then we can get away with far fewer Walsh coefficients. This results in
+a much more efficient encoding. The circuit below prepares a single such Walsh diagonal block encoding,
+ultimately we need to prepare as many operators as non-zero diagonals in :math:`A`.
 
 |
 
@@ -106,13 +102,15 @@ we need to prepare as many operators as non-zero diagonals in :math:`A`.
 
 |
 
+Where :math:`:math:H_{y} = SH`. For more details, refer to Appendix B's Walsh transform encoding in
+[#linaje2025]_.
 """
 
 import pennylane.numpy as qnp
 import pennylane.estimator as qre
 
 
-def WalshHadamard_Dk(num_diags, size_diagonal, num_walsh_coeffs):
+def Walsh_Dk(num_diags, size_diagonal, num_walsh_coeffs):
     num_diag_wires = int(qnp.ceil(qnp.log2(size_diagonal)))
     list_of_diagonal_ops = []
 
@@ -144,13 +142,13 @@ def WalshHadamard_Dk(num_diags, size_diagonal, num_walsh_coeffs):
 #
 # Shift Operator
 # --------------
-# Next we will implement the Shift operator. This is a product of three subroutines which
+# Next, we will implement the Shift operator. This is a product of three subroutines which
 # shift the diagonal entries into the correct rank of the d-diagonal block encoding. Each rank
-# has an associated shift value, the main diagonal has shift value 0. Each diagonal going up
-# is labelled :math:`(+1, +2, \ldots)` respectively and each diagonal going down is labelled
+# has an associated shift value, :math:`k`, the main diagonal has shift value 0. Each diagonal going down
+# is labelled :math:`(+1, +2, \ldots)` respectively and each diagonal going up is labelled
 # with its negative counterpart. The Shift operator works in three steps:
 #
-# 1. **Load** the binary representation of the shift value for each non-zero diagonal in :math:`A`.
+# 1. **Load** the binary representation of the shift value :math:`k` for each non-zero diagonal in :math:`A`.
 #
 # 2. **Shift** each of the diagonals in parallel using an :math:`Adder` subroutine.
 #
@@ -190,7 +188,9 @@ def ShiftOp(num_shifts, num_load_wires, wires):
 # d-Diagonal Block Encoding
 # -------------------------
 # Now that we have developed all of the pieces, we'll bring them together to implement
-# the full d-diagonal block encoding operator [#linaje2025]_.
+# the full d-diagonal block encoding operator. Note that the circuit appears more involved
+# than a simple PrepSelPrep circuit does, but we will soon show that resource cost can be decreased
+# significantly as a result.
 #
 # |
 #
@@ -223,7 +223,7 @@ def WH_Diagonal_BE(num_diagonals, matrix_size, num_walsh_coeffs):
     )
 
     # Multiplexed - Dk:
-    diagonal_ops = WalshHadamard_Dk(num_diagonals, matrix_size, num_walsh_coeffs)
+    diagonal_ops = Walsh_Dk(num_diagonals, matrix_size, num_walsh_coeffs)
     Dk = qre.Select(diagonal_ops, wires=load_diag_wires + prep_wires + ["target"])
 
     # Prep^t:
@@ -238,15 +238,13 @@ def WH_Diagonal_BE(num_diagonals, matrix_size, num_walsh_coeffs):
 # In this section we use all of the tools we have developed to **estimate the resource requirements
 # for solving a practical matrix inversion problem**. Following the CFD example [#linaje2025]_, we
 # will estimate the resources required to invert a tri-diagonal matrix of size :math:`(2^{20}, 2^{20})`.
-# This system requires a :math:`10^{8}`-degree polynomial approximation of the inverse function.
-#
-# We will also restrict the gateset to Clifford + T gates, to generate results that
-# are faithful to the ones presented in [#linaje2025]_.
+# This system requires a :math:`10^{8}`-degree polynomial approximation of the inverse function. We will
+# also restrict the gateset to Clifford + T gates.
 
 degree = 10**8
 matrix_size = 2**20  # 2^20 x 2^20
 num_diagonals = 3
-num_walsh_coeffs = 512  # imperically determined
+num_walsh_coeffs = 512  # empirically determined
 
 
 def matrix_inversion(degree, matrix_size, num_diagonals):
@@ -279,16 +277,16 @@ print(res)
 #
 # Conclusion
 # ----------
-# In this demo we used knowledge about the structure of our matricies to build a more efficient block encoding.
-# This work brings us one step closer to implementing quantum linear solvers on near term quantum hardware.
-# If you are interested in other subroutines for data loading and how to optimize them, checkout our paper on
-# a `Quantum compilation framework for data loading <https://arxiv.org/abs/2512.05183>`_.
+# In this demo, we showed how we can exploit knowledge about the structure of our matrices to build a more
+# efficient block encoding. This work brings us one step closer to implementing quantum linear solvers on near
+# term quantum hardware. If you are interested in other subroutines for data loading, including state preparation,
+# and how to optimize them, check out our paper: `Quantum compilation framework for data loading <https://arxiv.org/abs/2512.05183>`_.
 #
 # Along the way we showcased PennyLane's :mod:`~.pennylane.estimator` module to determine the resource
 # requirements for **matrix inversion by QSVT**. You learned how to build complex circuits from our library of
-# primitives, making resource estimation as simple as putting together Lego blocks. Ofcourse QSVT has many other
+# primitives, making resource estimation as simple as putting together Lego blocks. Of course, QSVT has many other
 # applications, from unstructured search, phase estimation and even Hamiltonian simulation. We challenge you to
-# think of smart data loading techniques to reduce the quantum cost of QSVT for these applications as well!
+# think of smarter data loading techniques to reduce the quantum cost of QSVT for these applications as well!
 #
 # References
 # ----------
