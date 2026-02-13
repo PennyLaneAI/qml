@@ -7,6 +7,7 @@ from inventories import IntersphinxInventories
 from pandocfilters import toJSONFilter, Link, RawInline
 
 DEMOS_URL = "https://pennylane.ai/qml/demos/"
+inventories = IntersphinxInventories()
 
 def process_link(text: str, key: str) -> tuple[str, str]:
     """Process a link to a PennyLane or Catalyst object."""
@@ -75,5 +76,4 @@ def filter_links(key, value, format, _):
                 return Link(["",[],[]], pandocify_string(name), [link.removesuffix("$"),""])
 
 if __name__ == '__main__':
-    inventories = IntersphinxInventories()
     toJSONFilter(filter_links)
