@@ -3,7 +3,7 @@ Welcome to the folder for UnitaryDESIGN submissions.
 
 For issue 1: [PennyLaneAI/qml#1643](https://github.com/PennyLaneAI/qml/issues/1634)
 
-* Please follow the instructions in the issue and upload your image in this folder in JPG or PNG file format.
+* Please follow the instructions in the issue and upload your image in this folder in JPG or PNG file format..
 
 For issue 2: [PennyLaneAI/qml#1635](https://github.com/PennyLaneAI/qml/issues/1635)
 
