@@ -162,7 +162,7 @@ def kinetic_circuit(mode_wires, phase_wires, scratch_wires, coeff_wires):
 # 1. Load the coefficients from QROM controlled by the electronic state.
 # 2. Compute the monomial product by using a square operation for quadratic terms.
 # 3. Accumulate the phase by decomposing the multiplication into a series of controlled adders that
-#   adds the product directly onto the phase gradient register.
+#    adds the product directly onto the phase gradient register.
 # 4. Uncompute the intermediate steps to clean up ancilla wires.
 #
 # We can define this circuit using two different segments, one for linear terms and one for quadratic terms:
