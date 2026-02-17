@@ -138,7 +138,7 @@ def kinetic_circuit(mode_wires, phase_wires, scratch_wires, coeff_wires):
 
 ######################################################################
 # Similarly, we can define the structure for the potential energy fragments. For a QVC model truncated to quadratic terms,
-# each fragment will implement a monomial of degree up to 2
+# each fragment will implement a monomial with a maximum degree of 2. 
 #
 # .. math::
 #
