@@ -38,7 +38,7 @@ where :math:`T` represents the kinetic energy of the nuclei, and is diagonal in 
 contains off-diagonal electronic couplings.
 
 To simulate the time evolution :math:`U(t) = e^{-iHt}`, we employ a product formula (Trotterization) approach as outlined in
-D. Motlagh et al. [#Motlagh2025]_. A key challenge in Trotterization is decomposing the Hamiltonian efficiently.
+D. Motlagh et al. [#Motlagh2025]_. A key challenge in Trotterization is decomposing the potential energy matrix, V, in the Hamiltonian efficiently.
 Here, we use the fragmentation scheme proposed in the reference, grouping the terms :math:`\ket{j} \bra{i} \otimes V_{ji}` such
 that they differ by a fixed bitstring :math:`m`. The original grouping method results in N different fragments, which can be viewed as
 blocks of the potential energy matrix as shown in Figure 1. Each of these fragments can then be block-diagonalized by using only
