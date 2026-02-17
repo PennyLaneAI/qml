@@ -291,7 +291,7 @@ def get_wire_labels(num_modes, num_states, k_grid, phase_prec):
 # This ensures that every block of the Hamiltonian identified in our fragmentation
 # scheme (Figure 1) is accounted for in the simulation.
 #
-# Additionally, an important part of the algorithm is the preparation of phase gradient register. The size of this register
+# Additionally, an important part of the algorithm is the preparation of the phase gradient register. The size of this register
 # is dictated by the desired precision for phase rotations in both the
 # potential and kinetic steps, directly influencing the simulation's accuracy.
 #
