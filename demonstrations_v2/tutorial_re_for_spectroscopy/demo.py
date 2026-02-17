@@ -99,9 +99,9 @@ import numpy as np
 
 eta = 0.05  # Lorentzian width (experimental broadening) in Hartree
 jmax = 100  # Number of time points (determines the smallest feature
-            # we can resolve in the spectrum)
-Hnorm = 2.0 # The effective spectral range over which our Hamiltonian
-            # has a nonzero spectral response, used to determine tau.
+# we can resolve in the spectrum)
+Hnorm = 2.0  # The effective spectral range over which our Hamiltonian
+# has a nonzero spectral response, used to determine tau.
 
 tau = np.pi / (2 * Hnorm)  # Sampling interval
 trotter_error = 1  # Our preset Trotter error constraint, in Hartree
@@ -148,7 +148,9 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
 
     # Controlled time evolution
     qre.Controlled(
-        qre.TrotterCDF(hamiltonian, num_trotter_steps, order=2), num_ctrl_wires=1, num_zero_ctrl=0
+        qre.TrotterCDF(hamiltonian, num_trotter_steps, order=2),
+        num_ctrl_wires=1,
+        num_zero_ctrl=0,
     )
 
     qre.Hadamard()
@@ -184,7 +186,11 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
 def single_qubit_rotation(precision):
     """Gidney-Adder based decomposition for single qubit rotations"""
     num_bits = int(np.ceil(np.log2(1 / precision)))
-    return [qre.GateCount(qre.resource_rep(qre.SemiAdder, {"max_register_size": num_bits + 1}))]
+    return [
+        qre.GateCount(
+            qre.resource_rep(qre.SemiAdder, {"max_register_size": num_bits + 1})
+        )
+    ]
 
 
 ######################################################
@@ -219,16 +225,32 @@ import matplotlib.pyplot as plt
 
 fig, ax1 = plt.subplots()
 
-ax1.set_xlabel('Number of Orbitals')
-ax1.set_ylabel('Qubits')
-ax1.plot(active_spaces, qubits, '-s', color="fuchsia", label="Qubits", linewidth=2.5, markersize=8)
-ax1.tick_params(axis='y')
+ax1.set_xlabel("Number of Orbitals")
+ax1.set_ylabel("Qubits")
+ax1.plot(
+    active_spaces,
+    qubits,
+    "-s",
+    color="fuchsia",
+    label="Qubits",
+    linewidth=2.5,
+    markersize=8,
+)
+ax1.tick_params(axis="y")
 
 ax2 = ax1.twinx()
-ax2.set_ylabel('Toffoli Gates')
+ax2.set_ylabel("Toffoli Gates")
 ax2.set_yscale("log")
-ax2.plot(active_spaces, toffolis, '-s', color="goldenrod", label="Toffoli Gates", linewidth=2.5, markersize=8)
-ax2.tick_params(axis='y')
+ax2.plot(
+    active_spaces,
+    toffolis,
+    "-s",
+    color="goldenrod",
+    label="Toffoli Gates",
+    linewidth=2.5,
+    markersize=8,
+)
+ax2.tick_params(axis="y")
 
 lines_1, labels_1 = ax1.get_legend_handles_labels()
 lines_2, labels_2 = ax2.get_legend_handles_labels()
@@ -284,7 +306,8 @@ def basis_rotation_cost(dim):
     ]
 
     return [
-        qre.GateCount(qre.resource_rep(op, params or {}), count) for op, count, params in ops_data
+        qre.GateCount(qre.resource_rep(op, params or {}), count)
+        for op, count, params in ops_data
     ]
 
 
@@ -308,7 +331,9 @@ for ham in limno_ham:
 
 def custom_CRZ_decomposition(precision):
     """Decomposition of CRZ gate using double phase trick"""
-    rz = qre.resource_rep(qre.RZ, {"precision": precision})  # resource representation of RZ
+    rz = qre.resource_rep(
+        qre.RZ, {"precision": precision}
+    )  # resource representation of RZ
     cnot = qre.resource_rep(qre.CNOT)
 
     return [qre.GateCount(cnot, 2), qre.GateCount(rz, 1)]
@@ -390,9 +415,13 @@ bodipy_ham = qre.THCHamiltonian(num_orbitals=11, tensor_rank=22, one_norm=6.48)
 # Let's define the precision parameters based on the error budget from Zhou et al., and construct the walk operator accordingly:
 
 error = 0.0016  # Error budget from Zhou et al. (2025), in Hartree (chemical accuracy)
-n_coeff = int(np.ceil(2.5 + np.log2(10 * bodipy_ham.one_norm / error)))  # Coefficient precision
+n_coeff = int(
+    np.ceil(2.5 + np.log2(10 * bodipy_ham.one_norm / error))
+)  # Coefficient precision
 n_angle = int(
-    np.ceil(5.652 + np.log2(10 * bodipy_ham.one_norm * 2 * bodipy_ham.num_orbitals / error))
+    np.ceil(
+        5.652 + np.log2(10 * bodipy_ham.one_norm * 2 * bodipy_ham.num_orbitals / error)
+    )
 )  # Rotation angle precision
 
 prep_op = qre.PrepTHC(bodipy_ham, coeff_precision=n_coeff, select_swap_depth=4)
@@ -460,8 +489,12 @@ def pdt_circuit(walk_op, poly_degree_hi, poly_degree_low, num_slaters=1e4):
 qubits_pdt = []
 toffolis_pdt = []
 
-poly_deg_hi, poly_deg_low = polynomial_degree(bodipy_ham.one_norm)  # Calculate polynomial degree
-resource_counts = qre.estimate(pdt_circuit, config=cfg)(walk_op, poly_deg_hi, poly_deg_low)
+poly_deg_hi, poly_deg_low = polynomial_degree(
+    bodipy_ham.one_norm
+)  # Calculate polynomial degree
+resource_counts = qre.estimate(pdt_circuit, config=cfg)(
+    walk_op, poly_deg_hi, poly_deg_low
+)
 print(resource_counts)
 
 ######################################################################
