@@ -11,9 +11,9 @@ of electrons and nuclei simultaneously.
 However, modeling such dynamics is computationally demanding. Before we attempt to run such complex algorithms on future fault-tolerant hardware,
 we need to answer a fundamental question: Is this algorithm actually feasible?
 
-In this demo, we assume the role of an algorithm architect. We will construct a simulation workflow
-for the vibronic Hamiltonian from the ground up, utilizing the modular building blocks within PennyLane's :mod:`~.pennylane.estimator`.
-By constructing this pipeline ourselves, we can perform a feasibility analysis, determining exactly what resources are required to simulate
+This demo is based on D. Motlagh et al. [#Motlagh2025]_, and will present how to estimate the resource requirements of a vibronic Hamiltonian simulation
+from the ground up. An efficient treatment of the potential energy will be presented. With the modular building blocks within PennyLane's :mod:~.pennylane.estimator,
+we can perform a feasibility analysis, determining exactly what resources are required to simulate
 these complex non-adiabatic processes on future hardware.
 
 .. figure:: ../_static/demonstration_assets/mapping/long_image.png
@@ -40,7 +40,7 @@ contains off-diagonal electronic couplings.
 To simulate the time evolution :math:`U(t) = e^{-iHt}`, we employ a product formula (Trotterization) approach as outlined in
 D. Motlagh et al. [#Motlagh2025]_. A key challenge in Trotterization is decomposing the potential energy matrix, V, in the Hamiltonian efficiently.
 Here, we use the fragmentation scheme proposed in the reference, grouping the terms :math:`\ket{j} \bra{i} \otimes V_{ji}` such
-that they differ by a fixed bitstring :math:`m`. The original grouping method results in N different fragments, which can be viewed as
+that they differ by a fixed bitstring :math:`m`. This grouping method results in N different fragments, which can be viewed as
 blocks of the potential energy matrix as shown in Figure 1. Each of these fragments can then be block-diagonalized by using only
 Clifford gates and implemented as a sequence of evolutions controlled by the corresponding electronic states.
 
@@ -49,13 +49,16 @@ Clifford gates and implemented as a sequence of evolutions controlled by the cor
     :width: 80%
     :target: javascript:void(0)
 
-    Figure 1: Fragmentation of the Vibronic Hamiltonian into N blocks based on bitstring.
+    Figure 1: (a) Fragmentation of the potential matrix :math:`V` into blocks :math:`H_m`. Note that :math:`H_0` captures the diagonal elements while :math:`H_{1,2,3}` represent specific off-diagonal couplings.
+    (b) Example of off-diagonal fragments being block-diagonalized using Clifford gates to simplify quantum circuit implementation.
 
 Defining the Hamiltonian
 ^^^^^^^^^^^^^^^^^^^^^^^^
 With the algorithmic approach defined, the next step is to instantiate the system we wish to benchmark.
 
-We don't need access to the full Hamiltonian coefficients to derive a reliable baseline; we only need structural parameters. By defining the number of modes, electronic states, and grid size, we can map out the cost topology of a real system without needing to generate and store the full Hamiltonian. Of course, access to the full Hamiltonian coefficients would allow us to further optimize costs by leveraging the commutativity of electronic parts. 
+We don't need access to the full Hamiltonian coefficients to derive a reliable baseline; we only need structural parameters. By defining the number of modes,
+electronic states, and grid size, we can map out the cost topology of a real system without needing to generate and store the full Hamiltonian. Of course,
+access to the full Hamiltonian coefficients would allow us to further optimize costs by leveraging the commutativity of electronic parts.
 
 As a case study, we select (NO)$_4$-Anth, a molecule created by introducing four N-oxyl radical fragments to
 anthracene. Proposed for its theoretically record-breaking singlet fission speed [#Pradhan2022]_, we use this molecule to define our simulation parameters:
@@ -138,7 +141,7 @@ def kinetic_circuit(mode_wires, phase_wires, scratch_wires, coeff_wires):
 
 ######################################################################
 # Similarly, we can define the structure for the potential energy fragments. For a QVC model truncated to quadratic terms,
-# each fragment will implement a monomial with a maximum degree of 2. 
+# each fragment will implement a monomial with a maximum degree of 2.
 #
 # .. math::
 #
@@ -285,7 +288,7 @@ def get_wire_labels(num_modes, num_states, k_grid, phase_prec):
 # a second-order `Suzuki-Trotter expansion <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.TrotterProduct.html>`_
 #
 # To construct the expansion, we loop over all fragments: the kinetic energy fragment is added once, while the
-# number of potential energy fragments is determined by the size of the electronic register N.
+# number of potential energy fragments is determined by the size of the electronic register.
 # This ensures that every block of the Hamiltonian identified in our fragmentation
 # scheme (Figure 1) is accounted for in the simulation.
 #
@@ -308,7 +311,7 @@ def circuit(num_modes, num_states, k_grid, taylor_degree, num_steps, phase_grad_
     fragments.append(kinetic_fragment) # Add Kinetic Energy Fragment
 
     num_fragments = 2**len(elec_wires)
-    for i in range(num_fragments):
+    for i in range(num_fragments): # Loop over all potential energy fragments
         frag_op = []
         for mode in range(num_modes):
             if taylor_degree >= 1:
@@ -347,6 +350,9 @@ print(qre.estimate(circuit)(num_modes, num_states, k_grid, taylor_degree, num_st
 # The higher gate counts in this estimation occur because we assume a dense Hamiltonian, whereas the reference work
 # leverages system-specific sparsity by only implementing non-zero coupling terms. These numbers can therefore be viewed as
 # a reliable upper bound for the cost of simulating (NO)$_4$-Anth dynamics.
+# Notably, even this upper bound demonstrates that the resource requirements for such a complex vibronic system are remarkably
+# low, suggesting that these non-adiabatic simulations are highly viable for early-generation fault-tolerant quantum computers.
+#
 #
 # Conclusions
 # -----------
