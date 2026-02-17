@@ -58,7 +58,7 @@ With the algorithmic approach defined, the next step is to instantiate the syste
 We don't need access to the full Hamiltonian coefficients to derive a reliable baseline; we only need structural parameters. By defining the number of modes, electronic states, and grid size, we can map out the cost topology of a real system without needing to generate and store the full Hamiltonian. Of course, access to the full Hamiltonian coefficients would allow us to further optimize costs by leveraging the commutativity of electronic parts. 
 
 As a case study, we select (NO)$_4$-Anth, a molecule created by introducing four N-oxyl radical fragments to
-anthracene. Proposed for its theoretically record-breaking singlet fission speed [#Pradhan2022]_, we use this system to define our simulation parameters:
+anthracene. Proposed for its theoretically record-breaking singlet fission speed [#Pradhan2022]_, we use this molecule to define our simulation parameters:
 """
 
 num_modes = 19  # Number of vibrational modes
