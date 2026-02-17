@@ -1,20 +1,21 @@
-r"""Resource Estimation for Simulating Spectroscopy
-=====================================================
+r"""Resource Estimation for X-ray Absorption and Photodynamic Therapy
+=====================================================================
 Spectroscopy is an indispensible measurement technique in chemistry and physics,
 providing fundamental insights into the structure and dynamics of molecules and materials. However,
 to extract these insights, it is often necessary to use simulations to interpret the experimentally
 measured spectra. In practice, this requires exciting the system with an external electromagnetic
 field---for example, visible light, or X-rays---and then simulating how the system's quantum state
-evolves over time in response to that, under the influence of its Hamiltonian. On classical computers,
+evolves over time in response to that, described by its Hamiltonian. On classical computers,
 this is notoriously expensive. The computational resources required to accurately model the excited
 states of a complex molecule or material scale exponentially with system size, often pushing even
 the most powerful supercomputers to their breaking point.
 
 Can quantum computers do better?
 
-In this demo, we will show you how to use PennyLane to answer that question, by directly
-calculating the actual resource requirements of key spectroscopy quantum algorithms through PennyLane's
-resource :mod:`estimator <pennylane.estimator>`. By estimating the costs of these algorithms now, we can
+In this demo, we answer that question by using **PennyLane's resource :mod:`estimator <pennylane.estimator>`
+to directly calculate the requirements for two distinct algorithmic approaches. Specifically, we calculate the resources for
+Trotter-based time evolution for X-Ray Absorption Spectroscopy (XAS) and Qubitization-based spectral filtering
+for Photodynamic Therapy (PDT). By estimating the costs of these algorithms now, we can
 ensure they can feasibly be executed on fault-tolerant hardware in the future.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
@@ -55,7 +56,7 @@ PennyLane's resource :mod:`estimator <pennylane.estimator>` to quantify the reso
 
 X-Ray Absorption Spectroscopy
 -----------------------------
-`XAS <https://pennylane.ai/qml/demos/tutorial_xas>`_ is a critical spectroscopic method used to study the electronic
+`XAS <https://pennylane.ai/qml/demos/tutorial_xas>`_ is a spectroscopic method used to study the electronic
 and local structural environment of specific elements within a material, by probing core-level electron excitations.
 For this simulation, we follow the algorithm established in Fomichev et al. (2025) [#Fomichev2025]_,
 which utilizes the `Compressed Double-Factorization (CDF) <https://pennylane.ai/qml/demos/tutorial_how_to_build_compressed_double_factorized_hamiltonians>`_
@@ -97,8 +98,10 @@ limno_ham = [qre.CDFHamiltonian(num_orbitals=i, num_fragments=i) for i in active
 import numpy as np
 
 eta = 0.05  # Lorentzian width (experimental broadening) in Hartree
-jmax = 100  # Number of time points (determines the smallest feature we can resolve in the spectrum)
-Hnorm = 2.0  # The effective spectral range over which our Hamiltonian has a nonzero spectral response, used to determine tau.
+jmax = 100  # Number of time points (determines the smallest feature
+            # we can resolve in the spectrum)
+Hnorm = 2.0 # The effective spectral range over which our Hamiltonian
+            # has a nonzero spectral response, used to determine tau.
 
 tau = np.pi / (2 * Hnorm)  # Sampling interval
 trotter_error = 1  # Our preset Trotter error constraint, in Hartree
@@ -209,6 +212,28 @@ for ham in limno_ham:
     toffolis.append(resource_counts.gate_counts["Toffoli"])
     qubits.append(resource_counts.total_wires)
 
+import matplotlib.pyplot as plt
+
+fig, ax1 = plt.subplots()
+
+ax1.set_xlabel('Number of Orbitals')
+ax1.set_ylabel('Qubits')
+ax1.plot(active_spaces, qubits, '-s', color="fuchsia", label="Qubits", linewidth=2.5, markersize=8)
+ax1.tick_params(axis='y')
+
+ax2 = ax1.twinx()
+ax2.set_ylabel('Toffoli Gates')
+ax2.set_yscale("log")
+ax2.plot(active_spaces, toffolis, '-s', color="goldenrod", label="Toffoli Gates", linewidth=2.5, markersize=8)
+ax2.tick_params(axis='y')
+
+lines_1, labels_1 = ax1.get_legend_handles_labels()
+lines_2, labels_2 = ax2.get_legend_handles_labels()
+ax1.legend(lines_1 + lines_2, labels_1 + labels_2, loc="upper left")
+
+plt.title("XAS Resource Estimation")
+fig.tight_layout()
+plt.show()
 ######################################################################
 # Let's visualize how these initial estimates scale with the system size.
 #
@@ -334,10 +359,10 @@ plt.tight_layout()
 plt.show()
 
 ######################################################################
-# The plot illustrates the effectiveness of our optimization strategy. The specialized basis rotation
-# (gold) delivers the most significant reduction, visibly correcting the slope of the cost
-# scaling compared to the baseline. The double phase trick then provides a final constant-factor
-# improvement (pink), bringing the total gate count even further down. This stepwise
+# The plot illustrates the effectiveness of our optimization strategy. We observe a consistent
+# reduction in resource requirements as we apply each layer of optimization.
+# The orbital rotation (gold) improves upon the baseline, while the
+# double phase trick (pink) further depresses the Toffoli count. This stepwise
 # reduction validates the importance of matching the gate synthesis strategy to specific algorithmic
 # requirements, engineering a lower simulation cost by targeting dominant bottlenecks.
 #
