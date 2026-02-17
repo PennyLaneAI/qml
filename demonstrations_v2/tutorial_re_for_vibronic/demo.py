@@ -67,7 +67,7 @@ k_grid = 4  # Number of qubits per mode (discretization)
 taylor_degree = 2  # Truncate to Quadratic Vibronic Coupling
 
 #################################################################################
-# In our model, we truncate the interaction terms for potential energy fragment to linear and quadratic terms only.
+# In our model, we truncate the interaction terms for potential energy fragments to linear and quadratic terms only.
 # This approximation, known as the Quadratic Vibronic Coupling (QVC) model, captures the dominant physical effects while simplifying the potential
 # energy circuits significantly.
 #
