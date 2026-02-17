@@ -346,7 +346,7 @@ print(qre.estimate(circuit)(num_modes, num_states, k_grid, taylor_degree, num_st
 # the Toffoli gate count is slightly higher.
 # The higher gate counts in this estimation occur because we assume a dense Hamiltonian, whereas the reference work
 # leverages system-specific sparsity by only implementing non-zero coupling terms. These numbers can therefore be viewed as
-# a reliable upper bound for the cost of simulating (NO):math:`_4`-Anth dynamics.
+# a reliable upper bound for the cost of simulating (NO)$_4$-Anth dynamics.
 #
 # Conclusions
 # -----------
