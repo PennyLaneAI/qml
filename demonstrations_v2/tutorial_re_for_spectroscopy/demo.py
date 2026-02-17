@@ -12,7 +12,7 @@ the most powerful supercomputers to their breaking point.
 
 Can quantum computers do better?
 
-In this demo, we answer that question by using **PennyLane's resource :mod:`estimator <pennylane.estimator>`
+In this demo, we answer that question by using PennyLane's resource :mod:`estimator <pennylane.estimator>`
 to directly calculate the requirements for two distinct algorithmic approaches. Specifically, we calculate the resources for
 Trotter-based time evolution for X-Ray Absorption Spectroscopy (XAS) and Qubitization-based spectral filtering
 for Photodynamic Therapy (PDT). By estimating the costs of these algorithms now, we can
@@ -260,6 +260,7 @@ plt.title("XAS Resource Estimation")
 fig.tight_layout()
 plt.show()
 
+################################################################
 # These results highlight that while qubit requirements (~100) are plausible for
 # early fault-tolerant devices, the gate requirements pose a challenge,
 # as the complexity approaches :math:`10^9` Toffolis.
@@ -530,15 +531,15 @@ print(resource_counts)
 #    for battery materials on a quantum computer”. `arXiv preprint arXiv:2506.15784
 #    (2025) <https://arxiv.org/abs/2506.15784>`__.
 #
-# .. [#Kunitsa2025]
-#
-#    Alexander Kunitsa et al., "Quantum Simulation of Electron Energy Loss Spectroscopy for Battery Materials".
-#    `arXiv preprint arXiv:2508.15935 (2025) <https://arxiv.org/abs/2508.15935>`__.
-#
 # .. [#Laoiza2025]
 #
 #    Ignacio Laoiza et al., "Simulating near-infrared spectroscopy on a quantum computer for enhanced chemical detection".
 #    `arXiv preprint arXiv:2504.10602 (2025) <https://arxiv.org/abs/2504.10602>`__.
+#
+# .. [#Kunitsa2025]
+#
+#    Alexander Kunitsa et al., "Quantum Simulation of Electron Energy Loss Spectroscopy for Battery Materials".
+#    `arXiv preprint arXiv:2508.15935 (2025) <https://arxiv.org/abs/2508.15935>`__.
 #
 # .. [#SOSStatePrep2024]
 #
