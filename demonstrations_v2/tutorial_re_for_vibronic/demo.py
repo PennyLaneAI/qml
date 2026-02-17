@@ -305,7 +305,7 @@ def circuit(num_modes, num_states, k_grid, taylor_degree, num_steps, phase_grad_
     kinetic_fragment = kinetic_circuit(
         mode_wires, phase_wires, scratch_wires, coeff_wires
     )
-    fragments.append(kinetic_fragment) # Add Kinetic Fragment
+    fragments.append(kinetic_fragment) # Add Kinetic Energy Fragment
 
     num_fragments = 2**len(elec_wires)
     for i in range(num_fragments):
