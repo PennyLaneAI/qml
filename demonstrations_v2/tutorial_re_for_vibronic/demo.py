@@ -87,8 +87,16 @@ taylor_degree = 2  # Truncate to Quadratic Vibronic Coupling
 #     loads coefficients using a `QROM (Quantum Read-Only Memory) <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_,
 #     computes the vibrational monomial product using quantum arithmetic, and applies a phase gradient.
 #
-# Let's first see what the circuit will look for the kinetic energy fragment:
-
+#
+# .. figure:: ../_static/demonstration_assets/vibronic_re/ke_circuit.png
+#     :align: center
+#     :width: 80%
+#     :target: javascript:void(0)
+#
+#     Figure 2: Circuit for implementing the exponential of kinetic energy fragment.
+#
+# Implementation of the kinetic energy fragment is illustrated in Figure 2. Let's see how this visual blueprint of the circuit translates into PennyLane code:
+#
 import pennylane.estimator as qre
 
 
@@ -148,14 +156,14 @@ def kinetic_circuit(mode_wires, phase_wires, scratch_wires, coeff_wires):
 #     V_{ji} = \sum_{r} c_{r} Q_{r} + \sum_{r} \tilde{c}_{r} Q_{r}^2,
 #
 # where :math:`c_r` and :math:`\tilde{c}_{r}` are the linear and quadratic coupling coefficients respectively. The exponential
-# of each term is implemented by the modular circuit shown in Figure 2.
+# of each term is implemented by the modular circuit shown in Figure 3.
 #
 # .. figure:: ../_static/demonstration_assets/vibronic_re/circuit_diagram.png
 #     :align: center
 #     :width: 80%
 #     :target: javascript:void(0)
 #
-#     Figure 2: Circuit for implementing the exponential of a monomial term in the potential energy fragment.
+#     Figure 3: Circuit for implementing the exponential of a monomial term in the potential energy fragment.
 #
 # The circuit executes the following steps:
 #
@@ -339,7 +347,7 @@ def circuit(num_modes, num_states, k_grid, taylor_degree, num_steps, phase_grad_
 #################################################################################
 # Finally, we can estimate the resource requirements for this full circuit using the estimate function.
 # To ensure the simulation reaches a total time of 100 fs with sufficient accuracy, we set the number of
-# Trotter steps to 500. This value is chosen based on benchmark data from Motlagh et al. [#Motlagh2025]_,
+# Trotter steps to 500. This value is chosen based on benchmark data from Motlagh et al.,
 # where this step count was shown to maintain reliable accuracy for a 100 fs simulation of the (NO)$_4$-Anth system.
 
 print(qre.estimate(circuit)(num_modes, num_states, k_grid, taylor_degree, num_steps=500))
