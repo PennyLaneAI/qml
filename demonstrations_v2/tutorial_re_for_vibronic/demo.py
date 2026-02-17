@@ -75,7 +75,7 @@ taylor_degree = 2  # Truncate to Quadratic Vibronic Coupling
 #
 # Constructing Circuits for Single Time-Step
 # ------------------------------------------
-# Next step is to define what the circuit will look like for evolving a single time step.
+# The next step is to define what the circuit will look like for evolving a single time step.
 # Based on the above defined fragmentation scheme, the single Trotter step is composed of two distinct types of
 # quantum circuits interleaved together:
 #
