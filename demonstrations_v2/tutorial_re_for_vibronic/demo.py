@@ -41,7 +41,7 @@ To simulate the time evolution :math:`U(t) = e^{-iHt}`, we employ a product form
 D. Motlagh et al. [#Motlagh2025]_. A key challenge in Trotterization is decomposing the Hamiltonian efficiently.
 Here, we use the fragmentation scheme proposed in the reference, grouping the terms :math:`\ket{j} \bra{i} \otimes V_{ji}` such
 that they differ by a fixed bitstring :math:`m`. The original grouping method results in N different fragments, which can be viewed as
-blocks of the potential energy matrix as shown in Figure:1. Each of these fragments can then be block-diagonalized by using only
+blocks of the potential energy matrix as shown in Figure 1. Each of these fragments can then be block-diagonalized by using only
 Clifford gates and implemented as a sequence of evolutions controlled by the corresponding electronic states.
 
 .. figure:: ../_static/demonstration_assets/vibronic_re/vibronic_fragments.png
