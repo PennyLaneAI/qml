@@ -230,7 +230,7 @@ for ham in limno_ham:
 # ^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # We optimize the resource estimation by overriding the default decompositions
-# in :mod:~.pennylane.estimator with specialized, high-performance subroutines tailored for this algorithm.
+# in :mod:`~.pennylane.estimator` with specialized, high-performance subroutines tailored for this algorithm.
 #
 # Optimization 1: Efficient Orbital Basis Transformation
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
