@@ -345,8 +345,8 @@ def circuit(num_modes, num_states, k_grid, taylor_degree, num_steps, phase_grad_
 
 
 #################################################################################
-# Finally, we can estimate the resource requirements for this full circuit using the estimate function.
-# To ensure the simulation reaches a total time of 100 fs with sufficient accuracy, we set the number of
+# Finally, we can estimate the resource requirements for this full circuit using the `estimate <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.estimate.estimate.html>`_
+# function. To ensure the simulation reaches a total time of 100 fs with sufficient accuracy, we set the number of
 # Trotter steps to 500. This value is chosen based on benchmark data from Motlagh et al.,
 # where this step count was shown to maintain reliable accuracy for a 100 fs simulation of the (NO)$_4$-Anth system.
 
