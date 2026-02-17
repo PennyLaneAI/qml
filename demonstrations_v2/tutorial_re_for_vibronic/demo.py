@@ -71,7 +71,7 @@ taylor_degree = 2  # Truncate to Quadratic Vibronic Coupling
 # This approximation, known as the Quadratic Vibronic Coupling (QVC) model, captures the dominant physical effects while simplifying the potential
 # energy circuits significantly.
 #
-# Constructing Circuits for Single Time-Step
+# Constructing Circuits for A Single Time Step
 # ------------------------------------------
 # The next step is to define what the circuit will look like for evolving a single time step.
 # Based on the above defined fragmentation scheme, the single Trotter step is composed of two distinct types of
