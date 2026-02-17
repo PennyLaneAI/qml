@@ -3,7 +3,7 @@ Quantifying Resource Requirements for Vibronic Dynamics Simulation
 ==================================================================
 
 Standard quantum chemistry often relies on the adiabatic Born-Oppenheimer approximation, assuming nuclei move on a single potential energy surface (PES)
-well-separated from others. But in the world of photochemistry, where molecules absorb light, and break bonds, this approximation
+that is well-separated from others. But in the world of photochemistry, where molecules absorb light and can undergo bond dissociation, this approximation
 breaks down. The timescales of electronic and nuclear motion become comparable, giving rise to vibronic coupling. This coupling, drives
 critical processes like photosynthesis, and solar cell efficiency and accurately simulating this requires a Hamiltonian that treats the dynamics
 of electrons and nuclei simultaneously.
