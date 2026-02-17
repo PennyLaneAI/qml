@@ -293,7 +293,7 @@ def get_wire_labels(num_modes, num_states, k_grid, phase_prec):
 
 #################################################################################
 # We now define the full circuit by assembling our fragments into
-# a second-order `Suzuki-Trotter expansion <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.TrotterProduct.html>`_
+# a second-order `Suzuki-Trotter expansion <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.templates.TrotterProduct.html>`_.
 #
 # To construct the expansion, we loop over all fragments: the kinetic energy fragment is added once, while the
 # number of potential energy fragments is determined by the size of the electronic register.
