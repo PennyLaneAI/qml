@@ -212,6 +212,9 @@ for ham in limno_ham:
     toffolis.append(resource_counts.gate_counts["Toffoli"])
     qubits.append(resource_counts.total_wires)
 
+######################################################################
+# Let's visualize how these initial estimates scale with the system size.
+
 import matplotlib.pyplot as plt
 
 fig, ax1 = plt.subplots()
@@ -234,14 +237,7 @@ ax1.legend(lines_1 + lines_2, labels_1 + labels_2, loc="upper left")
 plt.title("XAS Resource Estimation")
 fig.tight_layout()
 plt.show()
-######################################################################
-# Let's visualize how these initial estimates scale with the system size.
-#
-# .. figure:: ../_static/demonstration_assets/xas_re/xas_base.jpeg
-#     :align: center
-#     :width: 80%
-#     :target: javascript:void(0)
-#
+
 # These results highlight that while qubit requirements (~100) are plausible for
 # early fault-tolerant devices, the gate requirements pose a challenge,
 # as the complexity approaches :math:`10^9` Toffolis.
