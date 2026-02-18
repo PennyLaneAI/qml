@@ -264,7 +264,7 @@ def quadratic_circuit(
 
 #################################################################################
 # Finally, to ensure precise resource estimation, we explicitly label our wire registers. This avoids ambiguity
-# about which circuit operations are mapped to which quantum registers and ensures the resource estimator captures the
+# about which circuit operations are mapped to which quantum registers, so that the resource estimator captures the
 # full width of the circuit.
 
 def get_wire_labels(num_modes, num_states, k_grid, phase_prec):
