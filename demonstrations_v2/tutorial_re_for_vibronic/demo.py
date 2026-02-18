@@ -11,7 +11,7 @@ of electrons and nuclei simultaneously.
 However, modeling such dynamics is computationally demanding. Before we attempt to run such complex algorithms on future fault-tolerant hardware,
 we need to answer a fundamental question: Is this algorithm actually feasible?
 
-This demo is based on D. Motlagh et al. [#Motlagh2025]_, and will present how to estimate the resource requirements of a vibronic Hamiltonian simulation
+This demo is based on our paper [Quantum Algorithm for Vibronic Dynamics: Case Study on Singlet Fission Solar Cell Design](https://arxiv.org/abs/2411.13669) by D. Motlagh et al. [1], and will present how to estimate the resource requirements of a vibronic Hamiltonian simulation
 from the ground up. An efficient treatment of the potential energy will be presented. With the modular building blocks within PennyLane's resource
 :mod:`~.pennylane.estimator`, we can perform a feasibility analysis, determining exactly what resources are required to simulate
 these complex non-adiabatic processes on quantum hardware.
