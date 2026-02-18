@@ -56,7 +56,7 @@ Defining the Hamiltonian
 ^^^^^^^^^^^^^^^^^^^^^^^^
 With the algorithmic approach defined, the next step is to instantiate the system we wish to benchmark.
 
-We don't need access to the full Hamiltonian coefficients to derive a reliable baseline; we only need structural parameters. By defining the number of modes,
+We don't need access to the Hamiltonian coefficients to derive a reliable baseline; we only need structural parameters. By defining the number of modes,
 electronic states, and grid size, we can map out the cost topology of a real system without needing to generate and store the full Hamiltonian. Of course,
 access to the full Hamiltonian coefficients would allow us to further optimize costs by leveraging the commutativity of electronic parts.
 
@@ -85,7 +85,7 @@ taylor_degree = 2  # Truncate to Quadratic Vibronic Coupling
 #     to switch to the momentum basis, applies a phase rotation, and then switches back.
 # 2.  **Potential Energy Fragments:** These implement the interaction terms. For each fragment, the algorithm
 #     loads coefficients using a `QROM (Quantum Read-Only Memory) <https://pennylane.ai/qml/demos/tutorial_intro_qrom>`_,
-#     computes the vibrational monomial product using quantum arithmetic, and applies a phase gradient.
+#     computes the vibrational monomial product using quantum arithmetic, and applies a `phase gradient <https://pennylane.ai/compilation/phase-gradient/>`_.
 #
 #
 # .. figure:: ../_static/demonstration_assets/vibronic_re/ke_circuit.png
