@@ -100,7 +100,6 @@ taylor_degree = 2  # Truncate to Quadratic Vibronic Coupling
 #
 import pennylane.estimator as qre
 
-
 def kinetic_circuit(mode_wires, phase_wires, scratch_wires, coeff_wires):
     ops = []
     num_phase_wires = len(phase_wires)
