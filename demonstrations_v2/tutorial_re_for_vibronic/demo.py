@@ -96,7 +96,7 @@ taylor_degree = 2  # Truncate to Quadratic Vibronic Coupling
 #
 #     Figure 2: Circuit for implementing the exponential of kinetic energy fragment.
 #
-# Implementation of the kinetic energy fragment is illustrated in Figure 2. Let's see how this visual blueprint of the circuit translates into PennyLane code:
+# The implementation of the kinetic energy fragment is illustrated in Figure 2. Let's see how this visual blueprint of the circuit translates into PennyLane code:
 #
 import pennylane.estimator as qre
 
