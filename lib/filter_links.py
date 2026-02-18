@@ -3,38 +3,19 @@
 """
 Pandoc filter to process intersphinx links.
 """
-import time
-from typing import Any, Dict
-
-import sphobjinv as soi
+from inventories import IntersphinxInventories
 from pandocfilters import toJSONFilter, Link, RawInline
-from requests import exceptions as requests_exceptions
 
 DEMOS_URL = "https://pennylane.ai/qml/demos/"
-PL_OBJ_INV_URL = "https://docs.pennylane.ai/en/stable/"
-CAT_OBJ_INV_URL = "https://docs.pennylane.ai/projects/catalyst/en/stable/"
-
-def load_inventory_with_retry(url: str, retries: int = 3, delay: float = 1.0) -> soi.Inventory:
-    """Fetch an inventory with simple retry logic for transient HTTP errors."""
-    for attempt in range(1, retries + 1):
-        try:
-            return soi.Inventory(url=url)
-        except requests_exceptions.HTTPError:
-            if attempt == retries:
-                raise
-            time.sleep(delay * attempt)
-
-def make_named_inventory(inv: soi.Inventory) -> Dict[str, Any]:
-    """Make a dictionary of objects from an inventory."""
-    return {item.name: item for item in inv.objects}
+inventories = IntersphinxInventories()
 
 def process_link(text: str, key: str) -> tuple[str, str]:
     """Process a link to a PennyLane or Catalyst object."""
     # Check if it's a PennyLane object. These are more popular, so check first.
-    if key in pl_obj_inv.keys():
-        return text if text else pl_obj_inv[key].dispname, PL_OBJ_INV_URL + pl_obj_inv[key].uri
-    if key in cat_obj_inv.keys():
-        return text if text else cat_obj_inv[key].dispname, CAT_OBJ_INV_URL + cat_obj_inv[key].uri
+    if key in inventories.pennylane.keys():
+        return text if text else inventories.pennylane[key].dispname, inventories.pennylane_base_url + inventories.pennylane[key].uri
+    if key in inventories.catalyst.keys():
+        return text if text else inventories.catalyst[key].dispname, inventories.catalyst_base_url + inventories.catalyst[key].uri
     return text, key
 
 def process_doc_link(text: str, key: str) -> tuple[str, str]:
@@ -95,6 +76,4 @@ def filter_links(key, value, format, _):
                 return Link(["",[],[]], pandocify_string(name), [link.removesuffix("$"),""])
 
 if __name__ == '__main__':
-    pl_obj_inv = make_named_inventory(load_inventory_with_retry(PL_OBJ_INV_URL+"objects.inv"))
-    cat_obj_inv = make_named_inventory(load_inventory_with_retry(CAT_OBJ_INV_URL+"objects.inv"))
     toJSONFilter(filter_links)
