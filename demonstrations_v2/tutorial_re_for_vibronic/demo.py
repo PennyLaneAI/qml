@@ -25,7 +25,7 @@ these complex non-adiabatic processes on quantum hardware.
 
 The Vibronic Hamiltonian
 ------------------------
-To perform this feasibility check, we must first define the system. We use the vibronic coupling Hamiltonian,
+To assess feasibility, we must first define the system. We use the vibronic coupling Hamiltonian,
 which describes a set of :math:`N` electronic states interacting with :math:`M` vibrational modes.
 
 Unlike standard electronic structure problems, this model mixes discrete electronic levels with continuous
