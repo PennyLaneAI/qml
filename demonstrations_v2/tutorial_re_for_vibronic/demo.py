@@ -378,7 +378,7 @@ print(qre.estimate(circuit)(num_modes, num_states, k_grid, taylor_degree, num_st
 # .. [#Motlagh2025]
 #
 #      D. Motlagh et al., "Quantum Algorithm for Vibronic Dynamics: Case Study on Singlet Fission Solar Cell Design".
-#      `arXiv preprint arXiv:2411.13669 (2014) <https://arxiv.org/abs/2411.13669>`__.
+#      `arXiv preprint arXiv:2411.13669 (2025) <https://arxiv.org/abs/2411.13669>`__.
 #
 # .. [#Pradhan2022]
 #
