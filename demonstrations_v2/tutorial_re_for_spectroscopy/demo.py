@@ -43,7 +43,7 @@ To measure this observable on a quantum computer, we rely on a standard algorith
   Figure 1: *Circuit for XAS Simulation*
 
 As we will see, the dominant cost in this circuit comes from the controlled time evolution block, the efficiency of which
-thus dictates the feasibility of our algorithm. This cost is set by the physics of
+dictates the feasibility of our algorithm. This cost is set by the physics of
 the specific spectroscopy we are after, as well as the details of our implementation strategy.
 
 While the physical problem of interest dictates the type of Hamiltonian we must use (such as electronic, vibrational),
