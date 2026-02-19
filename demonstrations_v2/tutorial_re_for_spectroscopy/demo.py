@@ -159,7 +159,7 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
 ######################################################################
 # Estimating the Resources
 # ^^^^^^^^^^^^^^^^^^^^^^^^
-# With the circuit fully defined, we turn to cost estimation. Before generating counts, however,
+# With the circuit fully defined, we turn to resource estimation. Before generating counts, however,
 # we must select an implementation strategy for the rotation gates, as this choice heavily influences
 # the final resource overhead.
 #
