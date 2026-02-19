@@ -72,8 +72,8 @@ than on the values of the one- and two-electron integrals themselves. This makes
 that we can bypass the tedious construction of the exact Hamiltonian, and instead use those two high-level attributes to
 define a specialized
 `compact Hamiltonian <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.compact_hamiltonian.CDFHamiltonian.html>`__
-representation offered by PennyLane. Creating and using the compact Hamiltonian is a lot simpler, but it still
-retains the high accuracy we need for our resource estimation. In this case, we adopt the commonly used rule of thumb that
+representation offered by PennyLane. Creating and using the compact Hamiltonian is much simpler, and it still
+provides the high accuracy we need for our resource estimation. In this case, we adopt the commonly used rule of thumb that
 the number of fragments needed for a high-fidelity CDF factorization is roughly equal to the number of spatial orbitals
 in the Hamiltonian.
 """
