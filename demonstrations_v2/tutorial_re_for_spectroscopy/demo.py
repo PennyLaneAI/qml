@@ -227,28 +227,16 @@ fig, ax1 = plt.subplots()
 
 ax1.set_xlabel("Number of Orbitals")
 ax1.set_ylabel("Qubits")
-ax1.plot(
-    active_spaces,
-    qubits,
-    "-s",
-    color="fuchsia",
-    label="Qubits",
-    linewidth=2.5,
-    markersize=8,
+ax1.plot(active_spaces, qubits,
+    "-s", color="fuchsia", label="Qubits", linewidth=2.5, markersize=8,
 )
 ax1.tick_params(axis="y")
 
 ax2 = ax1.twinx()
 ax2.set_ylabel("Toffoli Gates")
 ax2.set_yscale("log")
-ax2.plot(
-    active_spaces,
-    toffolis,
-    "-s",
-    color="goldenrod",
-    label="Toffoli Gates",
-    linewidth=2.5,
-    markersize=8,
+ax2.plot(active_spaces, toffolis,
+    "-s", color="goldenrod", label="Toffoli Gates", linewidth=2.5, markersize=8,
 )
 ax2.tick_params(axis="y")
 
