@@ -272,7 +272,7 @@ plt.show()
 # state into these different bases.
 #
 # In PennyLane, this basis change is modelled by the ``BasisRotation``
-# class. By default, the estimator decomposes this operation using a generic, standard decomposition strategy,
+# operator. By default, the estimator computes its resources using a standard decomposition strategy,
 #
 # Here, we replace the generic standard decomposition
 # with the specialized, lower-cost circuit described in `Kivlichan et al. (2018)
