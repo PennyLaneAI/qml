@@ -59,6 +59,11 @@
             "type": "demonstration",
             "id": "tutorial_re_for_qubitizedQPE",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_estimator_hamiltonian_simulation_gqsp",
+            "weight": 1.0
         }
     ]
 }
