@@ -180,7 +180,7 @@ for rotation gate synthesis using Repeat-Until-Success circuits [#Alex2014]_,
 # Therefore, the cost of a rotation becomes identical to the cost of a quantum adder.
 #
 # To adopt this more efficient strategy, we configure the estimator to use the phase gradient trick
-# by leveraging :class:`~.pennylane.resource.ResourceConfig`.
+# with the use of a :class:`pennylane.estimator.resource_config.ResourceConfig`.
 #
 
 
