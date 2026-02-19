@@ -392,8 +392,8 @@ plt.show()
 # Photodynamic Therapy Applications
 # ---------------------------------
 # Having shown how to estimate resources for an XAS spectroscopic workflow, let's see how we can
-# apply these tools to a different application, **Photodynamic Therapy (PDT)**, where we need to
-# estimate the cumulative absorption for a strongly correlated photosensitizer molecule. [#Zhou2025]_
+# apply these tools to a different application: **Photodynamic Therapy (PDT)**.
+# Here, we need to estimate the cumulative absorption for a strongly correlated photosensitizer molecule [#Zhou2025]_.
 #
 # This application requires a different algorithmic approach. In XAS, we simulated the system's time evolution
 # using Trotterization to recover the full spectrum. In PDT, we will instead employ a spectral filtering approach
