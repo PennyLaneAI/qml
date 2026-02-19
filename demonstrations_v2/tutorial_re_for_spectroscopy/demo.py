@@ -172,8 +172,7 @@ for rotation gate synthesis using Repeat-Until-Success circuits [#Alex2014]_,
 # The phase gradient trick is algorithmically superior for this application because it allows
 # us to implement rotations with deterministic cost using arithmetic, rather than relying on
 # probabilistic synthesis sequences. This results in better scaling as the precision requirements increase.
-#
-# The phase gradient method relies on a specific
+# This method relies on a specific
 # resource state (the phase gradient state) that encodes phase information in its amplitudes.
 # A unique mathematical property of this state is that adding an integer $k$ to the register
 # mathematically induces a phase rotation of angle :math:`\theta \propto k`.
