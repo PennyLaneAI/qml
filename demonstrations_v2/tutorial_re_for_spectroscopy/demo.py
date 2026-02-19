@@ -16,7 +16,7 @@ In this demo, we answer that question by using PennyLane's resource :mod:`estima
 to directly calculate the requirements for two distinct algorithmic approaches. Specifically, we calculate the resources for
 Trotter-based time evolution for X-Ray Absorption Spectroscopy (XAS) and Qubitization-based spectral filtering
 for Photodynamic Therapy (PDT). By estimating the costs of these algorithms now, we can
-ensure they can feasibly be executed on fault-tolerant hardware in the future.
+best prepare them for execution on future fault-tolerant hardware.
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/OGthumbnail_how_to_build_spin_hamiltonians.png
     :align: center
