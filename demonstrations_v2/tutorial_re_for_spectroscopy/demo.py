@@ -271,7 +271,7 @@ plt.show()
 # To simulate time evolution, the quantum circuit must repeatedly transform the system's
 # state into these different bases.
 #
-# In PennyLane, this basis change is modeled by the :class:`~.pennylane.resource.BasisRotation`
+# In PennyLane, this basis change is modelled by the ``BasisRotation``
 # class. By default, the estimator decomposes this operation using a generic, standard decomposition strategy,
 #
 # Here, we replace the generic standard decomposition
