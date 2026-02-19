@@ -256,7 +256,7 @@ plt.show()
 # Notice that these are estimates for a single shot; the total cost for the full algorithm will scale
 # linearly with the number of samples required, amplifying the gate costs even further.
 #
-# Can we do better?
+# However, we can do better.
 #
 # Optimizing the Estimates
 # ^^^^^^^^^^^^^^^^^^^^^^^^
