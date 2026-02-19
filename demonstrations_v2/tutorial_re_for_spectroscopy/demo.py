@@ -313,7 +313,7 @@ for ham in limno_ham:
 # Optimization 2: Double Phase Trick
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Second, we implement the double phase trick for the Controlled-RZ (CRZ) gates.
-# As described in Section III A of Fomichev et al. (2025) [#Fomichev2025]_, this optimization
+# As described in Section III.A of Fomichev et al. (2025) [#Fomichev2025]_, this optimization
 # reduces the cost of the controlled rotations inside the Trotter steps by replacing each controlled
 # rotation by an uncontrolled one plus two CNOT gates.
 
