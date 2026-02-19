@@ -164,7 +164,7 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
 # the final resource overhead.
 #
 # By default, PennyLane's :mod:`estimator <pennylane.estimator>` provides the resources
-for rotation gate synthesis using Repeat-Until-Success circuits [#Alex2014]_,
+# for rotation gate synthesis using Repeat-Until-Success circuits [#Alex2014]_,
 # which decompose rotations into sequences of probabilistic T-gates. While effective for general circuits,
 # the algorithm in Fomichev et al. (2025) [#Fomichev2025]_ used instead the `phase gradient method <https://pennylane.ai/compilation/phase-gradient/>`__ proposed
 # by Craig Gidney [#Gidney2018]_.
@@ -191,11 +191,6 @@ def single_qubit_rotation(precision):
             qre.resource_rep(qre.SemiAdder, {"max_register_size": num_bits + 1})
         )
     ]
-
-
-######################################################
-# We can now set up the resource estimation with this custom rotation gate decomposition using the ``set_decomp`` function
-# and also set the targeted precision:
 
 cfg = qre.ResourceConfig()
 cfg.set_decomp(qre.RX, single_qubit_rotation)
@@ -377,7 +372,8 @@ plt.show()
 # using Trotterization to recover the full spectrum. In PDT, we will instead employ a spectral filtering approach
 # to directly read out how much of the spectral internsity falls within a predetermined window (typically 700–850 nm).
 #
-# To do the filtering, we will use generalized quantum signal processing (GQSP), combining it with a qubitization-based
+# To do the filtering, we will use `generalized quantum signal processing (GQSP) <https://pennylane.ai/qml/demos/tutorial_estimator_hamiltonian_simulation_gqsp>`_,
+# combining it with a qubitization-based
 # time evolution implementation. Specifically, we will use a walk operator constructed from the tensor hypercontracted
 # Hamiltonian, which allows for a highly compact block encoding. As with XAS, we can use the
 # `compact Hamiltonian <https://docs.pennylane.ai/en/stable/code/api/pennylane.estimator.compact_hamiltonian.THCHamiltonian.html>`__
@@ -481,7 +477,7 @@ print(resource_counts)
 # The estimated resources of 174 qubits and :math:`1.96 \times 10^7` Toffoli gates
 # align with the reference values of 177 qubits and :math:`2.72 \times 10^7` Toffoli gates.
 # The small differences can be attributed to different tunable parameters being used.
-# We encourage users to explore further by testing other systems from the reference or analyzing how the resources scale
+# We encourage you to explore further by testing other systems from the reference or analyzing how the resources scale
 # with different error budgets, using the parameter tuning techniques detailed in our
 # `qubitization demo <https://pennylane.ai/qml/demos/tutorial_re_for_qubitizedQPE>`_, or even by trying to use
 # Trotterization instead.
@@ -492,7 +488,7 @@ print(resource_counts)
 # the time-domain simulation of X-ray absorption (XAS) and the spectral filtering approach for photodynamic therapy (PDT).
 #
 # While PennyLane's resource :mod:`estimator <pennylane.estimator>` was able to give us initial estimates with
-# minimum input information---including with only a high-level description of the Hamiltonian!---we also showed how
+# minimum input information---including only a high-level description of the Hamiltonian!---we also showed how
 # versatile it can be. Moving beyond the standard implementations, we were able to quickly and easily implement
 # algorithmic optimizations from the literature, namely the phase gradient trick and a specialized basis rotation implementation,
 # and immediately see their impact on the resource counts.
