@@ -384,8 +384,8 @@ plt.show()
 ######################################################################
 # The plot illustrates the effectiveness of our optimization strategy. We observe a consistent
 # reduction in resource requirements as we apply each layer of optimization.
-# The orbital rotation (gold) improves upon the baseline, while the
-# double phase trick (pink) further depresses the Toffoli count. This stepwise
+# The efficient orbital rotation provides improvements compared to the baseline,
+# and use of the double phase trick further depresses the Toffoli count. This stepwise
 # reduction validates the importance of matching the gate synthesis strategy to specific algorithmic
 # requirements, engineering a lower simulation cost by targeting dominant bottlenecks.
 #
