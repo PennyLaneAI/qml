@@ -163,7 +163,8 @@ def xas_circuit(hamiltonian, num_trotter_steps, measure_imaginary=False, num_sla
 # we must select an implementation strategy for the rotation gates, as this choice heavily influences
 # the final resource overhead.
 #
-# PennyLane's default compiler synthesizes rotation gates using Repeat-Until-Success circuits [#Alex2014]_,
+# By default, PennyLane's :mod:`estimator <pennylane.estimator>` provides the resources
+for rotation gate synthesis using Repeat-Until-Success circuits [#Alex2014]_,
 # which decompose rotations into sequences of probabilistic T-gates. While effective for general circuits,
 # the algorithm in Fomichev et al. (2025) [#Fomichev2025]_ used instead the `phase gradient method <https://pennylane.ai/compilation/phase-gradient/>`__ proposed
 # by Craig Gidney [#Gidney2018]_.
