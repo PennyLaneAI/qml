@@ -27,13 +27,13 @@ LARGE_THUMBNAIL_FILENAME = "large_thumbnail"
 app = typer.Typer(
     name="demo",
     no_args_is_help=True,
-    help="PennyLane Demo build tool - Create, build, and manage PennyLane demos.",
+    help="PennyLane demo build tool - Create, build, and manage PennyLane demos.",
 )
 
 
 @app.command()
 def help():
-    print("PennyLane Demo build tool - Create, build, and manage PennyLane demos.")
+    print("PennyLane demo build tool - Create, build, and manage PennyLane demos.")
 
 
 @app.command()
