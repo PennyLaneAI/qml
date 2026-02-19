@@ -9,7 +9,7 @@ on:
   workflow_call:
     inputs:
       branch:
-        description: The QML branch that is being built.
+        description: The branch that is being built.
         type: string
         required: true
       dev:
@@ -147,7 +147,7 @@ jobs:
           else
             DEV_FLAG="--no-dev"
           fi
-          qml build \
+          demo build \
           --no-execute \
           --format html \
           --keep-going \
