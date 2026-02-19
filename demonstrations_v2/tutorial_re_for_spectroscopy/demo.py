@@ -337,33 +337,24 @@ for ham in limno_ham:
     )
     toffolis_final.append(res.gate_counts["Toffoli"])
 
+##################################################################
 # Let's visualize the cumulative impact of our optimizations:
+
 import matplotlib.pyplot as plt
 
 plt.plot(active_spaces, toffolis, "o-", label="Baseline", color="gray", linewidth=2.5)
-plt.plot(
-    active_spaces,
-    toffolis_opt1,
-    "^-",
-    label="Optimization 1 (Basis Rot.)",
-    color="goldenrod",
-    linewidth=2.5,
+plt.plot(active_spaces, toffolis_opt1,
+    "^-", label="Optimization 1 (Basis Rot.)", color="goldenrod", linewidth=2.5,
 )
-plt.plot(
-    active_spaces,
-    toffolis_final,
-    "*-",
-    label="Fully Optimized",
-    color="fuchsia",
-    linewidth=2.5,
-    markersize=8,
+plt.plot(active_spaces, toffolis_final,
+    "*-", label="Fully Optimized", color="fuchsia", linewidth=2.5, markersize=8,
 )
 
 plt.xlabel("Number of Orbitals", fontsize=14)
-plt.ylabel("Toffoli Gate Count", fontsize=14)
+plt.ylabel("Toffoli Gates", fontsize=14)
 plt.yscale("log")
 plt.tick_params(axis="both", which="both", direction="in", labelsize=12)
-plt.title("XAS Resource Estimation Comparison", fontsize=16)
+plt.title("XAS Resource Estimates", fontsize=16)
 plt.legend(frameon=False, fontsize=10)
 plt.tight_layout()
 plt.show()
