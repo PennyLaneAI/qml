@@ -274,7 +274,7 @@ plt.show()
 # In PennyLane, this basis change is modelled by the ``BasisRotation``
 # operator. By default, the estimator computes its resources using a standard decomposition strategy,
 #
-# Here, we replace the generic standard decomposition
+# Here, we replace the generic decomposition
 # with the specialized, lower-cost circuit described in `Kivlichan et al. (2018)
 # <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.120.110501>`_.
 
