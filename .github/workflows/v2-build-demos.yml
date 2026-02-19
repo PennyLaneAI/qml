@@ -189,7 +189,7 @@ jobs:
 
       - name: Build demos
         run: |
-          qml build \
+          demo build \
             --format json \
             ${{ inputs.execute && '--execute' || '--no-execute' }} \
             ${{ inputs.keep-going && '--keep-going' || '--no-keep-going' }} \
