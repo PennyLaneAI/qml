@@ -19,7 +19,7 @@ For more information on how to use PennyLane's QSVT functionality checkout our o
 - `QSVT in Practice <tutorial_apply_qsvt>`_
 - `How to implement QSVT on hardware <tutorial_qsvt_hardware>`_
 
-It's important to estimate the quantum resource cost of running the QSVT algorithm, for any system size.
+It's important to understand the quantum resource cost of the QSVT algorithm for a variety of system sizes.
 Fortunately, PennyLane's resource :mod:`~.pennylane.estimator` module makes that easy, even if the QSVT problem
 you're interested in is too big to simulate right now. If you are new to resource estimation in PennyLane or need
 a quick refresher, checkout this demo on `how to use PennyLane for Resource Estimation <re_how_to_use_pennylane_for_resource_estimation>`_.
