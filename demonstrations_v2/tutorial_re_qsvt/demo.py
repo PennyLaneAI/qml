@@ -85,8 +85,8 @@ resources = qre.estimate(circ, gate_set=gs)()
 print(resources)
 
 ##############################################################################
-# This works great for small systems. For larger system sizes, we can use some of the other functionality
-# from the :mod:`~.pennylane.estimator` module designed for scale to estimate the cost of QSVT.
+# This works well for small systems. For larger system sizes, we can use some of the other functionalities
+# from the :mod:`~.pennylane.estimator` module that are designed for scale to estimate the cost of QSVT.
 #
 # Resources from an Estimator Workflow
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
