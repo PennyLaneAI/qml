@@ -88,9 +88,16 @@ methods is an active area of research. The :class:`~pennylane.qsvt` function in 
 
 Let's look at a simple example of how quantum signal processing can be implemented using
 PennyLane. We aim to perform a transformation by the Legendre polynomial
-:math:`(5 x^3 - 3x)/2`.
+:math:`P(a) = (5 x^3 - 3x)/2`.
 As you will soon learn, QSP can be viewed as a special case of QSVT. We thus use the :func:`~.pennylane.qsvt`
-operation to construct the output matrix and compare the resulting transformation to the target polynomial.
+operation to construct the matrix representation of the QSP transformation. In the code below, we build one matrix
+for each value of :math:`a` that we test. If the top-left entry of the matrix matches :math:`P(a)` for all
+input values, then our QSP transformation successfully implements the desired matrix,
+
+.. math:: \begin{pmatrix}
+    P(a) & *\\
+    * & *
+    \end{pmatrix}.
 """
 
 import pennylane as qml
@@ -142,7 +149,8 @@ plt.show()
 #
 # Any such method of encoding a matrix inside a larger unitary is known as a **block encoding**. In our construction,
 # the matrix :math:`A` is encoded in the top-left block, hence the name. PennyLane supports
-# the :class:`~pennylane.BlockEncode` operation that follows the construction above. Let's test
+# the :class:`~pennylane.BlockEncode` operation that follows the construction above. This operation serves to block-ecode
+# both scalars and matrices. Let's test
 # it out with an example encoding first a square matrix:
 
 # square matrix
@@ -240,10 +248,11 @@ print(np.round(qml.matrix(pcp), 2))
 # implemented in polynomial time in the number of qubits, the resulting
 # quantum algorithm will also run in polynomial time. This is very powerful.
 #
-# In PennyLane, implementing the QSVT transformation is as simple as using :func:`~.pennylane.qsvt`. Let's revisit
+# In PennyLane, implementing a quantum circuit for the QSVT transformation is as simple as using :func:`~.pennylane.qsvt`.
+# Under the hood, it uses :class:`~pennylane.BlockEncode` and :class:`~pennylane.PCPhase` operations to implement QSVT as described
+# in the equations above. Now let's revisit
 # our previous example and transform a matrix according to the same Legendre polynomial. We'll use a diagonal matrix
-# with eigenvalues evenly distributed between -1 and 1, allowing us to easily check the transformation. This time,
-# let's see the circuit that implements QSVT:
+# with eigenvalues evenly distributed between -1 and 1, allowing us to easily check the transformation.
 
 eigvals = np.linspace(-1, 1, 16)
 A = np.diag(eigvals)  # 16-dim matrix
@@ -253,7 +262,8 @@ qml.draw_mpl(qml.transforms.decompose(qml.qsvt))(A,  target_poly, encoding_wires
 plt.show()
 
 ###############################################################################
-# Now, let's see how each eigenvalue is transformed by the alternating operators of QSVT:
+# Now, let's see how each eigenvalue of :math:`A` is transformed by QSVT. We will plot the original eigenvalues
+# and the eigenvalues of the 
 
 U_A = qml.matrix(qml.qsvt, wire_order=wire_order)(
     A, target_poly, encoding_wires=wire_order, block_encoding="embedding"
