@@ -56,11 +56,6 @@ import pennylane as qml
 from pennylane import numpy as pnp
 import numpy as np
 import matplotlib.pyplot as plt
-import functools
-
-import numpy as np
-from scipy.optimize import minimize
-
 
 # number of qubits for the Hamiltonian
 n_qubits = 2
@@ -76,7 +71,6 @@ alphas = np.random.normal(0, 0.5, size=n_qubits)
 hamiltonian = qml.sum(
     *[qml.PauliZ(wires=i) @ qml.PauliZ(wires=i + 1) for i in range(n_qubits - 1)]
 ) + qml.dot(alphas, [qml.PauliX(wires=i) for i in range(n_qubits)])
-
 
 ######################################################################
 # 2. Creating random initial states
@@ -97,12 +91,12 @@ hamiltonian = qml.sum(
 
 from scipy.stats import unitary_group
 
-n_qubits = 2
-n_random_states = 10
+n_random_states = 100
 
-random_prod_unis = [ [unitary_group.rvs(2) for _ in range(n_qubits)] for _ in range(n_random_states)]
-
-initial_params = 0.1*pnp.random.random(size=n_qubits*2-1, requires_grad=True)
+# Generate several random unitaries
+random_unitaries = unitary_group.rvs(2**n_qubits, n_random_states)
+# Take the first column of each unitary as a random state
+random_states = [random_unitary[:, 0] for random_unitary in random_unitaries]
 
 ######################################################################
 # .. note ::
