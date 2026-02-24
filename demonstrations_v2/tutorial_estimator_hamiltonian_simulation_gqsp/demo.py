@@ -19,6 +19,11 @@ can be found in our other demos:
 - `Using PennyLane and Qualtran to analyze how QSP can improve measurements of molecular properties <tutorial_qksd_qsp_qualtran>`_
 - `Intro to QSVT <tutorial_intro_qsvt>`_
 
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-hamiltonian-simulation-with-gqsp-open-graph.png
+    :align: center
+    :width: 70%
+    :target: javascript:void(0)
+
 Hamiltonian simulation with GQSP
 --------------------------------
 QSP is a method for performing polynomial transformations of
