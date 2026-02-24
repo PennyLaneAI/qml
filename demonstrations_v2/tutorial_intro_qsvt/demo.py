@@ -88,7 +88,7 @@ methods is an active area of research. The :class:`~pennylane.qsvt` function in 
 
 Let's look at a simple example of how quantum signal processing can be implemented using
 PennyLane. We aim to perform a transformation by the Legendre polynomial
-:math:`P(a) = (5 x^3 - 3x)/2`.
+:math:`P(a) = (5 a^3 - 3a)/2`.
 As you will soon learn, QSP can be viewed as a special case of QSVT. We thus use the :func:`~.pennylane.qsvt`
 operation to construct the matrix representation of the QSP transformation. In the code below, we build one matrix
 for each value of :math:`a` that we test. If the top-left entry of the matrix matches :math:`P(a)` for all
@@ -263,7 +263,7 @@ plt.show()
 
 ###############################################################################
 # Now, let's see how each eigenvalue of :math:`A` is transformed by QSVT. We will plot the original eigenvalues
-# and the eigenvalues of the 
+# and the corresponding eigenvalues of the top-left block of the QSVT matrix. 
 
 U_A = qml.matrix(qml.qsvt, wire_order=wire_order)(
     A, target_poly, encoding_wires=wire_order, block_encoding="embedding"
