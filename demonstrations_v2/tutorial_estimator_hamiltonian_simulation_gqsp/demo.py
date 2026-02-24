@@ -9,6 +9,11 @@ signal processing (QSP) [#qsp]_. Quantifying the precise constant-factor cost of
 as we need to compute the cost of block encoding Hamiltonians and determine the correct number of phase factors as
 a function of evolution time and target errors. Well, at least it *used* to be challenging.
 
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-hamiltonian-simulation-with-gqsp-open-graph.png
+    :align: center
+    :width: 60%
+    :target: javascript:void(0)
+
 In this demo, we use PennyLane's :mod:`~.pennylane.estimator` module to compute the cost of Hamiltonian
 simulation with QSP, making it simple to determine how useful it is for your application of interest. We focus
 on the modern framework of **generalized quantum signal processing (GQSP)** and study examples of resource estimation
@@ -18,11 +23,6 @@ can be found in our other demos:
 - `Function Fitting using Quantum Signal Processing <function_fitting_qsp>`_
 - `Using PennyLane and Qualtran to analyze how QSP can improve measurements of molecular properties <tutorial_qksd_qsp_qualtran>`_
 - `Intro to QSVT <tutorial_intro_qsvt>`_
-
-.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-hamiltonian-simulation-with-gqsp-open-graph.png
-    :align: center
-    :width: 70%
-    :target: javascript:void(0)
 
 Hamiltonian simulation with GQSP
 --------------------------------
