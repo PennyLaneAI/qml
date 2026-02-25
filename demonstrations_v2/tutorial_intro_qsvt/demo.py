@@ -149,7 +149,7 @@ plt.show()
 #
 # Any such method of encoding a matrix inside a larger unitary is known as a **block encoding**. In our construction,
 # the matrix :math:`A` is encoded in the top-left block, hence the name. PennyLane supports
-# the :class:`~pennylane.BlockEncode` operation that follows the construction above. This operation serves to block-ecode
+# the :class:`~pennylane.BlockEncode` operation that follows the construction above. This operation serves to block-encode
 # both scalars and matrices. Let's test
 # it out with an example encoding first a square matrix:
 
