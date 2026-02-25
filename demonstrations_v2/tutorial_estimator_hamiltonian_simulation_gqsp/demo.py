@@ -11,7 +11,7 @@ a function of evolution time and target errors. Well, at least it *used* to be c
 
 .. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-hamiltonian-simulation-with-gqsp-open-graph.png
     :align: center
-    :width: 60%
+    :width: 50%
     :target: javascript:void(0)
 
 In this demo, we use PennyLane's :mod:`~.pennylane.estimator` module to compute the cost of Hamiltonian
