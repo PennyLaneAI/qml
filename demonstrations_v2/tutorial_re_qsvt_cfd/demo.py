@@ -327,7 +327,7 @@ print(res)
 # Along the way we showcased PennyLane's :mod:`~.pennylane.estimator` module to determine the resource
 # requirements for **matrix inversion by QSVT**. You learned how to build complex circuits from our library of
 # primitives, making resource estimation as simple as putting together Lego blocks. Of course, QSVT has many other
-# applications, from unstructured search, phase estimation, to even Hamiltonian simulation. We challenge you to
+# applications, from unstructured search to phase estimation, and even to Hamiltonian simulation. We challenge you to
 # think of smarter data loading techniques to reduce the quantum cost of QSVT for these applications as well!
 #
 # References
