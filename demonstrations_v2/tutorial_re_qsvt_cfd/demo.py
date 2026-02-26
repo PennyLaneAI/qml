@@ -266,7 +266,7 @@ def WH_Diagonal_BE(num_diagonals, matrix_size, num_walsh_coeffs):
 matrix_size = 2**20  # 2^20 x 2^20
 num_diagonals = 3
 num_walsh_coeffs = 512  # empirically determined
-resources = qre.estimate(WH_Diagonal_BE)(num_diagonals, matrix_size , num_walsh_coeffs)
+resources = qre.estimate(WH_Diagonal_BE)(num_diagonals, matrix_size, num_walsh_coeffs)
 print(resources)
 
 ##############################################################################
