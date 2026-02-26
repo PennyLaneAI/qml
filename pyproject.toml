@@ -32,7 +32,7 @@ dependencies = [
 # ---------------------------
 [project.urls]
 Homepage = "https://pennylane.ai/qml/"
-Repository = "https://github.com/PennyLaneAI/qml"
+Repository = "https://github.com/PennyLaneAI/demos"
 
 # ---------------------------
 # Project Scripts

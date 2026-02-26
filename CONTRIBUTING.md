@@ -83,7 +83,7 @@ While you are encouraged to be creative with your demo, please keep the followin
 ## General Guidelines
 
 - **Format:** Demos are written as executable Python scripts.
-- **Jupyter Notebook Conversion:** If you prefer writing your demo in a Jupyter notebook, you can convert it to the required executable Python format by following the [Notebook to Demo Converter](https://github.com/PennyLaneAI/qml/tree/master/notebook_converter).
+- **Jupyter Notebook Conversion:** If you prefer writing your demo in a Jupyter notebook, you can convert it to the required executable Python format by following the [Notebook to Demo Converter](https://github.com/PennyLaneAI/demos/tree/master/notebook_converter).
 - **Naming Convention:** All demo directories must be saved in the `demonstrations_v2` directory. For example: `demonstrations_v2/my_demo`.
 - **Frameworks:** New demos should avoid using `autograd` or `TensorFlow`. `JAX` and `PyTorch` are recommended instead. Whenever possible, the use of `lightning.qubit` is also encouraged.
 - **Restructured Text (ReST):** ReST sections can be included anywhere within the script by beginning the comment with 79 hash characters (`#`). These are useful for breaking up large code blocks and providing extensive explanations.
@@ -112,7 +112,7 @@ While you are encouraged to be creative with your demo, please keep the followin
 
 ## Metadata Guidelines
 
-Every demo requires an accompanying `metadata.json` file located in its directory. This JSON file stores crucial information about the demo. Refer to [this example](https://github.com/PennyLaneAI/qml/blob/master/demonstrations_v2/tutorial_here_comes_the_sun/metadata.json) for the required fields:
+Every demo requires an accompanying `metadata.json` file located in its directory. This JSON file stores crucial information about the demo. Refer to [this example](https://github.com/PennyLaneAI/demos/blob/master/demonstrations_v2/tutorial_here_comes_the_sun/metadata.json) for the required fields:
 
 - **Filename:** Ensure the file is named `metadata.json`.
 - **Authors:** Ensure that the `"authors"` field is populated with the `"username"` of the author(s) as registered on pennylane.ai. This should match the username provided when creating the bio.
@@ -245,8 +245,8 @@ If you do not specify a `--format` option, the demo will be built in JSON format
 
 ## Support
 
-- **Source Code:** https://github.com/PennyLaneAI/QML
-- **Issue Tracker:** https://github.com/PennyLaneAI/QML/issues
+- **Source Code:** https://github.com/PennyLaneAI/demos
+- **Issue Tracker:** https://github.com/PennyLaneAI/demos/issues
 
 If you encounter any issues, please report them on our GitHub issue tracker.
 
