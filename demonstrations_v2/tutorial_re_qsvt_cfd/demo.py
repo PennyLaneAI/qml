@@ -132,7 +132,7 @@ ultimately we need to prepare as many operators as non-zero diagonals in :math:`
 
 Where :math:`H_{y} = SH`. For more details, refer to Appendix B's Walsh transform encoding section in
 [#linaje2025]_.
-"""
+# 
 
 import pennylane.numpy as qnp
 import pennylane.estimator as qre
