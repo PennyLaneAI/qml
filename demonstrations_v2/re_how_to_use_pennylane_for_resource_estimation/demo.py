@@ -15,6 +15,11 @@ The :mod:`estimator <pennylane.estimator>` module leverages the latest resource 
 decompositions, and compilation techniques from the literature, and is designed to do so as
 quickly as possible.
 
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-how-to-resource-estimation-open-graph.png
+    :align: center
+    :width: 70%
+    :target: javascript:void(0)
+
 In this demo, we will estimate the quantum resources necessary for a simple Hamiltonian simulation workflow:
 evolving the quantum state of a honeycomb lattice of spins under the
 :func:`Kitaev Hamiltonian <pennylane.spin.kitaev>`.
