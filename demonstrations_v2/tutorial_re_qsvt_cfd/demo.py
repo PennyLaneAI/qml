@@ -113,7 +113,7 @@ print(resources)
 # Each :math:`D_{k}` is a block-diagonal operator that contains the normalised entries from the :math:`k^{\text{th}}`
 # diagonal of our d-diagonal matrix :math:`A`. By multiplexing over the :math:`D_{k}` operators, we can load all of
 # the diagonals in *parallel*.
-
+# 
 # Instead of implementing each :math:`D_{k}` as a product of :class:`~.pennylane.ControlledPhaseShift` gates,
 # we leverage the Walsh transformation [#zylberman2025]_. The Walsh transform allows us to naturally
 # optimize the cost of our block encoding by tuning the number of Walsh coefficients within :math:`[1, N]`,
