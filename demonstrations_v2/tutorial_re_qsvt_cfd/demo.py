@@ -88,7 +88,7 @@ print(resources)
 # 
 # 
 # Exploiting structure in the block encoding
-------------------------------------------
+# ------------------------------------------
 # This matrix (:math:`A`) can be block encoded using a *d-diagonal encoding* technique [#linaje2025]_ developed
 # by my colleagues here at Xanadu. The method loads each diagonal in parallel, then shifts them to their respective
 # ranks in the matrix. The values along each diagonal can be sparsely represented in a different basis, which
