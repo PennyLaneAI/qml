@@ -106,32 +106,32 @@ print(resources)
 # 
 # Estimating the resource cost for this circuit may seem like a daunting task, but we have
 # PennyLane's quantum resource :mod:`~.pennylane.estimator` to help us construct each piece!
+# 
+# Diagonal Matrices & the Walsh Transform
+# ------------------------------------------------
+# Each :math:`D_{k}` is a block-diagonal operator that contains the normalised entries from the :math:`k^{\text{th}}`
+# diagonal of our d-diagonal matrix :math:`A`. By multiplexing over the :math:`D_{k}` operators, we can load all of
+# the diagonals in *parallel*.
 
-Diagonal Matrices & the Walsh Transform
-------------------------------------------------
-Each :math:`D_{k}` is a block-diagonal operator that contains the normalised entries from the :math:`k^{\text{th}}`
-diagonal of our d-diagonal matrix :math:`A`. By multiplexing over the :math:`D_{k}` operators, we can load all of
-the diagonals in *parallel*.
-
-Instead of implementing each :math:`D_{k}` as a product of :class:`~.pennylane.ControlledPhaseShift` gates,
-we leverage the Walsh transformation [#zylberman2025]_. The Walsh transform allows us to naturally
-optimize the cost of our block encoding by tuning the number of Walsh coefficients within :math:`[1, N]`,
-where :math:`N` is the size of the matrix. If the entries in our diagonal are sparse in the Walsh basis,
-as is the case for the CFD example, then we can get away with far fewer Walsh coefficients. This results in
-a much more efficient encoding. The circuit below prepares a single such Walsh diagonal block encoding,
-ultimately we need to prepare as many operators as non-zero diagonals in :math:`A`.
-
-|
-
-.. figure:: ../_static/demonstration_assets/re_qsvt_cfd/WH_a.png
-    :align: center
-    :width: 90%
-    :target: javascript:void(0)
-
-|
-
-Where :math:`H_{y} = SH`. For more details, refer to Appendix B's Walsh transform encoding section in
-[#linaje2025]_.
+# Instead of implementing each :math:`D_{k}` as a product of :class:`~.pennylane.ControlledPhaseShift` gates,
+# we leverage the Walsh transformation [#zylberman2025]_. The Walsh transform allows us to naturally
+# optimize the cost of our block encoding by tuning the number of Walsh coefficients within :math:`[1, N]`,
+# where :math:`N` is the size of the matrix. If the entries in our diagonal are sparse in the Walsh basis,
+# as is the case for the CFD example, then we can get away with far fewer Walsh coefficients. This results in
+# a much more efficient encoding. The circuit below prepares a single such Walsh diagonal block encoding,
+# ultimately we need to prepare as many operators as non-zero diagonals in :math:`A`.
+# 
+# |
+# 
+# .. figure:: ../_static/demonstration_assets/re_qsvt_cfd/WH_a.png
+#     :align: center
+#     :width: 90%
+#     :target: javascript:void(0)
+# 
+# |
+# 
+# Where :math:`H_{y} = SH`. For more details, refer to Appendix B's Walsh transform encoding section in
+# [#linaje2025]_.
 # 
 
 import pennylane.numpy as qnp
