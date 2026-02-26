@@ -60,29 +60,27 @@ Resource cost of naive block encoding
 ------------------------------------------
 Let's explore the average cost of block encoding a matrix in the standard way. We suppose that this matrix has size $2^{20} \times 2^{20}$ and can be written as the superposition of $4^{20}$ Pauli words. Note that this does not necessarily represent any arbitrary matrix of this size, and so the resulting resource estimate is not necessarily general. However, it does illustrate the cost of naively block encoding a particular matrix. 
 
-```python
-import pennylane.estimator as qre
+.. code-block:: python
+  import pennylane.estimator as qre
+  
+  num_qubits = 20
+  matrix_size = 2**num_qubits
+  
+  
+  lcu_A = qre.PauliHamiltonian(
+      num_qubits = num_qubits,
+      pauli_terms = {"Z"*(num_qubits//2): 4**num_qubits},
+  ) # 4^20 Pauli words comprise this matrix
+  
+  def Standard_BE(prep, sel):
+      return qre.ChangeOpBasis(prep, sel, qre.Adjoint(prep))
+  
+  Prep = qre.QROMStatePreparation(num_qubits)  # Preparing a single qubit in the target state
+  Select = qre.SelectPauli(lcu_A)  # Select the operators in the LCU
+  
+  resources = qre.estimate(Standard_BE)(Prep, Select) # Estimate the resource requirement
+  print(resources)
 
-num_qubits = 20
-matrix_size = 2**num_qubits
-
-
-lcu_A = qre.PauliHamiltonian(
-    num_qubits = num_qubits,
-    pauli_terms = {"Z"*(num_qubits//2): 4**num_qubits},
-) # 4^20 Pauli words comprise this matrix
-
-def Standard_BE(prep, sel):
-    return qre.ChangeOpBasis(prep, sel, qre.Adjoint(prep))
-
-Prep = qre.QROMStatePreparation(num_qubits)  # Preparing a single qubit in the target state
-Select = qre.SelectPauli(lcu_A)  # Select the operators in the LCU
-
-resources = qre.estimate(Standard_BE)(Prep, Select) # Estimate the resource requirement
-print(resources)
-
-
-```
 ##############################################################################
 # With one line, we can see that that the estimated T gate cost of naive block encoding this matrix is :math:`1 \cdot 10^{12}`. This block encoding is called many times within an instance of the QSVT algorithm, and can be the dominant cost. Now that we have established a baseline of the `standard' cost, we ask: Can we do better? 
 #
