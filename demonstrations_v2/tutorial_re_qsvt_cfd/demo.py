@@ -82,7 +82,7 @@ Let's explore the average cost of block encoding a matrix in the standard way. W
    print(resources)
 
 
-With one line, we can see that that the estimated T gate cost of naive block encoding this matrix is :math:`1 \cdot 10^{12}`. This block encoding is called many times within an instance of the QSVT algorithm, and can be the dominant cost. Now that we have established a baseline of the `standard' cost, we ask: Can we do better? 
+With one line, we can see that that the estimated T gate cost of naive block encoding this matrix is :math:`1 \times 10^{12}`. This block encoding is called many times within an instance of the QSVT algorithm, and can be the dominant cost. Now that we have established a baseline of the `standard' cost, we ask: Can we do better? 
 
 Yes! We leverage the **structure** of our matrix to implement a much more efficient block encoding operator.
 
