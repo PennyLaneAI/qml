@@ -88,24 +88,24 @@ print(resources)
 # 
 # Exploiting structure in the block encoding
 ------------------------------------------
-This matrix (:math:`A`) can be block encoded using a *d-diagonal encoding* technique [#linaje2025]_ developed
-by my colleagues here at Xanadu. The method loads each diagonal in parallel, then shifts them to their respective
-ranks in the matrix. The values along each diagonal can be sparsely represented in a different basis, which
-further reduces resources than existing state-of-the-art methods. The quantum circuit that implements the
-d-diagonal block encoding is presented below. To learn more, read our paper: `"Quantum compilation framework for
-data loading" <https://arxiv.org/abs/2512.05183>`_.
-
-|
-
-.. figure:: ../_static/demonstration_assets/re_qsvt_cfd/SparseBE.png
-    :align: center
-    :width: 80%
-    :target: javascript:void(0)
-
-|
-
-Estimating the resource cost for this circuit may seem like a daunting task, but we have
-PennyLane's quantum resource :mod:`~.pennylane.estimator` to help us construct each piece!
+# This matrix (:math:`A`) can be block encoded using a *d-diagonal encoding* technique [#linaje2025]_ developed
+# by my colleagues here at Xanadu. The method loads each diagonal in parallel, then shifts them to their respective
+# ranks in the matrix. The values along each diagonal can be sparsely represented in a different basis, which
+# further reduces resources than existing state-of-the-art methods. The quantum circuit that implements the
+# d-diagonal block encoding is presented below. To learn more, read our paper: `"Quantum compilation framework for
+# data loading" <https://arxiv.org/abs/2512.05183>`_.
+# 
+# |
+# 
+# .. figure:: ../_static/demonstration_assets/re_qsvt_cfd/SparseBE.png
+#     :align: center
+#     :width: 80%
+#     :target: javascript:void(0)
+# 
+# |
+# 
+# Estimating the resource cost for this circuit may seem like a daunting task, but we have
+# PennyLane's quantum resource :mod:`~.pennylane.estimator` to help us construct each piece!
 
 Diagonal Matrices & the Walsh Transform
 ------------------------------------------------
