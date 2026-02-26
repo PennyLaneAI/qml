@@ -56,6 +56,7 @@ encoding also scales exponentially. Even computing the LCU decomposition becomes
 Furthermore, there is no way of knowing a priori how many terms there will be in the LCU. For these reasons, a
 general "one size fits all" block encoding scheme is usually too expensive for our systems of interest.
 
+.. _naive_block_encoding:
 Resource cost of naive block encoding
 ------------------------------------------
 Let's explore the average cost of block encoding a matrix in the standard way. We suppose that this matrix has size :math:`2^{20} \times 2^{20}` and can be written as the superposition of $4^{20}$ Pauli words. Note that this does not necessarily represent any arbitrary matrix of this size, and so the resulting resource estimate is not necessarily general. However, it does illustrate the cost of naively block encoding a particular matrix. 
