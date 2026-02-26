@@ -14,8 +14,8 @@
 </p>
 
 <center>
-  <a href="https://pennylane.ai/qml/demonstrations/" title="View QML Demonstrations Online">
-    <img src="/documentation/images/documentation-hero.png" width="100%" alt="QML Demonstrations Hero Image">
+  <a href="https://pennylane.ai/qml/demonstrations/" title="View PennyLane Demonstrations Online">
+    <img src="/documentation/images/documentation-hero.png" width="100%" alt="PennyLane Demonstrations Hero Image">
   </a>
 </center>
 
@@ -28,7 +28,7 @@ Explore the full collection of [PennyLane demos](https://pennylane.ai/qml/demons
 ## Table of Contents
 
 - [Contributing to Demos](CONTRIBUTING.md)
-- [QML CLI Tool](/documentation/qml-cli.md)
+- [CLI Tool](/documentation/demo-cli.md)
 - [Dependency Management](/dependencies/README.md)
 - [Support](#support)
 - [License](#license)
