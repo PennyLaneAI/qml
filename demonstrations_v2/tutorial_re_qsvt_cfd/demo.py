@@ -10,7 +10,7 @@ Optimising QSVT data loading by exploiting structure
     tutorial_lcu_blockencoding Linear combination of unitaries and block encodings
 
 Solving systems of linear equations is important for a wide range of industries, such as healthcare,
-transportation, finance, chemistry, and even quantum computing. QSVT can implement matrix inversion to solve such
+transportation, finance, chemistry, and even quantum computing. The Quantum Singular Value Transformation (QSVT) algorithm can implement matrix inversion to solve such
 equations on a quantum computer [#chuang2021]_. For more information on how to use PennyLane's
 :func:`~.pennylane.qsvt` functionality to run matrix inversion on a quantum computer see our demo on `QSVT in
 Practice <tutorial_apply_qsvt>`_.
