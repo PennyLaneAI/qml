@@ -1,5 +1,5 @@
 r"""
-Optimising QSVT data loading by exploiting structure
+Optimizing QSVT data loading by exploiting structure
 ====================================================
 .. meta::
     :property="og:description": Learn how to estimate the cost of matrix inversion with QSVT for CFD applications
