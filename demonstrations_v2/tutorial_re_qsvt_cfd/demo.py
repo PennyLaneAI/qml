@@ -81,7 +81,6 @@ Select = qre.SelectPauli(lcu_A)  # Select the operators in the LCU
 resources = qre.estimate(Standard_BE)(Prep, Select) # Estimate the resource requirement
 print(resources)
 
-"""
 
 ```
 ##############################################################################
