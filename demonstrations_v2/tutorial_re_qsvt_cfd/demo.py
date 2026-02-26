@@ -15,8 +15,8 @@ equations on a quantum computer [#chuang2021]_. For more information on how to u
 :func:`~.pennylane.qsvt` functionality to run matrix inversion on a quantum computer see our demo on `QSVT in
 Practice <tutorial_apply_qsvt>`_.
 
-It turns out that the quantum compute cost can get quite large due to **data loading**. The bottleneck of QSVT is
-typically the cost of encoding the matrix onto a quantum computer in the first place! While this cost is
+It turns out that the bottleneck of QSVT is
+typically the cost of encoding the matrix onto a quantum computer in the first place! While this **data loading** cost is
 significant for any general matrix, in real life our problems often have patterns and structure!
 
 By exploiting the structure of a problem, we can significantly reduce the quantum resource cost of the algorithm.
