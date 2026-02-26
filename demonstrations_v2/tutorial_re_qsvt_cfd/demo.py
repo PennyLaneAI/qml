@@ -19,8 +19,7 @@ It turns out that the bottleneck of QSVT is
 typically the cost of encoding the matrix onto a quantum computer in the first place! While this **data loading** cost is
 significant for any general matrix, in real life our problems often have patterns and structure!
 
-By exploiting the structure of a problem, we can significantly reduce the quantum resource cost of the algorithm.
-Thereby making QSVT based matrix inversion more accessible to implement on nearer term fault-tolerant quantum
+By exploiting the structure of a problem, we can significantly reduce the quantum resource cost of the algorithm, thereby making QSVT based matrix inversion more accessible to implement on nearer term fault-tolerant quantum
 hardware.
 
 This demo, based on our recent paper `Quantum compilation framework for data loading
