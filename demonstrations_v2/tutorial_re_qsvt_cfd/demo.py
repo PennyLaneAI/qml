@@ -81,7 +81,7 @@ resources = qre.estimate(Standard_BE)(Prep, Select) # Estimate the resource requ
 print(resources)
 
 
-With one line, we can see that that the estimated T gate cost of naive block encoding this matrix is :math:`1 \times 10^{12}`. This block encoding is called many times within an instance of the QSVT algorithm, and can be the dominant cost. Now that we have established a baseline of the `standard' cost, we ask: Can we do better? 
+# With one line, we can see that that the estimated T gate cost of naive block encoding this matrix is :math:`1 \times 10^{12}`. This block encoding is called many times within an instance of the QSVT algorithm, and can be the dominant cost. Now that we have established a baseline of the `standard' cost, we ask: Can we do better? 
 
 Yes! We leverage the **structure** of our matrix to implement a much more efficient block encoding operator.
 
