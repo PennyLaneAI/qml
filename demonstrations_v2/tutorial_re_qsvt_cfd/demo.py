@@ -102,7 +102,7 @@ ultimately we need to prepare as many operators as non-zero diagonals in :math:`
 
 |
 
-Where :math:`:math:H_{y} = SH`. For more details, refer to Appendix B's Walsh transform encoding in
+Where :math:`H_{y} = SH`. For more details, refer to Appendix B's Walsh transform encoding in
 [#linaje2025]_.
 """
 
