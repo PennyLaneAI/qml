@@ -61,6 +61,7 @@ Resource cost of naive block encoding
 Let's explore the average cost of block encoding a matrix in the standard way. We suppose that this matrix has size :math:`2^{20} \times 2^{20}` and can be written as the superposition of $4^{20}$ Pauli words. Note that not all matrices of that size can be written in this manner, so the resulting resource estimate is not necessarily general. However, it does illustrate the cost of naively block encoding a particular matrix of this size. 
 
 """
+
 import pennylane.estimator as qre
 
 num_qubits = 20
