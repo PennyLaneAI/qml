@@ -173,7 +173,7 @@ def Walsh_Dk(num_diags, size_diagonal, num_walsh_coeffs):
 # --------------
 # Next, we will implement the Shift operator. This is a product of three subroutines which
 # shift the diagonal entries into the correct rank of the d-diagonal block encoding. Each rank
-# has an associated shift value, :math:`k`, the main diagonal has shift value 0. Each diagonal going down
+# has an associated shift value, :math:`k`, the main diagonal has shift value $0$. Each diagonal going down
 # is labelled :math:`(+1, +2, \ldots)` respectively and each diagonal going up is labelled
 # with its negative counterpart. The Shift operator works in three steps:
 #
