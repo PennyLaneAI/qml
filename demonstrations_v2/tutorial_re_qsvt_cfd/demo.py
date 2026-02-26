@@ -257,6 +257,19 @@ def WH_Diagonal_BE(num_diagonals, matrix_size, num_walsh_coeffs):
 
     return qre.Prod([Prep, Shift, Dk, Prep_dagger])
 
+##############################################################################
+# With this special block encoding method ready, we can estimate the resource cost of block encoding with the same hyperparameters as used in the CFD example below. 
+
+matrix_size = 2**20  # 2^20 x 2^20
+num_diagonals = 3
+num_walsh_coeffs = 512  # empirically determined
+resources = qre.estimate(WH_Diagonal_BE)(num_diagonals, matrix_size , num_walsh_coeffs)
+print(resources)
+
+##############################################################################
+# Although this matrix :math:`A` is not the same as the matrix considered in the Resource cost of naive block encoding section, we can see that exploiting the structure of the matrix has decreased the order of magnitude of the T gate cost from :math:`1 \cdot 10^{12}` to :math:`3 \cdot 10^{5}`. 
+
+
 
 ##############################################################################
 # Putting it all together: QSVT for matrix inversion
