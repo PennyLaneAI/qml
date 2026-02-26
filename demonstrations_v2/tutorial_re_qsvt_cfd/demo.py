@@ -315,7 +315,7 @@ print(res)
 
 ##############################################################################
 # The estimated T gate count of this matrix inversion workflow matches
-# the reported :math:`3 \cdot 10^{13}` from the reference.
+# the reported :math:`3 \times 10^{13}` from the reference.
 #
 # Conclusion
 # ----------
