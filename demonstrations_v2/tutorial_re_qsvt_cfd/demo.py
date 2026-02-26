@@ -314,7 +314,7 @@ res = qre.estimate(matrix_inversion, gate_set)(degree, matrix_size, num_diagonal
 print(res)
 
 ##############################################################################
-# The estimated T gate count of this matrix inversion workflow matches
+# The estimated $T$ gate count of this matrix inversion workflow matches
 # the reported :math:`3 \times 10^{13}` from the reference.
 #
 # Conclusion
