@@ -1,14 +1,6 @@
 r"""
 How to estimate the resource cost of QSVT
 =========================================
-.. meta::
-    :property="og:description": Learn how to estimate the resource cost of QSVT
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/resource_estimation.jpeg
-
-.. related::
-    tutorial_intro_qsvt Intro to QSVT
-    re_how_to_use_pennylane_for_resource_estimation How to use PennyLane for Resource Estimation
-    tutorial_apply_qsvt QSVT in Practice
 
 The Quantum Singular Value Transformation (QSVT) is a versatile algorithm that is applicable to a wide range of
 problems, including unstructured search, Hamiltonian simulation, matrix inversion, and many more [#chuang2021]_.
