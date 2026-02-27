@@ -1,13 +1,6 @@
 r"""
 Optimizing QSVT data loading by exploiting structure
 ====================================================
-.. meta::
-    :property="og:description": Learn how to estimate the cost of matrix inversion with QSVT for CFD applications
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/resource_estimation.jpeg
-
-.. related::
-    tutorial_apply_qsvt QSVT in Practice
-    tutorial_lcu_blockencoding Linear combination of unitaries and block encodings
 
 Solving systems of linear equations is important for a wide range of industries, such as healthcare,
 transportation, finance, chemistry, and even quantum computing. The Quantum Singular Value Transformation (QSVT) algorithm can implement matrix inversion to solve such
@@ -38,7 +31,7 @@ The figure below highlights the non-zero entries of :math:`A` with a dimensional
 
 |
 
-.. figure:: ../_static/demonstration_assets/re_qsvt_cfd/sparse_diagonal_matrix.png
+.. figure:: ../_static/demonstration_assets/resource_estimation_QSVT_CFD/sparse_diagonal_matrix.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -98,7 +91,7 @@ print(resources)
 # 
 # |
 # 
-# .. figure:: ../_static/demonstration_assets/re_qsvt_cfd/SparseBE.png
+# .. figure:: ../_static/demonstration_assets/resource_estimation_QSVT_CFD/SparseBE.png
 #     :align: center
 #     :width: 80%
 #     :target: javascript:void(0)
@@ -124,7 +117,7 @@ print(resources)
 # 
 # |
 # 
-# .. figure:: ../_static/demonstration_assets/re_qsvt_cfd/WH_a.png
+# .. figure:: ../_static/demonstration_assets/resource_estimation_QSVT_CFD/WH_a.png
 #     :align: center
 #     :width: 90%
 #     :target: javascript:void(0)
@@ -223,7 +216,7 @@ def ShiftOp(num_shifts, num_load_wires, wires):
 #
 # |
 #
-# .. figure:: ../_static/demonstration_assets/re_qsvt_cfd/SparseBE.png
+# .. figure:: ../_static/demonstration_assets/resource_estimation_QSVT_CFD/SparseBE.png
 #     :align: center
 #     :width: 80%
 #     :target: javascript:void(0)
