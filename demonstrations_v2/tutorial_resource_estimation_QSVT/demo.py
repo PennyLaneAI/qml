@@ -24,6 +24,11 @@ Fortunately, PennyLane's resource :mod:`~.pennylane.estimator` module makes that
 you're interested in is too big to simulate right now. If you are new to resource estimation in PennyLane or need
 a quick refresher, checkout this demo on `how to use PennyLane for Resource Estimation <re_how_to_use_pennylane_for_resource_estimation>`_.
 
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-resource-estimation-qsvt-open-graph.png
+    :align: center
+    :width: 70%
+    :target: javascript:void(0)
+
 In this demo, you will learn how to use PennyLane's :mod:`~.pennylane.estimator` module to easily estimate the
 cost of QSVT. There are two ways of doing so: the Executable workflow and the Estimator workflow. The
 Estimator workflow involves expressing our QSVT circuit using :mod:`~.pennylane.estimator` operators. This
