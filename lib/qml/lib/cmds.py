@@ -1,4 +1,6 @@
+import json
 import subprocess
+from packaging.version import Version
 from pathlib import Path
 from collections.abc import Iterable
 from typing import Literal
@@ -141,3 +143,45 @@ def pip_compile(
     cmd.extend((str(arg) for arg in args))
 
     subprocess.run(cmd).check_returncode()
+
+
+def pip_get_versions(
+    python: str | Path,
+    package: str,
+    index_url: str | None = None,
+    pre: bool = True,
+) -> list[str]:
+    """Get the versions of a package from the index.
+    
+    Args:
+        python: Path to python interpreter
+        package: Name of package to get versions for
+        index_url: URL of index to use
+        pre: Whether to include pre-release versions
+
+    Returns:
+        List of versions of the package, sorted from newest to oldest
+
+    Raises:
+        CalledProcessError: The command does not complete successfully
+    """
+    package = package.strip()
+    cmd = [
+        str(python),
+        "-m",
+        "pip",
+        "index",
+        "versions",
+        package,
+        "--json",
+    ]
+    if index_url:
+        cmd.extend(("--index-url", index_url))
+    if pre:
+        cmd.append("--pre")
+
+    result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+    
+    result_dict = json.loads(result.stdout)
+    
+    return sorted(result_dict["versions"], key=Version, reverse=True)
