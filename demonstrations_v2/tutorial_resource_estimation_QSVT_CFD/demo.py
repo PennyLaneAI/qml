@@ -15,6 +15,11 @@ significant for any general matrix, in real life our problems often have pattern
 By exploiting the structure of a problem, we can significantly reduce the quantum resource cost of the algorithm, thereby making QSVT based matrix inversion more accessible to implement on nearer term fault-tolerant quantum
 hardware.
 
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-resource-estimation-qsvt-2-open-graph.png
+    :align: center
+    :width: 70%
+    :target: javascript:void(0)
+
 This demo, based on our recent paper `Quantum compilation framework for data loading
 <https://arxiv.org/abs/2512.05183>`_ [#linaje2025]_, will showcase an optimized block encoding strategy that
 uses the sparsity of the matrix to significantly reduce the cost of QSVT. We will focus on a particular matrix
