@@ -22,7 +22,7 @@ def _load_inventory_from_path(path: Path) -> soi.Inventory | None:
     if not path.is_file():
         return None
     try:
-        return soi.Inventory(path)
+        return soi.Inventory(fname_zlib=path)
     except Exception:
         return None
 
@@ -43,7 +43,7 @@ def _load_inventory_from_url(
             time.sleep(delay * attempt)
     # sphobjinv accepts zlib-compressed bytes from objects.inv
     raw = response.content
-    return soi.Inventory(raw), raw
+    return soi.Inventory(zlib=raw), raw
 
 
 def _make_named_inventory(inv: soi.Inventory) -> dict[str, Any]:
