@@ -452,6 +452,7 @@ def pdt_circuit(walk_op, poly_degree_hi, poly_degree_low, num_slaters=1e4):
     qre.MultiControlledX(
         num_ctrl_wires=2,
         num_zero_ctrl=1,
+        wires=[0,1,2]
     )
 
     # Hadamard
@@ -474,7 +475,7 @@ resource_counts = qre.estimate(pdt_circuit, config=cfg)(
 print(resource_counts)
 
 ######################################################################
-# The estimated resources of 174 qubits and :math:`1.96 \times 10^7` Toffoli gates
+# The estimated resources of 177 qubits and :math:`1.96 \times 10^7` Toffoli gates
 # align with the reference values of 177 qubits and :math:`2.72 \times 10^7` Toffoli gates.
 # The small differences can be attributed to different tunable parameters being used.
 # We encourage you to explore further by testing other systems from the reference or analyzing how the resources scale
