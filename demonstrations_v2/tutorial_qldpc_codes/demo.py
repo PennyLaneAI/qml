@@ -81,7 +81,7 @@ plt.figure(figsize=(6, 4))
 pos = nx.bipartite_layout(G, var_nodes)
 colors = ["#70CEFF"] * num_vars + ["#C756B2"] * num_checks
 nx.draw(G, pos, with_labels=True, node_color=colors, node_size=500)
-plt.text(-0.7, 0.0, "Variable Nodes", rotation=90, 
+plt.text(-0.75, 0.0, "Variable Nodes", rotation=90, 
     verticalalignment='center', fontsize=12, color=colors[0])
 plt.text(1.1, 0.0, "Check Nodes", rotation=270,
     verticalalignment='center', fontsize=12, color=colors[-1])
@@ -498,14 +498,15 @@ print(f"Result: The codespace is preserved: {result}")
 # Conclusion
 # ----------
 #
-# The journey to fault-tolerant quantum computing hinges on managing errors without requiring an astronomical
-# number of physical qubits. By relaxing the strict nearest-neighbor constraints of topological codes,
-# Quantum Low-Density Parity-Check (qLDPC) codes offer a profound paradigm shift: they trade massive qubit
-# overhead for a complex hardware connectivity challenge. Advancements in dynamically reconfigurable neutral
-# atom arrays and modular architectures are turning these highly connected codes into a physical reality.
-# While, still many engineering hurdles remain, particularly in designing universal transversal gate sets
-# and executing efficient logical measurements. However, supported by fast, linear-time decoding algorithms,
-# qLDPC codes have evolved past elegant mathematical formalism and are progressing towards practicality.
+# The journey to fault-tolerant quantum computing hinges on managing errors without requiring an
+# astronomical number of physical qubits. By relaxing the strict nearest-neighbor constraints of
+# topological codes, Quantum Low-Density Parity-Check (qLDPC) codes offer a profound paradigm
+# shift: they trade massive qubit overhead for a complex hardware connectivity challenge.
+# Advancements in dynamically reconfigurable and modular architectures are turning these highly
+# connected codes into a physical reality. While, still many engineering hurdles remain,
+# particularly in designing universal transversal gate sets and executing efficient logical
+# measurements. However, supported by fast, linear-time decoding algorithms, qLDPC codes have
+# evolved past elegant mathematical formalism and are progressing towards practicality.
 
 
 ######################################################################
