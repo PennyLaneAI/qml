@@ -11,7 +11,6 @@
         "Algorithms",
         "Quantum Computing",
         "Quantum Hardware",
-        "Error Correction"
     ],
     "tags": [],
     "previewImages": [{
@@ -25,16 +24,7 @@
     ],
     "seoDescription": "Learn how to use quantum low-density parity-check (QLDPC) codes for quantum error correction.",
     "doi": "",
-    "references": [{
-        "id": "reference_id",
-        "type": "article",
-        "title": "Reference title",
-        "authors": "Reference authors",
-        "year": "Reference year",
-        "journal": "Reference journal",
-        "doi": "Reference DOI",
-        "url": "Reference URL"
-    }],
+    "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [{
