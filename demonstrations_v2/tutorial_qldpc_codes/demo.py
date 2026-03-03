@@ -535,3 +535,67 @@ print(f"Result: The codespace is preserved: {result}")
 # particularly in designing universal transversal gate sets and executing efficient logical
 # measurements. However, supported by fast, linear-time decoding algorithms, qLDPC codes have
 # evolved past elegant mathematical formalism and are progressing towards practicality.
+# 
+# References
+# ----------
+#
+# .. [#qldpc1]
+#
+#     N. P. Breuckmann, J. N. Eberhardt,
+#     "Quantum Low-Density Parity-Check Codes",
+#     `PRX Quantum 2, 040101 <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.040101>`__, 2021.
+#
+# .. [#CSS]
+#
+#     T. Rakovszky, V. Khemani,
+#     "The Physics of (good) LDPC Codes I. Gauging and dualities",
+#     `arXiv:2310.16032 <https://arxiv.org/abs/2310.16032>`__, 2023.
+#
+# .. [#HGP]
+#
+#     J.-P. Tillich, G. Zémor,
+#     "Quantum LDPC Codes With Positive Rate and Minimum Distance Proportional to the Square Root of the Blocklength",
+#     `IEEE Transactions on Information Theory 60(1), 119–136 <https://ieeexplore.ieee.org/document/6671468>`__, 2014.
+#
+# .. [#LPCodes]
+#
+#     F. G. Jeronimo, T. Mittal, R. O'Donnell, P. Paredes, M. Tulsiani,
+#     "Explicit Abelian Lifts and Quantum LDPC Codes",
+#     `arXiv:2112.01647 <https://arxiv.org/abs/2112.01647>`__, 2021.
+#
+# .. [#QTCodes]
+#
+#     A. Leverrier, G. Zémor,
+#     "Quantum Tanner codes",
+#     `arXiv:2202.13641 <https://arxiv.org/abs/2202.13641>`__, 2022.
+#
+# .. [#BBCodes]
+#
+#     S. Bravyi, A. W. Cross, J. M. Gambetta, D. Maslov, P. Rall, T. J. Yoder,
+#     "High-threshold and low-overhead fault-tolerant quantum memory",
+#     `Nature <https://www.nature.com/articles/s41586-024-07107-7>`__, 2024.
+#
+# .. [#BProp]
+#
+#     J. Old, M. Rispler,
+#     "Generalized Belief Propagation Algorithms for Decoding of Surface Codes",
+#     `Quantum 7, 1037 <https://quantum-journal.org/papers/q-2023-06-07-1037/>`__, 2023.
+#
+# .. [#OSD0]
+#
+#     J. Valls, F. Garcia-Herrero, N. Raveendran, B. Vasic,
+#     "Syndrome-Based Min-Sum vs OSD-0 Decoders: FPGA Implementation and Analysis for Quantum LDPC Codes",
+#     `IEEE Access <https://ieeexplore.ieee.org/document/9562513>`__, 2021.
+#
+# .. [#Transversal]
+#
+#     H. Leitch, A. Kay,
+#     "Transversal Gates for Highly Asymmetric qLDPC Codes",
+#     `arXiv:2506.15905 <https://arxiv.org/abs/2506.15905>`__, 2025.
+#
+# .. [#LHMM]
+#
+#     B. Ide, M. G. Gowda, P. J. Nadkarni, G. Dauphinais,
+#     "Fault-tolerant logical measurements via homological measurement",
+#     `Phys. Rev. X 15, 021088 <https://arxiv.org/abs/2410.02753>`__, 2024.
+#
