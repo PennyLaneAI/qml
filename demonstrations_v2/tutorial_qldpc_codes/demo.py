@@ -237,33 +237,33 @@ print(f"Physical qubits (n) of the HGP code: {n1*n2 + m1*m2} == {2*dist*(dist-1)
 # in achieving this goal, primarily through a series of breakthroughs, some of them being:
 #
 # 1. Lifted Product Codes: To overcome the :math:`O(\sqrt{n})` distance barrier of standard
-# Hypergraph Product codes, Lifted Product Codes replace the binary scalar entries of a
-# classical seed matrix with elements of a group algebra, such as polynomials representing
-# cyclic shifts. By taking the hypergraph product over this polynomial space and "lifting"
-# the result back into a massive, sparse binary matrix, this hidden group structure injects
-# powerful algebraic constraints. This drastically boosts the minimum distance to
-# :math:`d = \Theta(\sqrt{n} \log n)` while maintaining a constant encoding rate
-# :math:`R = \Theta(1)` and the crucial sparsity required for fast message-passing decoding.
+#    Hypergraph Product codes, Lifted Product Codes replace the binary scalar entries of a
+#    classical seed matrix with elements of a group algebra, such as polynomials representing
+#    cyclic shifts. By taking the hypergraph product over this polynomial space and "lifting"
+#    the result back into a massive, sparse binary matrix, this hidden group structure injects
+#    powerful algebraic constraints. This drastically boosts the minimum distance to
+#    :math:`d = \Theta(\sqrt{n} \log n)` while maintaining a constant encoding rate
+#    :math:`R = \Theta(1)` and the crucial sparsity required for fast message-passing decoding.
 #
 # 2. Quantum Tanner Codes: Seeking to maximize both storage density and error-correcting
-# power, these codes move away from flat grids and are constructed using Cayley graphs
-# of finite groups with high expansion properties. By placing qubits on the faces of a
-# multidimensional square complex and rigidly enforcing local classical constraints at
-# every vertex, the expander graph geometry physically prevents small errors from forming
-# undetectable logical operators. Consequently, these codes achieve both a constant rate
-# :math:`R = \Theta(1)` and a strictly linear distance :math:`d = \Theta(n)`,
-# approaching the theoretical limit of the quantum Singleton bound where doubling the
-# physical qubits strictly doubles the error-correcting power.
+#    power, these codes move away from flat grids and are constructed using Cayley graphs
+#    of finite groups with high expansion properties. By placing qubits on the faces of a
+#    multidimensional square complex and rigidly enforcing local classical constraints at
+#    every vertex, the expander graph geometry physically prevents small errors from forming
+#    undetectable logical operators. Consequently, these codes achieve both a constant rate
+#    :math:`R = \Theta(1)` and a strictly linear distance :math:`d = \Theta(n)`,
+#    approaching the theoretical limit of the quantum Singleton bound where doubling the
+#    physical qubits strictly doubles the error-correcting power.
 #
 # 3. Bivariate Bicycle Codes: To bridge the gap between the abstract algebra of expander
-# graphs (which require highly non-local hardware wiring) and the reality of physical
-# quantum processors, Bivariate Bicycle Codes (BBCs) were developed. They are built
-# using simple polynomials of two commuting variables (:math:`x` and :math:`y`) that
-# directly correspond to local spatial shifts on a periodic 2D grid, ensuring the
-# resulting :math:`X` and :math:`Z` parity-check matrices automatically commute. By
-# construction, the physical qubits can be laid out in a quasi-2D architecture with
-# strictly bounded, short-range connections, while sacrificing infinite asymptotic linear
-# scaling.
+#    graphs (which require highly non-local hardware wiring) and the reality of physical
+#    quantum processors, Bivariate Bicycle Codes (BBCs) were developed. They are built
+#    using simple polynomials of two commuting variables (:math:`x` and :math:`y`) that
+#    directly correspond to local spatial shifts on a periodic 2D grid, ensuring the
+#    resulting :math:`X` and :math:`Z` parity-check matrices automatically commute. By
+#    construction, the physical qubits can be laid out in a quasi-2D architecture with
+#    strictly bounded, short-range connections, while sacrificing infinite asymptotic linear
+#    scaling.
 # 
 # Below, we take a look at the Quantum Tanner code and how it improves the distance
 # scaling of the quantum codes compared to the HGP codes.
@@ -305,9 +305,9 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 
-#
-# Decoding the Syndrome: Belief Propagation
-# -------------------------------------------
+######################################################################
+# Decoding qLDPC Codes
+# ----------------------
 #
 # As mentioned earlier, using the parity-check matrix of the code, one can construct its resulting
 # Tanner graph, which can be used for decoding errors efficiently using a decoder that implements
@@ -490,7 +490,7 @@ result = verify_transversality(ops, gens, stabs)
 
 print(f"Result: The codespace is preserved: {result}")
 
-#
+######################################################################
 # In addition to the gate operations being transversal, there's active work being done to develop
 # efficient frameworks to perform logical Pauli measurements, as well [#LMHM], which is another
 # critical requirement for the partical utility of these codes.
