@@ -10,16 +10,16 @@
     "categories": [
         "Algorithms",
         "Quantum Computing",
-        "Quantum Hardware",
+        "Quantum Hardware"
     ],
     "tags": [],
     "previewImages": [{
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_qldpc_codes.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-stabilizer-codes-thumbnail.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_qldpc_codes.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-stabilizer-codes-large-thumbnail.png"
         }
     ],
     "seoDescription": "Learn how to use quantum low-density parity-check (QLDPC) codes for quantum error correction.",
