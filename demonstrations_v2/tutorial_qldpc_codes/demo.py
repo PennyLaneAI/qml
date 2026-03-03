@@ -116,7 +116,7 @@ plt.show()
 # :math:`[[7,1,3]]` constructed from two :math:`d=3` and :math:`d=3` hamming codes:
 #
 
-from pennylane import qp
+import pennylane as qp
 
 def hamming_code(distance: int) -> np.ndarray:
     """Returns a Hamming code parity check matrix of a given rank."""
