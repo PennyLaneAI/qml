@@ -24,7 +24,107 @@
     ],
     "seoDescription": "Learn how to use quantum low-density parity-check (QLDPC) codes for quantum error correction.",
     "doi": "",
-    "references": [],
+    "references": [{
+            "id": "qldpc1",
+            "type": "article",
+            "title": "Quantum Low-Density Parity-Check Codes",
+            "authors": "Breuckmann, N.P., Eberhardt, J.N.",
+            "year": "2021",
+            "journal": "PRX Quantum",
+            "doi": "10.1103/PRXQuantum.2.040101",
+            "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.040101"
+        },
+        {
+            "id": "CSS",
+            "type": "article",
+            "title": "The Physics of (good) LDPC Codes I. Gauging and dualities",
+            "authors": "Rakovszky, T., Khemani, V.",
+            "year": "2023",
+            "journal": "",
+            "doi": "10.48550/arXiv.2310.16032",
+            "url": "https://arxiv.org/abs/2310.16032"
+        },
+        {
+            "id": "HGP",
+            "type": "article",
+            "title": "Quantum LDPC Codes with Reduced Overhead",
+            "authors": "Tillich, J.-P., Zémor, G.",
+            "year": "2014",
+            "journal": "IEEE Trans. Inf. Theory",
+            "doi": "10.1109/TIT.2013.2288639",
+            "url": "https://ieeexplore.ieee.org/document/6671468"
+        },
+        {
+            "id": "LPCodes",
+            "type": "article",
+            "title": "Explicit Abelian Lifts and Quantum LDPC Codes",
+            "authors": "Granha Jeronimo, F., Mittal, T., O'Donnell, R., Paredes, P., Tulsiani, M.",
+            "year": "2021",
+            "journal": "arXiv e-prints",
+            "doi": "10.48550/arXiv.2112.01647",
+            "url": "https://arxiv.org/abs/2112.01647"
+        },
+        {
+            "id": "QTCodes",
+            "type": "article",
+            "title": "Quantum Tanner codes",
+            "authors": "Panteleev, P., Kalachev, G.",
+            "year": "2022",
+            "journal": "IEEE Symp. Found. Comput. Sci. (FOCS)",
+            "doi": "10.48550/arXiv.2202.13641",
+            "url": "https://arxiv.org/abs/2202.13641"
+        },
+        {
+            "id": "BBCodes",
+            "type": "article",
+            "title": "Quantum bootstrap product codes",
+            "authors": "Huang, Y., Li, W., Yoshida, B.",
+            "year": "2024",
+            "journal": "Nature",
+            "doi": "10.1038/s41586-024-07107-7",
+            "url": "https://www.nature.com/articles/s41586-024-07107-7"
+        },
+        {
+            "id": "BProp",
+            "type": "article",
+            "title": "Belief Propagation Decoding of Quantum LDPC Codes",
+            "authors": "Kou, M., Liu, H., Li, H., He, G.",
+            "year": "2023",
+            "journal": "Quantum",
+            "doi": "10.22331/q-2023-06-07-1037",
+            "url": "https://quantum-journal.org/papers/q-2023-06-07-1037/"
+        },
+        {
+            "id": "OSD0",
+            "type": "article",
+            "title": "Ordered Statistics Decoding for Short Block Length Quantum LDPC Codes",
+            "authors": "Kung, C.-F., Kuo, K.-Y., Lai, C.-Y.",
+            "year": "2021",
+            "journal": "IEEE Trans. Commun.",
+            "doi": "10.1109/TCOMM.2021.3104319",
+            "url": "https://ieeexplore.ieee.org/document/9562513"
+        },
+        {
+            "id": "Transversal",
+            "type": "article",
+            "title": "Quantum LDPC Codes with Transversal Gates",
+            "authors": "Golowich, L., et al.",
+            "year": "2025",
+            "journal": "arXiv e-prints",
+            "doi": "10.48550/arXiv.2506.15905",
+            "url": "https://arxiv.org/abs/2506.15905"
+        },
+        {
+            "id": "LHMM",
+            "type": "article",
+            "title": "Learning Hidden Quantum Markov Models with Local Structure",
+            "authors": "Author list not yet fixed",
+            "year": "2024",
+            "journal": "arXiv e-prints",
+            "doi": "10.48550/arXiv.2410.02753",
+            "url": "https://arxiv.org/abs/2410.02753"
+        }
+    ],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [{
