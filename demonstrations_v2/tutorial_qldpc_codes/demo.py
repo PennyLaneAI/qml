@@ -36,9 +36,9 @@ Classical LDPC Codes
 
 To understand quantum LDPC codes, we begin by looking at their classical counterparts, which
 have revolutionized modern telecommunications (powering Wi-Fi and 5G networks) by approaching
-the absolute theoretical limits of data transmission, known as the Shannon limit [#shannon]_.
-Classical LDPC codes achieve this with highly efficient, linear-time decoding that exploits
-their structure of the parity checks.
+the absolute theoretical limits of data transmission, known as the `Shannon limit
+<https://en.wikipedia.org/wiki/Shannon_limit>`_. Classical LDPC codes achieve this with
+highly efficient, linear-time decoding that exploits their structure of the parity checks.
 
 A classical LDPC code :math:`C[n,k,m]` protects :math:`k` logical bits by encoding them into
 :math:`n` physical bits based on rules defined by an :math:`m\times n` parity-check matrix
@@ -476,10 +476,12 @@ def compute_stabilizer_group(hx: np.ndarray, hz: np.ndarray) -> tuple[list, set]
 
     # Create PauliStrings for X-checks and Z-checks
     generators = [
-        stim.PauliString(["".join(["I", "X"][bit]) for bit in row]) for row in hx if np.any(row)
+        stim.PauliString(["".join(["I", "X"][bit]) for bit in row])
+        for row in hx if np.any(row)
     ]
     generators += [
-        stim.PauliString(["".join(["I", "Z"][bit]) for bit in row]) for row in hz if np.any(row)
+        stim.PauliString(["".join(["I", "Z"][bit]) for bit in row])
+        for row in hz if np.any(row)
     ]
 
     full_group = set()
@@ -520,7 +522,7 @@ print(f"Result: The codespace is preserved: {result}")
 
 ######################################################################
 # In addition to the gate operations being transversal, there's active work being done to develop
-# efficient frameworks to perform logical Pauli measurements, as well [#LMHM], which is another
+# efficient frameworks to perform logical Pauli measurements, as well [#LMHM]_, which is another
 # critical requirement for the partical utility of these codes.
 #
 # Conclusion
