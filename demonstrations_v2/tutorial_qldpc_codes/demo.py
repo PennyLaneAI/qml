@@ -365,7 +365,7 @@ class BPOSDDecoder:
         .. math::
             M_cv[i,j] = (-1)^{s_i} \cdot 2 \arctanh{\prod_{j'\neqj} tanh(M_vc[i,j'] / 2)}
         """
-        pm = self.H 
+        pm = self.H
         th = np.tanh(v2c / 2)
         th = np.where((pm == 1) & (th == 0), 1e-15, th)
         th_masked = np.where(pm, th, 1.0)
@@ -373,7 +373,7 @@ class BPOSDDecoder:
         row_prod = np.prod(th_masked, axis=1, keepdims=True)
         ext = np.clip(row_prod / th_masked, -1 + 1e-12, 1 - 1e-12)
         sign = (1 - 2 * s)[:, None]  # (-1)^s per check
-        return H * sign * 2 * np.arctanh(ext)
+        return pm * sign * 2 * np.arctanh(ext)
 
     def _osd0(self, syndrome, llr):
         """Order-0 OSD: sort by reliability, then Gaussian elimination."""
