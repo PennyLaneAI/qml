@@ -31,7 +31,7 @@ The two-dimensional lid-driven cavity flow (2D-LDC) is a canonical benchmark in 
 schemes that solve the incompressible Navier–Stokes equations. Determining the
 fluid flow within the cavity requires solving the pressure correction equations by inverting the associated
 pressure correction matrix (:math:`A`). A key observation is that :math:`A` is highly structured and sparse.
-The figure below highlights the non-zero entries of :math:`A` with a dimensionality of :math:`(64 \times 64)`
+The figure below highlights the non-zero entries of :math:`A` with a dimensionality of :math:`64 \times 64`
 [#lapworth2022]_.
 
 |
