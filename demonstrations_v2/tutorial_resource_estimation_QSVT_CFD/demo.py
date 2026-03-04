@@ -131,7 +131,7 @@ print(resources)
 # 
 # |
 # 
-# Where :math:`H_{y} = SH`. For more details, refer to Appendix B's Walsh transform encoding section in
+# For more details, refer to Appendix B's Walsh transform encoding section in
 # [#linaje2025]_.
 # 
 
