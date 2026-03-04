@@ -119,7 +119,7 @@ print(resources)
 # optimize the cost of our block encoding by tuning the number of Walsh coefficients within :math:`[1, N]`,
 # where :math:`N` is the size of the matrix. If the entries in our diagonal are sparse in the Walsh basis,
 # as is the case for the CFD example, then we can get away with far fewer Walsh coefficients. This results in
-# a much more efficient encoding. The circuit below prepares a single such Walsh diagonal block encoding,
+# a much more efficient encoding. The circuit below, with :math:`H_{y} = SH`, prepares a single such Walsh diagonal block encoding,
 # ultimately we need to prepare as many operators as non-zero diagonals in :math:`A`.
 # 
 # |
