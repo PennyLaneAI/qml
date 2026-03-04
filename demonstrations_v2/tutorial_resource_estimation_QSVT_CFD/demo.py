@@ -51,7 +51,7 @@ times fast).
 The number of terms in the LCU scales as :math:`O(4^{n})` in the number of qubits, and thus the cost of the block
 encoding also scales exponentially. Even computing the LCU decomposition becomes a computational bottleneck.
 Furthermore, there is no way of knowing a priori how many terms there will be in the LCU. For these reasons, a
-general "one size fits all" block encoding scheme is usually too expensive for our systems of interest.
+general "one-size-fits-all" block encoding scheme is usually too expensive for our systems of interest.
 
 .. _naive_block_encoding:
 Resource cost of naive block encoding
