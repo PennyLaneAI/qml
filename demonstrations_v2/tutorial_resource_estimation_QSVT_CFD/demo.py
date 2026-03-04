@@ -44,7 +44,7 @@ The figure below highlights the non-zero entries of :math:`A` with a dimensional
 |
 
 To invert this matrix using QSVT, we will need to **load** it onto the quantum computer using a block encoding.
-The standard technique for block encoding any (square) matrix :math:`A` is the method of `linear combination of
+The standard technique for block encoding any (square) matrix is the method of `linear combination of
 unitaries (LCUs) <tutorial_lcu_blockencoding>`_. However, it suffers from a few fatal flaws (try saying that five
 times fast).
 
