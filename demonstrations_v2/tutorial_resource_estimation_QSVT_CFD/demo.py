@@ -105,8 +105,8 @@ print(resources)
 # 
 # |
 # 
-# Estimating the resource cost for this circuit may seem like a daunting task, but we have
-# PennyLane's quantum resource :mod:`~.pennylane.estimator` to help us construct each piece!
+# To estimate the resource cost for this approach, we can use
+# PennyLane's quantum resource :mod:`~.pennylane.estimator` module!
 # 
 # Diagonal Matrices & the Walsh Transform
 # ------------------------------------------------
