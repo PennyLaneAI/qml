@@ -326,13 +326,15 @@ plt.show()
 # For classical LDPC codes, BP is near-optimal and runs in :math:`O(\log n)` iterations. However,
 # for quantum LDPC codes, handling degeneracy (multiple error patterns producing the same syndrome)
 # is a challenging task, which requires using a post-processing step of Ordered Statistics Decoding
-# (OSD) to maintain the performance [#OSD0]_. Below, we take a look at using the BP+OSD decoder
-# to decode the errors in a simple HGP code.
+# (OSD) with order-0 to maintain the performance [#OSD0]_. Let us define a decoder class that
+# implements this, where the BP is implemented using the ``tanh`` product rule. When the BP
+# fails to converge, the OSD-0 is used as a fallback, which ranks the qubits by their final
+# LLR reliability and uses Gaussian elimination to mathematically force a valid parity solution.
 #
 
 
 class BPOSDDecoder:
-    """A minimal working implementation of Belief Propagation + OSD-0 decoder.
+    """A lightweight Belief Propagation + OSD-0 decoder.
 
     Args:
         H (np.ndarray): Parity-check matrix for the codeword (m x n).
@@ -346,55 +348,76 @@ class BPOSDDecoder:
         self.max_iter = max_iter
         self.channel_llr = np.log((1 - error_rate) / error_rate)
 
-    def decode(self, syndrome) -> tuple[bool, np.ndarray, str]:
+    def decode(self, syndrome: np.ndarray) -> tuple[bool, np.ndarray, str]:
         """Decode a length-m syndrome vector and return the estimated error."""
-        H, s, ch = self.H, np.asarray(syndrome, dtype=int), self.channel_llr
-        c2v = np.zeros((self.m, self.n))
-        posterior = np.full(self.n, ch)
+        # Initialize messages from check to variable nodes and the total belief
+        parity_matrix, target_syndrome = self.H, np.asarray(syndrome, dtype=int)
+        c2v_messages = np.zeros((self.m, self.n))
+        prior_llr = self.channel_llr # baseline likelihood - prior belief
+        posterior_llr = np.full(self.n, prior_llr)
+        for _ in range(self.max_iter): # BP loop
+            # Variable-to-Check Update (Extrinsic Information)
+            var_to_check_msgs = parity_matrix * (posterior_llr[None, :] - c2v_messages)
+            # Check-to-Variable Update (Tanh Product Rule)
+            c2v_messages = self.update_checks(var_to_check_msgs, target_syndrome)
+            # Update Total Beliefs (Posterior LLR)
+            posterior_llr = prior_llr + (c2v_messages * parity_matrix).sum(axis=0)
+            # Make a Hard Decision
+            estimated_error = (posterior_llr < 0).astype(int)  
+            # Verify the Syndrome
+            if np.all((parity_matrix @ estimated_error) % 2 == target_syndrome):
+                return (True, estimated_error, "BP")
 
-        for it in range(self.max_iter):
-            # Variable -> Check: extrinsic = posterior - message
-            v2c = H * (posterior[None, :] - c2v)
-            # Check -> Variable: tanh product rule
-            c2v = self._check_update(v2c, s)
-            # Posterior LLR and decide = channel + incoming c2v messages
-            posterior = ch + (c2v * H).sum(axis=0)
-            e_hat = (posterior < 0).astype(int)  # Hard decision
-            if np.all((H @ e_hat) % 2 == s):
-                return (True, e_hat, "BP")
+        # OSD Fallback and verify the syndrome
+        estimated_error = self.osd0(target_syndrome, posterior_llr)  
+        is_success = bool(np.all((parity_matrix @ estimated_error) % 2 == target_syndrome))
+        return (is_success, estimated_error, "OSD-0")
 
-        e_hat = self._osd0(s, posterior)  # Fallback: OSD-0 post-processing
-        return (bool(np.all((H @ e_hat) % 2 == s)), e_hat, "OSD-0")
-
-    def _check_update(self, v2c, s):
+    def update_checks(self, var_to_check_msgs: np.ndarray, syndrome: np.ndarray) -> np.ndarray:
         r"""Check-to-variable update via the tanh product rule.
 
         .. math::
-            M_cv[i,j] = (-1)^{s_i} \cdot 2 \arctanh{\prod_{j'\neqj} tanh(M_vc[i,j'] / 2)}
+            M_cv[i,j] = (-1)^{s_i} \cdot 2 \arctanh{\prod_{j'\neqj} \tanh(M_vc[i,j'] / 2)}
         """
-        pm = self.H
-        th = np.tanh(v2c / 2)
-        th = np.where((pm == 1) & (th == 0), 1e-15, th)
-        th_masked = np.where(pm, th, 1.0)
+        parity_matrix, delta = self.H, 1e-15
 
-        row_prod = np.prod(th_masked, axis=1, keepdims=True)
-        ext = np.clip(row_prod / th_masked, -1 + 1e-12, 1 - 1e-12)
-        sign = (1 - 2 * s)[:, None]  # (-1)^s per check
-        return pm * sign * 2 * np.arctanh(ext)
+        # Compute the tanh (for incoming messages) and check for edge-existence
+        tanh_msgs = np.tanh(var_to_check_msgs / 2.0)
+        tanh_msgs = np.where((parity_matrix == 1) & (tanh_msgs == 0.0), delta, tanh_msgs)
 
-    def _osd0(self, syndrome, llr):
-        """Order-0 OSD: sort by reliability, then do augmented Gaussian elimination."""
-        order = np.argsort(-np.abs(llr))
-        hs = np.hstack([self.H[:, order], syndrome.reshape(-1, 1)])
-        rref = qp.math.binary_finite_reduced_row_echelon(hs)
-        hw, sw = rref[:, : self.n], rref[:, -1]
-        pivot_rows, pivot_cols = hw.any(axis=1), hw.argmax(axis=1)
-        e_perm = np.zeros(self.n, dtype=int)
-        e_perm[pivot_cols[pivot_rows]] = sw[pivot_rows]
-        e = np.zeros(self.n, dtype=int)
-        e[order] = e_perm
-        return e
+        # Compute the "extrinsic" product for each edge and apply the syndrome
+        masked_tanh_msgs = np.where(parity_matrix == 1, tanh_msgs, 1.0)
+        check_node_prods = np.prod(masked_tanh_msgs, axis=1, keepdims=True)
+        extrinsic_tanh = np.clip(check_node_prods / masked_tanh_msgs, -1 + delta, 1 - delta)
 
+        # Apply the syndrome constraint and convert back to LLR space
+        syndrome_sign = (1 - 2 * syndrome)[:, None] # (-1)^s_i
+        check_to_var_msgs = parity_matrix * syndrome_sign * 2 * np.arctanh(extrinsic_tanh)
+        return check_to_var_msgs
+
+    def osd0(self, syndrome: np.ndarray, llr: np.ndarray) -> np.ndarray:
+        """Implements the ordered statistics decoding with order-0 fallback"""
+        # Permute using the LLR magnitude and augment it with the syndrome
+        reliability_order = np.argsort(-np.abs(llr))
+        H_permuted = self.H[:, reliability_order]
+        augmented_matrix = np.hstack([H_permuted, syndrome.reshape(-1, 1)])
+
+        # Perform Gaussian elimination over GF(2) and extract results
+        rref_matrix = qp.math.binary_finite_reduced_row_echelon(augmented_matrix)
+        H_reduced, updated_syndrome = rref_matrix[:, :self.n], rref_matrix[:, -1]
+
+        # Set all non-pivot variables to 0 and permute the errors back
+        has_pivot, pivot_cols = H_reduced.any(axis=1), H_reduced.argmax(axis=1)
+        final_error, permuted_error = np.zeros((2, self.n), dtype=int)
+        permuted_error[pivot_cols[has_pivot]] = updated_syndrome[has_pivot]
+        final_error[reliability_order] = permuted_error
+        return final_error
+
+######################################################################
+# Let us test our decoder on the Hypergraph Product (HGP) code constructed from the
+# repetition codes with distance 3. We will intentionally inject a specific 2-qubit
+# error, compute its syndrome, and ask the decoder to find a correction.
+#
 
 h1, h2 = rep_code(3), rep_code(3)
 hx, hz = hgp_code(h1, h2)
@@ -421,6 +444,12 @@ else:
     print("Result: logical error.")
 
 ######################################################################
+# As multiple physical error patterns map to the exact same syndrome, the decoder often
+# finds an alternative, equally valid path. So, as shown in the above example, sometimes
+# the decoder will find a correction that matches a valid stabilizer, rather than the exact
+# correction, which means the logical codespace is preserved, i.e., quantum information
+# remains protected.
+#
 # Transversal Gates for qLDPC Codes
 # ----------------------------------
 #
