@@ -1,20 +1,20 @@
 r"""Understanding Fault-tolerant Threshold Theorem in Practice
 ===============================================================
+
 Quantum mechanics offers a revolutionary framework for computation, unlocking the ability
 to solve highly complex problems well beyond the reach of classical supercomputers. Yet,
-the current generation of quantum hardware faces a critical roadblock: physical instability.
-Even though modern processors feature hundreds of qubits, they are highly susceptible to
-stray environmental interactions and imperfect gate operations. This constant barrage of
-noise causes delicate quantum states to rapidly decohere, corrupting the system with
-computational errors
+the current generation of quantum hardware faces a critical roadblock, namely physical
+instability. Even though modern processors feature hundreds of qubits, they are highly
+susceptible to stray environmental interactions and imperfect gate operations. This constant
+barrage of noise causes delicate quantum states to rapidly decohere, corrupting the system
+with computational errors.
 
-To build a quantum computer that can run indefinitely with negligible errors,
-we must utilize Quantum Error Correction (QEC). QEC works by redundantly encoding
-a single "logical" qubit into many "physical" qubits. However, because the
-operations used to perform this encoding are themselves noisy, QEC introduces
-new opportunities for errors to occur. This leads to a fundamental question:
-Can we ever get ahead of the noise? This is where the *fault-tolerant threshold theorem*
-comes in.
+To build a quantum computer that can run indefinitely with negligible errors, we must utilize
+Quantum Error Correction (QEC). QEC works by redundantly encoding a single "logical" qubit into
+many "physical" qubits. However, because the operations used to perform this encoding are
+themselves noisy, QEC introduces new opportunities for errors to occur. This leads to a
+fundamental question: Can we ever get ahead of the noise? This is where the *fault-tolerant
+threshold theorem* comes in.
 
 .. figure::    
     ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-stabilizer-codes-open-graph.png
@@ -27,24 +27,31 @@ Fault-tolerant Threshold Theorem
 ---------------------------------
 
 The Threshold Theorem is the mathematical bedrock of scalable quantum computing.
-It states that an ideal quantum circuit of size N can be reliably simulated by a
-noisy quantum circuit, provided that the physical error rate p of the individual
-operations is below a strict, non-zero constant known as the threshold :math:`p_{th}`.
+Intuitively, it states that a fault-tolerant quantum computation of size :math:`N`
+can be accurately executed on imperfect hardware, provided that the base error rate
+of the physical operations, :math:`p`, remains strictly below a specific, non-zero
+constant known as the threshold, :math:`p_{th}`.
 
-If :math:`p < p_{th}`, we can achieve arbitrarily low logical error rates by increasing the
-size of our error-correcting code. The theorem guarantees that the overhead required
-to do this is manageable: the size of the noisy circuit scales asymptotically as
-:math:`\mathcal{O}(N\log^{c}(N))` for some positive constant :math:`c`.
+To state this more rigorously: assuming a local stochastic error model where :math:`p<p_{th}`,
+we can take any ideal circuit :math:`\mathcal{C}` and construct a corresponding fault-tolerant
+circuit :math:`\mathcal{C}^{\prime}`. Even when subjected to continuous noise, the latter is
+guaranteed to yield an output that is statistically indistinguishable from the ideal
+outcome—deviating by no more than an arbitrarily small tolerance, :math:`\epsilon > 0`.
+Furthermore, the theorem ensures that this error correction is practically achievable,
+i.e., the required hardware overhead is efficient. The total number of physical qubits and
+time steps needed for the fault-tolerant circuit :math:`\mathcal{C}^{\prime}`
+grows at most by a polylogarithmic factor, :math:`\mathcal{O}(\log^{c}(N/\epsilon))`
+for some positive constant :math:`c`.
 
-In simple terms: As long as your physical hardware is "good enough", i.e., its physical
-error rate is below the threshold :math:`p_{th}`, you can build reliable quantum circuits
-of any size. The required number of physical qubits will grow, but not exponentially—it
-scales reasonably well with the size of the computation.
+In simpler terms, this means that as long as your physical hardware is "good enough",
+i.e., the error rate per physical gate or time step is below the threshold :math:`p_{th}`,
+you can build reliable quantum circuits of any size. The required number of physical
+qubits would grow non-exponentially with the size of the computation.
 
-While the theoretical proof relies on specific noise models, like independent
-stochastic noise, the threshold theorem has been shown to hold for highly realistic,
-correlated noise models as well. It assures us that there is no fundamental physical
-barrier to large-scale quantum computing.
+Although the original theoretical framework relied on specific assumptions like
+independent stochastic noise, the threshold theorem is robust enough to apply to
+highly realistic, correlated noise environments as well. It assures us that there
+is no fundamental physical barrier standing in the way of large-scale quantum computers.
 
 The Pseudo-Threshold
 --------------------
