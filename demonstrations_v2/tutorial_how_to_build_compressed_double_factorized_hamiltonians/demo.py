@@ -234,7 +234,7 @@ cdf_hamiltonian = {
 def leaf_unitary_rotation(leaf, wires):
     """Applies the basis rotation transformation corresponding to the leaf tensor."""
     basis_mat = qml.math.kron(leaf, qml.math.eye(2)) # account for spin
-    return qml.BasisRotation(unitary_matrix=basis_mat, wires=wires)
+    qml.BasisRotation(unitary_matrix=basis_mat, wires=wires)
 
 ######################################################################
 # Similarly, the unitary transformation for the core tensors can be applied efficiently
@@ -296,14 +296,14 @@ def CDFTrotterStep(time, cdf_ham, wires):
     for bidx, (core, leaf) in enumerate(zip(cores, leaves)):
         # Note: only the first term is one-body, others are two-body
         body_type = "two_body" if bidx else "one_body"
+        # apply the basis rotation for leaf tensor
+        leaf_unitary_rotation(leaf, wires)
         qml.prod(
-            # revert the change-of-basis for leaf tensor
-            leaf_unitary_rotation(leaf.conjugate().T, wires),
             # apply the rotation for core tensor scaled by the time-step
             *core_unitary_rotation(time * core, body_type, wires),
-            # apply the basis rotation for leaf tensor
-            leaf_unitary_rotation(leaf, wires),
         ) # Note: prod applies operations in the reverse order (right-to-left).
+        # revert the change-of-basis for leaf tensor
+        leaf_unitary_rotation(leaf.conjugate().T, wires)
 
 ######################################################################
 # We now use this function to simulate the evolution of the :math:`H_4` Hamiltonian
