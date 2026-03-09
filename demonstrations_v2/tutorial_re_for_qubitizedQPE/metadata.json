@@ -8,22 +8,21 @@
     "executable_stable": true,
     "executable_latest": true,
     "dateOfPublication": "2026-01-29T00:00:00+00:00",
-    "dateOfLastModification": "2026-02-06T15:48:14+00:00",
+    "dateOfLastModification": "2026-02-24T15:48:14+00:00",
     "categories": [
         "Algorithms",
         "Optimization",
-        "Quantum Chemistry",
-        "Quantum Computing"
+        "Quantum Chemistry"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-re-qubitization-qpe-thumbnail.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-resource-estimation-qpe-thumbnail.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-re-qubitization-qpe-large-thumbnail.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-resource-estimation-qpe-large-thumbnail.png"
         }
     ],
     "seoDescription": "Exploring Qubit and T-gate Trade-offs in Qubitized Quantum Phase Estimation",

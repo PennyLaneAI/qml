@@ -8,7 +8,7 @@
     "executable_stable": true,
     "executable_latest": true,
     "dateOfPublication": "2026-02-03T00:00:00+00:00",
-    "dateOfLastModification": "2026-02-06T00:00:00+00:00",
+    "dateOfLastModification": "2026-02-24T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Chemistry",
@@ -18,11 +18,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-hamiltonian-simulation-with-gqsp-thumbnail.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-resource-estimation-gqsp-thumbnail.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-hamiltonian-simulation-with-gqsp-large-thumbnail.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-resource-estimation-gqsp-large-thumbnail.png"
         }
     ],
     "seoDescription": "Learn how to use PennyLane's resource estimation module to compute the cost of Hamiltonian simulation with Generalized quantum signal processing (GQSP)",
