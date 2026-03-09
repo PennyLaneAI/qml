@@ -191,8 +191,8 @@ You can view the demonstration in any web browser. Upon successful completion of
 
 ## Support
 
-*   **Source Code:** https://github.com/PennyLaneAI/QML
-*   **Issue Tracker:** https://github.com/PennyLaneAI/QML/issues
+*   **Source Code:** https://github.com/PennyLaneAI/demos
+*   **Issue Tracker:** https://github.com/PennyLaneAI/demos/issues
 
 For any issues or questions, please utilize our GitHub issue tracker.
 
