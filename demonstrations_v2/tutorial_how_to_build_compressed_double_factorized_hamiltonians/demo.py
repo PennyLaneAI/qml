@@ -296,6 +296,7 @@ def CDFTrotterStep(time, cdf_ham, wires):
         body_type = "two_body" if bidx else "one_body"
         # apply the basis rotation for leaf tensor
         leaf_unitary_rotation(leaf, wires)
+        # apply the rotation for core tensor scaled by the time-step
         core_unitary_rotation(time * core, body_type, wires)
         # revert the change-of-basis for leaf tensor
         leaf_unitary_rotation(leaf.conjugate().T, wires)
