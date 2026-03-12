@@ -266,7 +266,7 @@ print(f"Physical qubits (n) of the HGP code: {n1*n2 + m1*m2} == {2*dist*(dist-1)
 # distance scaling, i.e., :math:`d=\Theta(n)`. In recent years, there has been some progress
 # in achieving this goal, primarily through a series of breakthroughs, some of which are:
 #
-
+#
 # 1. **Lifted Product (LP) Codes:** To overcome the :math:`O(\sqrt{n})` distance barrier of
 #    standard HGP codes, LP codes replace the binary scalar entries of a classical seed matrix
 #    with elements of a group algebra, such as polynomials representing cyclic shifts [#LPCodes]_.
