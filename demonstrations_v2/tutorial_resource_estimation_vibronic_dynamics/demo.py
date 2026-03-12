@@ -1,5 +1,5 @@
 r"""
-Quantifying Resource Requirements for Vibronic Dynamics Simulation
+Quantifying resource requirements for vibronic dynamics simulation
 ==================================================================
 
 Standard quantum chemistry often relies on the adiabatic Born-Oppenheimer approximation, assuming nuclei move on a single potential energy surface (PES)
