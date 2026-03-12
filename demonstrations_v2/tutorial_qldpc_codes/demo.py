@@ -1,4 +1,4 @@
-r"""Quantum low-density parity-check (qLDPC) codes for quantum error correction
+r"""Quantum low-density parity-check (QLDPC) codes for quantum error correction
 ================================================================================
 
 Quantum computers are envisioned to be incredibly powerful computational devices. While many of the
@@ -7,22 +7,31 @@ present in these systems, which manifests itself as computational errors and imp
 Thus, for a fault-tolerant quantum computer to exist, where one can run these devices indefinitely
 with minimal permissible errors, we need quantum error correction (QEC).
 
-While designing error-correction codes for this purpose, we look for some desirable properties such
-as (i) a high encoding rate :math:`R = k / n`, (ii) local and low-weight parity checks,
-(iii) an over-complete universal gate set with as big a transversal gate set as possible,
-and (iv) linear time classical decoding. Unfortunately, these requirements are not all
-mutually compatible. For example, widely used topological codes such as surface codes
-use local, nearest-neighbour connections, but have an inefficient encoding rate, i.e., protecting
-one logical qubit (:math:`k=1`) requires a patch of thousands of physical qubits (:math:`n \gg k`).
+For this purpose, QEC codes encode :math:`n` physical qubits into :math:`k` logical qubits.
+To allow for fault-tolerant computation with these :math:`k` qubits, the QEC codes need to have
+the following desirable properties:
+
+1. A high encoding rate (:math:`R = k / n`).
+2. Local and low-weight parity checks, i.e., measurements for error detection.
+3. An over-complete universal gate set with as many gates that can be applied transversally,
+   i.e., without entangling different physical systems within the code, as possible.
+4. Linear time classical decoding and corresponding error correction.
+
+Unfortunately, these requirements are not all mutually compatible. For example, widely used
+topological codes such as surface codes use local, nearest-neighbour connections, but have an
+inefficient encoding rate, i.e., protecting one logical qubit (:math:`k=1`) requires a patch of
+thousands of physical qubits (:math:`n \gg k`).
 
 However, it remains unclear which combination of these options would lead to the best long-term
 solution. But as solving real-world problems requires scaling up to thousands of logical qubits,
-removing the locality condition is crucial. Quantum low-density parity-check (qLDPC) codes
-enable us to do exactly that. In this demo, we will cover the basics of the qLDPC codes,
-including their construction and decoding. To better assimilate all the topics covered in this
-tutorial, we recommend reading our tutorials on the :doc:`Surface Code
-<demos/tutorial_game_of_surface_codes>` and :doc:`Stabilizer Codes <demos/tutorial_stabilizer_codes>`
-for a quick recap of the QEC topics.
+moving beyond strict nearest-neighbor constraints becomes crucial. Quantum low-density parity-check
+(QLDPC) codes are particularly well-suited for this, as they can leverage high-connectivity between
+qubits to drastically reduce qubit overheads, making them preferred codes of choice for the
+photonic and neutral-atom platforms that offer such qubit connectivity. In this demo, we will cover
+the basics of QLDPC codes, including their construction and decoding. For the readers who are not
+familiar with the fundamentals of QEC, we recommend reading our tutorials on the :doc:`Surface Code
+<demos/tutorial_game_of_surface_codes>`, :doc:`Stabilizer Codes <demos/tutorial_stabilizer_codes>`,
+and :doc:`Lattice Surgery <demos/tutorial_lattice_surgery>` that cover them in detail.
 
 .. figure::    
     ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-stabilizer-codes-open-graph.png
@@ -37,21 +46,22 @@ Classical LDPC Codes
 To understand quantum LDPC codes, we begin by looking at their classical counterparts, which
 have revolutionized modern telecommunications (powering Wi-Fi and 5G networks) by approaching
 the absolute theoretical limits of data transmission, known as the `Shannon limit
-<https://en.wikipedia.org/wiki/Shannon_limit>`_. Classical LDPC codes achieve this with
-highly efficient, linear-time decoding that exploits their structure of the parity checks.
+<https://en.wikipedia.org/wiki/Shannon_limit>`_. Classical LDPC codes achieve this with highly
+efficient, linear-time decoding that exploits the sparse structure of their parity checks.
 
-A classical LDPC code :math:`C[n,k,m]` protects :math:`k` logical bits by encoding them into
-:math:`n` physical bits based on rules defined by an :math:`m\times n` parity-check matrix
-(:math:`H`) [#qldpc1]_. The "low-density" part of their name comes from this matrix being
-overwhelmingly sparse, i.e., filled mostly with zeros, and more specifically, the column/row
-weights (number of 1s in each column/row) are strictly bounded constants independent of
-:math:`n`.
+A classical LDPC code :math:`C[n,k,d]` protects :math:`k` logical bits by encoding them into
+:math:`n` physical bits, where :math:`d` is the minimum distance of the code that dictates how
+many errors the code can correct. The encoding rules are defined by an :math:`m\times n`
+parity-check matrix (:math:`H`), where :math:`k = n - m` [#qldpc1]_. The "low-density" part of
+their name comes from this matrix being overwhelmingly sparse, i.e., filled mostly with zeros,
+and more specifically, the column/row weights (number of 1s in each column/row) are strictly
+bounded constants independent of :math:`n`.
 
-Mathematically, these are visualized as `Tanner graphs
+Mathematically, these codes are visualized as `Tanner graphs
 <https://en.wikipedia.org/wiki/Tanner_graph>`_, which are bipartite graphs with edges
 representing connections between the variable nodes (:math:`n` physical bits)
 and the check nodes (:math:`m` parity constraints). For example, the following
-is a Tanner graph for a simple :math:`[7, 4]` LDPC code:
+is a Tanner graph for a simple :math:`[5, 2, 3]` LDPC code:
 """
 
 import numpy as np
@@ -88,41 +98,44 @@ plt.show()
 #
 # When noise corrupts our bits, creating an error vector :math:`\vec{e}`, the system identifies the
 # problem by computing the syndrome :math:`s = H\vec{e} \mod\ 2`. As each check node only connects
-# to a handful of data nodes (and vice versa), these codes scale beautifully because errors can be
-# decoded using local message-passing algorithms sharing probabilistic information along the edges
-# of the Tanner graph until all parity constraints are satisfied. This will come in handy when we
-# learn about decoding, but before that, let's return to first constructing qLDPC codes.
+# to a handful of data nodes (and vice versa), these codes achieve linear-time decoding complexity
+# because errors can be decoded using local message-passing algorithms sharing probabilistic
+# information along the edges of the Tanner graph until all parity constraints are satisfied.
+# This will come in handy when we learn about decoding, but before that, let's return to first
+# constructing QLDPC codes.
 #
 # Calderbank-Shor-Steane (CSS) construction
 # ------------------------------------------
 #
-# The key goal of qLDPC codes is to replicate the sparsity (and unlock linear-time decoding) in the
-# quantum realm. This is a non-trivial task, as due to no-go theorems, one no longer has direct
-# access to the state to perform the standard parity checks, and in addition to bit flips, the
-# qubits also suffer from phase flips, which don't have a classical analog. Therefore, to detect
-# errors, we need to rely on measuring commuting multi-qubit Pauli operators that help detect
-# phase and bit flips.
+# The key goal of QLDPC codes is to replicate this sparsity (and unlock linear-time decoding) in the
+# quantum realm. However, this is a non-trivial task. Due to quantum no-go theorems, we cannot
+# directly read the state to perform standard parity checks. Furthermore, qubits suffer from phase
+# flips alongside standard bit flips—an error type with no classical analog. Therefore, to detect
+# errors, we must rely on measuring commuting multi-qubit Pauli operators that can identify both
+# types of flips.
 #
 # The most elegant and widely used solution to build a series of such operators is the
-# Calderbank-Shor-Steane (CSS) code construction [#CSS]_, where instead of trying to design one
-# massive, complicated matrix that mixes the Pauli X and Z operations, the problem is sliced into
-# two halves, defining a stabilizer code using generator sets containing only Pauli-Z (Pauli-X)
-# operators to catch bit (phase) flips. We can then represent these sets (or stabilizers) using
-# two separate classical parity-check matrices: :math:`H_X` and :math:`H_Z`, where the elements
-# :math:`H_{ij}^{P={X/Z}} = 1` are only if the :math:`i^{th}` :math:`P`-type check has support
-# on the :math:`j^{th}` qubit. For example, look at the following CSS code known as the
-# `Steane code <https://errorcorrectionzoo.org/c/steane>`_ :math:`[[7,1,3]]` constructed from
-# the two :math:`d=3` Hamming codes:
+# Calderbank-Shor-Steane (CSS) code construction [#CSS]_. A CSS code introduces two separate
+# sets of parity checks: one containing only Pauli-Z operators to catch bit flips, and another
+# containing only Pauli-X operators to catch phase flips. We can represent these sets using two
+# classical parity-check matrices, :math:`H_Z` and :math:`H_X`, which act as distinct Tanner graphs.
+# These graphs are then combined into a single hypergraph, where the elements are defined
+# as :math:`H_{ij}^{P=\{X,Z\}} = 1` only if the :math:`i^{th}` :math:`P`-type check has support
+# on the :math:`j^{th}` qubit.
+#
+# For example, look at the following CSS code known as the `Steane code
+# <https://errorcorrectionzoo.org/c/steane>`_ :math:`[[7,1,3]]`, which is constructed from the two
+# :math:`d=3` Hamming codes. To build its corresponding parity-check matrix, we assign the Hamming
+# code's parity-check matrix to both the :math:`X` and :math:`Z` checks, and stack them into a
+# single block matrix :math:`H = [H_X, 0;\, 0, H_Z]`, which is shown below:
 #
 
 import pennylane as qp
-
 
 def hamming_code(distance: int) -> np.ndarray:
     """Returns a Hamming code parity check matrix of a given rank."""
     bit_masks = np.arange(1, 2**distance)[:, None] & (1 << np.arange(distance)[::-1])
     return (bit_masks > 0).astype(np.uint8).T
-
 
 h1, h2 = hamming_code(3), hamming_code(3)
 (m1, n1), (m2, n2) = h1.shape, h2.shape
@@ -132,43 +145,54 @@ css_code = np.hstack((
         np.vstack([h2, np.zeros((m2, n2), dtype=np.uint8)])
 ))
 
-hx, hz = css_code[m1:, :n1], css_code[:m2, n2:]
+######################################################################
+# For these codes, all stabilizers must commute, which is ensured by having each of the
+# :math:`X - Z` stabilizer pairs overlap on an even number of qubits. Mathematically, this is
+# equivalent to the symplectic orthogonality condition :math:`H^X(H^Z)^T = 0\mod\ 2`,
+# which we can be easily verified below:
+#
+
+hx, hz = css_code[m1:, :n1], css_code[:m2, n2:] # Extract individual components.
 print(f"Does H_X * H_Z^T = 0? {np.allclose((hx @ hz.T) % 2, 0)}")
 print(f"Does H_Z * H_X^T = 0? {np.allclose((hz @ hx.T) % 2, 0)}\n")
 
+######################################################################
+# Finally, we can also confirm that our constructed matrix encodes exactly one logical qubit
+# by computing the code dimension (:math:`k`) by subtracting the linearly independent stabilizer
+# constraints from the total number of physical qubits. 
+#
+
 code_dim = hx.shape[1] - qp.math.binary_matrix_rank(hx) - qp.math.binary_matrix_rank(hz)
-print(f"Code dimension (k): {code_dim}")
+print(f"Code dimension (k): {code_dim}\n")
 
 ######################################################################
-# As implicity shown above, for satisfying the commutation condition, these matrices must
-# satisfy a symplectic orthogonality condition :math:`H^X(H^Z)^T = 0\mod\ 2`, i.e., each
-# of the :math:`X - Z` stabilizer pairs must overlap on an even number of qubits.
-#
 # Hypergraph Product Codes
 # ------------------------
-#
-# While finding just one classical matrix that is sparse is easy, finding two sparse matrices that
-# randomly happen to share an even number of connections everywhere their checks intersect is
-# mathematically laborious. It severely limits the design space compared to classical codes, which
-# is why it took decades for researchers to discover families of good qLDPC codes. However, a
-# foundational breakthrough happened with the Hypergraph Product (HGP) codes [#HGP]_,
-# which takes two classical LDPC codes, :math:`C_1` (:math:`[n_1, k_1, d_1]`) and :math:`C_2`
-# (:math:`[n_2, k_2, d_2]`), with parity-check matrices :math:`H_1` (:math:`m_1 \times n_1`) and
+
+# Finding a single sparse matrix for a classical code is straightforward. However, for a
+# quantum code, we must find two sparse matrices that also perfectly commute with each other.
+# This requires their parity checks to always overlap on an even number of qubits, whcich is
+# a strict mathematical constraint that makes generating these matrices notoriously difficult.
+# This severely limits the design space compared to classical codes, which is why it took decades
+# for researchers to discover families of good QLDPC codes. However, a foundational breakthrough
+# happened with the Hypergraph Product (HGP) codes [#HGP]_, which takes two classical LDPC codes,
+# :math:`C_1` (:math:`[n_1, k_1, d_1]`) and :math:`C_2` (:math:`[n_2, k_2, d_2]`),
+# with parity-check matrices :math:`H_1` (:math:`m_1 \times n_1`) and
 # :math:`H_2` (:math:`m_2 \times n_2`), respectively, and produces a CSS code with the following
 # parity-check matrices:
 #
 # .. math::
 #
 #     H^X = (H_1 \otimes I_{n_2} | I_{m_1} \otimes H_2^T),\\
-#     H^Z = (I_{n_1} \otimes H_2 | H_1^T \otimes I_{m_2}),
+#     H^Z = (I_{n_1} \otimes H_2 | H_1^T \otimes I_{m_2}).
 #
-# where the algebraic properties of the tensor product ensure that :math:`H^X` and :math:`H^Z`
-# satisfy the symplectic orthogonality condition, and :math:`H_i^T` defines the transpose code
-# of :math:`H_i`, with parameters :math:`[m_i, k_i^T, d_i^T ]`. For example, look at the
-# following HGP code constructed from two :math:`d_1=3` and :math:`d_2=3` repetition codes,
-# which is equivalent to a Toric code :math:`[[13, 1, 3]]`:
+# Here the algebraic properties of the tensor product ensure that :math:`H^X` and :math:`H^Z`
+# satisfy the symplectic orthogonality condition. Furthermore, the transposed matrix :math:`H_i^T`
+# defines the transpose code, which has its own parameters :math:`[m_i, k_i^T, d_i^T]`, where the
+# superscript :math:`T` simply labels the dimension and distance of this new code.
+# For example, look at the following HGP code constructed from two :math:`d_1=3` and :math:`d_2=3`
+# repetition codes, which is equivalent to a Toric code :math:`[[13, 1, 3]]`:
 #
-
 from pennylane.qchem.tapering import _kernel as binary_matrix_kernel
 
 
@@ -222,7 +246,7 @@ print(f"Physical qubits (n) of the HGP code: {n1*n2 + m1*m2} == {2*dist*(dist-1)
 
 ######################################################################
 # As shown above, the resulting quantum code can be represented by :math:`Q[[n,k,d]]`,
-# which encodes logical qubits with distance :math:`d=min(d_1,d_2,d_1^T,d_2^T)`,
+# which encodes logical qubits with distance :math:`d=\min(d_1,d_2,d_1^T,d_2^T)`,
 # with :math:`n = n_1n_2 + m_1m_2` and :math:`k = k_1k_2 + k_1^T k_2^T`. This means that
 # the HGP codes achieve a constant encoding rate :math:`R=\Theta(1)`, but their distance
 # grows only as :math:`d=\mathcal{O}(\sqrt{n})`, matching the surface code scaling. Note
@@ -231,7 +255,7 @@ print(f"Physical qubits (n) of the HGP code: {n1*n2 + m1*m2} == {2*dist*(dist-1)
 # the minimum weight of an error that goes undetected by the checks but is
 # not a stabilizer.
 #
-# Modern qLDPC Codes
+# Modern QLDPC Codes
 # -------------------
 #
 # To build truly scalable quantum computation devices, we need to at least achieve a linear
@@ -257,11 +281,11 @@ print(f"Physical qubits (n) of the HGP code: {n1*n2 + m1*m2} == {2*dist*(dist-1)
 #    approaching the theoretical limit of the quantum Singleton bound, where doubling the
 #    physical qubits strictly doubles the error-correcting power.
 #
-# 3. Bivariate Bicycle (BB) Codes: To bridge the gap between the abstract algebra of expander
-#    graphs (which require highly non-local hardware wiring) and the reality of physical
-#    quantum processors, these codes were developed [#BBCodes]_. They are built using simple
-#    bivariate polynomials of two commuting variables (:math:`x` and :math:`y`) that directly
-#    correspond to local spatial shifts on a periodic 2D grid, ensuring the resulting
+# 3. Bivariate Bicycle (BB) Codes: These codes were specifically developed to bridge the gap
+#    between the abstract algebra of expander graphs, which require highly non-local hardware
+#    wiring, and the reality of physical quantum processors [#BBCodes]_. They are built using
+#    simple bivariate polynomials of two commuting variables (:math:`x` and :math:`y`) that
+#    directly correspond to local spatial shifts on a periodic 2D grid, ensuring the resulting
 #    parity-check matrices commute. By construction, the physical qubits can be laid
 #    out in a quasi-2D architecture with strictly bounded, short-range connections,
 #    while sacrificing infinite asymptotic linear scaling.
@@ -292,7 +316,6 @@ def tanner_code(h1: np.ndarray, h2: np.ndarray) -> tuple[np.ndarray, np.ndarray]
 
     return hx, hz
 
-
 ns_hgp, ns_tan = [], []
 for dist in (distances := range(2, 20)):
     h1, h2 = rep_code(dist), rep_code(dist)
@@ -310,28 +333,32 @@ plt.tight_layout()
 plt.show()
 
 ######################################################################
-# Decoding qLDPC Codes
+# Decoding QLDPC Codes
 # ----------------------
 #
 # As mentioned earlier, Tanner graphs constructed using the parity-check matrix of the code
-# can be used for decoding errors efficiently using a decoder that implements iterative
-# message-passing algorithms like Belief Propogation (BP) [#BProp]_. It forms the backbone of the
-# many standardly algorithms used for qLDPC codes, which iteratively passes the messages between
-# the variable and check nodes. These messages consist of a log-likelihood ratio (LLR) summarizing
-# the evidence from the channel output and all other check nodes, who then use them to compute a
-# parity constraint and sends back an updated LLR. Generally, all the variable nodes need to
-# reach a consensus in a fixed number of iterations, making the whole process executable in
+# can be used for decoding errors efficiently using an iterative message-passing algorithm
+# like Belief Propagation (BP) [#BProp]_. This decoding process can be thought of as a
+# collaborative excercise, where the variable nodes (qubits) and check nodes (parity rules) act
+# like detectives passing notes back and forth. A variable node sends a confidence level message:
+# "I am 84% sure I have an error." The check node looks at the notes from all connected qubits,
+# applies the parity rule, and replies: "Based on group's evidence, adjust your confidence to 96%."
+# Mathematically, these "notes" are Log-Likelihood Ratios (LLRs), which are updated iteratively
+# until all parity rules are satisfied (consensus) or a fixed number of iterations is reached,
+# making the whole process executable in polynomial time.
 # polynomial time.
 #
-# For classical LDPC codes, BP is near-optimal and runs in :math:`O(\log n)` iterations. However,
-# for quantum LDPC codes, handling degeneracy (multiple error patterns producing the same syndrome)
-# is a challenging task, which requires using a post-processing step of Ordered Statistics Decoding
-# (OSD) with order-0 to maintain the performance [#OSD0]_. Let us define a decoder class that
-# implements this, where the BP is implemented using the ``tanh`` product rule. When the BP
-# fails to converge, the OSD-0 is used as a fallback, which ranks the qubits by their final
-# LLR reliability and uses Gaussian elimination to mathematically force a valid parity solution.
+# For classical codes, BP is near-optimal and runs in :math:`O(\log n)` iterations. However,
+# quantum codes suffer from degeneracy, where multiple different error patterns trigger the exact
+# same syndrome. This often confuses BP, causing it to endlessly flip-flop without reaching a
+# consensus. When BP fails to converge, we use Ordered Statistics Decoding (OSD) with order-0 as
+# a fallback [#OSD0]_. One can think of OSD-0 as a tie-breaker, which takes the final,
+# unresolved LLRs from BP and ranks the qubits from most to least confident. It locks in the
+# "most confident" qubits as absolute truth, and then uses Gaussian elimination to mathematically
+# force a valid parity solution for the remaining uncertain qubits. Let us define a decoder class
+# that implements this, where the BP is implemented using the ``tanh`` product rule and the OSD-0
+# uses :func:`~.pennylane.math.binary_finite_reduced_row_echelon` to perform Gaussian elimination.
 #
-
 
 class BPOSDDecoder:
     """A lightweight Belief Propagation + OSD-0 decoder.
@@ -450,27 +477,31 @@ else:
 # correction, which means the logical codespace is preserved, i.e., quantum information
 # remains protected.
 #
-# Transversal Gates for qLDPC Codes
+# Transversal Gates for QLDPC Codes
 # ----------------------------------
 #
-# Transversal gates are the preferred way to perform computation fault-tolerantly with
-# a quantum code, as they are supposed to be relatively easy to implement and propagate
-# minimal errors. However, the `Earnest-Knill theorem
-# <https://en.wikipedia.org/wiki/Eastin%E2%80%93Knill_theorem>`_ restricts the set of the
-# logical unitary product operators that can be applied transversally for any nontrivial
-# local-error-detecting quantum code to be non-universal. While this limits the ways to implement
-# fault-tolerant gates on quantum codes, there are still ways to use non-transversal methods to
-# implement a logical gate. For example, we can implement non-Clifford gates such as
-# :class:`~.pennylane.T` can be implemented through state injection [#Transversal]_.
+# Beyond just storing information safely, a practical quantum computer must also perform logic 
+# operations on encoded qubits. A logical gate on a logical qubit is always realized by a
+# collection of microscopic operations on the physical qubits. Transversal gates typically refer
+# to the special case where the logical operation is realized by its equivalent physical operation
+# on all qubits. For example, a transversal :math:`T` gate in the Steane code corresponds to
+# applying a :math:`T` gate on all physical qubits.
 #
-# One of the key challenges in using quantum LDPC codes in practice is to construct the ones that
-# support transversal gates that allow universality. Similar to the commonly used quantum error
-# correcting codes, the Clifford gates can be applied transversally for qLDPC codes as well.
-# However, there are ways to construct certain families of quantum LDPC codes that support
-# applying certain non-Clifford gates like :class:`~.pennylane.CCZ` gates transversally.
+# As such, they are relatively easy to implement and propagate minimal errors. However, the
+# `Earnest-Knill theorem <https://en.wikipedia.org/wiki/Eastin%E2%80%93Knill_theorem>`_ restricts
+# the set of the logical unitary product operators that can be applied transversally for any
+# nontrivial local-error-detecting quantum code to be non-universal. While this limits the ways
+# to implement fault-tolerant gates on quantum codes, there are still ways to use non-transversal
+# methods to implement a logical gate. For example, we can implement non-Clifford gates such as
+# :class:`~.pennylane.T` can be implemented through `magic state injection
+# <https://pennylane.ai/qml/glossary/what-are-magic-states>`__ [#Transversal]_.
 #
-# Below, we take a look at how to test if a given operation is transversal for a given qLDPC code
-# by testing if it preserves its codespace.
+# While most standard codes are limited to transversal Clifford gates, a major breakthrough of
+# certain QLDPC code families is their ability to natively support transversal non-Clifford
+# gates, such as the :class:`~.pennylane.CCZ` gate. This drastically reduces the hardware
+# overhead needed for universal quantum computing. We can test if a given operation is
+# transversal for a given code by testing if it preserves its codespace. For example, we test
+# if the :class:`~.pennylane.SWAP` gate is transversal for a simple Toric code.
 #
 
 from itertools import product
@@ -507,7 +538,7 @@ def compute_stabilizer_group(hx: np.ndarray, hz: np.ndarray) -> tuple[list, set]
 
 
 def verify_transversality(operations: str, gens: list, group: set):
-    """Verify if the given operations are transversal for the given qLDPC code."""
+    """Verify if the given operations are transversal for the given QLDPC code."""
     tableau = stim.Tableau(num_qubits=len(gens[0]))
     for op in operations:
         tableau.append(*op)
@@ -522,7 +553,6 @@ def verify_transversality(operations: str, gens: list, group: set):
             break
 
     return is_transversal
-
 
 swap = stim.Tableau.from_named_gate("SWAP")
 ops = [[swap, (0, 1)], [swap, (2, 3)], [swap, (4, 5)], [swap, (6, 7)]]
@@ -541,12 +571,20 @@ print(f"Result: The codespace is preserved: {result}")
 #
 # The journey to fault-tolerant quantum computing hinges on managing errors without requiring an
 # astronomical number of physical qubits. By relaxing the strict nearest-neighbor constraints of
-# topological codes, Quantum Low-Density Parity-Check (qLDPC) codes offer a profound paradigm
+# topological codes, Quantum Low-Density Parity-Check (QLDPC) codes offer a profound paradigm
 # shift: they trade massive qubit overhead for a complex hardware connectivity challenge.
+#
+# So, which codes are actually leading the charge? While early abstract constructions like purely 
+# random sparse matrices proved too difficult to wire or decode in practice, highly structured 
+# families have emerged as the clear path forward. For near-term hardware with limited but growing 
+# connectivity, Bivariate Bicycle (BB) codes are currently the most promising candidates. Looking 
+# further ahead, asymptotically good codes such as lifted product and quantum Tanner codes offer 
+# the ultimate theoretical scaling for massive quantum processors.
+#
 # Advancements in dynamically reconfigurable and modular architectures are turning these highly
 # connected codes into a physical reality. While still many engineering hurdles remain,
 # particularly in designing universal transversal gate sets and executing efficient logical
-# measurements. However, supported by fast, linear-time decoding algorithms, qLDPC codes have
+# measurements. However, supported by fast, linear-time decoding algorithms, QLDPC codes have
 # evolved past elegant mathematical formalism and are progressing towards practicality.
 #
 # References
@@ -603,7 +641,7 @@ print(f"Result: The codespace is preserved: {result}")
 # .. [#Transversal]
 #
 #     H. Leitch, A. Kay,
-#     "Transversal Gates for Highly Asymmetric qLDPC Codes",
+#     "Transversal Gates for Highly Asymmetric QLDPC Codes",
 #     `arXiv:2506.15905 <https://arxiv.org/abs/2506.15905>`__, 2025.
 #
 # .. [#LMHM]
