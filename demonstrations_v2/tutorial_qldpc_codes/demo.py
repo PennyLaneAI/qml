@@ -264,28 +264,30 @@ print(f"Physical qubits (n) of the HGP code: {n1*n2 + m1*m2} == {2*dist*(dist-1)
 # distance scaling, i.e., :math:`d=\Theta(n)`. In recent years, there has been some progress
 # in achieving this goal, primarily through a series of breakthroughs, some of which are:
 #
-# 1. **Lifted Product (LP) Codes:** To overcome the :math:`\mathcal{O}(\sqrt{n})` distance barrier of
-#    standard HGP codes, LP codes replace the binary scalar entries of a classical seed matrix
-#    with elements of a group algebra, such as polynomials representing cyclic shifts [#LPCodes]_.
-#    By taking the hypergraph product over this polynomial space and *lifting* the result back
-#    into a massive, sparse binary matrix, they inject powerful algebraic constraints. This
-#    boosts the minimum distance to :math:`d = \Theta(\sqrt{n} \log n)`, while maintaining
-#    constant encoding rate :math:`R = \Theta(1)`.
+# 1. **Lifted Product (LP) Codes:** To overcome the :math:`\mathcal{O}(\sqrt{n})` distance barrier
+#    of standard HGP codes, LP codes replace the binary scalar entries of a classical seed matrix
+#    with elements of a cyclic group algebra, i.e., polynomials in :math:`\mathbb{F}_2[x]/(x^N-1)`,
+#    representing cyclic shifts [#LPCodes]_. By taking the hypergraph product over this polynomial
+#    space and *lifting* the result back into a sparse binary matrix, they inject powerful
+#    algebraic constraints. This first boosted the minimum distance to :math:`d=\Theta(n/\log n)`,
+#    and was later improved to fully linear :math:`d = \Theta(n)`, while maintaining a constant
+#    encoding rate :math:`R = \Theta(1)`.
 #
 # 2. **Quantum Tanner (QT) Codes:** Seeking to maximize both storage density and error-correcting
-#    power, these codes are constructed using Cayley graphs of finite groups with high expansion
-#    properties [#QTCodes]_. By rigidly enforcing local classical constraints at every vertex of
-#    a multidimensional complex, the expander graph geometry physically prevents small errors from
-#    forming undetectable logical operators. This achieves constant encoding rate with a strictly
-#    linear distance :math:`d = \Theta(n)` approaching the theoretical limit of the quantum
-#    Singleton bound, where error-correction power doubles with every doubling of :math:`n`.
+#    power, these codes are constructed by placing qubits on the squares of a left-right Cayley
+#    complex, i.e., a 2D structure built from two Cayley graphs of a finite group with high
+#    spectral expansion [#QTCodes]_. By enforcing local classical Tanner code constraints at every
+#    vertex of this complex, the expander geometry prevents small errors from forming undetectable
+#    logical operators. This achieves constant encoding rate with strictly linear distance
+#    :math:`d = \Theta(n)`, meeting the quantum Gilbert-Varshamov bound.
 #
 # 3. **Bivariate Bicycle (BB) Codes:** These codes bridge the gap between the abstract algebra of
-#    expander graphs, which require highly non-local hardware wiring, and the physical reality
-#    of quantum processors [#BBCodes]_. Built using commuting bivariate polynomials (:math:`x`
-#    and :math:`y`) that correspond to local spatial shifts on a periodic 2D grid, they ensure
-#    physical qubits can be laid out in a quasi-2D architecture with strictly bounded,
-#    short-range connections, making them highly viable for current hardware.
+#    expander graphs that require highly non-local hardware wiring, and the physical reality of
+#    of quantum processors [#BBCodes]_.  Built using pairs of low-degree polynomials :math:`A(x,y)`
+#    and :math:`B(x,y)` over the ring :math:`\mathbb{F}_2[x,y]/(x^\ell - 1, y^m - 1)`, where
+#    :math:`x` and :math:`y` generate cyclic shifts along the two axes of an :math:`\ell \times m`
+#    torus. This ensures that physical qubits can be laid out in a quasi-2D architecture with
+#    strictly bounded, short-range connections, making them highly viable for current hardware.
 #
 # To see why these modern constructions are so powerful, let us look at a simplified construction
 # of the QT codes. The function ``tanner_code`` below takes the base parity-check matrices of
