@@ -17,9 +17,9 @@ from the ground up. An efficient treatment of the potential energy will be prese
 :mod:`~.pennylane.estimator`, we can perform a feasibility analysis, determining exactly what resources are required to simulate
 these complex non-adiabatic processes on quantum hardware.
 
-.. figure:: ../_static/demonstration_assets/mapping/long_image.png
+.. figure:: ../_static/demo_thumbnails/opengraph_demo_thumbnails/pennylane-demo-resource-estimation-vibronic-open-graph.png
     :align: center
-    :width: 80%
+    :width: 70%
     :target: javascript:void(0)
 
 

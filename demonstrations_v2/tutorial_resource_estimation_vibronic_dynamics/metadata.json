@@ -18,14 +18,14 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/mapping/thumbnail_mapping_2024-06-20.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-resource-estimation-vibronic-thumbnail.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_mapping_2024-06-20.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-resource-estimation-vibronic-large-thumbnail.png"
         }
     ],
-    "seoDescription": "Learn how to estimate resources for a vibronic dynamics algorithm",
+    "seoDescription": "Learn how to estimate the quantum resources of a vibronic dynamics algorithm",
     "doi": "",
     "references": [
         {
