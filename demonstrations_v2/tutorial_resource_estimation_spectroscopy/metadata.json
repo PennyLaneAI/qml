@@ -21,11 +21,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_how_to_build_spin_hamiltonians.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-resource-estimation-spectroscopy-thumbnail.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_how_to_build_spin_hamiltonians.png"
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-resource-estimation-spectroscopy-large-thumbnail.png"
         }
     ],
     "seoDescription": "Learn how to estimate the resources for spectroscopic algorithms using PennyLane",
