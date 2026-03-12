@@ -203,14 +203,12 @@ def rep_code(distance: int) -> np.ndarray:
         distance - 1, distance, k=1, dtype=np.uint8
     )
 
-
 def hgp_code(h1: np.ndarray, h2: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """Construct HGP code parity check matrices."""
     (m1, n1), (m2, n2) = h1.shape, h2.shape
     hx = np.hstack((np.kron(h1, np.identity(n2)), np.kron(np.identity(m1), h2.T)))
     hz = np.hstack((np.kron(np.identity(n1), h2), np.kron(h1.T, np.identity(m2))))
     return hx.astype(np.int8), hz.astype(np.int8)
-
 
 h1, h2 = rep_code(3), rep_code(3)
 hx, hz = hgp_code(h1, h2)
@@ -222,6 +220,12 @@ k1, k2 = n1 - r1, n2 - r2
 k1t, k2t = m1 - r1, m2 - r2
 print(f"Code dimension (k) of the HGP code: {k1 * k2 + k1t * k2t}\n")
 
+######################################################################
+# Now that we have constructed our matrices and found the dimension, the final
+# step is to determine the distance of our HGP code. We can compute this by
+# finding the classical distances of the constituent codes and their transposes,
+# and taking the minimum across them.
+#
 
 def compute_distance(parity_matrix: np.ndarray) -> int:
     """Compute the classical distance of the code based on the parity-check matrices."""
@@ -239,16 +243,15 @@ def compute_distance(parity_matrix: np.ndarray) -> int:
     weights = codewords[1:].sum(axis=1)
     return int(np.min(weights))
 
-
 d1, d2 = compute_distance(h1), compute_distance(h2)
 d1t, d2t = compute_distance(h1.T), compute_distance(h2.T)
 print(f"Distance (d) of the HGP code: {(dist := min(d1, d2, d1t, d2t))}")
 print(f"Physical qubits (n) of the HGP code: {n1*n2 + m1*m2} == {2*dist*(dist-1) + 1}")
 
 ######################################################################
-# As shown above, the resulting quantum code can be represented by :math:`Q[[n,k,d]]`,
-# which encodes logical qubits with distance :math:`d=\min(d_1,d_2,d_1^T,d_2^T)`,
-# with :math:`n = n_1n_2 + m_1m_2` and :math:`k = k_1k_2 + k_1^T k_2^T`. This means that
+# As shown above, the resulting quantum code :math:`Q[[n,k,d]]`, encodes
+# :math:`n = n_1n_2 + m_1m_2` physical qubits into :math:`k = k_1k_2 + k_1^T k_2^T`
+# logical qubits with distance :math:`d=\min(d_1,d_2,d_1^T,d_2^T)`. This means that
 # the HGP codes achieve a constant encoding rate :math:`R=\Theta(1)`, but their distance
 # grows only as :math:`d=\mathcal{O}(\sqrt{n})`, matching the surface code scaling. Note
 # that, the distance computed here is the classical distance, which is not the same as
@@ -263,43 +266,42 @@ print(f"Physical qubits (n) of the HGP code: {n1*n2 + m1*m2} == {2*dist*(dist-1)
 # distance scaling, i.e., :math:`d=\Theta(n)`. In recent years, there has been some progress
 # in achieving this goal, primarily through a series of breakthroughs, some of which are:
 #
-# 1. Lifted Product (LP) Codes: To overcome the :math:`O(\sqrt{n})` distance barrier of standard
-#    HGP codes, these codes replace the binary scalar entries of a classical seed matrix with
-#    elements of a group algebra, such as polynomials representing cyclic shifts [#LPCodes]_.
-#    By taking the hypergraph product over this polynomial space and "lifting" the result back
-#    into a massive, sparse binary matrix, this hidden group structure injects powerful
-#    algebraic constraints. This drastically boosts the minimum distance to
-#    :math:`d = \Theta(\sqrt{n} \log n)`, while maintaining a constant encoding rate
-#    :math:`R = \Theta(1)` and the crucial sparsity required for fast message-passing decoding.
+
+# 1. **Lifted Product (LP) Codes:** To overcome the :math:`O(\sqrt{n})` distance barrier of
+#    standard HGP codes, LP codes replace the binary scalar entries of a classical seed matrix
+#    with elements of a group algebra, such as polynomials representing cyclic shifts [#LPCodes]_.
+#    By taking the hypergraph product over this polynomial space and *lifting* the result back
+#    into a massive, sparse binary matrix, they inject powerful algebraic constraints. This
+#    boosts the minimum distance to :math:`d = \Theta(\sqrt{n} \log n)`, while maintaining
+#    sparsity and constant encoding rate :math:`R = \Theta(1)`.
 #
-# 2. Quantum Tanner (QT) Codes: Seeking to maximize both storage density and error-correcting
-#    power, these codes move away from flat grids and are constructed using Cayley graphs of
-#    finite groups with high expansion properties [#QTCodes]_. By placing qubits on the faces of
-#    a multidimensional square complex and rigidly enforcing local classical constraints at
-#    every vertex, the expander graph geometry physically prevents small errors from forming
-#    undetectable logical operators. Consequently, these codes achieve both a constant rate
-#    :math:`R = \Theta(1)` and a strictly linear distance :math:`d = \Theta(n)`,
-#    approaching the theoretical limit of the quantum Singleton bound, where doubling the
-#    physical qubits strictly doubles the error-correcting power.
+# 2. **Quantum Tanner (QT) Codes:** Seeking to maximize both storage density and error-correcting
+#    power, these codes are constructed using Cayley graphs of finite groups with high expansion
+#    properties [#QTCodes]_. By rigidly enforcing local classical constraints at every vertex of
+#    a multidimensional complex, the expander graph geometry physically prevents small errors from
+#    forming undetectable logical operators. This achieves constant encoding rate with a strictly
+#    linear distance :math:`d = \Theta(n)` approaching the theoretical limit of the quantum
+#    Singleton bound, where error-correction power doubles with every doubling of :math:`n`.
 #
-# 3. Bivariate Bicycle (BB) Codes: These codes were specifically developed to bridge the gap
-#    between the abstract algebra of expander graphs, which require highly non-local hardware
-#    wiring, and the reality of physical quantum processors [#BBCodes]_. They are built using
-#    simple bivariate polynomials of two commuting variables (:math:`x` and :math:`y`) that
-#    directly correspond to local spatial shifts on a periodic 2D grid, ensuring the resulting
-#    parity-check matrices commute. By construction, the physical qubits can be laid
-#    out in a quasi-2D architecture with strictly bounded, short-range connections,
-#    while sacrificing infinite asymptotic linear scaling.
+# 3. **Bivariate Bicycle (BB) Codes:** These codes bridge the gap between the abstract algebra of
+#    expander graphs, which require highly non-local hardware wiring, and the physical reality
+#    of quantum processors [#BBCodes]_. Built using commuting bivariate polynomials (:math:`x`
+#    and :math:`y`) that correspond to local spatial shifts on a periodic 2D grid, they ensure
+#    physical qubits can be laid out in a quasi-2D architecture with strictly bounded,
+#    short-range connections, making them highly viable for current hardware.
 #
-# Below, we take a look at a simplified QT codes construction and benchmark the
-# improvements in the distance scaling compared to the HGP codes:
+# To see why these modern constructions are so powerful, let us look at a simplified construction
+# of the QT codes. The function ``tanner_code`` below takes the base parity-check matrices of
+# an HGP code and iteratively applies a row-and-column elimination procedure to enforce the
+# local-code structure of the Tanner graph, which removes the inter-block redundancies in the
+# HGP parity-checks.
 #
 
 def tanner_code(h1: np.ndarray, h2: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """Construct Tanner code parity check matrices [arXiv:2309.11719]."""
     itr, idx = h1.shape[0] * h2.shape[0], h1.shape[1] * h2.shape[1]
 
-    def eliminate_col(mat: np.ndarray) -> np.ndarray:
+    def apply_gaussian_pivot(mat: np.ndarray) -> np.ndarray:
         col = mat[:, idx]
         if not col.any():
             return mat
@@ -311,8 +313,8 @@ def tanner_code(h1: np.ndarray, h2: np.ndarray) -> tuple[np.ndarray, np.ndarray]
 
     hx, hz = hgp_code(h1, h2)
     for ix in range(itr):
-        hx = np.delete(eliminate_col(hx) if ix % 2 == 0 else hx, idx, axis=1)
-        hz = np.delete(eliminate_col(hz) if ix % 2 == 1 else hz, idx, axis=1)
+        hx = np.delete(apply_gaussian_pivot(hx) if ix % 2 == 0 else hx, idx, axis=1)
+        hz = np.delete(apply_gaussian_pivot(hz) if ix % 2 == 1 else hz, idx, axis=1)
 
     return hx, hz
 
@@ -547,7 +549,6 @@ def compute_stabilizer_group(hx: np.ndarray, hz: np.ndarray) -> tuple[list, set]
         full_group.add(str(current_pauli))
         full_group.add(str(-current_pauli))
     return generators, full_group
-
 
 def verify_transversality(operations: str, gens: list, group: set):
     """Verify if the given operations are transversal for the given QLDPC code."""
