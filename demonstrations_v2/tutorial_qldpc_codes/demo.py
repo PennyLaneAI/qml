@@ -462,21 +462,34 @@ dec_z = BPOSDDecoder(hz, error_rate=0.05, max_iter=50)
 res = dec_z.decode(z_syndrome)[1]
 print(f"Decoded error: {res}")
 
+######################################################################
+# As multiple physical error patterns map to the exact same syndrome, the decoder
+# might find an alternative, equally valid path. When we apply its guessed
+# correction to our system, we are essentially creating a *residual* error,
+# :math:`E_{residual} = (E_{injected} + E_{decoded}) \mod 2`, as we can see below.
+#
+
 residual = (res + x_error) % 2
-if np.allclose(residual, np.zeros(hx.shape[1], dtype=int)):
-    print("Result: exact correction")
+if np.allclose(residual, 0):
+    print("Result: Exact correction")
 elif np.all((hz @ residual) % 2 == 0):
-    print("Result: corrected up to stabilizer.")
+    print("Result: Corrected up to stabilizer.")
 else:
-    print("Result: logical error.")
+    print("Result: Logical error.")
 
 ######################################################################
-# As multiple physical error patterns map to the exact same syndrome, the decoder often
-# finds an alternative, equally valid path. So, as shown in the above example, sometimes
-# the decoder will find a correction that matches a valid stabilizer, rather than the exact
-# correction, which means the logical codespace is preserved, i.e., quantum information
-# remains protected.
-#
+# The guessed correction is exact when the residual error turns out to be a null vector.
+# Alternatively, it can happen to be a valid :math:`X`-stabilizer, which means that the
+# combined effect of the noise and our guessed correction simply applied a stabilizer to the
+# code block. Since stabilizers inherently leave the logical codespace perfectly untouched,
+# our quantum information is successfully preserved, even though the decoder guessed a
+# completely different physical path! We can see this by adding it as a new row to the
+# :math:`H_X` parity-check matrix and checking if it increases its :math:`\mathbb{Z}_2` rank.
+
+print(f"Rank w/o residual: {qp.math.binary_matrix_rank(hx)}")
+print(f"Rank with residual: {qp.math.binary_matrix_rank(np.vstack([hx, residual]))}")
+
+######################################################################
 # Transversal Gates for QLDPC Codes
 # ----------------------------------
 #
@@ -485,7 +498,7 @@ else:
 # collection of microscopic operations on the physical qubits. Transversal gates typically refer
 # to the special case where the logical operation is realized by its equivalent physical operation
 # on all qubits. For example, a transversal :math:`T` gate in the Steane code corresponds to
-# applying a :math:`T` gate on all physical qubits.
+# applying a :class:`~.pennylane.T` gate on all physical qubits.
 #
 # As such, they are relatively easy to implement and propagate minimal errors. However, the
 # `Earnest-Knill theorem <https://en.wikipedia.org/wiki/Eastin%E2%80%93Knill_theorem>`_ restricts
@@ -493,14 +506,14 @@ else:
 # nontrivial local-error-detecting quantum code to be non-universal. While this limits the ways
 # to implement fault-tolerant gates on quantum codes, there are still ways to use non-transversal
 # methods to implement a logical gate. For example, we can implement non-Clifford gates such as
-# :class:`~.pennylane.T` can be implemented through `magic state injection
-# <https://pennylane.ai/qml/glossary/what-are-magic-states>`__ [#Transversal]_.
+# :class:`~.pennylane.T` by injecting a `magic state
+# <https://pennylane.ai/qml/glossary/what-are-magic-states>`__ #Transversal]_.
 #
-# While most standard codes are limited to transversal Clifford gates, a major breakthrough of
-# certain QLDPC code families is their ability to natively support transversal non-Clifford
-# gates, such as the :class:`~.pennylane.CCZ` gate. This drastically reduces the hardware
-# overhead needed for universal quantum computing. We can test if a given operation is
-# transversal for a given code by testing if it preserves its codespace. For example, we test
+# While the transversal gate set for most standard codes is limited to Clifford gates, a major
+# breakthrough of certain QLDPC code families is their ability to natively support transversal
+# non-Clifford gates, such as the :class:`~.pennylane.CCZ` gate. This drastically reduces the
+# hardware overhead needed for universal quantum computing. We can test if a given operation is
+# transversal for a given code by testing if it preserves its *codespace*. For example, we test
 # if the :class:`~.pennylane.SWAP` gate is transversal for a simple Toric code.
 #
 
@@ -510,7 +523,6 @@ import stim
 # 2-bit repetition code on a ring
 h1, h2 = np.ones((2, 2)), np.ones((2, 2))
 hx, hz = hgp_code(h1, h2)  # Toric code
-
 
 def compute_stabilizer_group(hx: np.ndarray, hz: np.ndarray) -> tuple[list, set]:
     """Generates the independent Pauli checks and the full stabilizer group."""
@@ -544,7 +556,7 @@ def verify_transversality(operations: str, gens: list, group: set):
         tableau.append(*op)
 
     is_transversal = True
-    for gix, gen in enumerate(gens):
+    for gen in gens:
         if str(evolved := tableau(gen)) in group:
             print(f"{gen}  -->  {evolved}  (Valid!)")
         else:
@@ -558,7 +570,6 @@ swap = stim.Tableau.from_named_gate("SWAP")
 ops = [[swap, (0, 1)], [swap, (2, 3)], [swap, (4, 5)], [swap, (6, 7)]]
 gens, stabs = compute_stabilizer_group(hx, hz)
 result = verify_transversality(ops, gens, stabs)
-
 print(f"Result: The codespace is preserved: {result}")
 
 ######################################################################
@@ -574,11 +585,11 @@ print(f"Result: The codespace is preserved: {result}")
 # topological codes, Quantum Low-Density Parity-Check (QLDPC) codes offer a profound paradigm
 # shift: they trade massive qubit overhead for a complex hardware connectivity challenge.
 #
-# So, which codes are actually leading the charge? While early abstract constructions like purely 
-# random sparse matrices proved too difficult to wire or decode in practice, highly structured 
-# families have emerged as the clear path forward. For near-term hardware with limited but growing 
-# connectivity, Bivariate Bicycle (BB) codes are currently the most promising candidates. Looking 
-# further ahead, asymptotically good codes such as lifted product and quantum Tanner codes offer 
+# So, which codes are actually leading the charge? While early abstract constructions like purely
+# random sparse matrices proved too difficult to wire or decode in practice, highly structured
+# families have emerged as the clear path forward. For near-term hardware with limited but growing
+# connectivity, Bivariate Bicycle (BB) codes are currently the most promising candidates. Looking
+# further ahead, asymptotically good codes such as lifted product and quantum Tanner codes offer
 # the ultimate theoretical scaling for massive quantum processors.
 #
 # Advancements in dynamically reconfigurable and modular architectures are turning these highly
