@@ -151,6 +151,7 @@ css_code = np.hstack((
 #
 
 hx, hz = css_code[m1:, :n1], css_code[:m2, n2:] # Extract individual components.
+
 print(f"Does H_X * H_Z^T = 0? {np.allclose((hx @ hz.T) % 2, 0)}")
 print(f"Does H_Z * H_X^T = 0? {np.allclose((hz @ hx.T) % 2, 0)}\n")
 
@@ -266,14 +267,13 @@ print(f"Physical qubits (n) of the HGP code: {n1*n2 + m1*m2} == {2*dist*(dist-1)
 # distance scaling, i.e., :math:`d=\Theta(n)`. In recent years, there has been some progress
 # in achieving this goal, primarily through a series of breakthroughs, some of which are:
 #
-#
-# 1. **Lifted Product (LP) Codes:** To overcome the :math:`O(\sqrt{n})` distance barrier of
+# 1. **Lifted Product (LP) Codes:** To overcome the :math:`\mathcal{O}(\sqrt{n})` distance barrier of
 #    standard HGP codes, LP codes replace the binary scalar entries of a classical seed matrix
 #    with elements of a group algebra, such as polynomials representing cyclic shifts [#LPCodes]_.
 #    By taking the hypergraph product over this polynomial space and *lifting* the result back
 #    into a massive, sparse binary matrix, they inject powerful algebraic constraints. This
 #    boosts the minimum distance to :math:`d = \Theta(\sqrt{n} \log n)`, while maintaining
-#    sparsity and constant encoding rate :math:`R = \Theta(1)`.
+#    constant encoding rate :math:`R = \Theta(1)`.
 #
 # 2. **Quantum Tanner (QT) Codes:** Seeking to maximize both storage density and error-correcting
 #    power, these codes are constructed using Cayley graphs of finite groups with high expansion
@@ -342,21 +342,20 @@ plt.show()
 # can be used for decoding errors efficiently using an iterative message-passing algorithm
 # like Belief Propagation (BP) [#BProp]_. This decoding process can be thought of as a
 # collaborative excercise, where the variable nodes (qubits) and check nodes (parity rules) act
-# like detectives passing notes back and forth. A variable node sends a confidence level message:
-# "I am 84% sure I have an error." The check node looks at the notes from all connected qubits,
-# applies the parity rule, and replies: "Based on group's evidence, adjust your confidence to 96%."
-# Mathematically, these "notes" are Log-Likelihood Ratios (LLRs), which are updated iteratively
-# until all parity rules are satisfied (consensus) or a fixed number of iterations is reached,
-# making the whole process executable in polynomial time.
-# polynomial time.
+# like detectives passing *notes* back and forth. A variable node sends a confidence level message,
+# *"I am 84% sure that I've an error"*. The check node looks at the notes from all connected
+# qubits, applies the parity rule, and replies *"Based on group's evidence, adjust your
+# confidence to 96%"*. Mathematically, these notes are Log-Likelihood Ratios (LLRs), which are
+# updated iteratively until all parity rules are satisfied (consensus) or a fixed number of
+# iterations is reached, making the whole process executable in polynomial time.
 #
-# For classical codes, BP is near-optimal and runs in :math:`O(\log n)` iterations. However,
-# quantum codes suffer from degeneracy, where multiple different error patterns trigger the exact
-# same syndrome. This often confuses BP, causing it to endlessly flip-flop without reaching a
-# consensus. When BP fails to converge, we use Ordered Statistics Decoding (OSD) with order-0 as
-# a fallback [#OSD0]_. One can think of OSD-0 as a tie-breaker, which takes the final,
+# For classical codes, BP is near-optimal and runs in :math:`\mathcal{O}(\log n)` iterations.
+# However, quantum codes suffer from degeneracy, where multiple different error patterns trigger
+# the exact same syndrome. This often confuses BP, causing it to endlessly flip-flop without
+# reaching a consensus. When BP fails to converge, we use Ordered Statistics Decoding (OSD) with
+# order-0 as a fallback [#OSD0]_. One can think of OSD-0 as a tie-breaker, which takes the final,
 # unresolved LLRs from BP and ranks the qubits from most to least confident. It locks in the
-# "most confident" qubits as absolute truth, and then uses Gaussian elimination to mathematically
+# most confident qubits as absolute truth, and then uses Gaussian elimination to mathematically
 # force a valid parity solution for the remaining uncertain qubits. Let us define a decoder class
 # that implements this, where the BP is implemented using the ``tanh`` product rule and the OSD-0
 # uses :func:`~.pennylane.math.binary_finite_reduced_row_echelon` to perform Gaussian elimination.
@@ -384,6 +383,7 @@ class BPOSDDecoder:
         c2v_messages = np.zeros((self.m, self.n))
         prior_llr = self.channel_llr # baseline likelihood - prior belief
         posterior_llr = np.full(self.n, prior_llr)
+
         for _ in range(self.max_iter): # BP loop
             # Variable-to-Check Update (Extrinsic Information)
             var_to_check_msgs = parity_matrix * (posterior_llr[None, :] - c2v_messages)
@@ -443,9 +443,9 @@ class BPOSDDecoder:
         return final_error
 
 ######################################################################
-# Let us test our decoder on the Hypergraph Product (HGP) code constructed from the
-# repetition codes with distance :math:`3`. We will intentionally inject a specific
-# :math:`2`-qubit error, compute its syndrome, and ask the decoder to find a correction.
+# Let us test our decoder on the HGP code constructed from the repetition codes
+# with distance :math:`3`. We will intentionally inject a specific weight-:math:`2`
+# bit-flip error, compute its syndrome, and ask the decoder to find a correction.
 #
 
 h1, h2 = rep_code(3), rep_code(3)
@@ -472,6 +472,7 @@ print(f"Decoded error: {res}")
 #
 
 residual = (res + x_error) % 2
+
 if np.allclose(residual, 0):
     print("Result: Exact correction")
 elif np.all((hz @ residual) % 2 == 0):
@@ -550,27 +551,26 @@ def compute_stabilizer_group(hx: np.ndarray, hz: np.ndarray) -> tuple[list, set]
         full_group.add(str(-current_pauli))
     return generators, full_group
 
-def verify_transversality(operations: str, gens: list, group: set):
+def verify_transversality(operations: str, generators: list, stabilizers: set):
     """Verify if the given operations are transversal for the given QLDPC code."""
-    tableau = stim.Tableau(num_qubits=len(gens[0]))
-    for op in operations:
-        tableau.append(*op)
+    tableau, result = stim.Tableau(num_qubits=len(generators[0])), True
+    for operation in operations:
+        tableau.append(*operation)
 
-    is_transversal = True
-    for gen in gens:
-        if str(evolved := tableau(gen)) in group:
-            print(f"{gen}  -->  {evolved}  (Valid!)")
+    for generator in generators:
+        if str(evolved := tableau(generator)) in stabilizers:
+            print(f"{generator}  -->  {evolved}  (Valid!)")
         else:
-            print(f"{gen}  -->  {evolved}  (Invalid!)")
-            is_transversal = False
+            print(f"{generator}  -->  {evolved}  (Invalid!)")
+            result = False
             break
 
-    return is_transversal
+    return result
 
 swap = stim.Tableau.from_named_gate("SWAP")
 ops = [[swap, (0, 1)], [swap, (2, 3)], [swap, (4, 5)], [swap, (6, 7)]]
-gens, stabs = compute_stabilizer_group(hx, hz)
-result = verify_transversality(ops, gens, stabs)
+generators, stabilizers = compute_stabilizer_group(hx, hz)
+result = verify_transversality(ops, generators, stabilizers)
 print(f"Result: The codespace is preserved: {result}")
 
 ######################################################################
