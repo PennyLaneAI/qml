@@ -120,7 +120,7 @@ jobs:
       chunk-indexes: ${{ steps.get-chunk-indexes.outputs.chunk-indexes }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ inputs.ref }}
           fetch-depth: 1
@@ -162,7 +162,7 @@ jobs:
         chunk-index: ${{ fromJson(needs.generate-build-variables.outputs.chunk-indexes) }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ inputs.ref }}
           fetch-depth: 1
@@ -212,7 +212,7 @@ jobs:
     needs: [generate-build-variables, build-demos]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ inputs.ref }}
           fetch-depth: 1
