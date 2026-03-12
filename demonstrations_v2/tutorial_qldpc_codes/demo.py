@@ -415,7 +415,7 @@ class BPOSDDecoder:
         # Compute the "extrinsic" product for each edge and apply the syndrome
         masked_tanh_msgs = np.where(parity_matrix == 1, tanh_msgs, 1.0)
         check_node_prods = np.prod(masked_tanh_msgs, axis=1, keepdims=True)
-        extrinsic_tanh = np.clip(check_node_prods / masked_tanh_msgs, -1 + delta, 1 - delta)
+        extrinsic_tanh = np.clip(check_node_prods/masked_tanh_msgs, -1 + delta, 1 - delta)
 
         # Apply the syndrome constraint and convert back to LLR space
         syndrome_sign = (1 - 2 * syndrome)[:, None] # (-1)^s_i
@@ -507,14 +507,14 @@ print(f"Rank with residual: {binary_matrix_rank(np.vstack([hx, residual]))}")
 # to implement fault-tolerant gates on quantum codes, there are still ways to use non-transversal
 # methods to implement a logical gate. For example, we can implement non-Clifford gates such as
 # :class:`~.pennylane.T` by injecting a `magic state
-# <https://pennylane.ai/qml/glossary/what-are-magic-states>`__ #Transversal]_.
+# <https://pennylane.ai/qml/glossary/what-are-magic-states>`__ [#Transversal]_.
 #
 # While the transversal gate set for most standard codes is limited to Clifford gates, a major
 # breakthrough of certain QLDPC code families is their ability to natively support transversal
 # non-Clifford gates, such as the :class:`~.pennylane.CCZ` gate. This drastically reduces the
-# hardware overhead needed for universal quantum computing. We can test if a given operation is
-# transversal for a given code by testing if it preserves its *codespace*. For example, we test
-# if the :class:`~.pennylane.SWAP` gate is transversal for a simple Toric code.
+# hardware overhead needed for universal quantum computing. We can test if any given operation is
+# transversal for a given code by testing if it preserves its *codespace*. For example, we check
+# if the :class:`~.pennylane.SWAP` gate is transversal for a simple Toric code below.
 #
 
 from itertools import product
@@ -574,8 +574,8 @@ print(f"Result: The codespace is preserved: {result}")
 
 ######################################################################
 # In addition to the gate operations being transversal, there's active work being done to develop
-# efficient frameworks to perform logical Pauli measurements, as well [#LMHM]_, which is another
-# critical requirement for the partical utility of these codes.
+# efficient frameworks to perform logical Pauli measurements as well [#LMHM]_, which is another
+# critical requirement for the practical utility of these codes.
 #
 # Conclusion
 # ----------
