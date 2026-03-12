@@ -76,7 +76,8 @@ def Standard_BE(prep, sel):
 Prep = qre.QROMStatePreparation(num_qubits)  # Preparing a single qubit in the target state
 Select = qre.SelectPauli(lcu_A)  # Select the operators in the LCU
 
-resources = qre.estimate(Standard_BE)(Prep, Select) # Estimate the resource requirement
+gate_set = {"X", "Y", "Z", "Hadamard", "T", "S", "CNOT"}
+resources = qre.estimate(Standard_BE, gate_set)(Prep, Select) # Estimate the resource requirement
 print(resources)
 
 
