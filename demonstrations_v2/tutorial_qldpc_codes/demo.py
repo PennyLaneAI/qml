@@ -49,7 +49,7 @@ the absolute theoretical limits of data transmission, known as the `Shannon limi
 <https://en.wikipedia.org/wiki/Shannon_limit>`_. Classical LDPC codes achieve this with highly
 efficient, linear-time decoding that exploits the sparse structure of their parity checks.
 
-A classical LDPC code :math:`C[n,k,d]` protects :math:`k` logical bits by encoding them into
+A classical LDPC code :math:`C[[n,k,d]]` protects :math:`k` logical bits by encoding them into
 :math:`n` physical bits, where :math:`d` is the minimum distance of the code that dictates how
 many errors the code can correct. The encoding rules are defined by an :math:`m\times n`
 parity-check matrix (:math:`H`), where :math:`k = n - m` [#qldpc1]_. The "low-density" part of
@@ -61,7 +61,7 @@ Mathematically, these codes are visualized as `Tanner graphs
 <https://en.wikipedia.org/wiki/Tanner_graph>`_, which are bipartite graphs with edges
 representing connections between the variable nodes (:math:`n` physical bits)
 and the check nodes (:math:`m` parity constraints). For example, the following
-is a Tanner graph for a simple :math:`[5, 2, 3]` LDPC code:
+is a Tanner graph for a simple :math:`[[5, 2, 3]]` LDPC code:
 """
 
 import numpy as np
@@ -124,13 +124,11 @@ plt.show()
 # on the :math:`j^{th}` qubit.
 #
 # For example, look at the following CSS code known as the `Steane code
-# <https://errorcorrectionzoo.org/c/steane>`_ :math:`[[7,1,3]]`, which is constructed from the two
+# <https://errorcorrectionzoo.org/c/steane>`_ :math:`[[7,1,3]]`, constructed from the two
 # :math:`d=3` Hamming codes. To build its corresponding parity-check matrix, we assign the Hamming
 # code's parity-check matrix to both the :math:`X` and :math:`Z` checks, and stack them into a
 # single block matrix :math:`H = [H_X, 0;\, 0, H_Z]`, which is shown below:
 #
-
-from pennylane.math import binary_matrix_rank
 
 def hamming_code(distance: int) -> np.ndarray:
     """Returns a Hamming code parity check matrix of a given rank."""
@@ -148,7 +146,7 @@ css_code = np.hstack((
 ######################################################################
 # For these codes, all stabilizers must commute, which is ensured by having each of the
 # :math:`X - Z` stabilizer pairs overlap on an even number of qubits. Mathematically, this is
-# equivalent to the symplectic orthogonality condition :math:`H^X(H^Z)^T = 0\mod\ 2`,
+# equivalent to the symplectic orthogonality condition :math:`H^X(H^Z)^T = 0\mod\, 2`,
 # which we can be easily verified below:
 #
 
@@ -162,13 +160,15 @@ print(f"Does H_Z * H_X^T = 0? {np.allclose((hz @ hx.T) % 2, 0)}\n")
 # constraints from the total number of physical qubits. 
 #
 
+from pennylane.math import binary_matrix_rank
+
 code_dim = hx.shape[1] - binary_matrix_rank(hx) - binary_matrix_rank(hz)
 print(f"Code dimension (k): {code_dim}\n")
 
 ######################################################################
 # Hypergraph Product Codes
 # ------------------------
-
+#
 # Finding a single sparse matrix for a classical code is straightforward. However, for a
 # quantum code, we must find two sparse matrices that also perfectly commute with each other.
 # This requires their parity checks to always overlap on an even number of qubits, whcich is
@@ -400,16 +400,16 @@ class BPOSDDecoder:
         is_success = bool(np.all((parity_matrix @ estimated_error) % 2 == target_syndrome))
         return (is_success, estimated_error, "OSD-0")
 
-    def update_checks(self, var_to_check_msgs: np.ndarray, syndrome: np.ndarray) -> np.ndarray:
-        r"""Check-to-variable update via the tanh product rule.
+    def update_checks(self, var_messages: np.ndarray, syndrome: np.ndarray) -> np.ndarray:
+        r"""Check-to-variable update via the :math:`\tanh` product rule.
 
         .. math::
-            M_cv[i,j] = (-1)^{s_i} \cdot 2 \arctanh{\prod_{j'\neqj} \tanh(M_vc[i,j'] / 2)}
+            M_{cv}[i,j] = (-1)^{s_i} \cdot 2 \arctanh{\prod_{j'\neqj}\tanh(M_{vc}[i,j']/2)}
         """
         parity_matrix, delta = self.H, 1e-15
 
         # Compute the tanh (for incoming messages) and check for edge-existence
-        tanh_msgs = np.tanh(var_to_check_msgs / 2.0)
+        tanh_msgs = np.tanh(var_messages / 2.0)
         tanh_msgs = np.where((parity_matrix == 1) & (tanh_msgs == 0.0), delta, tanh_msgs)
 
         # Compute the "extrinsic" product for each edge and apply the syndrome
@@ -442,8 +442,8 @@ class BPOSDDecoder:
 
 ######################################################################
 # Let us test our decoder on the Hypergraph Product (HGP) code constructed from the
-# repetition codes with distance 3. We will intentionally inject a specific 2-qubit
-# error, compute its syndrome, and ask the decoder to find a correction.
+# repetition codes with distance :math:`3`. We will intentionally inject a specific
+# :math:`2`-qubit error, compute its syndrome, and ask the decoder to find a correction.
 #
 
 h1, h2 = rep_code(3), rep_code(3)
