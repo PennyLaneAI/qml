@@ -271,7 +271,7 @@ resources = qre.estimate(WH_Diagonal_BE)(num_diagonals, matrix_size, num_walsh_c
 print(resources)
 
 ##############################################################################
-# Although this matrix :math:`A` is not the same as the matrix considered in the :ref:`naive_block_encoding` section, we can see that exploiting the structure of the matrix has decreased the order of magnitude of the $T$ gate cost from :math:`4 \times 10^{12}` to :math:`3 \times 10^{5}` for the task of block encoding. 
+# Although this matrix :math:`A` is not the same as the matrix considered in the :ref:`naive_block_encoding` section, it is the same size. We can see that exploiting the structure of the matrix has decreased the order of magnitude of the $T$ gate cost from :math:`4 \times 10^{12}` to :math:`3 \times 10^{5}` for the task of block encoding. 
 
 
 
