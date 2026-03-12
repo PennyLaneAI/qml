@@ -115,7 +115,7 @@ print(resources)
 # the diagonals in *parallel*.
 # 
 # Instead of implementing each :math:`D_{k}` as a product of :class:`~.pennylane.ControlledPhaseShift` gates,
-# we leverage the [Walsh transform](https://mathworld.wolfram.com/WalshTransform.html) [#zylberman2025]_. The Walsh transform allows us to naturally
+# we leverage the `Walsh transform <https://mathworld.wolfram.com/WalshTransform.html>`_ [#zylberman2025]_. The Walsh transform allows us to naturally
 # optimize the cost of our block encoding by tuning the number of Walsh coefficients within :math:`[1, N]`,
 # where :math:`N` is the size of the matrix. If the entries in our diagonal are sparse in the Walsh basis,
 # as is the case for the CFD example, then we can get away with far fewer Walsh coefficients. This results in
