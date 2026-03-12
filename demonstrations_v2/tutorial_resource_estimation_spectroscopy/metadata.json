@@ -1,5 +1,5 @@
 {
-    "title": "Resource Estimation for X-ray Absorption and Photodynamic Therapy",
+    "title": "Resource estimation for X-ray absorption and photodynamic therapy",
     "authors": [
         {
             "username": "ddhawan"
@@ -10,13 +10,12 @@
     ],
     "executable_stable": true,
     "executable_latest": true,
-    "dateOfPublication": "2026-01-20T00:00:00+00:00",
-    "dateOfLastModification": "2026-01-20T15:48:14+00:00",
+    "dateOfPublication": "2026-03-17T00:00:00+00:00",
+    "dateOfLastModification": "2026-03-17T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Chemistry",
-        "Optimization",
-        "Quantum Computing"
+        "Optimization"
     ],
     "tags": [],
     "previewImages": [
