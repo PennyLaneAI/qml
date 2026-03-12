@@ -78,11 +78,8 @@ var_nodes = [f"v{i}" for i in range(num_vars)]
 check_nodes = [f"c{j}" for j in range(num_checks)]
 G.add_nodes_from(var_nodes, bipartite=0)
 G.add_nodes_from(check_nodes, bipartite=1)
-
-for j in range(num_checks):
-    for i in range(num_vars):
-        if H[j, i] == 1:
-            G.add_edge(f"c{j}", f"v{i}")
+for (i, j) in zip(*np.nonzero(H)):
+    G.add_edge(f"c{i}", f"v{j}")
 
 # Plot the Bipartite Graph
 plt.figure(figsize=(6, 4))
