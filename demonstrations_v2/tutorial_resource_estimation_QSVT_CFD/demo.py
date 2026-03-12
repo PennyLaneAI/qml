@@ -281,7 +281,7 @@ print(resources)
 # for solving a practical matrix inversion problem**. Following the CFD example [#linaje2025]_, we
 # will estimate the resources required to invert a tri-diagonal matrix of size :math:`2^{20} \times 2^{20}`.
 # This system requires a :math:`10^{8}`-degree polynomial approximation of the inverse function. We will
-# also restrict the gateset to Clifford + T gates.
+# also restrict the gateset to Clifford + $T$ gates.
 
 degree = 10**8
 matrix_size = 2**20  # 2^20 x 2^20
