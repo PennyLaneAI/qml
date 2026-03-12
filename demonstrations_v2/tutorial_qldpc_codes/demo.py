@@ -130,7 +130,7 @@ plt.show()
 # single block matrix :math:`H = [H_X, 0;\, 0, H_Z]`, which is shown below:
 #
 
-import pennylane as qp
+from pennylane.math import binary_matrix_rank
 
 def hamming_code(distance: int) -> np.ndarray:
     """Returns a Hamming code parity check matrix of a given rank."""
@@ -162,7 +162,7 @@ print(f"Does H_Z * H_X^T = 0? {np.allclose((hz @ hx.T) % 2, 0)}\n")
 # constraints from the total number of physical qubits. 
 #
 
-code_dim = hx.shape[1] - qp.math.binary_matrix_rank(hx) - qp.math.binary_matrix_rank(hz)
+code_dim = hx.shape[1] - binary_matrix_rank(hx) - binary_matrix_rank(hz)
 print(f"Code dimension (k): {code_dim}\n")
 
 ######################################################################
@@ -193,8 +193,9 @@ print(f"Code dimension (k): {code_dim}\n")
 # For example, look at the following HGP code constructed from two :math:`d_1=3` and :math:`d_2=3`
 # repetition codes, which is equivalent to a Toric code :math:`[[13, 1, 3]]`:
 #
-from pennylane.qchem.tapering import _kernel as binary_matrix_kernel
 
+from pennylane.qchem.tapering import _kernel as binary_matrix_kernel
+from pennylane.math import binary_finite_reduced_row_echelon
 
 def rep_code(distance: int) -> np.ndarray:
     """Construct repetition code parity check matrix for specified distance."""
@@ -216,7 +217,7 @@ hx, hz = hgp_code(h1, h2)
 print(f"Does H_X * H_Z^T = 0? {np.allclose((hx @ hz.T) % 2, 0)}")
 
 (m1, n1), (m2, n2) = h1.shape, h2.shape
-r1, r2 = qp.math.binary_matrix_rank(h1), qp.math.binary_matrix_rank(h2)
+r1, r2 = binary_matrix_rank(h1), binary_matrix_rank(h2)
 k1, k2 = n1 - r1, n2 - r2
 k1t, k2t = m1 - r1, m2 - r2
 print(f"Code dimension (k) of the HGP code: {k1 * k2 + k1t * k2t}\n")
@@ -225,7 +226,7 @@ print(f"Code dimension (k) of the HGP code: {k1 * k2 + k1t * k2t}\n")
 def compute_distance(parity_matrix: np.ndarray) -> int:
     """Compute the classical distance of the code based on the parity-check matrices."""
     kernel_matrix = binary_matrix_kernel(
-        qp.math.binary_finite_reduced_row_echelon(parity_matrix)
+        binary_finite_reduced_row_echelon(parity_matrix)
     )  # compute the kernel of the parity-check matrix
     if (k := kernel_matrix.shape[0]) == 0:
         return np.inf  # the code distance is not defined
@@ -293,7 +294,6 @@ print(f"Physical qubits (n) of the HGP code: {n1*n2 + m1*m2} == {2*dist*(dist-1)
 # Below, we take a look at a simplified QT codes construction and benchmark the
 # improvements in the distance scaling compared to the HGP codes:
 #
-
 
 def tanner_code(h1: np.ndarray, h2: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """Construct Tanner code parity check matrices [arXiv:2309.11719]."""
@@ -430,7 +430,7 @@ class BPOSDDecoder:
         augmented_matrix = np.hstack([H_permuted, syndrome.reshape(-1, 1)])
 
         # Perform Gaussian elimination over GF(2) and extract results
-        rref_matrix = qp.math.binary_finite_reduced_row_echelon(augmented_matrix)
+        rref_matrix = binary_finite_reduced_row_echelon(augmented_matrix)
         H_reduced, updated_syndrome = rref_matrix[:, :self.n], rref_matrix[:, -1]
 
         # Set all non-pivot variables to 0 and permute the errors back
@@ -486,8 +486,8 @@ else:
 # completely different physical path! We can see this by adding it as a new row to the
 # :math:`H_X` parity-check matrix and checking if it increases its :math:`\mathbb{Z}_2` rank.
 
-print(f"Rank w/o residual: {qp.math.binary_matrix_rank(hx)}")
-print(f"Rank with residual: {qp.math.binary_matrix_rank(np.vstack([hx, residual]))}")
+print(f"Rank w/o residual: {binary_matrix_rank(hx)}")
+print(f"Rank with residual: {binary_matrix_rank(np.vstack([hx, residual]))}")
 
 ######################################################################
 # Transversal Gates for QLDPC Codes
