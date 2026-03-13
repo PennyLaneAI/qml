@@ -23,7 +23,7 @@ hardware.
 This demo, based on our recent paper `Quantum compilation framework for data loading
 <https://arxiv.org/abs/2512.05183>`_ [#linaje2025]_, will showcase an optimized block encoding strategy that
 uses the sparsity of the matrix to significantly reduce the cost of QSVT. We will focus on a particular matrix
-inversion problem that arises in computational fluid dynamics (CFD) [#lapworth2022]_. Resource cost will be quantified using PennyLane's :mod:`~.pennylane.estimator` module. 
+inversion problem that arises in computational fluid dynamics (CFD) [#lapworth2022]_. We will quantify the resource cost using PennyLane's :mod:`~.pennylane.estimator` module. 
 
 Problem Setup
 -------------
