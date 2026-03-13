@@ -1,0 +1,103 @@
+{
+    "title": "GKP-based quantum error correction in photonic systems",
+    "authors": [
+        {
+            "username": "DennisWayo"
+        }
+    ],
+    "executable_stable": true,
+    "executable_latest": true,
+    "dateOfPublication": "2026-03-12T00:00:00+00:00",
+    "dateOfLastModification": "2026-03-12T10:05:00+00:00",
+    "categories": [
+        "Quantum Hardware",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_gkp_qec_photonic_s01.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/thumbnail_large_gkp_qec_photonic_s01.png"
+        }
+    ],
+    "seoDescription": "Understand how GKP error correction appears at the software layer in PennyLane through an effective logical-noise model.",
+    "doi": "",
+    "references": [
+        {
+            "id": "gkp2000",
+            "type": "preprint",
+            "title": "Encoding a qubit in an oscillator",
+            "authors": "Daniel Gottesman, Alexei Kitaev, and John Preskill",
+            "year": "2000",
+            "url": "https://arxiv.org/abs/quant-ph/0008040"
+        },
+        {
+            "id": "menicucci2014",
+            "type": "article",
+            "title": "Fault-tolerant measurement-based quantum computing with continuous-variable cluster states",
+            "authors": "Nicolas C. Menicucci",
+            "year": "2014",
+            "journal": "Physical Review Letters",
+            "volume": "112",
+            "number": "12",
+            "doi": "10.1103/PhysRevLett.112.120504",
+            "url": "https://doi.org/10.1103/PhysRevLett.112.120504"
+        },
+        {
+            "id": "mirrahimi2014",
+            "type": "article",
+            "title": "Dynamically protected cat-qubits: a new paradigm for universal quantum computation",
+            "authors": "Mazyar Mirrahimi, Zaki Leghtas, Victor V. Albert, Steven Touzard, Robert J. Schoelkopf, Liang Jiang, and Michel H. Devoret",
+            "year": "2014",
+            "journal": "New Journal of Physics",
+            "volume": "16",
+            "number": "4",
+            "pages": "045014",
+            "doi": "10.1088/1367-2630/16/4/045014",
+            "url": "https://doi.org/10.1088/1367-2630/16/4/045014"
+        },
+        {
+            "id": "banic2025",
+            "type": "article",
+            "title": "Exact simulation of realistic Gottesman-Kitaev-Preskill cluster states",
+            "authors": "Marko Bani\u0107, Tori Hodgkinson, Mark M. Wilde, and Nicolas C. Menicucci",
+            "year": "2025",
+            "journal": "Physical Review A",
+            "volume": "112",
+            "pages": "052425",
+            "doi": "10.1103/PhysRevA.112.052425",
+            "url": "https://doi.org/10.1103/PhysRevA.112.052425"
+        },
+        {
+            "id": "bergholm2018",
+            "type": "preprint",
+            "title": "PennyLane: Automatic differentiation of hybrid quantum-classical computations",
+            "authors": "Ville Bergholm, Josh Izaac, Maria Schuld, Christian Gogolin, Carsten Blank, Keri McKiernan, Nathan Killoran, and Juan Miguel Arrazola",
+            "year": "2018",
+            "url": "https://arxiv.org/abs/1811.04968"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_error_mitigation",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_error_prop",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_how_to_use_noise_models",
+            "weight": 1.0
+        }
+    ]
+}
