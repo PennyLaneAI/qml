@@ -1,13 +1,13 @@
 r"""
-How to do Hamiltonian Simulation with GQSP in PennyLane
+How to do Hamiltonian simulation with GQSP in PennyLane
 =======================================================
 
 .. tip::
 
     This demo assumes familiarity with block encoding, qubitization, and quantum signal
     processing (QSP). If any of these are new, the
-    :doc:`introduction to qubitization <demos/tutorial_qubitization>` [#qubitization]_ and
-    :doc:`QSVT in practice <demos/tutorial_apply_qsvt>` [#qsvt]_ demos are good starting points.
+    :doc:`introduction to qubitization <demos/tutorial_qubitization>` and
+    :doc:`QSVT in practice <demos/tutorial_apply_qsvt>` demos are good starting points.
 
 Generalized Quantum Signal Processing (GQSP), introduced by Motlagh and Wiebe [#motlagh]_,
 applies an arbitrary complex polynomial :math:`P` of a unitary :math:`U` using a single extra
@@ -24,12 +24,12 @@ favourably in the evolution time and the target accuracy.
 
 PennyLane provides :class:`~pennylane.GQSP` as a runnable circuit primitive and a resource-estimation demo
 (:doc:`Resource estimation for Hamiltonian simulation with GQSP <demos/tutorial_estimator_hamiltonian_simulation_gqsp>`
-[#estimator]_), which counts gates for cost analysis. This demo is the **executable
+), which counts gates for cost analysis. This demo is the **executable
 counterpart**. We will build and run the GQSP circuit and verify :math:`e^{-iHt}` against
 ``scipy.linalg.expm``, spelling out the recipe end to end.
 
 By the end of this demo, you will be able to carry out a
-:doc:`qubitization <demos/tutorial_qubitization>` [#qubitization]_ walk for a Pauli Hamiltonian,
+:doc:`qubitization <demos/tutorial_qubitization>` walk for a Pauli Hamiltonian,
 derive the GQSP polynomial for :math:`e^{-iHt}` from the Jacobi-Anger expansion, run
 :class:`~pennylane.GQSP` and recover the evolution, and confirm that the error converges with the
 truncation order, all with PennyLane. The three pieces are:
@@ -57,7 +57,7 @@ truncation order, all with PennyLane. The three pieces are:
 """
 
 ###############################################################################
-# The Hamiltonian and the Exact Target
+# The Hamiltonian and the exact target
 # -------------------------------------
 #
 # We will use a small two-qubit Heisenberg-type Hamiltonian. This is a convenient choice for this
@@ -93,7 +93,7 @@ print("H as a matrix:")
 print(np.round(H_matrix, 3))
 
 ###############################################################################
-# Step 1: The Qubitization Walk
+# Step 1: The qubitization walk
 # ------------------------------
 #
 # ``qp.Qubitization(H, control)`` builds the Low and Chuang [#low]_
@@ -139,7 +139,7 @@ print("walk eigenphases   :", walk_phases)
 print("arccos(E / lambda) :", arccos_E)
 
 ###############################################################################
-# Step 2: The Jacobi-Anger Polynomial
+# Step 2: The Jacobi-Anger polynomial
 # ------------------------------------
 #
 # We need a polynomial :math:`P` with :math:`P(e^{i\theta}) = e^{-i\lambda t\cos\theta}`. The
@@ -176,7 +176,7 @@ poly, s = jacobi_anger_poly(lam * t, K)
 print(f"K = {K}: polynomial degree {len(poly) - 1}, scale s = {s:.4f}")
 
 ###############################################################################
-# Step 3: Run :class:`~pennylane.GQSP` and Recover :math:`e^{-iHt}`
+# Step 3: Run :class:`~pennylane.GQSP` and recover :math:`e^{-iHt}`
 # -----------------------------------------------------------------
 #
 # ``qp.GQSP(U, angles, control)`` applies the single polynomial :math:`P(U)` with ``angles``
@@ -191,7 +191,7 @@ print(f"K = {K}: polynomial degree {len(poly) - 1}, scale s = {s:.4f}")
 #
 #     P(W) \approx s\, W^{K}\, e^{-iHt}.
 #
-# The :math:`s` and :math:`W^{K}` terms are not separate circuits we multiply on afterwards -- they
+# The :math:`s` and :math:`W^{K}` terms are not separate circuits we multiply on afterwards. They
 # are the two corrections already baked into the polynomial, which we now simply undo. We cancel the
 # :math:`W^{K}` factor by applying the **adjoint walk** :math:`W^\dagger` a total of :math:`K`
 # times after the GQSP block, and we divide out :math:`s` at read-out. The evolution then sits in
@@ -279,14 +279,16 @@ plt.show()
 # its :math:`\lambda t`, then floors at machine precision; larger :math:`\lambda t` needs a larger
 # :math:`K` to reach the same accuracy.
 #
-# Understanding the Results
+# Discussion and conclusion
 # -------------------------
 #
 # Running :class:`~pennylane.GQSP` on the qubitization walk reproduced :math:`e^{-iHt}` to within
 # :math:`\sim 10^{-8}` at truncation order :math:`K=8` (a polynomial of degree :math:`2K=16`),
 # matching ``scipy.linalg.expm`` to machine precision. Because of the fast Bessel decay seen in the
-# convergence plot, useful accuracy needs only :math:`K = \mathcal{O}(\lambda t + \log(1/\varepsilon))`,
-# i.e. :math:`\mathcal{O}(\lambda t + \log(1/\varepsilon))` applications of the walk.
+# convergence plot, useful accuracy needs only a truncation order
+# :math:`K = \mathcal{O}(\lambda t + \log(1/\varepsilon))`, where :math:`\varepsilon` is the target
+# error. In other words, the number of walk applications grows only mildly as the accuracy is
+# tightened.
 #
 # There are two practical things to keep in mind:
 #
@@ -298,7 +300,7 @@ plt.show()
 #   :math:`W` (plus :math:`K` adjoint-walk applications to undo the :math:`z^{K}` shift). The depth
 #   therefore grows quickly with :math:`K`. The
 #   :doc:`resource-estimation demo <demos/tutorial_estimator_hamiltonian_simulation_gqsp>`
-#   [#estimator]_ is a good reference to explore this cost.
+#   is a good reference to explore this cost.
 #
 # In practice, this makes GQSP a natural choice when you need an accurate :math:`e^{-iHt}` over a
 # longer evolution time :math:`t`. The super-exponential convergence means the order :math:`K`
@@ -312,6 +314,12 @@ plt.show()
 # ancillas, since a single control qubit carries one complex polynomial applied directly, instead of
 # building the polynomial's real and imaginary parts separately as ordinary QSP must.
 #
+# Now it is your turn: swap in your own Pauli Hamiltonian, pick an evolution time, and run the same
+# recipe to obtain :math:`e^{-iHt}`. To dig deeper into the building blocks, see the
+# :doc:`introduction to qubitization <demos/tutorial_qubitization>`,
+# :doc:`QSVT in practice <demos/tutorial_apply_qsvt>`, and the
+# :doc:`resource-estimation demo <demos/tutorial_estimator_hamiltonian_simulation_gqsp>`.
+#
 # References
 # ----------
 #
@@ -323,18 +331,3 @@ plt.show()
 # .. [#low] Guang Hao Low, Isaac L. Chuang,
 #     "Hamiltonian simulation by qubitization",
 #     `Quantum 3, 163 <https://quantum-journal.org/papers/q-2019-07-12-163/>`__, 2019.
-#
-#
-# .. [#estimator] PennyLane demo,
-#     "Resource estimation for Hamiltonian simulation with GQSP",
-#     `pennylane.ai <https://pennylane.ai/demos/tutorial_estimator_hamiltonian_simulation_gqsp>`__.
-#
-#
-# .. [#qubitization] PennyLane demo,
-#     "Introduction to qubitization",
-#     `pennylane.ai <https://pennylane.ai/demos/tutorial_qubitization>`__.
-#
-#
-# .. [#qsvt] PennyLane demo,
-#     "QSVT in practice",
-#     `pennylane.ai <https://pennylane.ai/demos/tutorial_apply_qsvt>`__.
