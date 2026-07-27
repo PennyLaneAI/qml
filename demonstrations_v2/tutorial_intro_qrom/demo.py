@@ -126,7 +126,7 @@ for i in range(8):
 
 resources = qp.specs(circuit)(0).resources
 
-print("Number of qubits: ", resources.num_qubits)
+print("Number of qubits: ", resources.num_wires)
 print("Gates: ", resources.quantum_operations)
 
 ##############################################################################
@@ -162,7 +162,7 @@ def circuit(index):
 
 resources = qp.specs(circuit)(0).resources
 
-print("Number of qubits: ", resources.num_qubits)
+print("Number of qubits: ", resources.num_wires)
 print("Gates: ", resources.quantum_operations)
 
 ##############################################################################
