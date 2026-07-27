@@ -363,7 +363,7 @@ for k_value in range(num_address_wires):
 # |                        |                        | multi-controlled       | exponential select     |
 # |                        |                        | writes                 | cost                   |
 # +------------------------+------------------------+------------------------+------------------------+
-# | :class:`~.pennylane.BBQRAM`             | :math:`O(2^n+n+m)`     | Active routing path    | Large width; local     |
+# | ``BBQRAM``             | :math:`O(2^n+n+m)`     | Active routing path    | Large width; local     |
 # |                        |                        | length :math:`O(n)`,   | routing architecture   |
 # |                        |                        | plus address           |                        |
 # |                        |                        | load/unload overhead   |                        |
