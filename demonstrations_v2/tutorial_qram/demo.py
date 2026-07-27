@@ -359,7 +359,7 @@ for k_value in range(num_address_wires):
 # | Construction           | Width scaling          | Depth / gate-cost      | Main tradeoff          |
 # |                        |                        | intuition              |                        |
 # +========================+========================+========================+========================+
-# | :class:`~.pennylane.SelectOnlyQRAM`     | :math:`O(n+m)`         | :math:`O(2^n m)`       | Minimal width;         |
+# | ``SelectOnlyQRAM``    | :math:`O(n+m)`         | :math:`O(2^n m)`       | Minimal width;         |
 # |                        |                        | multi-controlled       | exponential select     |
 # |                        |                        | writes                 | cost                   |
 # +------------------------+------------------------+------------------------+------------------------+
