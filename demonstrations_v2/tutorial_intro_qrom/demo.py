@@ -105,9 +105,12 @@ bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
 control_wires = [0, 1, 2]
 target_wires = [3, 4]
 
-from pennylane.decomposition.gate_sets import ROTATIONS_PLUS_CNOT
+SINGLE_QUBIT_GATES = {qp.RX, qp.RY, qp.RZ, qp.T}
+TWO_QUBIT_GATES = {qp.CNOT}
+gate_set = SINGLE_QUBIT_GATES | TWO_QUBIT_GATES
 
-@qp.decompose(gate_set=ROTATIONS_PLUS_CNOT)
+
+@qp.decompose(gate_set=gate_set)
 @qp.set_shots(1)
 @qp.qnode(dev)
 def circuit(index):
@@ -150,7 +153,7 @@ target_wires = [3, 4]
 work_wires = [5, 6]
 
 
-@qp.decompose(gate_set=ROTATIONS_PLUS_CNOT)
+@qp.decompose(gate_set=gate_set)
 @qp.set_shots(1)
 @qp.qnode(dev)
 def circuit(index):
@@ -158,6 +161,7 @@ def circuit(index):
     #  added work wires below
     qp.QROM(bitstrings, control_wires, target_wires, work_wires, clean=False)
     return qp.sample(wires=control_wires + target_wires + work_wires)
+
 
 resources = qp.specs(circuit)(0).resources
 
