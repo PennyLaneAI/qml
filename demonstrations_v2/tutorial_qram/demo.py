@@ -464,5 +464,5 @@ for name, summary in resource_table.items():
 # .. [#hardwareefficient] Connor T. Hann, Chang-Ling Zou, Yaxing Zhang, Yiwen Chu,
 #    Robert J. Schoelkopf, Steven M. Girvin, and Liang Jiang,
 #    "Hardware-efficient quantum random access memory with hybrid quantum acoustic systems",
-#    `https://arxiv.org/abs/1906.11340 <https://arxiv.org/abs/1906.11340>`__, 2019.
+#    `arXiv:1906.11340 <https://arxiv.org/abs/1906.11340>`__, 2019.
 #
