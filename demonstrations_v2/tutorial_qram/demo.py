@@ -145,6 +145,7 @@ select_specs = qp.specs(compiled_select_only_qram)(0)["resources"]
 print("Total work wires:", len(control_wires + target_wires))
 print("One-qubit gates:", select_specs.gate_sizes.get(1, 0))
 print("Two-qubit gates:", select_specs.gate_sizes.get(2, 0))
+print("Circuit depth:", select_specs.depth)
 
 
 ######################################################################
@@ -230,9 +231,10 @@ def compiled_bucket_brigade_qram(index):
 
 
 bb_specs = qp.specs(compiled_bucket_brigade_qram)(0)["resources"]
-print("Total qubits:", len(control_wires + target_wires + bb_work_wires))
+print("Total work wires:", len(control_wires + target_wires + bb_work_wires))
 print("One-qubit gates:", bb_specs.gate_sizes.get(1, 0))
 print("Two-qubit gates:", bb_specs.gate_sizes.get(2, 0))
+print("Circuit depth:", bb_specs.depth)
 
 
 ######################################################################
@@ -318,9 +320,10 @@ def compiled_hybrid_qram(index):
 
 
 hybrid_specs = qp.specs(compiled_hybrid_qram)(0)["resources"]
-print("Total qubits:", len(control_wires + target_wires + hybrid_work_wires))
+print("Total work wires:", len(control_wires + target_wires + hybrid_work_wires))
 print("One-qubit gates:", hybrid_specs.gate_sizes.get(1, 0))
 print("Two-qubit gates:", hybrid_specs.gate_sizes.get(2, 0))
+print("Circuit depth:", hybrid_specs.depth)
 
 
 ######################################################################
@@ -359,7 +362,7 @@ for k_value in range(num_address_wires):
 # | Construction           | Width scaling          | Depth / gate-cost      | Main tradeoff          |
 # |                        |                        | intuition              |                        |
 # +========================+========================+========================+========================+
-# | ``SelectOnlyQRAM``    | :math:`O(n+m)`         | :math:`O(2^n m)`       | Minimal width;         |
+# | ``SelectOnlyQRAM``     | :math:`O(n+m)`         | :math:`O(2^n m)`       | Minimal width;         |
 # |                        |                        | multi-controlled       | exponential select     |
 # |                        |                        | writes                 | cost                   |
 # +------------------------+------------------------+------------------------+------------------------+
@@ -380,22 +383,41 @@ for k_value in range(num_address_wires):
 # read as a small-instance comparison rather than an asymptotic benchmark: with only four records,
 # constant overheads can dominate, especially for the bucket-brigade and hybrid constructions.
 #
+# Select-only looks cheaper at :math:`n=2` because it is tailored to the specific data and omits
+# zero-valued writes, while the routing overhead of BBQRAM and HybridQRAM is already present before
+# their larger-scale parallelism becomes useful. After decomposing multi-controlled :math:`X` gates
+# through Toffoli gates to Clifford+T, the worst-case depths of Select-only, BBQRAM, and HybridQRAM
+# scale as :math:`O(mn2^n)`, :math:`O(nm+n)`, and
+# :math:`O(2^k[m(n-k)+(n-k)+k])`, respectively. A small all-one, :math:`m=3` CNOT-based check already
+# shows the crossover:
+#
+# +------------------------+--------------+--------------+
+# | Construction           | :math:`n=2`  | :math:`n=3`  |
+# +========================+==============+==============+
+# | ``SelectOnlyQRAM``     | 134          | 1,071        |
+# +------------------------+--------------+--------------+
+# | ``BBQRAM``             | 456          | 730          |
+# +------------------------+--------------+--------------+
+#
 
 resource_table = {
     "SelectOnlyQRAM": {
-        "total_qubits": len(control_wires + target_wires),
+        "total_work_wires": len(control_wires + target_wires),
         "one_qubit_gates": select_specs.gate_sizes.get(1, 0),
         "two_qubit_gates": select_specs.gate_sizes.get(2, 0),
+        "circuit_depth": select_specs.depth,
     },
     "BBQRAM": {
-        "total_qubits": len(control_wires + target_wires + bb_work_wires),
+        "total_work_wires": len(control_wires + target_wires + bb_work_wires),
         "one_qubit_gates": bb_specs.gate_sizes.get(1, 0),
         "two_qubit_gates": bb_specs.gate_sizes.get(2, 0),
+        "circuit_depth": bb_specs.depth,
     },
     "HybridQRAM": {
-        "total_qubits": len(control_wires + target_wires + hybrid_work_wires),
+        "total_work_wires": len(control_wires + target_wires + hybrid_work_wires),
         "one_qubit_gates": hybrid_specs.gate_sizes.get(1, 0),
         "two_qubit_gates": hybrid_specs.gate_sizes.get(2, 0),
+        "circuit_depth": hybrid_specs.depth,
     },
 }
 
