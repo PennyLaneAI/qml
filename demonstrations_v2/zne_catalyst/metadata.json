@@ -8,9 +8,8 @@
             "username": "natestemen"
         }
     ],
-    "_comment": "Disabled execution because QRack 1.1.0 broke compatibility with CPL and there is no capacity to restore compatibility at the moment.",
     "executable_stable": false,
-    "executable_latest": false,
+    "executable_latest": true,
     "dateOfPublication": "2024-11-15T00:00:00+00:00",
     "dateOfLastModification": "2026-07-28T00:00:00+00:00",
     "categories": [
