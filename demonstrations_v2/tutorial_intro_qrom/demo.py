@@ -118,10 +118,6 @@ def circuit(index):
     qp.QROM(bitstrings, control_wires, target_wires, work_wires=None)
     return qp.sample(wires=target_wires)
 
-
-for i in range(8):
-    print(f"The bitstring stored in index {i} is: {circuit(i)[0]}")
-
 ##############################################################################
 # Although this approach works correctly, the number of multicontrol gates is high — gates with a costly decomposition.
 # Here we show the number of 1 and 2 qubit gates we use when decomposing the circuit:
