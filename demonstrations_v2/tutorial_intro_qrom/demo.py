@@ -105,10 +105,7 @@ bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
 control_wires = [0, 1, 2]
 target_wires = [3, 4]
 
-
-@partial(
-    qp.compile, basis_set="CNOT"
-)  # Line added for resource estimation purposes only.
+@qp.decompose(gate_set={"RX", "RY", "RZ", "CNOT", "T"})
 @qp.set_shots(1)
 @qp.qnode(dev)
 def circuit(index):
@@ -151,7 +148,7 @@ target_wires = [3, 4]
 work_wires = [5, 6]
 
 
-@partial(qp.compile, basis_set="CNOT")
+@qp.decompose(gate_set={"RX", "RY", "RZ", "CNOT", "T"})
 @qp.set_shots(1)
 @qp.qnode(dev)
 def circuit(index):
