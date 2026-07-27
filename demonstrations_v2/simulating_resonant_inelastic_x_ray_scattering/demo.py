@@ -2,17 +2,14 @@ r"""
 Simulating Resonant Inelastic X-Ray Scattering
 ##############################################
 
-Our understanding of reality is only as accurate as our models and our models are only as accurate as our ability to interpret their
+Our understanding of reality is only as accurate as our models. Our models are only as accurate as our ability to interpret their
 results.
 
-In our battery-dependent world, it is very important that we properly understand
-how and why our battery technologies age and die. Lithium excess (Li-excess)
+Lithium excess (Li-excess)
 batteries are currently being eyed as the next generation of high-capacity
-batteries, but they are plagued by short lifespans. In an attempt to figure
-out why, resonant inelastic x-ray scattering (RIXS) experiments, an advanced
-X-ray spectroscopy technique that monitors energy changes between input and
-output photons that interact with a target molecule, have been deployed.
-These tests have indicated that Li-excess cathodes produce
+batteries. In an attempt to determine why they boast such short lifespans, 
+**resonant inelastic x-ray scattering (RIXS)** experiments, an advanced
+X-ray spectroscopy technique, have indicated that Li-excess cathodes produce
 molecular oxygen that becomes trapped inside the battery, leading to decline.
 
 In 2025, Gao et al. published "Clarifying the origin of molecular O2 in cathode
@@ -25,7 +22,7 @@ the bonding of oxygen dimers to transition metals in the battery materials.
 Though this wasn't necessarily a "back to the drawing board" moment, this shift in
 interpretation and understanding shed light on the need for reliable simulations
 that can help with the validation and interpretation of experimental results. The 
-problem? Classical computers simply cannot handle RIXS simulation. 
+problem? Classical computers simply cannot handle RIXS simulation for significant system sizes. 
 
 This is precisely the case made by Loaiza et al. in "Quantum algorithm for simulating
 resonant inelastic X-ray scattering of battery materials". Here, a quantum algorithm
@@ -36,12 +33,13 @@ amplification <demos/tutorial_intro_amplitude_amplification>`, :doc:`quantum
 amplitude estimation (QAE) <demos/iterative_quantum_amplitude_estimation>`, and
 :doc:`quantum phase estimation (QPE) <demos/tutorial_qpe>`. This solution not only
 addresses the typical resource limitations of classical computation, but unlocks
-access to the quantum processes that RIXS relies on, which are inaccessible 
-to classical systems.
+access to the quantum processes that RIXS relies on.
 
 Today, our goal will be to understand how these quantum building blocks work
 together to make way for reliable RIXS simulation and begin to open the door for
-more capable advanced materials discovery in the future. Let's get to work!
+more capable advanced materials discovery in the future. After working through 
+this demo, you should be better acquainted with RIXS and its simulation potential.
+Let's get to work!
 
 Getting Started
 ===============
