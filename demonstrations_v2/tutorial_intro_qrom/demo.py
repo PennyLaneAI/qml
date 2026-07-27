@@ -105,7 +105,9 @@ bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
 control_wires = [0, 1, 2]
 target_wires = [3, 4]
 
-@qp.decompose(gate_set={"RX", "RY", "RZ", "CNOT", "T"})
+from pennylane.decomposition.gate_sets import ROTATIONS_PLUS_CNOT
+
+@qp.decompose(gate_set=ROTATIONS_PLUS_CNOT)
 @qp.set_shots(1)
 @qp.qnode(dev)
 def circuit(index):
@@ -148,7 +150,7 @@ target_wires = [3, 4]
 work_wires = [5, 6]
 
 
-@qp.decompose(gate_set={"RX", "RY", "RZ", "CNOT", "T"})
+@qp.decompose(gate_set=ROTATIONS_PLUS_CNOT)
 @qp.set_shots(1)
 @qp.qnode(dev)
 def circuit(index):
