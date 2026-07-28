@@ -177,8 +177,7 @@ assert qp.math.allclose(approx_two_shift, two_shift, atol=1e-2)
 #
 # .. math:: H_{\text{CDF}} = \mu + \sum_{\sigma \in {\uparrow, \downarrow}} U^{(0)}_{\sigma} \left( \sum_{p} Z^{(0)}_{p} a^\dagger_{\sigma, p} a_{\sigma, p} \right) U_{\sigma}^{(0)\ \dagger} + \sum_t^T \sum_{\sigma, \tau \in {\uparrow, \downarrow}} U_{\sigma, \tau}^{(t)} \left( \sum_{pq} Z_{pq}^{(t)} a^\dagger_{\sigma, p} a_{\sigma, p} a^\dagger_{\tau, q} a_{\tau, q} \right) U_{\sigma, \tau}^{(t)\ \dagger}.
 #
-# This Hamiltonian can be easily mapped to the qubit basis via `Jordan-Wigner
-# transformation <https://pennylane.ai/qml/demos/tutorial_mapping>`_ (JWT) using
+# This Hamiltonian can be easily mapped to the qubit basis via :doc:`Jordan-Wigner transformation <demos/tutorial_mapping>` (JWT) using
 # :math:`a_p^\dagger a_p = n_p \mapsto 0.5 * (1 - z_p)`, where :math:`n_p` is the number
 # operator and :math:`z_p` is the Pauli-Z operation acting on the qubit corresponding to
 # orbital :math:`p`. The mapped form naturally gives rise to a measurement grouping, where
@@ -230,7 +229,7 @@ cdf_hamiltonian = {
 # :class:`~.pennylane.BasisRotation` operation, which implements the unitary transformation
 # :math:`\exp \left( \sum_{pq}[\log U]_{pq} (a^\dagger_p a_q - a^\dagger_q a_p) \right)`
 # using the `Givens rotation networks
-# <https://docs.pennylane.ai/en/stable/code/api/pennylane.qchem.givens_decomposition.html>`_
+# <https://docs.pennylane.ai/en/stable/code/api/pennylane.math.decomposition.givens_decomposition.html>`_
 # that can be efficiently implemented on quantum hardware. The ``leaf_unitary_rotation``
 # function below does this for a leaf tensor:
 #

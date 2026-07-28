@@ -151,7 +151,7 @@ def encoding(phi, gamma):
 # We now choose a parametrization for both the probe state and the POVM.
 # To be able to parametrize all possible probe states and all local measurements,
 # we make use of the
-# `ArbitraryStatePreparation <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.state_preparations.ArbitraryStatePreparation.html>`_
+# `ArbitraryStatePreparation <https://docs.pennylane.ai/en/stable/code/api/pennylane.ArbitraryStatePreparation.html>`_
 # template from PennyLane.
 
 
@@ -200,7 +200,7 @@ print(
 #
 # Now, let's turn to the cost function itself. The most important ingredient
 # is the Classical Fisher Information Matrix, which we compute using a separate
-# function that uses the explicit `parameter-shift rule <https://pennylane.ai/qml/glossary/parameter_shift.html>`_
+# function that uses the explicit `parameter-shift rule <https://pennylane.ai/glossary/parameter_shift>`_
 # to enable differentiation.
 def CFIM(weights, phi, gamma):
     p = experiment(weights, phi, gamma=gamma)
@@ -269,7 +269,7 @@ W = np.eye(2)
 
 ##############################################################################
 # We are now ready to perform the optimization. We will initialize the weights
-# at random. Then we make use of the `Adagrad <https://pennylane.readthedocs.io/en/stable/introduction/optimizers.html>`_
+# at random. Then we make use of the `Adagrad <https://docs.pennylane.ai/en/stable/code/api/pennylane.AdagradOptimizer.html>`_
 # optimizer. Adaptive gradient descent methods are advantageous as the optimization
 # of quantum sensing protocols is very sensitive to the step size.
 def opt_cost(weights, phi=phi, gamma=gamma, J=J, W=W):
@@ -335,7 +335,7 @@ plt.show()
 # that has a better noise resilience than standard Ramsey spectroscopy!
 #
 # This tutorial shows that variational methods are useful for quantum metrology.
-# The are numerous avenues open for further research: one could study more intricate
+# There are numerous avenues open for further research: one could study more intricate
 # sensing problems, different noise models, and other platforms like optical systems.
 #
 # For more intricate noise models that can't be realized on quantum hardware, Ref. [#meyer2020]_
