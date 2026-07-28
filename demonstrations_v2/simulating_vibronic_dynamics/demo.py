@@ -752,7 +752,7 @@ def ElectronPopVibronicsSimulation(steps, gradient_wires, StatePrepFunc, Coupler
 # drug exploration. In `"Quantum algorithm for simulating non-adiabatic dynamics
 # at metallic surfaces" <https://arxiv.org/abs/2601.16264>`_, the authors
 # employ similar techniques to simulate vibronic dynamics using a GAN Hamiltonian.
-# Test your new skills by giving it a read!
+# Give it a read and test your new skills!
 #
 # .. _references:
 #
