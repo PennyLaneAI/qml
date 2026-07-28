@@ -92,7 +92,7 @@ print("The Hamiltonian is ", H)
 # creation operators, and
 # :math:`\langle \alpha, \beta \vert \hat{s}_1 \cdot \hat{s}_2 \vert \gamma, \delta \rangle`
 # is the `matrix element of the two-body spin operator
-# <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.qchem.obs.spin2.html>`_
+# <https://docs.pennylane.ai/en/stable/code/api/pennylane.qchem.spin2.html>`_
 # :math:`\hat{s}_1 \cdot \hat{s}_2` in the basis of spin orbitals.
 #
 # We use the :func:`~.pennylane.qchem.obs.spin2` function to build the
@@ -349,7 +349,7 @@ print("\n" f"Final value of the energy = {energy:.8f} Ha")
 print("\n" f"Optimal value of the circuit parameters = {params}")
 
 ##############################################################################
-# As expected, the VQE algorithms has found the lowest-energy state with total spin
+# As expected, the VQE algorithm has found the lowest-energy state with total spin
 # :math:`S=1` which is an excited state of the hydrogen molecule.
 #
 # Conclusion
