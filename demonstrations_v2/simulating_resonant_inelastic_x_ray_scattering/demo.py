@@ -127,9 +127,9 @@ The Hamiltonian
 
    |
 
-   1. :math:`\hat{c_i^\dagger}`, the **creation operator**. This is used when a particle
+   1. :math:`\hat{a_i^\dagger}`, the **creation operator**. This is used when a particle
       is "created", effectively occupying some orbital.
-   2. :math:`\hat{c_i}`, the **annihilation operator**. This is used when a particle is
+   2. :math:`\hat{a_i}`, the **annihilation operator**. This is used when a particle is
       "destroyed", effectively vacating some orbital.
 
    |
@@ -138,7 +138,7 @@ The Hamiltonian
    which "count" the number of electrons occupying a given orbital:
 
    .. math::
-      \hat{n}_i=c^\dagger_i c_i
+      \hat{n}_i=a^\dagger_i a_i
 
 
 In "Quantum algorithm for simulating resonant inelastic X-ray scattering of
@@ -146,7 +146,7 @@ battery materials", Loaiza et al. focus on a second-quantized Hamiltonian of
 the form
 
 .. math::
-   \hat{H}=E^{0}+\sum_{p,q=1}^{N_{a}}\sum_{\sigma\in \{\uparrow, \downarrow\}}h_{pq}\hat{c}_{p\sigma}^{\dagger}\hat{c}_{q\sigma}+\frac{1}{2}\sum_{p,q,r,s=1}^{N_{a}}\sum_{\sigma,\sigma '\in \{\uparrow, \downarrow\}}V_{pqrs}\hat{c}_{p\sigma}^{\dagger}\hat{c}_{q\sigma}\hat{c}_{r\sigma^{\prime}}^{\dagger}\hat{c}_{s\sigma^{\prime}},
+   \hat{H}=E^{0}+\sum_{p,q=1}^{N_{a}}\sum_{\sigma\in \{\uparrow, \downarrow\}}h_{pq}\hat{a}_{p\sigma}^{\dagger}\hat{a}_{q\sigma}+\frac{1}{2}\sum_{p,q,r,s=1}^{N_{a}}\sum_{\sigma,\sigma '\in \{\uparrow, \downarrow\}}V_{pqrs}\hat{a}_{p\sigma}^{\dagger}\hat{a}_{q\sigma}\hat{a}_{r\sigma^{\prime}}^{\dagger}\hat{a}_{s\sigma^{\prime}},
 
 where :math:`N_a` is the number of active orbitals used in the simulation, :math:`p,
 q, r,` and :math:`s` are specific orbital indices, :math:`\sigma` and
@@ -331,20 +331,33 @@ E_0 = H_evals[0] #Extract ground state eigenvalue
 #
 # The remaining two registers (the QAE wires and the QPE wires) should be
 # computed relative to the desired accuracy and resolution of the spectral
-# output. In general, the number of wires required to achieve accuracy
-# :math:`\epsilon` is given by
+# output. The number of wires in the QAE register can be found via the general
+# expression:
 #
-# .. math:: \lceil \log_2(1/\epsilon) \rceil
+# .. math:: 
+#    \lceil \log_2(1/\epsilon) \rceil.
+#
+# It is defined in the source paper that the QPE register is given by
+#
+# .. math:: 
+#    \lceil \log_2(N(\epsilon_\omega)) \rceil,
+#
+# where 
+# 
+# .. math::
+#    N(\epsilon_\omega)=\left\lciel \frac{\pi\lambda}{\sqrt{2}\epsilon_\omega},
+# 
+# where :math:`\epsilon_\omega` is the defined resolution of the register.
 #
 # So, we can define our thresholds and compute our register sizes, initializing the
 # full set of system registers using :func:`~pennylane.registers`.
 
-eps_omega = 0.01
+eps_omega = 0.2
 eps_QAE = 0.3
 Na = 4 #two core plus two valence
 
 N_eps_omega = np.ceil((np.pi*lamb)/(np.sqrt(2)*eps_omega))
-n_omega = np.ceil(np.log2(1/eps_omega))
+n_omega = np.ceil(np.log2(N_eps_omega))
 nQAE = np.ceil(np.log2(1/eps_QAE))
 
 registers = {
@@ -471,7 +484,8 @@ D_eps_mat_in_norm = D_eps_in_mat/norm_const_in
 D_eps_mat_out_norm = D_eps_out_mat/norm_const_out
 ###############################################################################
 #
-# Green's Function and GQSP ......................... 
+# Green's Function and GQSP 
+# ......................... 
 #
 # Even though the RIXS process is formally a second-order spectroscopy, Loaiza
 # et al. chose to instead focus on the quantum simulation of high-resolution
