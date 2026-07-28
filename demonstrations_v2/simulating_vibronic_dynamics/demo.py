@@ -737,6 +737,7 @@ def ElectronPopVibronicsSimulation(steps, gradient_wires, StatePrepFunc, Coupler
 #    ../demonstrations_v2/simulating_vibronic_dynamics/10StepVibePlot.png
 #    :align: center 
 #    :width: 700px
+#    :alt: Plot depicting the final time evolution of the demonstration's toy model.
 #  
 #    *Electronic state population time evolution after 10 steps with dt=0.4*
 # 
