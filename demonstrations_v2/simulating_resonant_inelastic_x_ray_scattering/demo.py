@@ -859,19 +859,34 @@ def plot_qpe_spectrum_tools(amplitude, H_traceless, n_omega, eta=0.2, xmax=4.0):
 #
 #    *Simulated spectrum*
 #
-# As we can see, the two spectral peaks are aligned! We can interpret this
-# spectrum as depicting the elastic peak (which occurs at 0 eV and corresponds
-# to excitations that result in a relaxation of the same electron into the core
-# hole) and the inelastic peak (which occurs at approximately 2.75 eV and
-# corresponds to excitations that leave the molecule in the final, excited state
-# that we are interested in). 
+# Upon inspection, it is clear that the two plots are not exactly aligned. In this 
+# simulated case, the peak is shifted and wider than in the analytical case. Since we
+# made no impactful assumptions about our system in our implementation, why is this the 
+# case?
 #
-# Bringing back the idea of RIXS for battery discovery, the inelastic peak is
-# the fingerprint of a specific molecule existing within the system. Researchers
-# can interpret these results to determine what molecules are present during a
-# certain chemical process by correlating the peak values to known excitation
-# energies. Comparing their results to simulation will, therefore, distinguish
-# significant, process inherent molecules from experimental artifacts.
+# The main culprit here is the value of :math:`n_\omega`, which defines the size of the
+# QPE register. As the size of this register increases, the angle bins that the QPE
+# read out fall in to shrink, resulting in higher resolution. Thus, a maximized register size
+# leads to the most accurate results. Unfortunately, increasing this register size
+# exponentially increases the size of the simulation, meaning computational resources
+# are quickly exhausted on classical devices.
+#
+# .. figure::
+#    ../demonstrations_v2/simulating_resonant_inelastic_x_ray_scattering/pennylane-demo-simulating-resonant-inelastic-xray-scattering-PlotRegisterEvolution.gif
+#    :align: center 
+#    :width: 500px 
+#    :alt: Progression of the simulated spectrum with changing QPE register sizes
+#
+#    *Progression of the simulated spectrum with changing QPE register sizes*
+#
+# So, striving for high resolution is a key to achieving an exact simulation of 
+# a RIXS system. 
+#
+# These plots depict two peaks, the elastic peak (centered at 0) and the inelastic
+# peak (centered at 2.745). The inelastic peak is the value of interest in the battery
+# experiments we discussed previously. The frequency at which this peak occurs can
+# be compared to known resonance frequencies of various molecules to determine what
+# is present in a chemical process. 
 #
 # Conclusion
 # ==========
