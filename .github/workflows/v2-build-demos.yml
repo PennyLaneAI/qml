@@ -207,7 +207,7 @@ jobs:
           retention-days: 1
 
   consolidate-artifacts:
-    runs-on: Linux-arm-2-core-GitHub-hosted-runners-azure-network
+    runs-on: ubuntu-latest
     if: ${{ inputs.save-artifact }}
     needs: [generate-build-variables, build-demos]
     steps:
@@ -232,8 +232,3 @@ jobs:
           path: _build/pack/*.zip
           retention-days: ${{ inputs.artifact-retention }}
           overwrite: true
-      
-      - name: Delete partial artifacts
-        uses: geekyeggo/delete-artifact@v6
-        with:
-            name: ${{ needs.generate-build-variables.outputs.artifact-name }}-c*
