@@ -9,7 +9,7 @@ on:
 
 jobs:
   check-directory:
-    runs-on: ubuntu-latest
+    runs-on: Linux-arm-2-core-GitHub-hosted-runners-azure-network
     outputs:
       demonstrations-v1-changes-detected: ${{ steps.determine-changes.outputs.demonstrations-v1-changes-detected }}
     steps:

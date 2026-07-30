@@ -20,7 +20,7 @@ jobs:
   # Step 1: Prepare the build context
   prepare-build-context:
     if: github.event.workflow_run.conclusion == 'success'
-    runs-on: ubuntu-latest
+    runs-on: Linux-arm-2-core-GitHub-hosted-runners-azure-network
     steps:
       - name: Download Build Context
         uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
@@ -97,7 +97,7 @@ jobs:
   # If build fails, generate a comment indicating the failure.
   generate-comment:
     if: github.event.workflow_run.event == 'pull_request' && needs.prepare-build-context.outputs.pr_id != ''
-    runs-on: ubuntu-latest
+    runs-on: Linux-arm-2-core-GitHub-hosted-runners-azure-network
     needs: [prepare-build-context, deploy-preview-demos]
     steps:
       - name: Generate Markdown Comment for Successful Deployment

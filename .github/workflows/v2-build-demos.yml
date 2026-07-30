@@ -207,7 +207,7 @@ jobs:
           retention-days: 1
 
   consolidate-artifacts:
-    runs-on: ubuntu-latest
+    runs-on: Linux-arm-2-core-GitHub-hosted-runners-azure-network
     if: ${{ inputs.save-artifact }}
     needs: [generate-build-variables, build-demos]
     steps:

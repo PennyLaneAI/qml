@@ -13,7 +13,7 @@ on:
 
 jobs:
   update-dev:
-    runs-on: ubuntu-latest
+    runs-on: Linux-arm-2-core-GitHub-hosted-runners-azure-network
 
     if: >-
       ${{

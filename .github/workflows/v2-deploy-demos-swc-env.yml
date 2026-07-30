@@ -20,7 +20,7 @@ jobs:
   # Step 1: Prepare the build context
   prepare-build-context:
     if: github.event.workflow_run.conclusion == 'success'
-    runs-on: ubuntu-latest
+    runs-on: Linux-arm-2-core-GitHub-hosted-runners-azure-network
     steps:
       - name: Download Build Context
         uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main

@@ -3,7 +3,7 @@ on: [status]
 
 jobs:
   artifact-comment:
-    runs-on: ubuntu-latest
+    runs-on: Linux-arm-2-core-GitHub-hosted-runners-azure-network
     name: Run CircleCI artifacts redirector
     steps:
       - uses: actions/checkout@v5

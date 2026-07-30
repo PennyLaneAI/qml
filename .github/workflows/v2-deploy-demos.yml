@@ -38,7 +38,7 @@ on:
 
 jobs:
   deploy-demos:
-    runs-on: ubuntu-latest
+    runs-on: Linux-2-core-GitHub-hosted-runners-azure-network
     environment: ${{ inputs.environment }}
     env:
       DEPLOYMENT_ENDPOINT_URL: ${{ secrets.DEPLOYMENT_ENDPOINT_URL }}
