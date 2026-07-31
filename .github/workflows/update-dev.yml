@@ -13,7 +13,9 @@ on:
 
 jobs:
   update-dev:
-    runs-on: Linux-arm-2-core-GitHub-hosted-runners-azure-network
+    runs-on:
+      group: 'PennyLaneAI-Static-IP-Runners'
+      labels: ['pl-2-core-gh-runner']
 
     if: >-
       ${{

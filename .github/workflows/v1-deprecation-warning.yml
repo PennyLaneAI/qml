@@ -9,7 +9,9 @@ on:
 
 jobs:
   check-directory:
-    runs-on: Linux-arm-2-core-GitHub-hosted-runners-azure-network
+    runs-on:
+      group: 'PennyLaneAI-Static-IP-Runners'
+      labels: ['pl-2-core-gh-runner']
     outputs:
       demonstrations-v1-changes-detected: ${{ steps.determine-changes.outputs.demonstrations-v1-changes-detected }}
     steps:

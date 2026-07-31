@@ -38,7 +38,9 @@ on:
 
 jobs:
   deploy-demos:
-    runs-on: Linux-2-core-GitHub-hosted-runners-azure-network
+    runs-on:
+      group: 'PennyLaneAI-Static-IP-Runners'
+      labels: ['pl-2-core-gh-runner']
     environment: ${{ inputs.environment }}
     env:
       DEPLOYMENT_ENDPOINT_URL: ${{ secrets.DEPLOYMENT_ENDPOINT_URL }}
