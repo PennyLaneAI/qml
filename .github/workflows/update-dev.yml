@@ -13,7 +13,9 @@ on:
 
 jobs:
   update-dev:
-    runs-on: ubuntu-latest
+    runs-on:
+      group: 'PennyLaneAI-Static-IP-Runners'
+      labels: ['pl-2-core-gh-runner']
 
     if: >-
       ${{
@@ -25,10 +27,17 @@ jobs:
       }}
 
     steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: Checkout
         uses: actions/checkout@v5
         with:
-          token: ${{ secrets.NIGHTLY_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
           fetch-depth: 0  # We want entire git-history to avoid any merge conflicts
 
       - name: Nightly Merge
