@@ -765,9 +765,9 @@ def ElectronPopVibronicsSimulation(steps, gradient_wires, StatePrepFunc, Coupler
 # .. [#Motlagh2025] D.\ Motlagh, R. A. Lang, P. Jain, J. A.
 # Campos-Gonzalez-Angulo, W. Maxwell, T. Zeng, A. Aspuru-Guzik, and J. M.
 # Arrazola, "Quantum Algorithm for Vibronic Dynamics: Case Study on Singlet
-# Fission Solar Cell Design," 2025, `arXiv: 2411.13669
-# <https://arxiv.org/abs/2411.13669>`_.
+# Fission Solar Cell Design," 2025, `doi: 10.48550/arXiv.2411.13669
+# <https://doi.org/10.48550/arXiv.2411.13669>`_.
 #
 # .. [#Lang2026] R.\ A. Lang, P. Jain, J. M. Arrazola, and D. Motlagh, "Quantum
 # Algorithm for Simulating Non-Adiabatic Dynamics at Metallic Surfaces," 2026,
-# `arXiv: 2601.16264 <https://arxiv.org/abs/2601.16264>`_.
+# `doi: 10.48550/arXiv.2601.16264 <https://doi.org/10.48550/arXiv.2601.16264>`_.
