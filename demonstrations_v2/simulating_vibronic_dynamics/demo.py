@@ -136,14 +136,6 @@ To implement these fragments in a circuit, they must be diagonal. Unfortunately 
 run rampant in vibronic systems due to the high degree of coupling. Thus, a complete Trotter step
 should include a diagonalization procedure.
 
-So, each Trotter step in our implementation should:
-
-1. Perform a kinetic half-step on the system,
-2. Diagonalize each fragment to represent coupling behaviour,
-3. Perform a potential step for each fragment,
-4. Uncompute the diagonalization step,
-5. Perform another kinetic half-step on the system.
-
 To address this, Motlagh et al. lay out a Clifford gate based
 scheme for `block-diagonalization
 <https://pennylane.ai/compilation/diagonal-unitary-decomp/details>`_. To understand the scheme, we must first take
@@ -532,6 +524,17 @@ def KDCFrag(fragment, load_coeffs, mode_list, coeff_data, state_wires, electron_
 # mirrored steps lands a :math:`QFT` next to a :math:`QFT^\dagger`, meaning we can
 # easily maintain the proper basis without adding additional transformations.
 # Phew!
+#
+# So, our Trotter process should:
+#
+# 1. Perform a half-step evolution on the outermost fragment,
+# 2. For each intermediate fragment,
+#    a. Diagonalize,
+#    b. Perform a half-step evolution
+#    c. Un-diagonalize
+# 3. Repeat step 2 in reverse order,
+# 4. Perform a half-step evolution on the outermost fragment.
+
 
 def TrotterStepKDC(k, dt, frag_list, coupler, PotentialStep, KineticStep, kinetic_args, coupler_args, potential_args):
     K = 2**k
