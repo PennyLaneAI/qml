@@ -9,18 +9,19 @@ Lithium excess (Li-excess)
 batteries are currently being eyed as the next generation of high-capacity
 batteries. As we attempt to determine why they boast such short lifespans, 
 **resonant inelastic x-ray scattering (RIXS)** experiments, an advanced
-X-ray spectroscopy technique, have indicated that Li-excess cathodes produce
+X-ray spectroscopy technique, have suggested Li-excess cathodes produce
 molecular oxygen that becomes trapped inside the battery, leading to decline.
 
 In 2025, Gao et al. published "Clarifying the origin of molecular O2 in cathode
-oxides", dropping the bombshell that RIXS experiments show the presence of molecular
-oxygen in non-Li-excess batteries incapable of producing these molecules as well, 
-meaning it is likely an artifact of the methodology itself. They additionally
+oxides", noting RIXS experiments show the presence of molecular
+oxygen in non-Li-excess batteries incapable of producing these molecules as well. 
+This implies these molecules are likely an artifact of the RIXS methodology itself rather than the 
+battery process. They additionally
 point to this as evidence of a much more complex degradation mechanism involving
 the bonding of oxygen dimers to transition metals in the battery materials.
 
-Though this wasn't necessarily a "back to the drawing board" moment, this shift in
-interpretation and understanding shed light on the need for reliable simulations
+This wasn't necessarily a "back to the drawing board" moment, but it did cause a shift in
+interpretation and understanding that shed light on the need for reliable simulations
 that can help with the validation and interpretation of experimental results. The 
 problem? Classical computers simply cannot handle RIXS simulation for significant system sizes. 
 
@@ -47,7 +48,7 @@ Getting Started
 ===============
 What is RIXS?
 -------------
-The goal of RIXS spectroscopy is to monitor how matter interacts with light. 
+The goal of RIXS spectroscopy is to monitor how matter interacts with incident light. 
 At a high level, RIXS involves a material being illuminated by 
 X-ray photons with energy very close to a core electron's binding
 energy (also known as the "absorption edge") [#Loaiza2026]_. The successful
@@ -61,11 +62,10 @@ and used to compute the difference between the input and output photon energies.
 
 Though this simple explanation is sufficient to understand our observables,
 it obscures the fact that RIXS is fundamentally a second-order quantum scattering
-process. This means that the intermediate state (which exists between the ground
+process. This means the intermediate state (which exists between the ground
 state and final excited state) is actually a coherent collection of virtual states.
-So, the system never actually collapses to a single intermediate state, expanding
-the intermediate Hilbert space to massive scales and adding further complexity to 
-RIXS simulations.
+So, technically no collapse to the intermediate state occurs, but it can be treated
+as its own state for practical purposes.
 
 .. figure:: ../demonstrations_v2/simulating_resonant_inelastic_x_ray_scattering/pennylane-demo-simulating-resonant-inelastic-xray-scattering-EnergyLevelDiagram.png
    :align: center
@@ -78,7 +78,7 @@ To summarize, the three states involved in the RIXS process are:
 
 1. :math:`|E_0\rangle`: The molecule sits in an unexcited state prior to the absorption of the incident :math:`\omega_I` photon.
 2. :math:`|E_n\rangle`: Following the absorption of the incident :math:`\omega_I` photon, a core electron has been excited to a higher-energy valence orbital. This results 
-in a short-lived superposition of core hole states that can be approximated as a vacancy in the core orbital.
+in a short-lived superposition of core hole states.
 3. :math:`|E_f\rangle`: To fill the unfavourable core hole, an electron from a lower energy valence orbital has relaxed into the core, leaving behind a valence hole and emitting a :math:`\omega_S` photon [#Loaiza2026]_. The molecule is left in an excited state.
 
 The difference between :math:`E_f` and :math:`E_0` is known as the **energy
@@ -90,7 +90,7 @@ energies for identification.
 
 Why Quantum?
 ------------
-Classical simulation is limited in the amount and type of complexity it can
+Classical simulation is limited in the amount of complexity it can
 handle. Basic comparisons of classical and quantum simulation methods tend to make the
 case that the maximum compatible system size varies greatly between the two, 
 with quantum simulations typically capable of handling many more
@@ -164,7 +164,7 @@ will take a basic system consisting of two core orbitals and two valence
 orbitals to be our focus. To do this, we will adapt the given Hamiltonian as
 
 .. math::
-   \hat{H}=\sum_{\sigma\in \{\uparrow, \downarrow\}}(\epsilon_{c1}\hat{n}_{c1,\sigma}+\epsilon_{c2}\hat{n}_{c2,\sigma}+\epsilon_{\nu_1}\hat{n}_{\nu_1,\sigma}+\epsilon_{\nu_2}\hat{n}_{\nu_2,\sigma})+h\sum_{\sigma\in \{\uparrow, \downarrow\}}(\hat{a}_{\nu_1,\sigma}^\dagger\hat{a}_{\nu_2,\sigma}+\hat{a}_{\nu_2,\sigma}^{\dagger}\hat{a}_{\nu_1,\sigma})+V\sum_{\sigma\in \{\uparrow, \downarrow\}}\hat{n}_{\nu_2,\sigma}
+   \hat{H}=\sum_{\sigma\in \{\uparrow, \downarrow\}}(\epsilon_{c_1}\hat{n}_{c_1,\sigma}+\epsilon_{c_2}\hat{n}_{c_2,\sigma}+\epsilon_{\nu_1}\hat{n}_{\nu_1,\sigma}+\epsilon_{\nu_2}\hat{n}_{\nu_2,\sigma})+h\sum_{\sigma\in \{\uparrow, \downarrow\}}(\hat{a}_{\nu_1,\sigma}^\dagger\hat{a}_{\nu_2,\sigma}+\hat{a}_{\nu_2,\sigma}^{\dagger}\hat{a}_{\nu_1,\sigma})+V\sum_{\sigma\in \{\uparrow, \downarrow\}}\hat{n}_{\nu_2,\sigma}
 
 where :math:`c_1` and :math:`c_2` are core orbitals, :math:`\nu_1` and
 :math:`\nu_2` are valence orbitals, and :math:`\epsilon_i` are on-site orbital
@@ -215,14 +215,14 @@ V = 1.0*s
 # When building a toy model for demonstration, we choose physically
 # meaningless parameters to create a small system that is sufficient to see
 # non-trivial effects. In practice, this system would need to include many
-# more orbitals and coefficients extracted from calculations
+# more orbitals and coefficients extracted from specific calculations
 # (such as `Hartree-Fock calculations <https://en.wikipedia.org/wiki/Hartree%E2%80%93Fock_method>`_)
 # to be useful. 
 #
 # With our operators defined, we can build our Hamiltonian terms using standard 
 # multiplications and additions. In Fermi operator arithmetic,
 # operator ordering is crucial due to the anti-commutation relationships
-# that govern them. Luckily for us, PennyLane handles the associated statistics
+# that govern them. Luckily for us, PennyLane handles the associated algebra
 # for us, meaning we can assemble our Hamiltonian using ordinary arithmetic.
 #
 # Since we will soon run this expression through our quantum circuits,
@@ -245,7 +245,7 @@ H_raw = qp.jordan_wigner((Hdiag_up+Hdiag_down)+(Hhybrid_up+Hhybrid_down)+Hspin).
 ###############################################################################
 # Eventually, we will map this Hamiltonian onto our registers, but
 # for now we can extract its eigenvalues and eigenvectors for benchmarking. The algorithm itself
-# only needs the ground state energies and the value of :math:`E_0` to function, but we 
+# only needs the ground-state energies and the value of :math:`E_0` to function, but we 
 # can construct a reference spectrum from the complete ``np.linalg.eigh()`` output later on.
 
 coeffs, ops = H_raw.terms()
@@ -260,7 +260,8 @@ E_0 = H_evals[0] #Extract ground state eigenvalue
 ###############################################################################
 # Here, the Hamiltonian was converted to a traceless representation to ensure
 # the spectrum can be centered around zero and that the 1-norm is reduced. Overall,
-# doing this makes our problem cheaper, so why not!
+# doing this makes our problem cheaper since the associated shift can be effectively
+# ignored, so why not!
 #
 # The Algorithm
 # =============
@@ -280,7 +281,7 @@ E_0 = H_evals[0] #Extract ground state eigenvalue
 #    *The entire RIXS circuit involves preparing the RIXS state and executing walk-based QPE*
 #
 # Item 1 on this list does a lot of heavy lifting here. In fact, the process of
-# preparing the state *is* the algorithm in many ways. So, we can expand the
+# preparing the state dominantly contributes to the overall cost of the algorithm. So, we can expand the
 # list to capture the complete methodology:
 # 
 # 1. Prepare the initial RIXS state, :math:`|R_{\epsilon_I,\epsilon_S}(\omega_I)\rangle`
@@ -294,12 +295,12 @@ E_0 = H_evals[0] #Extract ground state eigenvalue
 #    coefficients of the Green's function and translating them to angles for
 #    implementation, 
 #
-#    c. Define the **dipole operator**
+#    c. Define incoming and outgoing polarization to obtain associated the **dipole operators**
 #    :math:`\hat{D}_{\epsilon_i}`, which captures, within the dipole approximation, the perturbation that occurs
 #    as a result of the incident photon excitation, 
 #
 #    d. Prepare a block-encoding
-#    :math:`\hat{\mathcal{U}}` of the operator proportional to
+#    :math:`\hat{\mathcal{U}}` of the operator effectively proportional to
 #    :math:`\hat{D}_{\epsilon_S}^\dagger \hat{G}(\omega_I, \Gamma)
 #    \hat{D}_{\epsilon_I}`, 
 #
@@ -321,7 +322,7 @@ E_0 = H_evals[0] #Extract ground state eigenvalue
 #
 # Resource Definition 
 # ................... 
-# Before we jump in, some bookkeeping is in order. Based on the algorithm
+# First, some bookkeeping is in order. Based on the algorithm
 # outline, we will build our functions using 
 # a total of 9 registers, each of which requires a different number of wires. 
 #
@@ -332,7 +333,8 @@ E_0 = H_evals[0] #Extract ground state eigenvalue
 # as the system has active spin-orbitals, which is twice the number of spatial 
 # orbitals.
 #
-# The remaining two registers (the QAE wires and the QPE wires) should be
+# The remaining two registers (the QAE wires and the QPE wires, which faciliate 
+# seperate circuits) should be
 # computed relative to the desired accuracy and resolution of the spectral
 # output. The number of wires in the QAE register can be found via the general
 # expression:
@@ -398,10 +400,8 @@ H = H_traceless.map_wires(wire_map)
 # -----------------------
 # In order to carry out subsequent block-encoding and minimize resource costs,
 # the target Hamiltonian needs to be decomposed into a :doc:`linear
-# combination of unitaries (LCU) <demos/tutorial_lcu_blockencoding>`. The main
-# goal of this process is to *compress* the Hamiltonian, making it easier to
-# implement using gates and more feasible to execute within available
-# resources.
+# combination of unitaries (LCU) <demos/tutorial_lcu_blockencoding>`. This 
+# is a necessary step for block-encoding.
 #
 # Loaiza et al. select the block-invariant symmetry-shift technique with
 # tensor hypercontraction factorization (BLISS-THC) method for their
@@ -421,8 +421,9 @@ H = H_traceless.map_wires(wire_map)
 #
 # .. math:: |R_{\epsilon_I,
 #    \epsilon_S}(\omega_I)\rangle\equiv\frac{\hat{R}_{\epsilon_I,
-#    \epsilon_S}(\omega_I)|E_0\rangle}{|R_{\epsilon_I,\epsilon_S}(\omega_I)|}.
+#    \epsilon_S}(\omega_I)|E_0\rangle}{|R_{\epsilon_I,\epsilon_S}(\omega_I)|},
 #
+# where :math:`|R_{\epsilon_I,\epsilon_S}(\omega_I)|` is the norm of the state. 
 # We will take for granted that this state is equivalent to the block-encoded
 # operator
 #
@@ -443,20 +444,19 @@ H = H_traceless.map_wires(wire_map)
 #
 # The Dipole Operator 
 # ...................
-# For a given polarization :math:`\delta`, the (one-electron) dipole operator can be generally defined as
+# For a given polarization :math:`\epsilon`, the (one-electron) dipole operator can be generally defined as
 # 
 # .. math::
-#    \hat{D}_{\delta}=\sum_{pq}\sum_{\sigma\in \{\uparrow, \downarrow\}}d_{pq}^{(\delta)}\hat{c}_{p\sigma}^\dagger\hat{c}_{q\sigma}+\text{h.c.},
+#    \hat{D}_{\epsilon}=\sum_{pq}\sum_{\sigma\in \{\uparrow, \downarrow\}}d_{pq}^{(\epsilon)}\hat{c}_{p\sigma}^\dagger\hat{c}_{q\sigma}+\text{h.c.},
 #
-# where :math:`d_{pq}^{(\delta)}` are the dipole matrix elements. Note that, for simplicity, we do not consider different polarizations in our toy model.
+# where :math:`d_{pq}^{(\epsilon)}` are the dipole matrix elements. Note that, for simplicity, we do not consider different polarizations in our toy model.
 #
 # Since the total dipole operator (containing both the excitation and de-excitation terms) is necessarily Hermitian, we can represent it as 
 # 
 # .. math::
 #    \hat{D}=\hat{D}_{exc}+\hat{D}_{exc}^\dagger.
 #
-# Thus, we can define the excitation operator using our Fermi operators and construct our total operator. We will only deal with a single polarization for our
-# example, so we can forgo :math:`\delta` for now.
+# Thus, we can define the excitation operator using our Fermi operators and construct our total operator.
 # 
 
 #Define dipole matrix elements
@@ -469,8 +469,9 @@ d_c4 = 0.3
 D_up   = d_c1*create(2)*annihilate(0) + d_c2*create(4)*annihilate(0) + d_c3*create(2)*annihilate(6) + d_c4*create(4)*annihilate(6)
 #Spin down terms
 D_down = d_c1*create(3)*annihilate(1) + d_c2*create(5)*annihilate(1) + d_c3*create(3)*annihilate(7) + d_c4*create(5)*annihilate(7)
+
 #Full expression
-D = qp.jordan_wigner(D_up+D_down)
+D_half = qp.jordan_wigner(D_up+D_down)
 ###############################################################################
 # From here, we can translate the summation expression into a matrix representation, compute the transpose to achieve the de-excitation dipole operator, and normalize.
 
@@ -479,11 +480,11 @@ D_in_mat = qp.matrix(D, wire_order = range(8))
 #De-Excitation
 D_out_mat = D_in_mat.conj().T
 
-#Normalization
-norm_const_in = np.linalg.norm(D_in_mat,2)
-norm_const_out = np.linalg.norm(D_out_mat,2)
-D_mat_in_norm = D_in_mat/norm_const_in
-D_mat_out_norm = D_out_mat/norm_const_out
+D_mat = D_in_mat+D_out_mat
+norm_const = np.linalg.norm(D_raw,2)
+
+#Final dipole operator
+D = D_mat/norm_const
 ###############################################################################
 # Green's Function and GQSP 
 # ......................... 
@@ -503,8 +504,8 @@ D_mat_out_norm = D_out_mat/norm_const_out
 # .. math::
 #    \Gamma\hat{G}(\omega_I,\Gamma)=\frac{\Gamma}{\omega_I-(\hat{H}-E_0)+i\Gamma}.
 # 
-# Note that a :math:`\Gamma` factor has been added here to guarantee
-# normalization and implementability via GQSP. 
+# Note that a :math:`\Gamma` factor represents a physical broadening caused by the 
+# finite lifetimes of the intermediate states we discussed previously. 
 #
 # To use GQSP, the phase factor angles, which essentially instruct a system as to
 # how a target function can be encoded onto a system,
@@ -522,17 +523,16 @@ D_mat_out_norm = D_out_mat/norm_const_out
 # polynomial expansion, yielding higher resolution.
 
 #Define the Gamma parameter and initial photon energy
-Gamma = 0.99*s
+Gamma = 0.67*s
 omega_I = 6.10*s
 
 #Define the Green's function polynomial degree and scaling factor
 K_G = 100
-scale = 0.7 #Ensure compatibility with poly_to_angle tool
 
 #The Green's function must operate between -1 and 1
 z = np.linspace(-1, 1, 1000)
 def AngleFinder(Gamma, lamb, E_0, omega_I):
-    GreensFunc = lambda x: scale*Gamma/(omega_I-((lamb*x)-E_0)+(1j*Gamma))
+    GreensFunc = lambda x: Gamma/(omega_I-((lamb*x)-E_0)+(1j*Gamma))
 
     cheb = np.polynomial.chebyshev.Chebyshev.interpolate(GreensFunc, deg = K_G)
 
@@ -585,8 +585,8 @@ def RIXSStateEncodingUnitary(angles):
     #INITIAL STATE |E_0>
     #Prep the initial state
     psi0 = H_evecs[:,0]
-    D_psi0_state = D_in_mat @ psi0 #Apply the dipole operator to the ground state
-    D_psi0 = D_psi0_state/np.linalg.norm(D_psi0_state)
+    D_psi0_state = D_mat @ psi0 #Apply the unnormalized dipole operator to the ground state
+    D_psi0 = D_psi0_state/np.linalg.norm(D_psi0_state) #normalize the combined state
     qp.StatePrep(D_psi0, wires = system_wires)
 
     #Define the GQSP walk operator
@@ -595,13 +595,13 @@ def RIXSStateEncodingUnitary(angles):
     #Implement GQSP and uncompute walk operator
     qp.GQSP(W, angles, control = GQSP_wire)
     
-    #Clean the GQSP register
+    #Undo shift induced due to non-negative exponent restriction
     for _ in range(K_G):
         qp.adjoint(W)
     
     #FINAL STATE |E_f>
     #Encode de-excitation dipole operator
-    qp.BlockEncode(D_mat_out_norm, wires = list(block_ancilla) + list(system_wires))
+    qp.BlockEncode(D, wires = list(block_ancilla) + list(system_wires))
     
     #Add success flag
     flag_ctrl = list(GQSP_wire) + list(block_ancilla) + list(gqsp_walk_wires)
@@ -621,7 +621,8 @@ def RIXSStateEncodingUnitary(angles):
 # application of the RIXS state block-encoding, Loaiza et al. instead chose to
 # use amplitude amplification on this block-encoding to guarantee the success
 # and reduce the overall runtime. They note that, while you can carry out
-# amplification without prior knowledge of the success probability :math:`P_R`,
+# amplification without prior knowledge of the success probability :math:`P_R`
+# via fixed-point amplitude amplification,
 # it is "advantageous to first determine :math:`P_R` and then use "textbook"
 # amplitude amplification ... which has better prefactors" [#Loaiza2026]_. 
 #
@@ -883,8 +884,12 @@ def plot_qpe_spectrum_tools(amplitude, H_traceless, n_omega, eta=0.2, xmax=4.0):
 #
 #    *Simulated spectrum*
 #
-# Upon inspection, it is clear that the two plots are not exactly aligned. In this 
-# simulated case, the peak is slightly shifted and wider than in the analytical case. Since we
+# We did pretty well! As shown, the peaks occur at approximately the same energy loss value
+# with similar intensity in both plots. This was achieved with a :math:`n_omega=8` value.
+# 
+# Upon inspection, it is clear that the two plots are not perfectly aligned, though. The result
+# is pretty good, but when we are striving for precision for high-importance validations, accuracy
+# is everything. Since we
 # made no impactful assumptions about our system in our implementation, why is this the 
 # case?
 #
