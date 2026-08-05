@@ -3,7 +3,7 @@ r"""Block encoding signed integers
 
 Quantum algorithms based on :doc:`block encodings <demos/tutorial_lcu_blockencoding>` serve as a powerhouse for `fault-tolerant quantum computation <https://pennylane.ai/topics/fault-tolerant-quantum-computing>`__. 
 Unified under the framework of the :doc:`QSVT <demos/tutorial_intro_qsvt>`, block encodings enable efficient polynomial transformations of matrices, 
-allowing for fast simulation algorithms, :doc:`linear system solvers <demos/tutorial_apply_qsvt>`, and more. Herein we present a technique to block encode 
+allowing for fast `Hamiltonian simulation algorithms <https://pennylane.ai/topics/hamiltonian-simulation>`__, :doc:`linear system solvers <demos/tutorial_apply_qsvt>`, and more. Herein, we present a technique to block encode 
 `signed integers <https://en.wikipedia.org/wiki/Signed_number_representations>`__ loaded in a quantum register. This is useful, in the simplest example, to block encode a position operator. 
 But it can also be used to block encode any data loaded into a quantum register, such as a discrete approximation to a 
 function of a quantum register that can be loaded with :doc:`QROM <demos/tutorial_intro_qrom>`. 
