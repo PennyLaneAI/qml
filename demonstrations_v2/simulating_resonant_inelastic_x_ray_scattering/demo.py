@@ -9,7 +9,7 @@ Lithium excess (Li-excess)
 batteries are currently being eyed as the next generation of high-capacity
 batteries. As we attempt to determine why they boast such short lifespans, 
 **resonant inelastic x-ray scattering (RIXS)** experiments, an advanced
-X-ray spectroscopy technique, have suggested Li-excess cathodes produce
+X-ray spectroscopy technique, have suggested Li-excess cathodes may produce
 molecular oxygen that becomes trapped inside the battery, leading to decline.
 
 In 2025, Gao et al. published "Clarifying the origin of molecular O2 in cathode
@@ -130,10 +130,10 @@ The Hamiltonian
 
    |
 
-   1. :math:`\hat{c}_i^\dagger`, the **creation operator**. This is used when a particle
-      is "created", effectively occupying some orbital.
-   2. :math:`\hat{c}_i`, the **annihilation operator**. This is used when a particle is
-      "destroyed", effectively vacating some orbital.
+   1. :math:`\hat{c}_i^\dagger`, the **creation operator**. This is used when an electron
+      is "created", effectively occupying some orbital :math:`i`.
+   2. :math:`\hat{c}_i`, the **annihilation operator**. This is used when an electron is
+      "destroyed", effectively vacating some orbital :math:`i`.
 
    |
 
@@ -297,7 +297,7 @@ E_0 = H_evals[0] #Extract ground state eigenvalue
 #
 #    c. Define incoming and outgoing polarization to obtain the associated the **dipole operators**
 #    :math:`\hat{D}_{\epsilon_i}`, which captures, within the dipole approximation, the perturbation that occurs
-#    as a result of the incident photon excitation, 
+#    as a result of the incident excitation and outgoing relaxation, 
 #
 #    d. Prepare a block-encoding
 #    :math:`\hat{\mathcal{U}}` of the operator effectively proportional to
@@ -408,7 +408,7 @@ H = H_traceless.map_wires(wire_map)
 # decomposition, which is known to be well-suited for compressing molecular
 # Hamiltonians [#Caesura2025]_. 
 # The THC Hamiltonian [#Lee2021]_
-# specifically can be implemented natively in PennyLane :doc:`resource estimation <demos/tutorial_resource_estimation>`
+# specifically can be implemented natively in PennyLane :doc:`resource estimation <demos/tutorial_re_for_qubitizedQPE>`
 # tasks using :class:`~pennylane.estimator.compact_hamiltonian.THCHamiltonian`.
 #
 # Luckily, we do not have to worry about this as our toy model is simple enough
@@ -566,7 +566,7 @@ angles = AngleFinder(Gamma, lamb, E_0, omega_I)
 #    our walk operator,
 # 3. Block-encode the final conjugate dipole operator D\dagger_\epsilon onto the system
 #    register (the de-excitation step that fills the core hole),
-# 4. Carry out a controlled X operation that will flag if the block-encoding all
+# 4. Carry out a controlled X operation that will flag if all
 #    inner block-encodings were successful.
 #
 # .. figure::
