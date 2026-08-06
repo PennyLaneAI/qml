@@ -10,8 +10,8 @@
     ],
     "executable_stable": true,
     "executable_latest": true,
-    "dateOfPublication": "2026-07-31T16:30:00+00:00",
-    "dateOfLastModification": "2026-07-31T16:36:00+00:00",
+    "dateOfPublication": "2026-08-06T16:30:00+00:00",
+    "dateOfLastModification": "2026-08-06T16:36:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms",
@@ -21,7 +21,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_placeholder.png"
+            "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-block-encoding-signed-integers-thumbnail.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-block-encoding-signed-integers-large-thumbnail.png"
         }
     ],
     "seoDescription": "Learn how to block encode signed integers and its application",
