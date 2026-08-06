@@ -55,7 +55,7 @@ energy (also known as the "absorption edge") [#Loaiza2026]_. The successful
 absorption of this photon with frequency :math:`\omega_I` kicks off a two-step
 process in which the absorbed photon promotes a core electron to a valence
 orbital, leaving behind a hole in the core orbital that is eventually filled by
-a different, lower energy valence electron. This is why RIXS is termed a "photon-in, 
+a different, lower-energy valence electron. This is why RIXS is termed a "photon-in, 
 photon-out" process, since the relaxation of the second valence electron into the 
 core releases a photon of frequency :math:`\omega_S` that is detected 
 and used to compute the difference between the input and output photon energies.
@@ -79,7 +79,7 @@ To summarize, the three states involved in the RIXS process are:
 1. :math:`|E_0\rangle`: The molecule sits in an unexcited state prior to the absorption of the incident :math:`\omega_I` photon.
 2. :math:`|E_n\rangle`: Following the absorption of the incident :math:`\omega_I` photon, a core electron has been excited to a higher-energy valence orbital. This results 
 in a short-lived superposition of core hole states.
-3. :math:`|E_f\rangle`: To fill the unfavourable core hole, an electron from a lower energy valence orbital has relaxed into the core, leaving behind a valence hole and emitting a :math:`\omega_S` photon [#Loaiza2026]_. The molecule is left in an excited state.
+3. :math:`|E_f\rangle`: To fill the unfavourable core hole, an electron from a lower-energy valence orbital has relaxed into the core, leaving behind a valence hole and emitting a :math:`\omega_S` photon [#Loaiza2026]_. The molecule is left in an excited state.
 
 The difference between :math:`E_f` and :math:`E_0` is known as the **energy
 loss**. When energy loss versus intensity is plotted (as is characteristic of a
@@ -172,7 +172,7 @@ energies. Note that the :math:`\sum_{p,q=1}^{N_{a}}\sum_{\sigma\in \{\uparrow, \
 term has been explicitly broken up into the diagonal (first term) and off-diagonal (second term) components in 
 our Hamiltonian.
 
-To implement this Hamiltonian in PennyLane, we can first call the built in
+To implement this Hamiltonian in PennyLane, we can first call the built-in
 Fermionic operators :class:`~pennylane.FermiC` (the creation operator) and
 :class:`~pennylane.FermiA` (the annihilation operator). These will be used 
 to construct the required number operators.
@@ -256,7 +256,7 @@ H_evals, H_evecs = np.linalg.eigh(H_sparse)
 
 #Extract the 1-norm and initial energy value from the Hamiltonian
 lamb = float(np.sum(np.abs(H_traceless.terms()[0])))
-E_0 = H_evals[0] #Extract ground state eigenvalue
+E_0 = H_evals[0] #Extract ground-state eigenvalue
 ###############################################################################
 # Here, the Hamiltonian was converted to a traceless representation to ensure
 # the spectrum can be centered around zero and that the 1-norm is reduced. Overall,
@@ -437,7 +437,7 @@ H = H_traceless.map_wires(wire_map)
 # final state dipole operator, :math:`\lambda_D^{(\epsilon_S)}` is the 1-norm of
 # the final state dipole operator, :math:`\hat{G}(\omega_I, \Gamma)` is the
 # Green's function, and :math:`\hat{U}_{\epsilon_I}` is an operator that maps the
-# initial dipole perturbed state onto the all-zero state, giving
+# initial dipole-perturbed state onto the all-zero state, giving
 # :math:`\hat{U}_{\epsilon_I}|0\rangle=|D_{\epsilon_I}\rangle` [#Loaiza2026]_. So, our main
 # goal for now is to gather the building blocks of the embedded unitary operator
 # and construct this block-encoding representation.
