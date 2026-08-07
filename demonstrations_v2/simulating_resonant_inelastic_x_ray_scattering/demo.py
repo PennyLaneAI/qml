@@ -580,6 +580,12 @@ angles = AngleFinder(Gamma, lamb, E_0, omega_I)
 # optimally reduces the 1-norm but requires a more complex implementation, we
 # here instead use PennyLane's built-in block-encoding via Pauli operators via
 # :class:`~pennylane.BlockEncode`.
+#
+# Note that :func:`~qp.GQSP` cannot handle negative exponents in the input function.
+# Since we centered our function previously, :func:`~qp.GQSP` will shift the register
+# to compensate, requiring us to shift the register back using adjoint walk operators.
+# Unfortunately, this adds some resource cost to our implementation, but will
+# suffice to achieve the desired output. 
 
 def RIXSStateEncodingUnitary(angles):
     #INITIAL STATE |E_0>
