@@ -149,7 +149,7 @@ print("Circuit depth:", select_specs.depth)
 
 
 ######################################################################
-# Bucket-brigade QRAM
+# Bucket-brigade QRAM (BBQRAM)
 # -------------------
 #
 # The bucket-brigade idea reorganizes the problem. Instead of using one large global selection gadget,
