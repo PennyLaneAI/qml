@@ -421,6 +421,22 @@ for name, summary in resource_table.items():
 # structure can look expensive; the purpose of the hybrid construction is to expose a design knob that
 # becomes more useful as the address space grows.
 #
+# Select-only looks cheaper at :math:`n=2` because it is tailored to the specific data and omits
+# zero-valued writes, while the routing overhead of BBQRAM and HybridQRAM is already present before
+# their larger-scale parallelism becomes useful. After decomposing multi-controlled :math:`X` gates
+# through Toffoli gates to Clifford+T, the worst-case depths of Select-only, BBQRAM, and HybridQRAM
+# scale as :math:`O(mn2^n)`, :math:`O(nm+n)`, and
+# :math:`O(2^k[m(n-k)+(n-k)+k])`, respectively. A small all-one, :math:`m=3` CNOT-based check already
+# shows the crossover:
+#
+# +------------------------+--------------+--------------+
+# | Construction           | :math:`n=2`  | :math:`n=3`  |
+# +========================+==============+==============+
+# | ``SelectOnlyQRAM``     | 134          | 1,071        |
+# +------------------------+--------------+--------------+
+# | ``BBQRAM``             | 456          | 730          |
+# +------------------------+--------------+--------------+
+#
 # Conclusion
 # ----------
 #
