@@ -3,7 +3,7 @@ Intro to quantum random access memory (QRAM)
 ============================================
 
 Many quantum algorithms that promise advantage or speedup (e.g., `quantum machine learning <https://pennylane.ai/quantum-machine-learning>`__, :doc:`search <demos/tutorial_grovers_algorithm>`,
-:doc:`linear algebra <demos/tutorial_intro_qsvt>`, `state preparation <https://pennylane.ai/blog/2025/10/state-preparation/>`__) quietly assume that classical data can be efficiently and
+:doc:`linear algebra <demos/tutorial_intro_qsvt>`, `state preparation <https://pennylane.ai/blog/2025/10/state-preparation/>`__) implicitly assume that classical data can be efficiently and
 cheaply loaded onto a quantum computer. For some time, this assumption has been justified by
 pointing to Quantum Random Access Memory (QRAM) [#qram]_. But in examining this assumption, it turns out that
 exactly how you build QRAM directly changes the cost of data loading, in both circuit depth and
