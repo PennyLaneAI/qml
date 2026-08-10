@@ -49,6 +49,7 @@ A central challenge in quantum algorithm design is bridging this gap to implemen
 # -------------------------------------
 # .. tip::
 #     Before diving in, reinforce your knowledge of the basics with our :doc:`Intro to QSVT <demos/tutorial_intro_qsvt>` and :doc:`QSVT in Practice <demos/tutorial_apply_qsvt>` tutorials. 
+# 
 # The introduction highlighted a basic mismatch: 
 # 
 # - QSVT applies a polynomial to the singular values or eigenvalues of an operator. 
