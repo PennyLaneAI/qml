@@ -75,10 +75,9 @@ A central challenge in quantum algorithm design is bridging this gap to implemen
 # Once :math:`A` is available in this form, QSVT can implement polynomial transformations of the
 # encoded operator, informally :math:`A \mapsto P(A)`, by acting on its spectrum.
 # 
-# Now consider a state prepared by a unitary :math:`U`:
+# Our data, however, is in a state prepared by a unitary :math:`U`:
 # 
 # .. math::
-# 
 # 
 #    |\psi\rangle=U|0\rangle=\sum_{i=1}^N \psi_i|i\rangle,
 # 
@@ -88,12 +87,10 @@ A central challenge in quantum algorithm design is bridging this gap to implemen
 # 
 # .. math::
 # 
-# 
 #    \psi_i = \langle i|U|0\rangle.
 # 
-# So the amplitude vector :math:`{\psi_i}` appears as the first column of :math:`U`. The obstacle is
-# that QSVT does not act on a column of a unitary; it acts on the spectrum of an operator accessed
-# through a block encoding.
+# So the amplitude vector :math:`{\psi_i}` appears as the first column of :math:`U`. 
+# A column is not a spectrum, so QSVT cannot manipulate it yet. 
 # 
 # The nonlinear amplitude transformation approach resolves this by constructing, from :math:`U` and
 # controlled uses of :math:`U^\dagger`, a new unitary :math:`U_\Psi` whose encoded block is the
