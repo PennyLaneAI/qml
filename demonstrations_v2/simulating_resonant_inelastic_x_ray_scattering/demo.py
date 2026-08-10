@@ -2,31 +2,26 @@ r"""
 Simulating Resonant Inelastic X-Ray Scattering
 ##############################################
 
-Our understanding of reality is only as accurate as our models. Our models are only as accurate as our ability to interpret their
-results.
-
 Lithium excess (Li-excess)
-batteries are currently being eyed as the next generation of high-capacity
+platforms are currently being eyed for the next generation of high-capacity
 batteries. As we attempt to determine why they boast such short lifespans, 
-**resonant inelastic x-ray scattering (RIXS)** experiments, an advanced
+`resonant inelastic x-ray scattering (RIXS) <https://en.wikipedia.org/wiki/Resonant_inelastic_X-ray_scattering>`_ experiments, an advanced
 X-ray spectroscopy technique, have suggested Li-excess cathodes may produce
 molecular oxygen that becomes trapped inside the battery, leading to decline.
 
-In 2025, Gao et al. published "Clarifying the origin of molecular O2 in cathode
-oxides", noting RIXS experiments show the presence of molecular
+In 2025, Gao et al. published `"Clarifying the origin of molecular O2 in cathode
+oxides" <https://www.nature.com/articles/s41563-025-02144-7>`_, noting RIXS experiments show the presence of molecular
 oxygen in non-Li-excess batteries incapable of producing these molecules as well. 
 This implies these molecules are likely an artifact of the RIXS methodology itself rather than the 
-battery process. They additionally
-point to this as evidence of a much more complex degradation mechanism involving
-the bonding of oxygen dimers to transition metals in the battery materials.
+battery process.
 
 This wasn't necessarily a "back to the drawing board" moment, but it did cause a shift in
 interpretation and understanding that shed light on the need for reliable simulations
 that can help with the validation and interpretation of experimental results. The 
 problem? Classical computers simply cannot handle RIXS simulation for significant system sizes. 
 
-This is precisely the case made by Loaiza et al. in "Quantum algorithm for simulating
-resonant inelastic X-ray scattering in battery materials". Here, a quantum algorithm
+This is precisely the case made by Loaiza et al. in `"Quantum algorithm for simulating
+resonant inelastic X-ray scattering in battery materials" <https://arxiv.org/abs/2602.20270>`_. Here, a quantum algorithm
 is put forward to tackle the problem of RIXS simulation
 using a novel combination of :doc:`generalized quantum signal processing (GQSP)
 <demos/tutorial_estimator_hamiltonian_simulation_gqsp>`, :doc:`amplitude
@@ -44,8 +39,8 @@ on quantum devices.
 
 Let's get to work!
 
-Getting Started
-===============
+Laying the Groundwork for RIXS Simulation
+=========================================
 What is RIXS?
 -------------
 The goal of RIXS spectroscopy is to monitor how matter interacts with incident light. 
@@ -88,35 +83,6 @@ target system. The energy values at which these peaks occur indicate what is pre
 allowing for correlation between observed excitation peaks and known molecular excitation
 energies for identification.
 
-Why Quantum?
-------------
-Classical simulation is limited in the amount of complexity it can
-handle. Basic comparisons of classical and quantum simulation methods tend to make the
-case that the maximum compatible system size varies greatly between the two, 
-with quantum simulations typically capable of handling many more
-states. There are, however, additional, potentially more important
-advantages that are not merely reliant on an increase in computational power. In
-the case of Loaiza et al.'s RIXS algorithm, the following two advantages are
-listed for the quantum case:
-
-1. RIXS spectroscopy involves several **delocalized processes**, meaning the positions
-   of the electrons involved are probabilistically spread out across the
-   molecule. Capturing this requires a large active space that simply cannot be constructed 
-   by classical bits incapable of emulating superposition and entanglement relationships.
-
-2. Strongly correlated systems of interest, such as the transition metal-oxygen
-   dimer bonding proposed by Gao et al., experience complex intermediate states (like the case we discussed) 
-   that dictate the mixing of orbitals in the oxygen-metal bonding process. To
-   model this sufficiently, any computationally simple wavefunction is
-   insufficient, and a classical computer is once again incapable of carrying
-   out the necessary entanglement math [#Loaiza2026]_.
-
-So, even though it *is* a valid argument to say quantum computers can 
-handle larger molecules if necessary, the stronger argument in
-this context is that the use of qubits to carry out RIXS simulation makes it
-possible to model the quantum phenomena that the technique relies on. Good thing
-we know our stuff!
-
 The Hamiltonian
 ---------------
 .. admonition:: A note on operators
@@ -144,8 +110,7 @@ The Hamiltonian
       \hat{n}_i=\hat{c}^\dagger_i \hat{c}_i
 
 
-In "Quantum algorithm for simulating resonant inelastic X-ray scattering of
-battery materials", Loaiza et al. focus on a second-quantized Hamiltonian of
+Loaiza et al. focus on a second-quantized Hamiltonian of
 the form
 
 .. math::
@@ -159,12 +124,12 @@ and :math:`E^0` is the total energy of the inner-shell electrons, which are appr
 space definition. 
 
 Let's make things a bit simpler. For our purposes, we will not apply this Hamiltonian structure
-to the :math:`MnO_7H_6` molecule that the source paper focuses on. Instead, we
+to the :math:`\textrm{MnO}_7\textrm{H}_6` molecule that the source paper focuses on. Instead, we
 will take a basic system consisting of two core orbitals and two valence
 orbitals to be our focus. To do this, we will adapt the given Hamiltonian as
 
 .. math::
-   \hat{H}=\sum_{\sigma\in \{\uparrow, \downarrow\}}(\epsilon_{c_1}\hat{n}_{c_1,\sigma}+\epsilon_{c_2}\hat{n}_{c_2,\sigma}+\epsilon_{\nu_1}\hat{n}_{\nu_1,\sigma}+\epsilon_{\nu_2}\hat{n}_{\nu_2,\sigma})+h\sum_{\sigma\in \{\uparrow, \downarrow\}}(\hat{c}_{\nu_1,\sigma}^\dagger\hat{c}_{\nu_2,\sigma}+\hat{c}_{\nu_2,\sigma}^{\dagger}\hat{c}_{\nu_1,\sigma})+V\sum_{\sigma\in \{\uparrow, \downarrow\}}\hat{n}_{\nu_2,\sigma}
+   \hat{H}=\sum_{\sigma\in \{\uparrow, \downarrow\}}(\epsilon_{c_1}\hat{n}_{c_1,\sigma}+\epsilon_{c_2}\hat{n}_{c_2,\sigma}+\epsilon_{\nu_1}\hat{n}_{\nu_1,\sigma}+\epsilon_{\nu_2}\hat{n}_{\nu_2,\sigma})+h\sum_{\sigma\in \{\uparrow, \downarrow\}}(\hat{c}_{\nu_1,\sigma}^\dagger\hat{c}_{\nu_2,\sigma}+\hat{c}_{\nu_2,\sigma}^{\dagger}\hat{c}_{\nu_1,\sigma})+V\sum_{\sigma\in \{\uparrow, \downarrow\}}\hat{n}_{\nu_2,\sigma},
 
 where :math:`c_1` and :math:`c_2` are core orbitals, :math:`\nu_1` and
 :math:`\nu_2` are valence orbitals, and :math:`\epsilon_i` are on-site orbital
@@ -182,21 +147,21 @@ import pennylane as qp
 import numpy as np
 from pennylane.fermi import FermiC as create, FermiA as annihilate
 
-#Define number operators
-
-#Core Orbital 1
+# Core Orbital 1
 num_op_c1_up = create(0)*annihilate(0)
 num_op_c1_down = create(1)*annihilate(1)
-#Core Orbital 2
+
+# Core Orbital 2
 num_op_c2_up = create(6)*annihilate(6)
 num_op_c2_down = create(7)*annihilate(7)
-#Valence Orbital 1
+
+# Valence Orbital 1
 num_op_v1_up = create(2)*annihilate(2)
 num_op_v1_down = create(3)*annihilate(3)
-#Valence Orbital 2
+
+# Valence Orbital 2
 num_op_v2_up = create(4)*annihilate(4)
 num_op_v2_down = create(5)*annihilate(5)
-###############################################################################
 
 s = 0.45 #Optional scaling term
 
@@ -242,6 +207,7 @@ Hhybrid_down = h*((create(3)*annihilate(5))+(create(5)*annihilate(3)))
 Hspin = V*(num_op_v2_up*num_op_v2_down)
 
 H_raw = qp.jordan_wigner((Hdiag_up+Hdiag_down)+(Hhybrid_up+Hhybrid_down)+Hspin).simplify()
+print(H_raw)
 ###############################################################################
 # Eventually, we will map this Hamiltonian onto our registers, but
 # for now we can extract its eigenvalues and eigenvectors for benchmarking. The algorithm itself
@@ -251,12 +217,14 @@ H_raw = qp.jordan_wigner((Hdiag_up+Hdiag_down)+(Hhybrid_up+Hhybrid_down)+Hspin).
 coeffs, ops = H_raw.terms()
 id_c = sum(c for c, o in zip(coeffs, ops) if len(o.wires)==0)  
 H_traceless = H_raw-id_c*qp.Identity(0)
-H_sparse = H_traceless.sparse_matrix(wire_order=range(8)).toarray()
-H_evals, H_evecs = np.linalg.eigh(H_sparse)
+H_array = H_traceless.sparse_matrix(wire_order=range(8)).toarray()
+H_evals, H_evecs = np.linalg.eigh(H_array)
 
 #Extract the 1-norm and initial energy value from the Hamiltonian
 lamb = float(np.sum(np.abs(H_traceless.terms()[0])))
 E_0 = H_evals[0] #Extract ground-state eigenvalue
+
+print(E_0)
 ###############################################################################
 # Here, the Hamiltonian was converted to a traceless representation to ensure
 # the spectrum can be centered around zero and that the 1-norm is reduced. Overall,
@@ -286,30 +254,30 @@ E_0 = H_evals[0] #Extract ground-state eigenvalue
 # 
 # 1. Prepare the initial RIXS state, :math:`|R_{\epsilon_I,\epsilon_S}(\omega_I)\rangle`
 # 
-#    a. Construct a PREP-SEL-PREP block-encoding of the Hamiltonian, from which we have 
+#    * Construct a PREP-SEL-PREP block-encoding of the Hamiltonian, from which we have 
 #    direct access to the associated qubitized walk operator, 
 #
-#    b. Implement a Green's function spectral filter
+#    * Implement a Green's function spectral filter
 #    using GQSP with the walk operator :math:`\hat G(\omega_I,\Gamma) \approx \sum_k w_k \hat W^k`, 
 #    which amounts to finding the Chebyshev
 #    coefficients of the Green's function and translating them to angles for
 #    implementation, 
 #
-#    c. Define incoming and outgoing polarization to obtain the associated the **dipole operators**
+#    * Define incoming and outgoing polarization to obtain the associated the **dipole operators**
 #    :math:`\hat{D}_{\epsilon_i}`, which captures, within the dipole approximation, the perturbation that occurs
 #    as a result of the incident excitation and outgoing relaxation, 
 #
-#    d. Prepare a block-encoding
+#    * Prepare a block-encoding
 #    :math:`\hat{\mathcal{U}}` of the operator effectively proportional to
 #    :math:`\hat{D}_{\epsilon_S}^\dagger \hat{G}(\omega_I, \Gamma)
 #    \hat{D}_{\epsilon_I}`, 
 #
-#    e. Construct a :doc:`Grover operator
+#    * Construct a :doc:`Grover operator
 #    <demos/tutorial_grovers_algorithm>` using :math:`\hat{\mathcal{U}}` and
 #    carry out amplitude estimation to determine the success probability of the
 #    block-encoding step, 
 #
-#    f. Carry out :doc:`amplitude amplification
+#    * Carry out :doc:`amplitude amplification
 #    <demos/tutorial_intro_amplitude_amplification>` on the successful block
 #    encoded state to boost the success probability,
 # 
@@ -630,7 +598,7 @@ def RIXSStateEncodingUnitary(angles):
 # amplification without prior knowledge of the success probability :math:`P_R`
 # via fixed-point amplitude amplification,
 # it is "advantageous to first determine :math:`P_R` and then use 'textbook'
-# amplitude amplification ... which has better prefactors" [#Loaiza2026]_. 
+# amplitude amplification... which has better prefactors" [#Loaiza2026]_. 
 #
 # To quickly review, :doc:`amplitude estimation
 # <demos/iterative_quantum_amplitude_estimation>` is the process of determining
