@@ -151,7 +151,7 @@ dictate how the block should be treated. The logic is as follows:
 2. IF :math:`j` and :math:`m\oplus j` differ by 1, we can achieve
     diagonalization by sandwiching the fragment between Hadamard gates.
 3. ELSE, pick one of the differing (off-diagonal) bit positions to act as a control for CNOT operations 
-    targetting all other differing bits. This reduces the Hamming weight to 1,
+    targeting all other differing bits. This reduces the Hamming weight to 1,
     enabling diagonalization via a Hadamard gate acting on the control bit.
 
 .. figure::
@@ -164,7 +164,7 @@ dictate how the block should be treated. The logic is as follows:
 import pennylane as qp
 import numpy as np
 
-def diagonalization_scheme(fragment, electron_wires):
+def DiagonalizationScheme(fragment, electron_wires):
     bits = []
     weight = 0
 
@@ -231,7 +231,7 @@ def diagonalization_scheme(fragment, electron_wires):
 #    |R\rangle = \frac{1}{2^{b/2}}\sum e^{i2\pi y/2^b}|y\rangle,
 #
 # where :math:`b` is the number of wires in the gradient register and determines the
-# precision of the rotation. major benefit of using phase gradients is they only need to be prepared
+# precision of the rotation. A major benefit of using phase gradients is they only need to be prepared
 # once, since the addition step does not have any impact on the state. 
 #
 # To carry out the addition
@@ -273,8 +273,7 @@ def AddPhaseGradient(k, cache_wires, coeff_wires, gradient_wires, scratch_wires,
             #If we are dealing with a signed integer and the most significant bit, use an adjoint semiadder.
             adder = qp.adjoint(qp.SemiAdder) if (signed and point == 0) else qp.SemiAdder 
             qp.ctrl(adder, control = ctrl_wire)(x_wires = x_wire_current, y_wires = y_wire_current, work_wires = scratch_wires)
-
-#
+################################################################################
 # The result of this procedure is a set of target states that have
 # accumulated a phase equivalent to the change incurred during a given
 # kinetic time step.
@@ -293,7 +292,6 @@ def KineticStep(time_step, kinetic_coeffs, num_modes, state_wires, gradient_wire
     k = len(state_wires[0])
     K = 2 ** k
     b = len(gradient_wires)
-    AdjointSemiAdder = qp.adjoint(qp.SemiAdder)
 
     #Set function to be executed by OutPoly()
     def f(x):
@@ -301,8 +299,8 @@ def KineticStep(time_step, kinetic_coeffs, num_modes, state_wires, gradient_wire
 
     #Perform basis transformation
     for mode in range(num_modes):
-        qp.QFT(wires = state_wires[mode])
-        qp.X(wires = state_wires[mode][0])
+        qp.QFT(wires=state_wires[mode])
+        qp.X(wires=state_wires[mode][0])
 
     #Loop full computational procedure over all modes
     for i in range(num_modes):
@@ -311,9 +309,6 @@ def KineticStep(time_step, kinetic_coeffs, num_modes, state_wires, gradient_wire
         kin_coeff_raw = (kinetic_coeffs[i] * time_step * (2 ** b) / (2 * K))
         C = int(np.floor(kin_coeff_raw + 0.5))
 
-        #Flag if the nucleus is frozen
-        if C == 0:
-            print(f"WARNING: kinetic underflow (raw={kin_coeff_raw:.3f}); nuclei frozen. Raise b or dt.")
         C_binary = format(C, f'0{len(coeff_wires)}b')
 
         #Encode coefficients
@@ -326,7 +321,7 @@ def KineticStep(time_step, kinetic_coeffs, num_modes, state_wires, gradient_wire
         
         AddPhaseGradient(k, cache_wires, coeff_wires, gradient_wires, scratch_wires)
 
-    #Uncompute
+        #Uncompute
         qp.adjoint(qp.OutPoly)(f, input_registers = [state_wires[i]], output_wires = cache_wires)
 
         for j, bit in enumerate(C_binary):
@@ -365,7 +360,7 @@ def KineticStep(time_step, kinetic_coeffs, num_modes, state_wires, gradient_wire
 #
 # As shown in our QVC representation of :math:`\textbf{W'}`, we are only
 # concerned with scenarios with one or two mode states. Thus, in the case our system 
-# is quadratic, we need to apply an :func:`~qp.OutPoly`
+# is quadratic, we need to apply an :func:`~pennylane.OutPoly`
 # operator that multiplies the two mode registers together, just like we did in
 # the kinetic step. Otherwise, no arithmetic required. The outcome of either of these
 # cases is added to the phase gradient register via quantum arithmetic multiplier-adder
@@ -385,16 +380,14 @@ def PotentialStepLinear(fragment, load_coeffs, mode, time_coeffs, state_wires, e
     k = len(state_wires[mode])
     K = 2 ** k
 
-    AdjointSemiAdder = qp.adjoint(qp.SemiAdder)
-
     #Load pre-determined, electron state dependent coefficients
     load_coeffs(fragment, time_coeffs, electron_wires, coeff_wires, scratch_wires)
 
-    qp.OutPoly(lambda x: (x - K // 2), input_registers = [state_wires[mode]], output_wires = cache_wires)
+    qp.OutPoly(lambda x: (x - K // 2), input_registers=[state_wires[mode]], output_wires=cache_wires)
 
-    AddPhaseGradient(k, cache_wires, coeff_wires, gradient_wires, scratch_wires, signed = True)
+    AddPhaseGradient(k, cache_wires, coeff_wires, gradient_wires, scratch_wires, signed=True)
 
-    qp.adjoint(qp.OutPoly)(lambda x: (x - K // 2), input_registers = [state_wires[mode]], output_wires = cache_wires)
+    qp.adjoint(qp.OutPoly)(lambda x: (x - K // 2), input_registers=[state_wires[mode]], output_wires=cache_wires)
 
     qp.adjoint(load_coeffs)(fragment, time_coeffs, electron_wires, coeff_wires, scratch_wires)
 ###############################################################################
@@ -405,8 +398,6 @@ def PotentialStepQuadratic(fragment, load_coeffs, mode1, mode2, time_coeffs, sta
 
     k = len(state_wires[mode1])
     K = 2 ** k
-
-    AdjointSemiAdder = qp.adjoint(qp.SemiAdder)
 
     load_coeffs(fragment, time_coeffs, electron_wires, coeff_wires, scratch_wires)
 
@@ -421,14 +412,14 @@ def PotentialStepQuadratic(fragment, load_coeffs, mode1, mode2, time_coeffs, sta
 
 ###############################################################################
 # Motlagh et al. specify that the coefficients
-# can be easily loaded via a QROM. Using PennyLane's built in :func:`~qp.QROM`
+# can be easily loaded via a QROM. Using PennyLane's built in :func:`~pennylane.QROM`
 # function, we can simply take computed coefficients and pass them in to the
 # potential energy step of our choosing.
 
 def LoadCoeffsKDC(fragment, output, electron_wires, coeff_wires, scratch_wires):
     fragment_coeffs = output[fragment]
     
-    qp.QROM(fragment_coeffs, control_wires = electron_wires, target_wires = coeff_wires, work_wires = scratch_wires)
+    qp.QROM(fragment_coeffs, control_wires=electron_wires, target_wires=coeff_wires, work_wires=scratch_wires)
 
 ###############################################################################
 # Given an input of mode states, we can evaluate if an entry is a
@@ -517,16 +508,20 @@ def TrotterStepKDC(dt, frag_list, coupler, PotentialStep, KineticStep, kinetic_a
 # the phase gradient steps require a register of size :math:`b`, which can be computed
 # in terms of the desired rotation precision :math:`\delta`. This is the main
 # driver of resolution for our task.
+#
+# It is worth noting that the
+# flooring step in the kinetic energy coefficient calculation requires a minimum
+# number of precision bits to be present in the system to avoid flooring to 0
+# and, therefore, suppressing all coupling effects. As such, ``delta`` should be
+# small enough to achieve :math:`b\geq 5`, though minimizing :math:`b` will always 
+# lead to a loss of precision. For the purposes of this demo, we will take :math:`b=5`.
 
 import math
 time_steps = 10
 k = 2
 n = 1
 num_modes = 1
-delta = 0.03
-
-precision_qubits = int(math.ceil(np.log2(1/delta))) #b
-nuclear_modes = {f"mode_{i}": k for i in range(num_modes)} #Account for linear vs quadratic
+delta = 0.04 #Yields b=5
 
 b = int(math.ceil(np.log2(1 / delta)))
 
@@ -544,7 +539,7 @@ regs = qp.registers({
 qp.decomposition.enable_graph() #enable graph-based decomposition for performance
 
 #Initialize and label registers
-total_wires = n+(num_modes*k)+(3*b+1+(2*k))
+total_wires = n + (num_modes * k) + (3 * b + 1 + (2 * k))
 
 electron_wires = regs["electrons"]
 state_wires = [regs[f"mode_{i}"] for i in range(num_modes)]
@@ -580,10 +575,10 @@ def KDCStatePrep(k):
     K = 2**k
     x = np.arange(K)
 
-    amplitudes = np.exp((-np.pi*((x-(K/2))**2))/(K))
+    amplitudes = np.exp((-np.pi * ((x - (K / 2)) ** 2)) / (K))
     norm_factor = np.linalg.norm(amplitudes)
 
-    chi0 = amplitudes/norm_factor
+    chi0 = amplitudes / norm_factor
 
     return chi0
 ###############################################################################
@@ -595,11 +590,7 @@ def KDCStatePrep(k):
 # To keep things simple (and computationally feasible), we will begin by
 # defining a small system with 2 electron states and 1 vibrational mode. 
 # The potential coefficients will be taken to be a simple array of values
-# that will soon be scaled by the required factors. It is worth noting that the
-# flooring step in the kinetic energy coefficient calculation requires a minimum
-# number of precision bits to be present in the system to avoid flooring to 0
-# and, therefore, suppressing all coupling effects. As such, ``delta`` should be
-# small enough to achieve :math:`b\geq 6`.
+# that will soon be scaled by the required factors. 
 #
 # In the source paper, the
 # full coefficient representation is given as
@@ -621,17 +612,16 @@ def KDCStatePrep(k):
 #Introduce scaling factor and reformat for compatibility with QROM
 mode_list = [0]
 omega = [1]
-coeff_array = np.array[
+coeff_array = np.array([
     #  |0>    |1>
     [ 1.0,   0.0 ],   # Fragment 0: Diagonal potential energy terms
     [ -1.3,   1.3 ]    # Fragment 1: Off-diagonal electronic coupling terms
-]
+])
 dt = 0.4
 
 width = len(coeff_wires)
 max_binary = 2 ** width
 Delta = np.sqrt(2 * np.pi / (2 ** k))
-scale = Delta / (2 * np.pi)
 alpha = 1 #Limiting to linear degree here
 
 multiplier = (dt / 2) * max_binary * (Delta ** alpha) / (2 * np.pi)
@@ -673,30 +663,57 @@ def ElectronStateVibronicsSimulation(steps, gradient_wires, StatePrepFunc, Coupl
             potential_args = potential_args
         )
     return qp.probs(wires=electron_wires)
-
-results = ElectronStateVibronicsSimulation(
-    time_steps, gradient_wires,
-    KDCStatePrep, diagonalization_scheme, KDCFrag, KineticStep,
-    kinetic_args, potential_args, coupler_args
-)
 ################################################################################
-# Which yeilds
-#
-# .. figure::
-#    ../demonstrations_v2/simulating_vibronic_dynamics/10StepVibePlot.png
-#    :align: center 
-#    :width: 700px
-#    :alt: Plot depicting the final time evolution of the demonstration's toy model.
-#  
-#    *Electronic state population time evolution after 10 steps with dt=0.4*
-# 
+# This function can then be called for plotting, with each time step appended
+# to a list that will output a tracked evolution of the electron state.
+
+import matplotlib.pyplot as plt
+
+time_grid = list(range(time_steps + 1))
+actual_time_axis = [step * dt for step in time_grid]
+
+vibronic_state_0 = []
+vibronic_state_1 = []
+
+for t in time_grid:
+    probs = (ElectronStateVibronicsSimulation)(
+    steps = t, 
+    gradient_wires = gradient_wires, 
+    StatePrepFunc = KDCStatePrep, 
+    CouplerFunc = DiagonalizationScheme, 
+    PotentialFunc = KDCFrag, 
+    KineticFunc = KineticStep, 
+    kinetic_args = kinetic_args, 
+    potential_args = potential_args, 
+    coupler_args = coupler_args
+)
+    vibronic_state_0.append(probs[0])
+    vibronic_state_1.append(probs[1])
+    
+plt.figure(figsize=(9, 6))
+
+# Plot Full Vibronic Simulation
+plt.plot(actual_time_axis, vibronic_state_0, color='blue', label='Vibronic - State 0', linewidth=2.5)
+plt.plot(actual_time_axis, vibronic_state_1, color='red', label='Vibronic - State 1', linewidth=2.5)
+
+# Graph Formatting
+plt.title("Electronic State Evolution", fontsize=14, fontweight='bold')
+plt.xlabel("Time (a.u.)", fontsize=12)
+plt.ylabel("State Probability", fontsize=12)
+plt.ylim(-0.05, 1.05) #True Max: 1, True Min: 0
+plt.grid(True, linestyle='--', alpha=0.5)
+plt.legend(loc='best', fontsize=10)
+
+# Display the final demo plot
+plt.show()
+################################################################################
 # We did it! The achieved plot depicts a physically expected outcome, in which
-# an incomplete transfer between the ground and excited state are observed. 
-# The symmetry of the evolution shows that no unexpected leakage has occured, 
+# an incomplete transfer between the ground and excited state is observed. 
+# The symmetry of the evolution shows that no unexpected leakage has occurred, 
 # while the oscillation adheres to expected state transitions for an electron.
 # This toy model is much smaller and simpler than a real, useful vibronic
 # system would be, but the results are sufficient to show the utility of 
-# Motlagh et al.'s quantum algorithm for vibronic simultion.
+# Motlagh et al.'s quantum algorithm for vibronic simulation.
 #
 # Conclusion
 # ----------
@@ -705,10 +722,16 @@ results = ElectronStateVibronicsSimulation(
 # of interest that are known to be important to researchers, companies, and
 # individuals is an important first step. Vibronic simulation has the potential
 # to expand our capacity for material discovery, renewable energy expansion, and
-# drug exploration. In `"Quantum algorithm for simulating non-adiabatic dynamics
+# drug exploration. 
+#
+# PennyLane is continually building out `resources related to quantum chemistry simulations <https://docs.pennylane.ai/en/stable/code/qp_qchem.html>`_,
+# such as tools for :doc:`resource estimation of vibronic dynamic simulation <tutorial_resource_estimation_vibronic_dynamics>`. 
+# In `"Quantum algorithm for simulating non-adiabatic dynamics
 # at metallic surfaces" <https://arxiv.org/abs/2601.16264>`_, the authors
-# employ similar techniques to simulate vibronic dynamics using a GAN Hamiltonian.
-# Give it a read and test your new skills!
+# employ similar techniques to simulate vibronic dynamics using a GAN Hamiltonian. Take advantage of these
+# resources to explore the ways quantum computers could revolutionize the way we approach
+# theoretical chemistry.
+# 
 #
 # .. _references:
 #
