@@ -249,7 +249,7 @@ bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
 
 control_wires = [0, 1, 2]
 target_wires = [3, 4]
-work_wires = [5, 6]
+work_wires = [5, 6, 7]
 
 
 @qp.set_shots(1)
