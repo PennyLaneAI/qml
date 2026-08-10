@@ -118,14 +118,12 @@ def circuit(index):
     qp.QROM(bitstrings, control_wires, target_wires, work_wires=None)
     return qp.sample(wires=target_wires)
 
+
 ##############################################################################
 # Although this approach works correctly, the number of multicontrol gates is high — gates with a costly decomposition.
 # Here we show the number of 1 and 2 qubit gates we use when decomposing the circuit:
 
-resources = qp.specs(circuit)(0).resources
-
-print("Number of qubits: ", resources.num_wires)
-print("Gates: ", resources.quantum_operations)
+print(qp.specs(circuit)(0))
 
 ##############################################################################
 # You can learn more about these resource estimation methods in
@@ -159,10 +157,7 @@ def circuit(index):
     return qp.sample(wires=control_wires + target_wires + work_wires)
 
 
-resources = qp.specs(circuit)(0).resources
-
-print("Number of qubits: ", resources.num_wires)
-print("Gates: ", resources.quantum_operations)
+print(qp.specs(circuit)(0))
 
 ##############################################################################
 # The number of 1 and 2 qubit gates is significantly reduced!
