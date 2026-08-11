@@ -267,14 +267,23 @@ def AddPhaseGradient(k, cache_wires, coeff_wires, gradient_wires, scratch_wires,
 
         #Apply addition operator based on the size of the numbers being added
         if target_length == 1:
-            qp.ctrl(qp.CNOT, control = ctrl_wire)(wires=[x_wire_current[-1], y_wire_current[0]])
+            qp.ctrl(
+                qp.CNOT, 
+                control = ctrl_wire
+                )(wires=[x_wire_current[-1], y_wire_current[0]])
         elif target_length >= 2:
             #If we are dealing with a signed integer and the most significant bit, use an adjoint semiadder.
             if (signed and point == 0):
                 adder = qp.adjoint(qp.SemiAdder)  
             else:
                 adder = qp.SemiAdder 
-            qp.ctrl(adder, control = ctrl_wire)(x_wires = x_wire_current, y_wires = y_wire_current, work_wires = scratch_wires)
+            qp.ctrl(
+                adder, 
+                control = ctrl_wire)(
+                    x_wires = x_wire_current, 
+                    y_wires = y_wire_current, 
+                    work_wires = scratch_wires
+                    )
 ################################################################################
 # The result of this procedure is a set of target states that have
 # accumulated a phase equivalent to the change incurred during a given
@@ -290,7 +299,17 @@ def AddPhaseGradient(k, cache_wires, coeff_wires, gradient_wires, scratch_wires,
 # followed by adding the coefficients to the register, then carrying out the required
 # quantum arithmetic before uncomputing.
 
-def KineticStep(time_step, kinetic_coeffs, num_modes, state_wires, gradient_wires, coeff_wires, scratch_wires, cache_wires):
+def KineticStep(
+        time_step,
+        kinetic_coeffs, 
+        num_modes, 
+        state_wires, 
+        gradient_wires, 
+        coeff_wires, 
+        scratch_wires, 
+        cache_wires
+        ):
+    
     k = len(state_wires[0])
     K = 2 ** k
     b = len(gradient_wires)
@@ -324,7 +343,11 @@ def KineticStep(time_step, kinetic_coeffs, num_modes, state_wires, gradient_wire
         AddPhaseGradient(k, cache_wires, coeff_wires, gradient_wires, scratch_wires)
 
         #Uncompute
-        qp.adjoint(qp.OutPoly)(f, input_registers = [state_wires[i]], output_wires = cache_wires)
+        qp.adjoint(qp.OutPoly)(
+            f, 
+            input_registers=[state_wires[i]], 
+            output_wires=cache_wires
+            )
 
         for j, bit in enumerate(C_binary):
             if bit == '1':
@@ -365,7 +388,12 @@ def KineticStep(time_step, kinetic_coeffs, num_modes, state_wires, gradient_wire
 def LoadCoeffsKDC(fragment, output, electron_wires, coeff_wires, scratch_wires):
     fragment_coeffs = output[fragment]
     
-    qp.QROM(fragment_coeffs, control_wires=electron_wires, target_wires=coeff_wires, work_wires=scratch_wires)
+    qp.QROM(
+        fragment_coeffs, 
+        control_wires=electron_wires, 
+        target_wires=coeff_wires, 
+        work_wires=scratch_wires
+        )
 
 ###############################################################################
 #
@@ -389,7 +417,18 @@ def LoadCoeffsKDC(fragment, output, electron_wires, coeff_wires, scratch_wires):
 # integers to properly interface with the QROM, so the ``AddPhaseGradient()`` function must be
 # configured as such.
 
-def PotentialStepLinear(fragment, load_coeffs, mode, time_coeffs, state_wires, electron_wires, gradient_wires, coeff_wires, cache_wires, scratch_wires):
+def PotentialStepLinear(
+    fragment, 
+    load_coeffs, 
+    mode, 
+    time_coeffs, 
+    state_wires, 
+    electron_wires, 
+    gradient_wires, 
+    coeff_wires, 
+    cache_wires, 
+    scratch_wires
+    ):
 
     k = len(state_wires[mode])
     K = 2 ** k
@@ -397,31 +436,85 @@ def PotentialStepLinear(fragment, load_coeffs, mode, time_coeffs, state_wires, e
     #Load pre-determined, electron state dependent coefficients
     load_coeffs(fragment, time_coeffs, electron_wires, coeff_wires, scratch_wires)
 
-    qp.OutPoly(lambda x: (x - K // 2), input_registers=[state_wires[mode]], output_wires=cache_wires)
+    qp.OutPoly(
+        lambda x: (x - K // 2), 
+        input_registers=[state_wires[mode]], 
+        output_wires=cache_wires
+        )
 
-    AddPhaseGradient(k, cache_wires, coeff_wires, gradient_wires, scratch_wires, signed=True)
+    AddPhaseGradient(
+        k, 
+        cache_wires, 
+        coeff_wires, 
+        gradient_wires, 
+        scratch_wires, 
+        signed=True
+        )
 
-    qp.adjoint(qp.OutPoly)(lambda x: (x - K // 2), input_registers=[state_wires[mode]], output_wires=cache_wires)
+    qp.adjoint(qp.OutPoly)(
+        lambda x: (x - K // 2), 
+        input_registers=[state_wires[mode]], 
+        output_wires=cache_wires
+        )
 
-    qp.adjoint(load_coeffs)(fragment, time_coeffs, electron_wires, coeff_wires, scratch_wires)
+    qp.adjoint(load_coeffs)(
+        fragment, 
+        time_coeffs, 
+        electron_wires, 
+        coeff_wires, 
+        scratch_wires
+        )
 ###############################################################################
 # ``PotentialStepQuadratic()`` handles the other scenario, in which there are two modes to be multiplied and used in the arithmetic steps.
 
-def PotentialStepQuadratic(fragment, load_coeffs, mode1, mode2, time_coeffs, state_wires, electron_wires, gradient_wires, coeff_wires, cache_wires, scratch_wires):
+def PotentialStepQuadratic(
+        fragment, 
+        load_coeffs, 
+        mode1, 
+        mode2, 
+        time_coeffs,
+        state_wires, 
+        electron_wires, 
+        gradient_wires, 
+        coeff_wires, 
+        cache_wires, 
+        scratch_wires
+        ):
 
     k = len(state_wires[mode1])
     K = 2 ** k
 
     load_coeffs(fragment, time_coeffs, electron_wires, coeff_wires, scratch_wires)
 
-    qp.OutPoly(lambda x0,x1: (x0 - K // 2)*(x1 - K // 2), input_registers = [state_wires[mode1], state_wires[mode2]], output_wires = cache_wires)
+    qp.OutPoly(
+        lambda x0,x1: (x0 - K // 2)*(x1 - K // 2), 
+        input_registers=[state_wires[mode1], state_wires[mode2]], 
+        output_wires = cache_wires
+        )
 
-    AddPhaseGradient(k, cache_wires, coeff_wires, gradient_wires, scratch_wires, signed = True)
+    AddPhaseGradient(
+        k, 
+        cache_wires, 
+        coeff_wires, 
+        gradient_wires, 
+        scratch_wires, 
+        signed = True
+        )
 
     #Uncompute
-    qp.adjoint(qp.OutPoly)(lambda x0,x1: (x0 - K // 2) * (x1 - K // 2), input_registers = [state_wires[mode1], state_wires[mode2]], output_wires = cache_wires)
+    qp.adjoint(qp.OutPoly)(
+        lambda x0,x1: (x0 - K // 2) * (x1 - K // 2), 
+        input_registers=[state_wires[mode1], state_wires[mode2]], 
+        output_wires=cache_wires
+        )
 
-    qp.adjoint(load_coeffs)(fragment, time_coeffs, electron_wires, coeff_wires, scratch_wires)
+    qp.adjoint(load_coeffs)(
+        fragment, 
+        time_coeffs, 
+        electron_wires, 
+        coeff_wires, 
+        scratch_wires
+        )
 
 ###############################################################################
 # Given an input of mode states, we can evaluate if an entry is a
@@ -432,16 +525,64 @@ def PotentialStepQuadratic(fragment, load_coeffs, mode1, mode2, time_coeffs, sta
 # using simple evaluation logic.
 
 #Fragmentation Scheme
-def KDCFrag(fragment, load_coeffs, mode_list, coeff_array, state_wires, electron_wires, gradient_wires, coeff_wires, cache_wires, scratch_wires):
+def KDCFrag(
+        fragment, 
+        load_coeffs, 
+        mode_list, 
+        coeff_array, 
+        state_wires, 
+        electron_wires, 
+        gradient_wires, 
+        coeff_wires, 
+        cache_wires, 
+        scratch_wires
+        ):
+    
     for entry in mode_list:
         if isinstance(entry, int):
-            PotentialStepLinear(fragment, load_coeffs, entry, coeff_array, state_wires, electron_wires, gradient_wires, coeff_wires, cache_wires, scratch_wires)
+            PotentialStepLinear(
+                fragment, 
+                load_coeffs, 
+                entry, 
+                coeff_array, 
+                state_wires, 
+                electron_wires, 
+                gradient_wires, 
+                coeff_wires,
+                cache_wires, 
+                scratch_wires
+                )
+
         if isinstance(entry, tuple) and len(entry) == 1:
-            PotentialStepLinear(fragment, load_coeffs, entry[0], coeff_array, state_wires, electron_wires, gradient_wires, coeff_wires, cache_wires, scratch_wires)
+            PotentialStepLinear(
+                fragment, 
+                load_coeffs, 
+                entry[0], 
+                coeff_array, 
+                state_wires, 
+                electron_wires, 
+                gradient_wires, 
+                coeff_wires, 
+                cache_wires, 
+                scratch_wires
+                )
+
         if isinstance(entry, tuple) and len(entry) == 2:
             mode1 = entry[0]
             mode2 = entry[1]
-            PotentialStepQuadratic(fragment, load_coeffs, mode1, mode2, coeff_array, state_wires, electron_wires, gradient_wires, coeff_wires, cache_wires, scratch_wires)
+            PotentialStepQuadratic(
+                fragment, 
+                load_coeffs,
+                mode1, 
+                mode2, 
+                coeff_array, 
+                state_wires, 
+                electron_wires, 
+                gradient_wires, 
+                coeff_wires, 
+                cache_wires, 
+                scratch_wires
+                )
 ###############################################################################
 # Now that we have the tools we need to carry out a system-wide time evolution,
 # how exactly do we execute?
@@ -477,7 +618,16 @@ def KDCFrag(fragment, load_coeffs, mode_list, coeff_array, state_wires, electron
 # 4. Perform a half-step evolution on the outermost fragment.
 
 
-def TrotterStepKDC(dt, frag_list, coupler, PotentialStep, KineticStep, kinetic_args, coupler_args, potential_args):
+def TrotterStepKDC(
+        dt, 
+        frag_list, 
+        coupler, 
+        PotentialStep, 
+        KineticStep, 
+        kinetic_args, 
+        coupler_args, 
+        potential_args
+        ):
 
     half_dt = dt / 2
 
@@ -631,13 +781,33 @@ time_coeffs = [[f"{v:0{width}b}" for v in row] for row in v_array]
 
 #Define argument lists
 kinetic_args = [omega, num_modes, state_wires, gradient_wires, coeff_wires, scratch_wires, cache_wires]
-potential_args = [LoadCoeffsKDC, mode_list, time_coeffs, state_wires, electron_wires, gradient_wires, coeff_wires, cache_wires, scratch_wires]
+potential_args = [
+    LoadCoeffsKDC, 
+    mode_list, 
+    time_coeffs, 
+    state_wires, 
+    electron_wires, 
+    gradient_wires, 
+    coeff_wires, 
+    cache_wires, 
+    scratch_wires
+    ]
 coupler_args = [electron_wires]
 
 dev = qp.device("lightning.qubit", wires=total_wires)
 
 @qp.qnode(dev)
-def ElectronStateVibronicsSimulation(steps, gradient_wires, StatePrepFunc, CouplerFunc, PotentialFunc, KineticFunc, kinetic_args, potential_args, coupler_args):
+def ElectronStateVibronicsSimulation(
+    steps, 
+    gradient_wires, 
+    StatePrepFunc, 
+    CouplerFunc, 
+    PotentialFunc, 
+    KineticFunc, 
+    kinetic_args, 
+    potential_args, 
+    coupler_args
+    ):
     #Prepare the phase gradient state in the appropriate register
     for wire in gradient_wires:
         qp.X(wires=wire)
@@ -701,7 +871,7 @@ plt.xlabel("Time (a.u.)", fontsize=12)
 plt.ylabel("State Probability", fontsize=12)
 plt.ylim(-0.05, 1.05) #True Max: 1, True Min: 0
 plt.grid(True, linestyle='--', alpha=0.5)
-plt.legend(loc='best', fontsize=10)
+plt.legend(loc='best', fontsize=10);
 ################################################################################
 # We did it! The achieved plot depicts a physically expected outcome, in which
 # an incomplete transfer between the ground and excited state is observed. 
