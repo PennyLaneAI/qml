@@ -352,11 +352,22 @@ def KineticStep(time_step, kinetic_coeffs, num_modes, state_wires, gradient_wire
 # 4. Add the product of the mode state and coefficient register to the phase
 #    gradient register,
 # 5. Uncompute.
-# 
+#
 # To facilitate loading, the state-dependent coefficients must be determined and stored
 # in a bit-position-dependent fashion prior to Trotterization. For now, we
 # will assume that this has been handled and simply passed into our
 # potential step function for use.
+# Motlagh et al. specify that the coefficients
+# can be easily loaded via a QROM. Using PennyLane's built in :func:`~pennylane.QROM`
+# function, we can simply take computed coefficients and pass them in to the
+# potential energy step of our choosing.
+
+def LoadCoeffsKDC(fragment, output, electron_wires, coeff_wires, scratch_wires):
+    fragment_coeffs = output[fragment]
+    
+    qp.QROM(fragment_coeffs, control_wires=electron_wires, target_wires=coeff_wires, work_wires=scratch_wires)
+
+###############################################################################
 #
 # As shown in our QVC representation of :math:`\textbf{W'}`, we are only
 # concerned with scenarios with one or two mode states. Thus, in the case our system 
@@ -413,17 +424,6 @@ def PotentialStepQuadratic(fragment, load_coeffs, mode1, mode2, time_coeffs, sta
     qp.adjoint(load_coeffs)(fragment, time_coeffs, electron_wires, coeff_wires, scratch_wires)
 
 ###############################################################################
-# Motlagh et al. specify that the coefficients
-# can be easily loaded via a QROM. Using PennyLane's built in :func:`~pennylane.QROM`
-# function, we can simply take computed coefficients and pass them in to the
-# potential energy step of our choosing.
-
-def LoadCoeffsKDC(fragment, output, electron_wires, coeff_wires, scratch_wires):
-    fragment_coeffs = output[fragment]
-    
-    qp.QROM(fragment_coeffs, control_wires=electron_wires, target_wires=coeff_wires, work_wires=scratch_wires)
-
-###############################################################################
 # Given an input of mode states, we can evaluate if an entry is a
 # singular integer value, a list containing a single entry, or a list containing
 # two entries, each of which are possible valid inputs. The first two scenarios
@@ -448,8 +448,7 @@ def KDCFrag(fragment, load_coeffs, mode_list, coeff_array, state_wires, electron
 #
 # Assembling the Trotter Step
 # ---------------------------
-# In "Quantum Algorithm for Vibronic Dynamics", it is specified that either a
-# first or second order Trotterization can be carried out. While first order
+# It is up to us whether what Trotterization order we implement. While first order
 # Trotterization is less resource intensive, second order allows for reduced
 # `Trotter error
 # <https://arxiv.org/html/2606.30738v1>`_
@@ -506,7 +505,7 @@ def TrotterStepKDC(dt, frag_list, coupler, PotentialStep, KineticStep, kinetic_a
 # ---------
 # The registers we will use for implementation
 # can be defined according to the requirements of the system using
-# :func:`~pennylane.registers`. As mentioned
+# :func:`~pennylane.registers`. As mentioned,
 # the phase gradient steps require a register of size :math:`b`, which can be computed
 # in terms of the desired rotation precision :math:`\delta`. This is the main
 # driver of resolution for our task.
@@ -529,7 +528,7 @@ b = int(math.ceil(np.log2(1 / delta)))
 
 regs = qp.registers({
     "electrons": n,
-    "states": {f"mode_{i}": k for i in range(num_modes)},
+    "states": {f"mode_{i}": k for i in range(num_modes)},   # must stay a dict
     "gradient": b,
     "coefficients": b,
     "scratch": b + 1,
@@ -568,11 +567,10 @@ cache_wires = regs["cache"]
 # state, where :math:`Z` is a normalization constant and :math:`x` is, again, a
 # position-basis grid point index. It is stated that one can choose to begin
 # with a superposition state to enable functionalities such as spectroscopy. In
-# this demo, we will be targeting a simple electronic state population time
-# evolution, so an initial superposition is not necessary. This state can be
+# this demo, since we will be targeting a simple electronic state time
+# evolution, an initial superposition is not necessary. This state can be
 # generated using ``KDCStatePrep()``.
 
-#State Preparation - Vertical Excitation of System
 def KDCStatePrep(k):
     K = 2**k
     x = np.arange(K)
@@ -611,7 +609,6 @@ def KDCStatePrep(k):
 # we are only dealing with linear mode behaviour. This can be easily changed
 # depending on the needs and conditions of the system.
 
-#Introduce scaling factor and reformat for compatibility with QROM
 mode_list = [0]
 omega = [1]
 coeff_array = np.array([
@@ -708,11 +705,11 @@ plt.legend(loc='best', fontsize=10)
 ################################################################################
 # We did it! The achieved plot depicts a physically expected outcome, in which
 # an incomplete transfer between the ground and excited state is observed. 
-# The symmetry of the evolution shows that no unexpected leakage has occurred, 
+# The anti-symmetry between the two energy levels shows that no unexpected leakage has occurred, 
 # while the oscillation adheres to expected state transitions for an electron.
 # This toy model is much smaller and simpler than a real, useful vibronic
 # system would be, but the results are sufficient to show the utility of 
-# Motlagh et al.'s quantum algorithm for vibronic simulation.
+# Motlagh et al.'s quantum algorithm for vibronic simulation. 
 #
 # Conclusion
 # ----------
@@ -730,7 +727,6 @@ plt.legend(loc='best', fontsize=10)
 # employ similar techniques to simulate vibronic dynamics using a GAN Hamiltonian. Take advantage of these
 # resources to explore the ways quantum computers could revolutionize the way we approach
 # theoretical chemistry.
-# 
 #
 # .. _references:
 #
