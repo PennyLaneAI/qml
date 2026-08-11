@@ -9,7 +9,7 @@ batteries. As we attempt to determine why they suffer such short lifespans,
 X-ray spectroscopy technique, have suggested Li-excess cathodes may produce
 molecular oxygen that becomes trapped inside the battery, leading to reduced capacity.
 
-In 2025, Gao et al. published `"Clarifying the origin of molecular :math:`O_2` in cathode
+In 2025, Gao et al. published `"Clarifying the origin of molecular O_2 in cathode
 oxides" <https://www.nature.com/articles/s41563-025-02144-7>`_, noting RIXS experiments show the presence of molecular
 oxygen in non-Li-excess batteries incapable of producing these molecules as well. 
 This implies these molecules are likely an artifact of the RIXS methodology itself rather than the 
@@ -439,7 +439,7 @@ D = D_mat / norm_const
 # .. math::
 #    \Gamma\hat{G}(\omega_I,\Gamma)=\frac{\Gamma}{\omega_I-(\hat{H}-E_0)+i\Gamma}.
 # 
-# Note that a :math:`\Gamma` factor represents a physical broadening caused by the 
+# Note that the :math:`\Gamma` factor represents a physical broadening caused by the 
 # finite lifetimes of the intermediate states we discussed previously. 
 #
 # To use GQSP, the phase factor angles, which dictate
