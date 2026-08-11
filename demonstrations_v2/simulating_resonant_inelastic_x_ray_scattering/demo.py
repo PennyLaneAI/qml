@@ -598,7 +598,7 @@ def RIXSStateEncodingUnitary(angles):
 # amplification without prior knowledge of the success probability :math:`P_R`
 # via fixed-point amplitude amplification,
 # it is "advantageous to first determine :math:`P_R` and then use 'textbook'
-# amplitude amplification... which has better prefactors" [#Loaiza2026]_. 
+# amplitude amplification ... which has better prefactors" [#Loaiza2026]_. 
 #
 # To quickly review, :doc:`amplitude estimation
 # <demos/iterative_quantum_amplitude_estimation>` is the process of determining
