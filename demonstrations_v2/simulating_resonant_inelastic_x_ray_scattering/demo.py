@@ -293,9 +293,10 @@ print(H_raw)
 
 eps_omega = 0.2
 eps_QAE = 0.3
-Na = 4 #two core plus two valence
+# Two core plus two valence electrons
+Na = 4
 
-#Construct the traceless Hamiltonian
+# Construct the traceless Hamiltonian
 coeffs, ops = H_raw.terms()
 id_c = sum(c for c, o in zip(coeffs, ops) if len(o.wires)==0)  
 H_traceless = H_raw-id_c * qp.Identity(0)
@@ -867,18 +868,6 @@ def plot_qpe_spectrum_tools(amplitude, H_traceless, n_omega, eta=0.2, xmax=4.0):
 # be compared to known resonance frequencies of various molecules to determine what
 # is present in a chemical process. 
 #
-# Conclusion
-# ==========
-# Pursuing useful, accessible quantum technologies requires careful
-# consideration of which applications and use cases are most important and well
-# suited. The problem of RIXS simulation is a clear example of this, in which a
-# gap in computational capability is causing confusion in cutting-edge research
-# and can be addressed specifically by the capabilities of quantum algorithms.
-# Chasing opportunities such as these is a first step in creating a
-# quantum-ready future. The algorithm implementation here shows a simple example
-# of a powerful algorithm. Play around with it as you become better acquainted
-# with the techniques used and explore larger molecules!
-# 
 # .. _references:
 #
 # References
