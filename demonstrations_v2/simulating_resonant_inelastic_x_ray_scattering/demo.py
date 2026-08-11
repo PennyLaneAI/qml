@@ -576,7 +576,9 @@ def RIXSStateEncodingUnitary(angles):
     
 print(qp.draw(RIXSStateEncodingUnitary)(angles))
 ###############################################################################
-# With this implemented, we have our RIXS state ready! But can we make it better?
+# Visualizing this circuit construction of this operator shows how resource intensive
+# the generation of this state is as-is. If we had additional computational resources,
+# though, how could we make it better?
 #
 # Amplitude Estimation and Amplification
 # --------------------------------------
