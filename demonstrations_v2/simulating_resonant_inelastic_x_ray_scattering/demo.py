@@ -295,6 +295,13 @@ eps_omega = 0.2
 eps_QAE = 0.3
 Na = 4 #two core plus two valence
 
+#Construct the traceless Hamiltonian
+coeffs, ops = H_raw.terms()
+id_c = sum(c for c, o in zip(coeffs, ops) if len(o.wires)==0)  
+H_traceless = H_raw-id_c * qp.Identity(0)
+
+lamb = float(np.sum(np.abs(H_traceless.terms()[0])))
+
 N_eps_omega = np.ceil((np.pi*lamb)/(np.sqrt(2)*eps_omega))
 n_omega = np.ceil(np.log2(N_eps_omega))
 nQAE = np.ceil(np.log2(1/eps_QAE))
@@ -314,10 +321,6 @@ regs = qp.registers(registers)
 ###############################################################################
 # With these registers defined, we can map our Hamiltonian to the system wires
 # to ensure nothing gets crossed along the way.
-
-coeffs, ops = H_raw.terms()
-id_c = sum(c for c, o in zip(coeffs, ops) if len(o.wires)==0)  
-H_traceless = H_raw-id_c * qp.Identity(0)
 
 sys_list = list(regs["system"])
 wire_map = {i: sys_list[i] for i in range(8)}
@@ -453,8 +456,7 @@ D = D_mat / norm_const
 H_array = H_traceless.sparse_matrix(wire_order=range(8)).toarray()
 H_evals, H_evecs = np.linalg.eigh(H_array)
 
-#Extract the 1-norm and initial energy value from the Hamiltonian
-lamb = float(np.sum(np.abs(H_traceless.terms()[0])))
+#Extract the initial energy value from the Hamiltonian
 E_0 = H_evals[0] #Extract ground-state eigenvalue
 
 print(E_0)
