@@ -6,16 +6,13 @@ Unified under the framework of the :doc:`QSVT <demos/tutorial_intro_qsvt>`, bloc
 allowing for fast `Hamiltonian simulation algorithms <https://pennylane.ai/topics/hamiltonian-simulation>`__, :doc:`linear system solvers <demos/tutorial_apply_qsvt>`, and more. 
 
 Herein, we present a technique to block encode 
-`signed integers <https://en.wikipedia.org/wiki/Signed_number_representations>`__ loaded in a quantum register. This is useful, in the simplest example, to block encode a position operator. 
+`signed integers <https://en.wikipedia.org/wiki/Signed_number_representations>`__ loaded in a quantum register i.e., :math:`|a\rangle \rightarrow a|a\rangle`, where :math:`a` is a signed integer stored in the register. In the simplest example, this block encodes a position or momentum operator. 
 But it can also be used to block encode any data loaded into a quantum register, such as a discrete approximation to a 
-function of a quantum register that can be loaded with :doc:`QROM <demos/tutorial_intro_qrom>`. 
+function of that quantum register, which can be loaded with :doc:`QROM <demos/tutorial_intro_qrom>` or computed on the fly with :doc:`arithmetic operator <demos/tutorial_how_to_use_quantum_arithmetic_operators>`. 
 
-With this construction, we can block encode position or momentum operators, or block encode functions of them. 
-These functions can be first loaded with QROM, or computed using :doc:`arithmetic operations <demos/tutorial_how_to_use_quantum_arithmetic_operators>`. 
-This is especially useful for :doc:`chemistry simulations in first quantization <demos/tutorial_resource_estimation>`, where our system qubits encode a discrete grid, and store the positions or momenta of the nuclei and electrons. 
+Such block encodings are key for :doc:`chemistry simulations in first quantization <demos/tutorial_resource_estimation>`, where the system qubits encode a discrete grid storing the positions or momenta of the nuclei and electrons. 
 
-In said simulations, one needs an efficient implementation of the kinetic energy operator. 
-Once we have a block encoding of the operation :math:`\ket p \to p \ket p`, we can simply square these block encodings by applying them sequentially to get a block encoding of :math:`p^2`. 
+In said simulations, a block encoding of the momentum operator :math:`\ket p \to p \ket p` is the building block of the kinetic energy operator; applying the block encoding twice yields a block encoding of :math:`p^2`. As we will discuss in the conclusion, the same block encoding unlocks more efficient walk operator constructions for :math:`qubitization <demos/tutorial_qubitization>`.
 
 However, we can do something more clever by building a walk operator :math:`U_p Z_\Pi`, where :math:`Z_\Pi` is a reflection about the block encoding subspace (see Ch. 7.1 of `Lin Lin's lecture notes <https://arxiv.org/abs/2201.08309>`__ [#linlin]_ for more details). 
 If we apply :math:`U_p Z_\Pi U_p Z_\Pi`, then we have encoded the second-order Chebyshev polynomial :math:`T(p) = 2p^2 -\mathbb I`. 
@@ -456,7 +453,23 @@ print(SEL_estimate.resource_decomp(10))
 # Conclusion
 # ---------------------------------
 # 
-# Wabc
+# We have shown how to block encode a register of signed integers stored in two's complement form, taking
+# :math:`\sum_a c_a |a\rangle \rightarrow \frac{1}{2^{n-1}} \sum_a c_a a |a\rangle` using a PREP-SEL-PREP structure that
+# costs only :math:`4n-3` Toffoli gates. Along the way, we saw how the PREP operator prepares the :math:`|\sqrt{\mathtt{amp}_n}\rangle`
+# resource state, how SEL acts as a filter that sets up the right interference for both the unsigned and signed cases,
+# and how PennyLane's resource estimator lets us count the non-Clifford cost directly.
+#
+# This primitive is more powerful than it might first appear. Because the block encoding of the momentum operator
+# :math:`|p\rangle \rightarrow p |p\rangle` can be applied twice to block encode :math:`p^2`, it gives a direct route to the
+# kinetic energy operator for :doc:`chemistry simulations in first quantization <demos/tutorial_resource_estimation>`. Even better, we can
+# build a walk operator :math:`U_p Z_\Pi`, where :math:`Z_\Pi` is a reflection about the block encoding subspace (see Ch. 7.1 of
+# `Lin Lin's lecture notes <https://arxiv.org/abs/2201.08309>`__ [#linlin]_ for more details). Applying :math:`U_p Z_\Pi U_p Z_\Pi`
+# encodes the second-order Chebyshev polynomial :math:`T(p) = 2p^2 - \mathbb I`. Since the identity commutes with the Hamiltonian
+# it does not influence the dynamics, and the leading factor of 2 lets us block encode the mass coefficients with an extra factor
+# of 1/2 in the PREP circuit, halving the overall 1-norm. As the 1-norm is usually very large and is a bottleneck for
+# :doc:`qubitization <demos/tutorial_qubitization>`, this trick is a significant improvement at almost negligible additional
+# circuit depth. See the paper by Pocrnic et al. [#pocrnic]_ for the full details.
+#
 # 
 # References
 # ---------------------------------
