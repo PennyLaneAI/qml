@@ -529,7 +529,7 @@ b = int(math.ceil(np.log2(1 / delta)))
 
 regs = qp.registers({
     "electrons": n,
-    "states": {f"mode_{i}": k for i in range(num_modes)},   # must stay a dict
+    "states": {f"mode_{i}": k for i in range(num_modes)},
     "gradient": b,
     "coefficients": b,
     "scratch": b + 1,
@@ -705,9 +705,6 @@ plt.ylabel("State Probability", fontsize=12)
 plt.ylim(-0.05, 1.05) #True Max: 1, True Min: 0
 plt.grid(True, linestyle='--', alpha=0.5)
 plt.legend(loc='best', fontsize=10)
-
-# Display the final demo plot
-plt.show()
 ################################################################################
 # We did it! The achieved plot depicts a physically expected outcome, in which
 # an incomplete transfer between the ground and excited state is observed. 
