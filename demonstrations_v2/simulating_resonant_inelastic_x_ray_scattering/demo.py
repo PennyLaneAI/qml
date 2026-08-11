@@ -180,8 +180,18 @@ V = 1.0 * s
 # possible using :func:`~pennylane.simplify` for resource optimization.
 
 # Diagonal terms
-Hdiag_up = (eps_c1 * num_op_c1_up) + (eps_c2 * num_op_c2_up) + (eps_v1 * num_op_v1_up) + (eps_v2 * num_op_v2_up)
-Hdiag_down = (eps_c1 * num_op_c1_down) + (eps_c2 * num_op_c2_down) + (eps_v1 * num_op_v1_down) + (eps_v2 * num_op_v2_down)
+Hdiag_up = (
+    (eps_c1 * num_op_c1_up) 
+    + (eps_c2 * num_op_c2_up) 
+    + (eps_v1 * num_op_v1_up) 
+    + (eps_v2 * num_op_v2_up)
+    )
+Hdiag_down = (
+    (eps_c1 * num_op_c1_down) 
+    + (eps_c2 * num_op_c2_down) 
+    + (eps_v1 * num_op_v1_down) 
+    + (eps_v2 * num_op_v2_down)
+    )
 
 # Hybrid terms
 Hhybrid_up = h * ((create(2) * annihilate(4)) + (create(4) * annihilate(2)))
@@ -190,7 +200,10 @@ Hhybrid_down = h * ((create(3) * annihilate(5)) + (create(5) * annihilate(3)))
 # Spin term
 Hspin = V * (num_op_v2_up*num_op_v2_down)
 
-H_raw = qp.jordan_wigner((Hdiag_up + Hdiag_down) + (Hhybrid_up + Hhybrid_down) + Hspin).simplify()
+H_raw = qp.jordan_wigner(
+    (Hdiag_up + Hdiag_down) 
+    + (Hhybrid_up + Hhybrid_down) 
+    + Hspin).simplify()
 
 print(H_raw)
 ###############################################################################
@@ -207,48 +220,32 @@ print(H_raw)
 # 1. Prepare the initial RIXS state :math:`|R_{\epsilon_I,\epsilon_S}(\omega_I)\rangle`,
 # 2. Carry out a walk-based :doc:`quantum phase estimation (QPE) <demos/tutorial_qpe>` procedure to read the final state.
 #
+# Item 1 on this list does a lot of heavy lifting here. In fact, the process of
+# preparing the state dominantly contributes to the overall cost of the algorithm. So, we can expand the
+# list to capture the complete methodology:
+# 
+# 1. Prepare the initial RIXS state, :math:`|R_{\epsilon_I,\epsilon_S}(\omega_I)\rangle`, in which we:
+# 
+#    * Construct a PREP-SEL-PREP block-encoding of the Hamiltonian, from which we have direct access to the associated qubitized walk operator, 
+#
+#    * Implement a Green's function spectral filter using GQSP with the walk operator :math:`\hat G(\omega_I,\Gamma) \approx \sum_k w_k \hat W^k`, which amounts to finding the Chebyshev coefficients of the Green's function and translating them to angles for implementation, 
+#
+#    * Define incoming and outgoing polarization to obtain the associated **dipole operators** :math:`\hat{D}_{\epsilon_i}`, which capture, within the dipole approximation, the perturbation that occurs as a result of the incident excitation and outgoing relaxation, 
+#
+#    * Prepare a block-encoding :math:`\hat{\mathcal{U}}` of the operator effectively proportional to :math:`\hat{D}_{\epsilon_S}^\dagger \hat{G}(\omega_I, \Gamma) \hat{D}_{\epsilon_I}`, 
+#
+#    * Construct a :doc:`Grover operator <demos/tutorial_grovers_algorithm>` using :math:`\hat{\mathcal{U}}` and carry out amplitude estimation to determine the success probability of the block-encoding step, 
+#
+#    * Carry out :doc:`amplitude amplification <demos/tutorial_intro_amplitude_amplification>` on the successful block encoded state to boost the success probability,
+# 
+# 2. Carry out a walk-based QPE to read the final state.
+#
 # .. figure:: ../demonstrations_v2/simulating_resonant_inelastic_x_ray_scattering/pennylane-demo-simulating-resonant-inelastic-xray-scattering-RIXScircuit.png
 #    :align: center 
 #    :width: 700px 
 #    :alt: An illustrated circuit diagram depicting the general components of Loaiza et al.'s algorithm.
 #
 #    *The entire RIXS circuit involves preparing the RIXS state and executing walk-based QPE*
-#
-# Item 1 on this list does a lot of heavy lifting here. In fact, the process of
-# preparing the state dominantly contributes to the overall cost of the algorithm. So, we can expand the
-# list to capture the complete methodology:
-# 
-# 1. Prepare the initial RIXS state, :math:`|R_{\epsilon_I,\epsilon_S}(\omega_I)\rangle`
-# 
-#    * Construct a PREP-SEL-PREP block-encoding of the Hamiltonian, from which we have 
-#    direct access to the associated qubitized walk operator, 
-#
-#    * Implement a Green's function spectral filter
-#    using GQSP with the walk operator :math:`\hat G(\omega_I,\Gamma) \approx \sum_k w_k \hat W^k`, 
-#    which amounts to finding the Chebyshev
-#    coefficients of the Green's function and translating them to angles for
-#    implementation, 
-#
-#    * Define incoming and outgoing polarization to obtain the associated **dipole operators**
-#    :math:`\hat{D}_{\epsilon_i}`, which capture, within the dipole approximation, the perturbation that occurs
-#    as a result of the incident excitation and outgoing relaxation, 
-#
-#    * Prepare a block-encoding
-#    :math:`\hat{\mathcal{U}}` of the operator effectively proportional to
-#    :math:`\hat{D}_{\epsilon_S}^\dagger \hat{G}(\omega_I, \Gamma)
-#    \hat{D}_{\epsilon_I}`, 
-#
-#    * Construct a :doc:`Grover operator
-#    <demos/tutorial_grovers_algorithm>` using :math:`\hat{\mathcal{U}}` and
-#    carry out amplitude estimation to determine the success probability of the
-#    block-encoding step, 
-#
-#    * Carry out :doc:`amplitude amplification
-#    <demos/tutorial_intro_amplitude_amplification>` on the successful block
-#    encoded state to boost the success probability,
-# 
-# 2. Carry out a walk-based QPE to
-#    read the final state.
 #
 # We have our work cut out for us! Thankfully, most of the tools we need are
 # built for us in PennyLane, so let us work through these steps systematically
@@ -395,10 +392,20 @@ d_c3 = 0.3
 d_c4 = 0.3
 
 # Spin up terms
-D_up   = d_c1 * create(2) * annihilate(0) + d_c2 * create(4) * annihilate(0) + d_c3 * create(2) * annihilate(6) + d_c4 * create(4) * annihilate(6)
+D_up   = (
+    d_c1 * create(2) * annihilate(0) 
+    + d_c2 * create(4) * annihilate(0) 
+    + d_c3 * create(2) * annihilate(6) 
+    + d_c4 * create(4) * annihilate(6)
+    )
 
 # Spin down terms
-D_down = d_c1 * create(3) * annihilate(1) + d_c2 * create(5) * annihilate(1) + d_c3 * create(3) * annihilate(7) + d_c4 * create(5) * annihilate(7)
+D_down = (
+    d_c1 * create(3) * annihilate(1) 
+    + d_c2 * create(5) * annihilate(1) 
+    + d_c3 * create(3) * annihilate(7) 
+    + d_c4 * create(5) * annihilate(7)
+    )
 
 # Full expression
 D_half = qp.jordan_wigner(D_up + D_down)
@@ -492,7 +499,11 @@ def AngleFinder(Gamma, lamb, E_0, omega_I):
         GQSPcoefs[d-k] = cheb.coef[k] / 2
         GQSPcoefs[d+k] = cheb.coef[k] / 2
     
-    GQSPangles = qp.poly_to_angles(poly = GQSPcoefs, routine = "GQSP", angle_solver = "iterative")
+    GQSPangles = qp.poly_to_angles(
+        poly=GQSPcoefs, 
+        routine="GQSP", 
+        angle_solver="iterative"
+        )
     return GQSPangles
 
 angles = AngleFinder(Gamma, lamb, E_0, omega_I)
@@ -505,8 +516,7 @@ print(angles)
 # angles found, we can carry out our block-encoding. To achieve this, we
 # need to: 
 #
-# 1. Prepare the dipole-perturbed initial state :math:`U =
-#    D|E_0\rangle / ||D|E_0\rangle||` 
+# 1. Prepare the dipole-perturbed initial state :math:`U = \frac{D|E_0\rangle}{||D|E_0\rangle||}
 #    on the system register,
 # 2. Carry out the GQSP process, 
 # 3. Block-encode the final conjugate dipole operator :math:`D^\dagger` onto the system
@@ -536,9 +546,10 @@ print(angles)
 def RIXSStateEncodingUnitary(angles):
     # INITIAL STATE |E_0>
     # Prep the initial state
+
     psi0 = H_evecs[:,0]
-    D_psi0_state = D_mat @ psi0 #Apply the unnormalized dipole operator to the ground state
-    D_psi0 = D_psi0_state / np.linalg.norm(D_psi0_state) #normalize the combined state
+    D_psi0_state = D_mat @ psi0 # Apply the unnormalized dipole operator to the ground state
+    D_psi0 = D_psi0_state / np.linalg.norm(D_psi0_state) # normalize the combined state
     qp.StatePrep(D_psi0, wires=regs["system"])
 
     # Define the GQSP walk operator
@@ -557,7 +568,11 @@ def RIXSStateEncodingUnitary(angles):
     
     # Add success flag
     flag_ctrl = list(regs["GQSP"]) + list(regs["block_ancilla"]) + list(regs["GQSP_walk"])
-    qp.ctrl(qp.X, control = flag_ctrl, control_values = [0] * len(flag_ctrl))(wires=regs["success"])
+    qp.ctrl(
+        qp.X, 
+        control=flag_ctrl, 
+        control_values=[0] * len(flag_ctrl)
+        )(wires=regs["success"])
 ###############################################################################
 # With this implemented, we have our RIXS state ready! But can we make it better?
 #
@@ -611,16 +626,21 @@ def RIXSStateEncodingUnitary(angles):
 #
 
 def GroverIterate():
-    R_reg = list(regs["system"]) + list(regs["GQSP"]) + list(regs["block_ancilla"]) + list(regs["GQSP_walk"])
+    R_reg = (
+        list(regs["system"]) 
+        + list(regs["GQSP"]) 
+        + list(regs["block_ancilla"]) 
+        + list(regs["GQSP_walk"])
+        )
     
-    qp.Z(wires = regs["success"])
+    qp.Z(wires=regs["success"])
 
     qp.adjoint(RIXSStateEncodingUnitary)(angles) #between success and collection register
 
-    qp.X(wires = regs["success"])
+    qp.X(wires=regs["success"])
     
     for wire in R_reg:
-        qp.X(wires = wire)
+        qp.X(wires=wire)
         
     qp.ctrl(qp.Z, control=R_reg)(wires=regs["success"])
     
@@ -723,7 +743,7 @@ def HighProbRIXSState(probs):
 def QPEReadout():
     RIXSStateEncodingUnitary(angles)
     
-    KaiserWindow = np.kaiser(2 ** n_omega + 1, 2.0)[:-1] #0 corresponds to a rectangular window shape
+    KaiserWindow = np.kaiser(2 ** n_omega + 1, 2.0)[:-1]
     KaiserWindowShifted = np.fft.ifftshift(KaiserWindow)
     KaiserWindowNorm = KaiserWindowShifted / np.linalg.norm(KaiserWindowShifted)
     
@@ -868,6 +888,19 @@ def plot_qpe_spectrum_tools(amplitude, H_traceless, n_omega, eta=0.2, xmax=4.0):
 # be compared to known resonance frequencies of various molecules to determine what
 # is present in a chemical process. 
 #
+# Conclusion
+# ==========
+# The problem of RIXS simulation is a clear example of
+# gap in computational capability causing confusion in cutting-edge research
+# that can be addressed specifically by the capabilities of quantum algorithms.
+# Chasing opportunities such as these is a first step in creating a
+# quantum-ready future. 
+#
+# This algorithms is a great demonstration of how cutting-edge algorithms 
+# can be constructed out of well known, established components. Its worthwhile
+# to acquaint yourself with these puzzle pieces, especially the methods
+# linked in this demo. It is never too late to go back to basics!
+# 
 # .. _references:
 #
 # References
