@@ -246,33 +246,41 @@ def DiagonalizationScheme(fragment, electron_wires):
 # if the integer being passed is signed (i.e., 
 # positive or negative, as it will be in the potential step) or unsigned (as it will be in the kinetic step).
 
-def AddPhaseGradient(k, cache_wires, coeff_wires, gradient_wires, scratch_wires, signed=False):
+def AddPhaseGradient(
+        k, 
+        cache_wires,
+        coeff_wires, 
+        gradient_wires,
+        scratch_wires, 
+        signed=False
+        ):
     for point in range(2 * k):
-    #Control on the spatial state register
+    # Control on the spatial state register
         ctrl_wire = [cache_wires[point]]
 
-        #Index to the current position in the register
+         #Index to the current position in the register
         weight = 2*k - 1 - point
         target_length = len(gradient_wires) - weight
 
         if target_length <= 0:
             continue
 
-        #Index the coefficient wires to the required size
+        # Index the coefficient wires to the required size
         x_wire_current = coeff_wires
         if len(x_wire_current) > target_length:
             x_wire_current = coeff_wires[(len(coeff_wires) - target_length):]
 
         y_wire_current = gradient_wires[:target_length]
 
-        #Apply addition operator based on the size of the numbers being added
+        # Apply addition operator based on the size of the numbers being added
         if target_length == 1:
             qp.ctrl(
                 qp.CNOT, 
                 control = ctrl_wire
                 )(wires=[x_wire_current[-1], y_wire_current[0]])
         elif target_length >= 2:
-            #If we are dealing with a signed integer and the most significant bit, use an adjoint semiadder.
+            # If we are dealing with a signed integer 
+            # and the most significant bit, use an adjoint semiadder.
             if (signed and point == 0):
                 adder = qp.adjoint(qp.SemiAdder)  
             else:
@@ -780,7 +788,16 @@ time_coeffs = [[f"{v:0{width}b}" for v in row] for row in v_array]
 # Now, at long last, we can carry out our time evolution. 
 
 #Define argument lists
-kinetic_args = [omega, num_modes, state_wires, gradient_wires, coeff_wires, scratch_wires, cache_wires]
+kinetic_args = [
+    omega, 
+    num_modes, 
+    state_wires, 
+    gradient_wires, 
+    coeff_wires, 
+    scratch_wires, 
+    cache_wires
+    ]
+
 potential_args = [
     LoadCoeffsKDC, 
     mode_list, 
@@ -862,8 +879,20 @@ for t in time_grid:
 plt.figure(figsize=(9, 6))
 
 # Plot Full Vibronic Simulation
-plt.plot(actual_time_axis, vibronic_state_0, color='blue', label='Vibronic - State 0', linewidth=2.5)
-plt.plot(actual_time_axis, vibronic_state_1, color='red', label='Vibronic - State 1', linewidth=2.5)
+plt.plot(
+    actual_time_axis, 
+    vibronic_state_0, 
+    color='blue', 
+    label='Vibronic - State 0', 
+    linewidth=2.5
+    )
+plt.plot(
+    actual_time_axis, 
+    vibronic_state_1, 
+    color='red', 
+    label='Vibronic - State 1', 
+    linewidth=2.5
+    )
 
 # Graph Formatting
 plt.title("Electronic State Evolution", fontsize=14, fontweight='bold')
