@@ -573,6 +573,8 @@ def RIXSStateEncodingUnitary(angles):
         control=flag_ctrl, 
         control_values=[0] * len(flag_ctrl)
         )(wires=regs["success"])
+    
+print(qp.draw(RIXSStateEncodingUnitary)(angles))
 ###############################################################################
 # With this implemented, we have our RIXS state ready! But can we make it better?
 #
