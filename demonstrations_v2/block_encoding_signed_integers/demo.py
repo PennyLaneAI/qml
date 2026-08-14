@@ -64,7 +64,7 @@ The PREP operator prepares this :math:`|\sqrt{\mathtt{amp}_n}\rangle` state alon
   :width: 95%
   :align: center
 
-  Figure 1: PREP oracle is composed of :math:`|\sqrt{\mathtt{amp}_n}\rangle` above in the above circuit. “:math:`\mathtt{HAD}`” refers to the Hadamard gate.
+  Figure 1: PREP oracle is composed of :math:`|\sqrt{\mathtt{amp}_n}\rangle` above in the above circuit. “:math:`\mathtt{Had}`” refers to the Hadamard gate.
   
 
 For example, for :math:`n = 3`, :math:`|\sqrt{\mathtt{amp}_n}\rangle = \frac{1}{2}|00\rangle|1\rangle_s + \frac{1}{2} |01\rangle|0\rangle_s + \frac{1}{\sqrt{2}} |10\rangle |0\rangle_s`.
