@@ -14,10 +14,8 @@ Such block encodings are key for :doc:`chemistry simulations in first quantizati
 
 In said simulations, a block encoding of the momentum operator :math:`\ket p \to p \ket p` is the building block of the kinetic energy operator; applying the block encoding twice yields a block encoding of :math:`p^2`. As we will discuss in the conclusion, the same block encoding unlocks more efficient walk operator constructions for :doc:`qubitization <demos/tutorial_qubitization>`.
 
-However, we can do something more clever by building a walk operator :math:`U_p Z_\Pi`, where :math:`Z_\Pi` is a reflection about the block encoding subspace (see Ch. 7.1 of `Lin Lin's lecture notes <https://arxiv.org/abs/2201.08309>`__ [#linlin]_ for more details). 
-If we apply :math:`U_p Z_\Pi U_p Z_\Pi`, then we have encoded the second-order Chebyshev polynomial :math:`T(p) = 2p^2 -\mathbb I`. 
-Since the identity commutes with the Hamiltonian, it does not influence the dynamics, and given the leading factor of 2, we can block encode the mass coefficients with a factor of 1/2 in our prep circuit, thus reducing the overall 1-norm by half. 
-Given the 1-norm is usually very large (a bottle neck for :doc:`qubitization <demos/tutorial_qubitization>` simulation), this block encoding method trick is a significant improvement with almost negligible additional circuit depth. 
+The same construction also has a less obvious payoff. Wrapped in a walk operator, it encodes the 2nd-order Chebyshev polynomial of :math:`2p^2 -\mathbb I` rather than :math:`p^2` alone, and the leading factor of 2 in that polynomial lets us encode the mass coefficients as :math:`1/4m` instead of :math:`1/2m`, thereby halving the 1-norm of the kinetic energy operator :math:`p^2/2m` at almost no additional circuit depth.
+Since the 1-norm sets the cost of qubitization and is usually the bottleneck, this is a substantial saving. We return to it in the conclusion, once the circuit is in hand.
 
 This demo will show how to block encode a register of signed integers by the technique elucidated by Pocrnic et al. [#pocrnic]_. 
 While the proof may be found in the `paper <https://arxiv.org/abs/2602.11272>`__, this demo details the action of each part of 
@@ -459,16 +457,21 @@ print(SEL_estimate.resource_decomp(10))
 # resource state, how SEL acts as a filter that sets up the right interference for both the unsigned and signed cases,
 # and how PennyLane's resource estimator lets us count the non-Clifford cost directly.
 #
-# This primitive is more powerful than it might first appear. Because the block encoding of the momentum operator
-# :math:`|p\rangle \rightarrow p |p\rangle` can be applied twice to block encode :math:`p^2`, it gives a direct route to the
-# kinetic energy operator for :doc:`chemistry simulations in first quantization <demos/tutorial_resource_estimation>`. Even better, we can
+# We can now return to the benefit of this formulation promised in the introduction. 
+# Applying the block encoding of the momentum operator 
+# :math:`|p\rangle \rightarrow p |p\rangle` twice gives a block encoding of :math:`p^2`, and hence a direct route to the
+# kinetic energy operator for :doc:`chemistry simulations in first quantization <demos/tutorial_resource_estimation>`. 
+# But this construction leads to a better option that squaring. We can
 # build a walk operator :math:`U_p Z_\Pi`, where :math:`Z_\Pi` is a reflection about the block encoding subspace (see Ch. 7.1 of
-# `Lin Lin's lecture notes <https://arxiv.org/abs/2201.08309>`__ [#linlin]_ for more details). Applying :math:`U_p Z_\Pi U_p Z_\Pi`
-# encodes the second-order Chebyshev polynomial :math:`T(p) = 2p^2 - \mathbb I`. Since the identity commutes with the Hamiltonian
-# it does not influence the dynamics, and the leading factor of 2 lets us block encode the mass coefficients with an extra factor
-# of 1/2 in the PREP circuit, halving the overall 1-norm. As the 1-norm is usually very large and is a bottleneck for
-# :doc:`qubitization <demos/tutorial_qubitization>`, this trick is a significant improvement at almost negligible additional
-# circuit depth. See the paper by Pocrnic et al. [#pocrnic]_ for the full details.
+# `Lin Lin's lecture notes <https://arxiv.org/abs/2201.08309>`__ [#linlin]_ for more details). Applying it twice :math:`U_p Z_\Pi U_p Z_\Pi`
+# encodes the second-order Chebyshev polynomial :math:`T(p) = 2p^2 - \mathbb I`. 
+# 
+# The identity commutes with the Hamiltonian, so it shifts the spectrum without affecting the dynamics and can thus be ignored. 
+# The leading factor of 2 lets us block encode the mass coefficients as :math:`1/4m` rather than :math:`1/2m` in the PREP circuit, halving the overall 1-norm of the kinetic energy operator. 
+# Since the number of steps in a :doc:`qubitization <demos/tutorial_qubitization>` walk scales with the 1-norm, and the 1-norm is usually the dominant cost, this trick halves the simulation cost at almost negligible additional
+# circuit depth next to the :math:`4n-3` Toffolis of the block encoding itself. 
+# 
+# See for yourself: build the walk operator :math:`U_p Z_Pi` and use qubitization to check the halved 1-norm against the squaring route. Then, cost out a complete algorithm with :doc:`qubitized quantum phase estimation <demos/tutorial_re_for_qubitizedQPE>`, where this block encoding becomes one component of a much larger budget. Read the full analysis at each step in the paper by Pocrnic et al. [#pocrnic]_.
 #
 # 
 # References
