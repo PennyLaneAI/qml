@@ -2,8 +2,8 @@ r"""Block encoding signed integers
 =========================================
 
 Quantum algorithms based on :doc:`block encodings <demos/tutorial_lcu_blockencoding>` serve as a powerhouse for `fault-tolerant quantum computation <https://pennylane.ai/topics/fault-tolerant-quantum-computing>`__. 
-Unified under the framework of the :doc:`QSVT <demos/tutorial_intro_qsvt>`, block encodings enable efficient polynomial transformations of matrices, 
-allowing for fast `Hamiltonian simulation algorithms <https://pennylane.ai/topics/hamiltonian-simulation>`__, :doc:`linear system solvers <demos/tutorial_apply_qsvt>`, and more. 
+Under the unifying framework of the :doc:`QSVT <demos/tutorial_intro_qsvt>`, block encodings enable efficient polynomial transformations of matrices, 
+allowing for fast `Hamiltonian simulation algorithms <https://pennylane.ai/topics/hamiltonian-simulation>`__, :doc:`linear system solvers <demos/tutorial_apply_qsvt>`, and more. However, finding resource efficient circuits to block encode linear operators can be a challenging task. 
 
 Herein, we present a technique to block encode 
 `signed integers <https://en.wikipedia.org/wiki/Signed_number_representations>`__ loaded in a quantum register i.e., :math:`|a\rangle \rightarrow a|a\rangle`, where :math:`a` is a signed integer stored in the register. In the simplest example, this block encodes a position or momentum operator. 
@@ -12,7 +12,7 @@ function of that quantum register, which can be loaded with :doc:`QROM <demos/tu
 
 Such block encodings are key for :doc:`chemistry simulations in first quantization <demos/tutorial_resource_estimation>`, where the system qubits encode a discrete grid storing the positions or momenta of the nuclei and electrons. 
 
-In said simulations, a block encoding of the momentum operator :math:`\ket p \to p \ket p` is the building block of the kinetic energy operator; applying the block encoding twice yields a block encoding of :math:`p^2`. As we will discuss in the conclusion, the same block encoding unlocks more efficient walk operator constructions for :math:`qubitization <demos/tutorial_qubitization>`.
+In said simulations, a block encoding of the momentum operator :math:`\ket p \to p \ket p` is the building block of the kinetic energy operator; applying the block encoding twice yields a block encoding of :math:`p^2`. As we will discuss in the conclusion, the same block encoding unlocks more efficient walk operator constructions for :doc:`qubitization <demos/tutorial_qubitization>`.
 
 However, we can do something more clever by building a walk operator :math:`U_p Z_\Pi`, where :math:`Z_\Pi` is a reflection about the block encoding subspace (see Ch. 7.1 of `Lin Lin's lecture notes <https://arxiv.org/abs/2201.08309>`__ [#linlin]_ for more details). 
 If we apply :math:`U_p Z_\Pi U_p Z_\Pi`, then we have encoded the second-order Chebyshev polynomial :math:`T(p) = 2p^2 -\mathbb I`. 
@@ -44,7 +44,7 @@ Circuit structure
 This block encoding circuit consists of two main components: PREP and SEL. 
 In turn, PREP consists of :math:`\mathtt{amp}_n` to prepare a resource state :math:`|\sqrt{\mathtt{amp}_n}\rangle`. 
 This PREP technique had been previously described in a `paper by Su et al. <https://arxiv.org/abs/2105.12767>`__ [#Su]_, 
-but there was no circuit provided for PREP to the best of our knowledge. 
+but the explicit circuit constructions were not provided. In fact, the techniques introduced in the aforementioned paper largely inspired the constructions presented herein. The expert reader may recall that their momenta are encoded in the sign-magnitude representation, which leads to a slight excess in the 1-norm of the kinetic energy operator. Not only is two's complement a more natural encoding for general arithmetic, it also avoids this artifact by exactly block encoding the momenta over the entire grid with no probability of failure.
 
 PREP
 ^^^^^^^^^^^^^^
