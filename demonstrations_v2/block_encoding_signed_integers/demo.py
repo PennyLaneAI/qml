@@ -471,7 +471,7 @@ print(SEL_estimate.resource_decomp(10))
 # Since the number of steps in a :doc:`qubitization <demos/tutorial_qubitization>` walk scales with the 1-norm, and the 1-norm is usually the dominant cost, this trick halves the simulation cost at almost negligible additional
 # circuit depth next to the :math:`4n-3` Toffolis of the block encoding itself. 
 # 
-# See for yourself: build the walk operator :math:`U_p Z_Pi` and use qubitization to check the halved 1-norm against the squaring route. Then, cost out a complete algorithm with :doc:`qubitized quantum phase estimation <demos/tutorial_re_for_qubitizedQPE>`, where this block encoding becomes one component of a much larger budget. Read the full analysis at each step in the paper by Pocrnic et al. [#pocrnic]_.
+# See for yourself: build the walk operator :math:`U_p Z_\Pi` and use qubitization to check the halved 1-norm against the squaring route. Then, cost out a complete algorithm with :doc:`qubitized quantum phase estimation <demos/tutorial_re_for_qubitizedQPE>`, where this block encoding becomes one component of a much larger budget. Read the full analysis at each step in the paper by Pocrnic et al. [#pocrnic]_.
 #
 # 
 # References
