@@ -64,7 +64,7 @@ The PREP operator prepares this :math:`|\sqrt{\mathtt{amp}_n}\rangle` state alon
   :width: 95%
   :align: center
 
-  Figure 1: *PREP oracle is composed of :math:`|\sqrt{\mathtt{amp}_n}\rangle` above in the above circuit. “:math:`\mathtt{HAD}`” refers to the Hadamard gate.*
+  Figure 1: PREP oracle is composed of :math:`|\sqrt{\mathtt{amp}_n}\rangle` above in the above circuit. “:math:`\mathtt{HAD}`” refers to the Hadamard gate.
   
 
 For example, for :math:`n = 3`, :math:`|\sqrt{\mathtt{amp}_n}\rangle = \frac{1}{2}|00\rangle|1\rangle_s + \frac{1}{2} |01\rangle|0\rangle_s + \frac{1}{\sqrt{2}} |10\rangle |0\rangle_s`.
@@ -79,7 +79,7 @@ Such a resource state can be prepared by the circuit below:
   :width: 95%
   :align: center
 
-  Figure 2: *Circuit to prepare :math:`|\sqrt{\mathtt{amp}_n}\rangle`*
+  Figure 2: Circuit to prepare :math:`|\sqrt{\mathtt{amp}_n}\rangle`
   
 The initial :class:`~.pennylane.Hadamard` gate and subsequent cascade of controlled-Hadamard gates creates a superposition of some computational basis states 
 :math:`|0\dots 0\rangle, |10\dots0\rangle, |110\dots 0\rangle, \dots, |1\dots 1\rangle,` where the :math:`k^\text{th}` state has :math:`1/\sqrt{2}` the amplitude of 
@@ -151,7 +151,7 @@ def prepn():
 #   :width: 95%
 #   :align: center
 # 
-#   Figure 3: *SEL sets up the relevant interference to encode the signed integers. The Toffoli gates are applied transversally over the :math:`n-1` qubits in the :math:`a` and :math:`b` registers, but act on the same flag qubit (see Figure 12 in [#pocrnic]_ for an example.)*
+#   Figure 3: SEL sets up the relevant interference to encode the signed integers. The Toffoli gates are applied transversally over the :math:`n-1` qubits in the :math:`a` and :math:`b` registers, but act on the same flag qubit (see Figure 12 in [#pocrnic]_ for an example.)
 # 
 # With all bitwise amplitudes loaded in the :math:`b` register, SEL must allow a branch to survive if :math:`\bar{a}_j = \bar{b}_{n-2-j} = 1`, 
 # and set up destructive interference otherwise. The adjoint of PREP will square the surviving amplitudes, the sum of which block 
