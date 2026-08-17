@@ -10,11 +10,10 @@ So how can you produce a nonlinear function on a quantum computer that can only 
 """
 
 ######################################################################
-# The "gold standard" methods to implement matrix transformations are :doc:`block
-# encoding <demos/tutorial_block_encoding>`
-# [#blockencoding]_ and :doc:`quantum singular value
+# The "gold standard" is :doc:`quantum singular value
 # transformation <demos/tutorial_intro_qsvt>`
-# [#qsvt]_. However, these techniques primarily transform the singular values (or eigenvalues) of an
+# [#qsvt]_, which applies a polynomial to an operator accessed through a :doc:`block
+# encoding <demos/tutorial_block_encoding>` [#blockencoding]_. However, it transforms the singular values (or eigenvalues) of an
 # operator. In many quantum machine learning settings - especially amplitude encoding - the data isn’t
 # stored in an operator at all. Instead, it lives directly in the amplitudes of a quantum state.
 # 
