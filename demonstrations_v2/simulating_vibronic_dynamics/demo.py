@@ -44,6 +44,10 @@ limits. This is especially true when we set out to simulate `vibronic systems <h
 which is concerned with vibrational
 interactions between electrons and nuclei.
 
+Motlagh et al. aim to enable beyond Born-Oppenheimer simulation,
+enabling the limits of classical computation in dynamic simulations
+to be overcome.
+
 The Köppel-Domcke-Cederbaum Hamiltonian
 ---------------------------------------
 The Köppel-Domcke-Cederbaum (KDC) Hamiltonian is a well known, straightforward
@@ -325,6 +329,7 @@ def KineticStep(time_step, kinetic_coeffs, num_modes, state_wires, gradient_wire
         #Compute coefficients
         kin_coeff_raw = (kinetic_coeffs[i] * time_step * (2 ** b) / (2 * K))
         C = int(np.floor(kin_coeff_raw + 0.5))
+        print(C)
 
         C_binary = format(C, f'0{len(coeff_wires)}b')
 
@@ -630,6 +635,9 @@ def KDCStatePrep(k):
     return chi0
 
 plt.plot(KDCStatePrep(6))
+plt.title("Initial State Distribution")
+plt.xlabel("Index", fontsize=12)
+plt.ylabel("Amplitude", fontsize=12)
 ###############################################################################
 # Implementation
 # --------------
