@@ -13,9 +13,9 @@ In 2025, Gao et al. published `"Clarifying the origin of molecular O₂ in catho
 oxides" <https://www.nature.com/articles/s41563-025-02144-7>`_, noting RIXS experiments show the presence of molecular
 oxygen in non-Li-excess batteries incapable of producing these molecules as well. 
 This implies these molecules are likely an artifact of the RIXS methodology itself rather than the 
-battery process. This caused a shift in
-interpretation and understanding that shed light on the need for reliable simulations
-to compare with experimental results. The 
+battery process, which caused a shift in
+interpretation. The need for reliable simulations
+to compare with experimental results was made clear here. The 
 problem? Classical computers simply cannot handle RIXS simulation for significant system sizes. 
 
 This is precisely the case made by Loaiza et al. in `"Quantum algorithm for simulating
@@ -66,7 +66,7 @@ loss**. When energy loss versus intensity is plotted (as is characteristic of a
 RIXS spectrum), each spectral peak can be interpreted as a specific excitation within the
 target system. The energy values at which these peaks occur indicate what is present in a reaction,
 allowing for correlation between observed excitation peaks and known molecular excitation
-energies for identification.
+energies to be analyzed for molecule identification.
 
 The Hamiltonian
 ---------------
@@ -159,23 +159,17 @@ V = 1.0 * s
 
 # Diagonal terms
 Hdiag_up = (
-    (eps_c1 * num_op_c1_up) 
-    + (eps_c2 * num_op_c2_up) 
-    + (eps_v1 * num_op_v1_up) 
-    + (eps_v2 * num_op_v2_up)
-    )
+    (eps_c1 * num_op_c1_up) + (eps_c2 * num_op_c2_up) 
+    + (eps_v1 * num_op_v1_up) + (eps_v2 * num_op_v2_up))
 Hdiag_down = (
-    (eps_c1 * num_op_c1_down) 
-    + (eps_c2 * num_op_c2_down) 
-    + (eps_v1 * num_op_v1_down) 
-    + (eps_v2 * num_op_v2_down)
-    )
+    (eps_c1 * num_op_c1_down) + (eps_c2 * num_op_c2_down) 
+    + (eps_v1 * num_op_v1_down) + (eps_v2 * num_op_v2_down))
 
 # Hybrid terms
 Hhybrid_up = h * ((create(2) * annihilate(4)) + (create(4) * annihilate(2)))
 Hhybrid_down = h * ((create(3) * annihilate(5)) + (create(5) * annihilate(3)))
 
-# Spin term
+# On-site two-electron interaction term
 Hspin = V * (num_op_v2_up*num_op_v2_down)
 
 H_raw = qp.jordan_wigner(
@@ -237,7 +231,7 @@ print(H_raw)
 #
 # The GQSP register, success flag register, and block-encoding ancilla
 # register only require one wire each. The number of wires included in the QPE walk
-# register, GQSP walk register, and the ancilla registers used for qubitization can be defined according to 
+# register, GQSP walk register, and the ancilla registers used for qubitization can be defined according to a
 # desired precision. The system register should have the same number of qubits
 # as the system has active spin-orbitals, which is twice the number of spatial 
 # orbitals.
@@ -246,14 +240,14 @@ print(H_raw)
 # separate circuits) should be
 # computed relative to the desired accuracy and resolution of the spectral
 # output. The number of wires in the QAE register can be found via the general
-# expression:
+# expression
 #
 # .. math:: 
 #    \lceil \log_2(1/\epsilon) \rceil,
 #
 # where :math:`\epsilon` is the target precision.
 #
-# It is defined in the source paper that the QPE register is given by
+# It is defined in the source paper that the QPE register size is given by
 #
 # .. math:: 
 #    \lceil \log_2(N(\epsilon_\omega)) \rceil,
@@ -268,7 +262,7 @@ print(H_raw)
 
 eps_omega = 0.2
 eps_QAE = 0.3
-# Two core plus two valence electrons
+# Two core plus two valence orbitals
 Na = 4
 
 # Construct the traceless Hamiltonian
@@ -371,19 +365,13 @@ d_c4 = 0.3
 
 # Spin up terms
 D_up   = (
-    d_c1 * create(2) * annihilate(0) 
-    + d_c2 * create(4) * annihilate(0) 
-    + d_c3 * create(2) * annihilate(6) 
-    + d_c4 * create(4) * annihilate(6)
-    )
+    d_c1 * create(2) * annihilate(0) + d_c2 * create(4) * annihilate(0) 
+    + d_c3 * create(2) * annihilate(6) + d_c4 * create(4) * annihilate(6))
 
 # Spin down terms
 D_down = (
-    d_c1 * create(3) * annihilate(1) 
-    + d_c2 * create(5) * annihilate(1) 
-    + d_c3 * create(3) * annihilate(7) 
-    + d_c4 * create(5) * annihilate(7)
-    )
+    d_c1 * create(3) * annihilate(1) + d_c2 * create(5) * annihilate(1) 
+    + d_c3 * create(3) * annihilate(7) + d_c4 * create(5) * annihilate(7))
 
 # Full expression
 D_half = qp.jordan_wigner(D_up + D_down)
@@ -419,15 +407,12 @@ print(f"D: shape={D.shape}, nonzeros={np.count_nonzero(D)}, max|D|={np.abs(D).ma
 # 
 # .. math::
 #    \Gamma\hat{G}(\omega_I,\Gamma)=\frac{\Gamma}{\omega_I-(\hat{H}-E_0)+i\Gamma}.
-# 
-# Note that the :math:`\Gamma` factor represents a physical broadening caused by the 
-# finite lifetimes of the intermediate states we discussed previously. 
 #
 # To use GQSP, the phase factor angles, which dictate
 # how a target function can be encoded onto a system,
 # must first be found. This is a completely classical process that involves
 # determining the `Chebyshev coefficients
-# <https://en.wikipedia.org/wiki/Chebyshev_polynomials>`_ and converting them
+# <https://en.wikipedia.org/wiki/Chebyshev_polynomials>`_ of the target function and converting them
 # into an angle representation for use. This can be handled by taking
 # advantage of Python and PennyLane tools such as
 # :func:`~pennylane.poly_to_angles`, which handles the conversion as long as the
@@ -665,10 +650,8 @@ def QAE():
 #    *Amplitude Amplification Circuit*
 #
 # In ``HighProbRIXSState()``, this refinement process is carried out. The repetitive
-# nature of achieving this state is costly, and adds to the runtime of the algorithm.
-# For this demonstration, we will forgo the estimation and amplification steps, but
-# the following function can easily be substituted in should you want to execute
-# the intended algorithm in full.
+# nature of achieving this state is costly, and adds to the runtime of the algorithm,
+# but prevents poor outcomes and wasted executions.
 
 def HighProbRIXSState(probs):
 
@@ -841,12 +824,8 @@ def plot_qpe_spectrum_tools(amplitude, H_traceless, n_omega, eta=0.2, xmax=4.0):
 # As shown, the peaks occur at approximately the same energy loss value
 # with similar intensity in both plots. This was achieved with an :math:`n_\omega=8` value that takes approximately 4 hours to converge.
 # 
-# Upon inspection, it is clear that the two plots are not perfectly aligned, though. The result
-# is pretty good, but when we are striving for precision for high-importance validations, accuracy
-# is everything. Since we
-# made no impactful physical assumptions about our system in our implementation, why is this the 
-# case?
-#
+# When we are striving for precision for high-importance validations, accuracy
+# is everything. Thus, we should be aware of what puts this at risk.
 # The main culprit here is the value of :math:`n_\omega`, which defines the size of the
 # QPE register. As the size of this register increases, the bins that the QPE results fall
 # into shrink, resulting in higher resolution and precision. Thus, a maximized register size
