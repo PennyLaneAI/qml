@@ -1,6 +1,6 @@
 r"""
-Simulating Resonant Inelastic X-Ray Scattering
-##############################################
+Quantum algorithm for simulating resonant inelastic X-ray scattering
+####################################################################
 
 Lithium excess (Li-excess)
 platforms are currently being eyed for the next generation of high-capacity
@@ -9,7 +9,7 @@ batteries. As we attempt to determine why they suffer such short lifespans,
 X-ray spectroscopy technique, have suggested Li-excess cathodes may produce
 molecular oxygen that becomes trapped inside the battery, leading to reduced capacity.
 
-In 2025, Gao et al. published `"Clarifying the origin of molecular O_2 in cathode
+In 2025, Gao et al. published `"Clarifying the origin of molecular O₂ in cathode
 oxides" <https://www.nature.com/articles/s41563-025-02144-7>`_, noting RIXS experiments show the presence of molecular
 oxygen in non-Li-excess batteries incapable of producing these molecules as well. 
 This implies these molecules are likely an artifact of the RIXS methodology itself rather than the 
@@ -70,30 +70,6 @@ energies for identification.
 
 The Hamiltonian
 ---------------
-.. admonition:: A note on operators
-   :class: note
-
-   When describing electrons in a molecular system represented using second-quantization, 
-   it is conventional to use :doc:`Fermionic
-   operators <demos/tutorial_fermionic_operators>` to describe the behaviour of
-   the indistinguishable particles that make up the system. In general, the operators of
-   concern are:
-
-   |
-
-   1. :math:`\hat{c}_i^\dagger`, the **creation operator**. This is used when an electron
-      is "created", effectively occupying some orbital :math:`i`.
-   2. :math:`\hat{c}_i`, the **annihilation operator**. This is used when an electron is
-      "destroyed", effectively vacating some orbital :math:`i`.
-
-   |
-
-   Combining these operators for a given orbital yields **number operators**,
-   which "count" the number of electrons occupying a given orbital:
-
-   .. math::
-      \hat{n}_i=\hat{c}^\dagger_i \hat{c}_i
-
 
 Loaiza et al. focus on a second-quantized Hamiltonian of
 the form
@@ -101,7 +77,9 @@ the form
 .. math::
    \hat{H}=E^{0}+\sum_{p,q=1}^{N_{a}}\sum_{\sigma\in \{\uparrow, \downarrow\}}h_{pq}\hat{c}_{p\sigma}^{\dagger}\hat{c}_{q\sigma}+\frac{1}{2}\sum_{p,q,r,s=1}^{N_{a}}\sum_{\sigma,\sigma '\in \{\uparrow, \downarrow\}}V_{pqrs}\hat{c}_{p\sigma}^{\dagger}\hat{c}_{q\sigma}\hat{c}_{r\sigma^{\prime}}^{\dagger}\hat{c}_{s\sigma^{\prime}},
 
-where :math:`N_a` is the number of active orbitals used in the simulation, :math:`p,
+where :math:`\hat{c}_i` is the annihilation operator (signifying an electron vacating an orbital), 
+:math:`\hat{c}_i^\dagger` is the creation operator (signifying an electron occupying an orbital),
+:math:`N_a` is the number of active orbitals used in the simulation, :math:`p,
 q, r,` and :math:`s` are specific orbital indices, :math:`\sigma` and
 :math:`\sigma^\prime` are spin states, :math:`h_{pq}` are the one-electron
 integrals, :math:`V_{pqrs}` are the two-electron integrals, 
@@ -148,18 +126,18 @@ num_op_v1_down = create(3) * annihilate(3)
 num_op_v2_up = create(4) * annihilate(4)
 num_op_v2_down = create(5) * annihilate(5)
  
-s = 0.45 #Optional scaling term
+s = 0.45 # Optional scaling term
 
-#Orbital energies
+# Orbital energies
 eps_c1 = -1.5 * s
 eps_c2 = -4.5 * s
 eps_v1 = -1.5 * s
 eps_v2 = 4.5 * s
 
-#One-electron integral
+# One-electron integral
 h = 0.5 * s
 
-#Two-electron integral
+# Two-electron integral
 V = 1.0 * s
 ###############################################################################
 # When building a toy model, we choose physically
@@ -421,17 +399,19 @@ D_out_mat = D_in_mat.conj().T
 D_mat = D_in_mat + D_out_mat
 norm_const = np.linalg.norm(D_mat,2)
 
-#Final dipole operator
+# Final dipole operator
 D = D_mat / norm_const
+
+print(D)
 ###############################################################################
 # Green's Function and GQSP
 # .........................
 # Even though RIXS is formally a second-order process that yields
-# a two dimensional spectrum, Loaiza
+# a two-dimensional spectrum, Loaiza
 # et al. chose to focus on the quantum simulation of high-resolution
 # RIXS spectra for selected incoming photon frequencies, in line with the
-# experimental requirements [#Loaiza2024]_. The selection frequencies of
-# interest is done using a
+# experimental requirements [#Loaiza2024]_. The selection of frequencies of
+# interest is carried out using a
 # frequency-specific Green's function, which acts as a spectral filter.
 #
 # The Green's function is given by
@@ -447,54 +427,53 @@ D = D_mat / norm_const
 # must first be found. This is a completely classical process that involves
 # determining the `Chebyshev coefficients
 # <https://en.wikipedia.org/wiki/Chebyshev_polynomials>`_ and converting them
-# into an angle representation for use. ``AngleFinder()`` handles this, taking
-# advantage of python and PennyLane tools (such as
+# into an angle representation for use. This can be handled by taking
+# advantage of Python and PennyLane tools such as
 # :func:`~pennylane.poly_to_angles`, which handles the conversion as long as the
-# found polynomial is represented in the Fourier basis) to get the job done. 
-#
+# found polynomial is represented in the Fourier basis. 
+# We will need to extract some
+# important parameters from our Hamiltonian, including the eigenvalues and 
+# eigenvectors (which are useful tools for benchmarking) and the 1-norm. 
+
+H_array = H_traceless.sparse_matrix(wire_order=range(8)).toarray()
+H_evals, H_evecs = np.linalg.eigh(H_array)
+
+# Extract the initial energy value from the Hamiltonian
+E_0 = H_evals[0] # Extract ground-state eigenvalue
+
+print(E_0)
+###############################################################################
 # For a given target accuracy, the Chebyshev expansion of the Green's function
 # will have an associated polynomial degree of :math:`K_G`, as fully explained in
 # Appendix A of [#Loaiza2026]_. A higher degree will result in a higher-order
 # polynomial expansion, yielding higher resolution.
 #
-# To carry out our GQSP and eventual state encoding, we will need to extract some
-# important parameters from our Hamiltonian. This includes the eigenvalues and 
-# eigenvectors (which are useful tools for benchmarking) and the 1-norm.
-
-H_array = H_traceless.sparse_matrix(wire_order=range(8)).toarray()
-H_evals, H_evecs = np.linalg.eigh(H_array)
-
-#Extract the initial energy value from the Hamiltonian
-E_0 = H_evals[0] #Extract ground-state eigenvalue
-
-print(E_0)
-###############################################################################
 # Here, the Hamiltonian was converted to a traceless representation to ensure
 # the spectrum can be centered around zero and that the 1-norm is reduced. Overall,
 # doing this makes our problem cheaper since the associated shift can be effectively
-# ignored, so why not!
+# ignored, so why not?
 #
-# With these parameters found, we can determined the coefficients of our Green's function,
+# With these parameters found, we can determine the coefficients of our Green's function,
 # convert them to the Fourier basis and center them for compatibility with :func:`~pennylane.poly_to_angles`,
-# and translate into angles.
+# and translate into angles. All of this is handled in ``AngleFinder()``.
 
 # Define the Gamma parameter, function degree, and initial photon energy
 Gamma = 0.67 * s
 K_G = 100
 omega_I = 6.10 * s
 
-#The Green's function must operate between -1 and 1
+# The Green's function must operate between -1 and 1
 def AngleFinder(Gamma, lamb, E_0, omega_I):
     GreensFunc = lambda x: Gamma / (omega_I - ((lamb * x) - E_0) + (1j * Gamma))
 
     cheb = np.polynomial.chebyshev.Chebyshev.interpolate(GreensFunc, deg=K_G)
 
-    #Convert to Fourier basis 
+    # Convert to Fourier basis 
     d = len(cheb.coef) - 1
     GQSPcoefs = np.zeros(2 * d + 1, dtype=complex)
     GQSPcoefs[d] = cheb.coef[0]
 
-    #shift indices
+    # Shift indices
     for k in range (1, d+1):
         GQSPcoefs[d-k] = cheb.coef[k] / 2
         GQSPcoefs[d+k] = cheb.coef[k] / 2
@@ -516,7 +495,7 @@ print(angles)
 # angles found, we can carry out our block-encoding. To achieve this, we
 # need to: 
 #
-# 1. Prepare the dipole-perturbed initial state :math:`U = \frac{D|E_0\rangle}{||D|E_0\rangle||}
+# 1. Prepare the dipole-perturbed initial state :math:`U = \frac{D|E_0\rangle}{||D|E_0\rangle||}`
 #    on the system register,
 # 2. Carry out the GQSP process, 
 # 3. Block-encode the final conjugate dipole operator :math:`D^\dagger` onto the system
@@ -538,7 +517,7 @@ print(angles)
 # :class:`~pennylane.BlockEncode`.
 #
 # Note that :class:`~pennylane.GQSP` cannot handle negative exponents in the input function.
-# Since we centered our function previously for compatability with the angle converter, :class:`~pennylane.GQSP` will shift the register
+# Since we centered our function previously for compatibility with the angle converter, :class:`~pennylane.GQSP` will shift the register
 # to compensate, requiring us to reset using adjoint walk operators.
 # Unfortunately, this adds some resource cost to our implementation, but will
 # suffice to achieve the desired output. 
@@ -549,7 +528,7 @@ def RIXSStateEncodingUnitary(angles):
 
     psi0 = H_evecs[:,0]
     D_psi0_state = D_mat @ psi0 # Apply the unnormalized dipole operator to the ground state
-    D_psi0 = D_psi0_state / np.linalg.norm(D_psi0_state) # normalize the combined state
+    D_psi0 = D_psi0_state / np.linalg.norm(D_psi0_state) # Normalize the combined state
     qp.StatePrep(D_psi0, wires=regs["system"])
 
     # Define the GQSP walk operator
@@ -576,14 +555,14 @@ def RIXSStateEncodingUnitary(angles):
     
 print(qp.draw(RIXSStateEncodingUnitary)(angles))
 ###############################################################################
-# Visualizing this circuit construction of this operator shows how resource intensive
+# Visualizing the circuit representation of this operator shows how resource intensive
 # the generation of this state is as-is. If we had additional computational resources,
 # though, how could we make it better?
 #
 # Amplitude Estimation and Amplification
 # --------------------------------------
 # To improve outcomes, Loaiza et al.
-# use amplitude amplification on to guarantee the successful RIXS block encoding
+# use amplitude amplification to guarantee the successful RIXS block encoding
 # is selected in the state generation process. They note that, while you can carry out
 # amplification without prior knowledge of the success probability :math:`P_R`
 # via fixed-point amplitude amplification,
@@ -604,7 +583,7 @@ print(qp.draw(RIXSStateEncodingUnitary)(angles))
 #
 # .. math:: P_R \equiv \left( \frac{\Gamma |R_{\epsilon_I,\epsilon_S}(\omega_I)|}{\lambda_D^{(\epsilon_S)} |D_{\epsilon_I}|}\right)^2.
 #
-# Which can be used to determine the number of amplitude amplification steps
+# This can be used to determine the number of amplitude amplification steps
 # :math:`K_A` via
 #
 # .. math:: 
@@ -621,7 +600,7 @@ print(qp.draw(RIXSStateEncodingUnitary)(angles))
 #    :alt: An illustrated circuit diagram for
 #    constructing the Grover iterate.
 #
-#    *Amplitude estimation and amplification requires the construction of a
+#    *Amplitude estimation and amplification require the construction of a
 #    Grover iterate* :math:`\hat{Q}_R`. *Note that* :math:`|{\cdot}_R\rangle` *is
 #    a collection of all block-encoding registers in* :math:`U_R`.
 #
@@ -639,7 +618,7 @@ def GroverIterate():
     
     qp.Z(wires=regs["success"])
 
-    qp.adjoint(RIXSStateEncodingUnitary)(angles) #between success and collection register
+    qp.adjoint(RIXSStateEncodingUnitary)(angles)
 
     qp.X(wires=regs["success"])
     
@@ -685,7 +664,7 @@ def QAE():
 #
 #    *Amplitude Amplification Circuit*
 #
-# In ``HighProbRIXSState()``, this refinement process is carrying out. The repetetive
+# In ``HighProbRIXSState()``, this refinement process is carried out. The repetitive
 # nature of achieving this state is costly, and adds to the runtime of the algorithm.
 # For this demonstration, we will forgo the estimation and amplification steps, but
 # the following function can easily be substituted in should you want to execute
@@ -811,7 +790,7 @@ def plot_qpe_spectrum_tools(amplitude, H_traceless, n_omega, eta=0.2, xmax=4.0):
 
     N = 2**int(n_omega)
     amp = np.asarray(amplitude).reshape(2, N)
-    block = amp[1] / amp[1].sum() #Select the results associated with the success flag
+    block = amp[1] / amp[1].sum() # Select the results associated with the success flag
 
     # Fold phases
     folded = np.zeros(N // 2 + 1)
@@ -824,7 +803,7 @@ def plot_qpe_spectrum_tools(amplitude, H_traceless, n_omega, eta=0.2, xmax=4.0):
     ftheta  = 2 * np.pi * (fbins / N)
     fenergy = lamb * np.cos(ftheta) - E_0  
 
-    #Lorentzian fit
+    # Lorentzian fit
     w = np.linspace(-1.0, xmax, 2000)
     spec = np.zeros_like(w)
     for prob, ef in zip(folded, fenergy):
@@ -869,8 +848,8 @@ def plot_qpe_spectrum_tools(amplitude, H_traceless, n_omega, eta=0.2, xmax=4.0):
 # case?
 #
 # The main culprit here is the value of :math:`n_\omega`, which defines the size of the
-# QPE register. As the size of this register increases, the angle bins that the QPE
-# read out fall into shrink, resulting in higher resolution. Thus, a maximized register size
+# QPE register. As the size of this register increases, the bins that the QPE results fall
+# into shrink, resulting in higher resolution and precision. Thus, a maximized register size
 # leads to the most accurate results. Unfortunately, increasing this register size
 # exponentially increases the size of the simulation, meaning computational resources
 # are quickly exhausted on classical devices.
@@ -886,7 +865,7 @@ def plot_qpe_spectrum_tools(amplitude, H_traceless, n_omega, eta=0.2, xmax=4.0):
 # So, striving for high resolution is key to achieving an exact simulation of 
 # a RIXS system. 
 #
-# These plots depict two peaks, the elastic peak (centered at 0) and the inelastic
+# These plots depict two peaks: the elastic peak (centered at 0) and the inelastic
 # peak (centered at 2.745). The inelastic peak is the value of interest in the battery
 # experiments we discussed previously. The frequency at which this peak occurs can
 # be compared to known resonance frequencies of various molecules to determine what
@@ -894,41 +873,45 @@ def plot_qpe_spectrum_tools(amplitude, H_traceless, n_omega, eta=0.2, xmax=4.0):
 #
 # Conclusion
 # ==========
-# The problem of RIXS simulation is a clear example of
+# The problem of RIXS simulation is a clear example of a
 # gap in computational capability causing confusion in cutting-edge research
 # that can be addressed specifically by the capabilities of quantum algorithms.
 # Chasing opportunities such as these is a first step in creating a
 # quantum-ready future. 
 #
-# This algorithms is a great demonstration of how cutting-edge algorithms 
-# can be constructed out of well known, established components. Its worthwhile
+# This algorithm is a great demonstration of how cutting-edge algorithms 
+# can be constructed out of well-known, established components. It is worthwhile
 # to acquaint yourself with these puzzle pieces, especially the methods
-# linked in this demo. It is never too late to go back to basics!
+# mentioned in this demo, like :doc:`generalized quantum signal processing (GQSP)
+# <demos/tutorial_estimator_hamiltonian_simulation_gqsp>`, :doc:`amplitude
+# amplification <demos/tutorial_intro_amplitude_amplification>`, :doc:`quantum
+# amplitude estimation (QAE) <demos/iterative_quantum_amplitude_estimation>`, and
+# :doc:`quantum phase estimation (QPE) <demos/tutorial_qpe>`. Good luck!
 # 
 # .. _references:
 #
 # References
-# ----------
+# ==========
 # .. [#Loaiza2026] I.\ Loaiza, A. Kunitsa, S. Fomichev, D. Motlagh, D. Dhawan,
-# S. Jahangiri, J. H. Fuglsbjerg, A. Izmaylov, N. Wiebe, Y. Abu-Lebdeh, J. M.
-# Arrazola, and A. Delgado, "Quantum algorithm for simulating resonant inelastic
-# X-ray scattering in battery materials," 2026. arXiv. doi:
-# `10.48550/arXiv.2602.20270 <https://doi.org/10.48550/arXiv.2602.20270>`_.
+#    S. Jahangiri, J. H. Fuglsbjerg, A. Izmaylov, N. Wiebe, Y. Abu-Lebdeh, J. M.
+#    Arrazola, and A. Delgado, "Quantum algorithm for simulating resonant inelastic
+#    X-ray scattering in battery materials," 2026. arXiv. doi:
+#    `10.48550/arXiv.2602.20270 <https://doi.org/10.48550/arXiv.2602.20270>`_.
 #
 # .. [#Caesura2025] A.\ Caesura, C. L. Cortes, W. Pol, S. Sim, M. Steudtner, G.
-# R. Anselmetti, M. Degroote, N. Moll, R. Santagati, M. Streif, and C. S.
-# Tautermann, "Faster quantum chemistry simulations on a quantum computer with
-# improved tensor factorization and active volume compilation," *PRX Quantum*,
-# vol. 6, no. 3, 2025. doi: `10.1103/yngp-5fpm
-# <https://link.aps.org/doi/10.1103/yngp-5fpm>`_.
+#    R. Anselmetti, M. Degroote, N. Moll, R. Santagati, M. Streif, and C. S.
+#    Tautermann, "Faster quantum chemistry simulations on a quantum computer with
+#    improved tensor factorization and active volume compilation," *PRX Quantum*,
+#    vol. 6, no. 3, 2025. doi: `10.1103/yngp-5fpm
+#    <https://link.aps.org/doi/10.1103/yngp-5fpm>`_.
 # 
 # .. [#Lee2021] J.\ Lee, D. W. Berry, C. Gidney, W. J. Huggins, J. R.
-# McClean, N. Wiebe, and R. Babbush, "Even more efficient quantum computations
-# of chemistry through tensor hypercontraction," *PRX Quantum*, vol. 2, no. 3, 2021.
-# doi: `10.1103/PRXQuantum.2.030305
-# <https://link.aps.org/doi/10.1103/PRXQuantum.2.030305>`_.
+#    McClean, N. Wiebe, and R. Babbush, "Even more efficient quantum computations
+#    of chemistry through tensor hypercontraction," *PRX Quantum*, vol. 2, no. 3, 2021.
+#    doi: `10.1103/PRXQuantum.2.030305
+#    <https://link.aps.org/doi/10.1103/PRXQuantum.2.030305>`_.
 #
 # .. [#Loaiza2024] I.\ Loaiza, D. Motlagh, K. Hejazi, M. S. Zini, A. Delgado,
-# and J. M. Arrazola, "Nonlinear Spectroscopy via Generalized Quantum Phase
-# Estimation", *Quantum*, vol. 9, 2025. doi: `10.22331/q-2025-08-07-1822
-# <https://doi.org/10.22331/q-2025-08-07-1822>`_.
+#    and J. M. Arrazola, "Nonlinear Spectroscopy via Generalized Quantum Phase
+#    Estimation", *Quantum*, vol. 9, 2025. doi: `10.22331/q-2025-08-07-1822
+#    <https://doi.org/10.22331/q-2025-08-07-1822>`_.
