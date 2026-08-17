@@ -131,7 +131,7 @@ So how can you produce a nonlinear function on a quantum computer that can only 
 # --------------------------------------------
 # 
 # Here, we build :math:`U_\Psi` explicitly for a small system (:math:`n=2`, so :math:`N=4`) to make
-# the construction tangible. The code below spells out the walk-style ingredients used in Guo et
+# the construction tangible. Here n is the number of qubits and :math:`N = 2^n` is the size of the Hilbert space. The code below spells out the walk-style ingredients used in Guo et
 # al. (2024): a reflection :math:`R`, controlled applications of the state-preparation unitary and its
 # adjoint, and a pair of composite steps :math:`W` and :math:`G` that together produce the desired
 # block structure. A phase toggle :math:`p \in \{0,1\}` switches between encoding the real part
