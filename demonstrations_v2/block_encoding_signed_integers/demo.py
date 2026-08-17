@@ -22,7 +22,7 @@ While the proof may be found in the `paper <https://arxiv.org/abs/2602.11272>`__
 the PREP and SEL operators, provides a working circuit, and details how :doc:`PennyLane can estimate the resources <demos/re_how_to_use_pennylane_for_resource_estimation>` of this block encoding. 
 
 Specifically, we shall show how to go from a superposition of integers :math:`a` in `two’s complement <https://en.wikipedia.org/wiki/Two%27s_complement>`__ form 
-e.g., :math:`\sum_a c_a |a\rangle`, where :math:`c_a` is a normalisation coefficient, to a block encoding of :math:`a` such that :math:`\sum_a c_a |a\rangle \rightarrow \frac{1}{2^{n-1}} \sum_a c_a a |a\rangle`, where :math:`n` is the number of qubits. 
+e.g., :math:`\sum_a c_a |a\rangle`, where :math:`c_a` is a normalization coefficient, to a block encoding of :math:`a` such that :math:`\sum_a c_a |a\rangle \rightarrow \frac{1}{2^{n-1}} \sum_a c_a a |a\rangle`, where :math:`n` is the number of qubits. 
 
 Signed integers
 ---------------------------------
@@ -39,15 +39,15 @@ the operation :math:`|a\rangle \rightarrow a | a \rangle` where :math:`a` is sai
 Circuit structure
 ---------------------------------
 
-This block encoding circuit consists of two main components: PREP and SEL. 
+This block encoding circuit consists of the standard two oracles from :doc:`Linear Combinations of Unitaries (LCU) <demos/tutorial_lcu_blockencoding>`: PREP and SEL. 
 In turn, PREP consists of :math:`\mathtt{amp}_n` to prepare a resource state :math:`|\sqrt{\mathtt{amp}_n}\rangle`. 
-This PREP technique had been previously described in a `paper by Su et al. <https://arxiv.org/abs/2105.12767>`__ [#Su]_, 
-but the explicit circuit constructions were not provided. In fact, the techniques introduced in the aforementioned paper largely inspired the constructions presented herein. The expert reader may recall that their momenta are encoded in the sign-magnitude representation, which leads to a slight excess in the 1-norm of the kinetic energy operator. Not only is two's complement a more natural encoding for general arithmetic, it also avoids this artifact by exactly block encoding the momenta over the entire grid with no probability of failure.
+This PREP technique had been previously described in a `paper <https://arxiv.org/abs/2105.12767>`__ by Su et al. [#Su]_, 
+but the explicit circuit constructions were not provided. In fact, the techniques introduced in the aforementioned paper largely inspired the constructions presented herein. The expert reader may recall that the discrete momentum encoding in that work is done in the sign-magnitude representation, which leads to a slight excess in the 1-norm of the kinetic energy operator. Not only is two's complement a more natural encoding for general arithmetic, it also avoids this artifact by exactly block encoding the momenta over the entire grid with no probability of failure.
 
 PREP
 ^^^^^^^^^^^^^^
 
-For this implementation, the following resource state is important for PREP. 
+For this implementation, the following resource state is prepared by the PREP routine 
 
 :math:`|\sqrt{\mathtt{amp}_n}\rangle = \frac{1}{2^{(n-1)/2}} \Big[|0\rangle^{n-1}|1\rangle_s + \sum_{b=0}^{n-2} 2^{b/2} |b\rangle |0\rangle_s \Big]`
 
@@ -64,7 +64,7 @@ The PREP operator prepares this :math:`|\sqrt{\mathtt{amp}_n}\rangle` state alon
   :width: 95%
   :align: center
 
-  Figure 1: PREP oracle is composed of :math:`|\sqrt{\mathtt{amp}_n}\rangle` above in the above circuit. “:math:`\mathtt{Had}`” refers to the Hadamard gate.
+  Figure 1: PREP oracle is composed of :math:`|\sqrt{\mathtt{amp}_n}\rangle` in the circuit above. “:math:`\mathtt{Had}`” refers to the Hadamard gate.
   
 
 For example, for :math:`n = 3`, :math:`|\sqrt{\mathtt{amp}_n}\rangle = \frac{1}{2}|00\rangle|1\rangle_s + \frac{1}{2} |01\rangle|0\rangle_s + \frac{1}{\sqrt{2}} |10\rangle |0\rangle_s`.
@@ -81,7 +81,7 @@ Such a resource state can be prepared by the circuit below:
 
   Figure 2: Circuit to prepare :math:`|\sqrt{\mathtt{amp}_n}\rangle`
   
-The initial :class:`~.pennylane.Hadamard` gate and subsequent cascade of controlled-Hadamard gates creates a superposition of some computational basis states 
+The initial :class:`~.pennylane.Hadamard` gate and subsequent cascade of controlled-Hadamard gates create a superposition of some computational basis states 
 :math:`|0\dots 0\rangle, |10\dots0\rangle, |110\dots 0\rangle, \dots, |1\dots 1\rangle,` where the :math:`k^\text{th}` state has :math:`1/\sqrt{2}` the amplitude of 
 the :math:`k-1^{\text{th}}` state for :math:`0\leq k \leq n-2.`
 
@@ -133,7 +133,7 @@ def prepn():
 ##########################################
 # For `fault-tolerant quantum computing <https://pennylane.ai/topics/fault-tolerant-quantum-computing>`__, the non-Clifford gate cost 
 # is typically the most burdensome. The sole non-Clifford gates are the controlled-Hadamard gates, which may be constructed by 
-# one :class:`~.pennylane.Toffoli` gate each [#pocrnic]_. Therefore, a :math:`n`-qubit PREP circuit uses :math:`n-2` controlled-Hadamard gates, 
+# one :class:`~.pennylane.Toffoli` gate each [#pocrnic]_. Therefore, an :math:`n`-qubit PREP circuit uses :math:`n-2` controlled-Hadamard gates, 
 # and thus costs :math:`n-2` Toffolis. 
 # 
 # The overall block encoding circuit calls PREP and the adjoint of PREP, so :math:`2n-4` Toffolis are needed as a result.
@@ -151,7 +151,7 @@ def prepn():
 #   :width: 95%
 #   :align: center
 # 
-#   Figure 3: SEL sets up the relevant interference to encode the signed integers. The Toffoli gates are applied transversally over the :math:`n-1` qubits in the :math:`a` and :math:`b` registers, but act on the same flag qubit (see Figure 12 in [#pocrnic]_ for an example.)
+#   Figure 3: SEL sets up the relevant interference to encode the signed integers. The Toffoli gates are applied over the :math:`n-1` qubits in the :math:`a` and :math:`b` registers, but act on the same flag qubit (see Figure 12 in [#pocrnic]_ for an example.)
 # 
 # With all bitwise amplitudes loaded in the :math:`b` register, SEL must allow a branch to survive if :math:`\bar{a}_j = \bar{b}_{n-2-j} = 1`, 
 # and set up destructive interference otherwise. The adjoint of PREP will square the surviving amplitudes, the sum of which block 
@@ -200,7 +200,7 @@ def prepn():
 # if :math:`\bar{a}_j = \bar{b}_{n-2-j} = 1` and delete the amplitude otherwise (see above). 
 # 
 # Contrary to the unsigned case, now, we must add :math:`+1` to complete negation in two's complement. That :math:`+1` comes from the all-zeros 
-# branch :math:`|0\dots0\rangle|1\rangle_s`. Ordinarily, some extra arithmetic must be done, but a clever way comes from the realisation 
+# branch :math:`|0\dots0\rangle|1\rangle_s`. Ordinarily, some extra arithmetic must be done, but a clever way comes from the realization 
 # that the amplitude of the all-zeros branch is :math:`2^0 = +1`. No Toffolis fire for this branch, irrespective of :math:`a`, meaning that the 
 # flag qubit is :math:`|0\rangle`. That allows CCZ to apply a Z gate. We established above that this Z gate can lead to the elimination of 
 # this branch’s amplitude. However, the CCCZ gate controlled on :math:`|\mathtt{ctl}\rangle`, :math:`|s\rangle` (the marker qubit in :math:`\mathtt{amp_n}`), and 
@@ -209,7 +209,7 @@ def prepn():
 # 
 # For example, if :math:`a=-6`, the two's complement binary encoding is :math:`|a\rangle = |1010\rangle`. Flipping all but the sign bit gives 
 # :math:`|1101\rangle`. Ignoring the sign qubit, the state is :math:`|101\rangle = |5\rangle` (note that :math:`5` is the one’s complement). 
-# The all-zeros branch adds :math:`+1` (:math:`5+1=6=|-6|`) while the CZ provides the minus sign. Thus, :math:`|a=-6\rangle = -6 |-6\rangle`, up to normalisation. 
+# The all-zeros branch adds :math:`+1` (:math:`5+1=6=|-6|`) while the CZ provides the minus sign. Thus, :math:`|a=-6\rangle = -6 |-6\rangle`, up to normalization. 
 # 
 # In total, the SEL operator requires :math:`2n+1` Toffoli gates [#pocrnic]_
 # 
@@ -461,7 +461,7 @@ print(SEL_estimate.resource_decomp(10))
 # Applying the block encoding of the momentum operator 
 # :math:`|p\rangle \rightarrow p |p\rangle` twice gives a block encoding of :math:`p^2`, and hence a direct route to the
 # kinetic energy operator for :doc:`chemistry simulations in first quantization <demos/tutorial_resource_estimation>`. 
-# But this construction leads to a better option that squaring. We can
+# But this construction leads to a better option than squaring. We can
 # build a walk operator :math:`U_p Z_\Pi`, where :math:`Z_\Pi` is a reflection about the block encoding subspace (see Ch. 7.1 of
 # `Lin Lin's lecture notes <https://arxiv.org/abs/2201.08309>`__ [#linlin]_ for more details). Applying it twice :math:`U_p Z_\Pi U_p Z_\Pi`
 # encodes the second-order Chebyshev polynomial :math:`T(p) = 2p^2 - \mathbb I`. 
