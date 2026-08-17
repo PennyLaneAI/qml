@@ -46,19 +46,7 @@ So how can you produce a nonlinear function on a quantum computer that can only 
 # .. tip::
 #     Before diving in, reinforce your knowledge of the basics with our :doc:`Intro to QSVT <demos/tutorial_intro_qsvt>` and :doc:`QSVT in Practice <demos/tutorial_apply_qsvt>` tutorials. 
 # 
-# The introduction highlighted a basic mismatch: 
-# 
-# - QSVT applies a polynomial to the singular values or eigenvalues of an operator. 
-# - In amplitude encoding, the data live directly in the amplitudes of a quantum state. 
-# 
-# Before QSVT becomes useful, the amplitudes must be re-expressed as spectral data of
-# an operator that can be block-encoded.
-# 
-# From amplitude encoding to an operator QSVT can transform
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
-# Recall the notion of a block encoding [#blockencoding]_. A unitary
-# :math:`U_A` block-encodes an operator :math:`A` if its top-left block equals :math:`A`:
+# A unitary :math:`U_A` block-encodes [#blockencoding]_ an operator :math:`A` if its top-left block equals :math:`A`:
 # 
 # .. math::
 # 
