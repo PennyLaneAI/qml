@@ -8,7 +8,7 @@ allowing for fast `Hamiltonian simulation algorithms <https://pennylane.ai/topic
 Herein, we present a technique to block encode 
 `signed integers <https://en.wikipedia.org/wiki/Signed_number_representations>`__ loaded in a quantum register i.e., :math:`|a\rangle \rightarrow a|a\rangle`, where :math:`a` is a signed integer stored in the register. In the simplest example, this block encodes a position or momentum operator. 
 But it can also be used to block encode any data loaded into a quantum register, such as a discrete approximation to a 
-function of that quantum register, which can be loaded with :doc:`QROM <demos/tutorial_intro_qrom>` or computed on the fly with :doc:`arithmetic operator <demos/tutorial_how_to_use_quantum_arithmetic_operators>`. 
+function of that quantum register, which can be loaded with :doc:`QROM <demos/tutorial_intro_qrom>` or computed on the fly with :doc:`arithmetic operators <demos/tutorial_how_to_use_quantum_arithmetic_operators>`. 
 
 Such block encodings are key for :doc:`chemistry simulations in first quantization <demos/tutorial_resource_estimation>`, where the system qubits encode a discrete grid storing the positions or momenta of the nuclei and electrons. 
 
