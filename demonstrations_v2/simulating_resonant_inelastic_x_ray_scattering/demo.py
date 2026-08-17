@@ -402,7 +402,8 @@ norm_const = np.linalg.norm(D_mat,2)
 # Final dipole operator
 D = D_mat / norm_const
 
-print(D)
+# Print non-zero entries of D
+print(f"D: shape={D.shape}, nonzeros={np.count_nonzero(D)}, max|D|={np.abs(D).max():.4f}") 
 ###############################################################################
 # Green's Function and GQSP
 # .........................
@@ -597,8 +598,7 @@ print(qp.draw(RIXSStateEncodingUnitary)(angles))
 #    ../demonstrations_v2/simulating_resonant_inelastic_x_ray_scattering/pennylane-demo-simulating-resonant-inelastic-xray-scattering-GroverIterateCircuit.png
 #    :align: center 
 #    :width: 700px 
-#    :alt: An illustrated circuit diagram for
-#    constructing the Grover iterate.
+#    :alt: An illustrated circuit diagram for constructing the Grover iterate.
 #
 #    *Amplitude estimation and amplification require the construction of a
 #    Grover iterate* :math:`\hat{Q}_R`. *Note that* :math:`|{\cdot}_R\rangle` *is
@@ -821,8 +821,7 @@ def plot_qpe_spectrum_tools(amplitude, H_traceless, n_omega, eta=0.2, xmax=4.0):
 #    ../demonstrations_v2/simulating_resonant_inelastic_x_ray_scattering/pennylane-demo-simulating-resonant-inelastic-xray-scattering-AnalyticalSolution.png
 #    :align: center 
 #    :width: 500px 
-#    :alt: A plot depicting the analytical solution
-#    of the target Hamiltonian.
+#    :alt: A plot depicting the analytical solution of the target Hamiltonian.
 #
 #    *Analytical spectrum*
 #
@@ -833,8 +832,7 @@ def plot_qpe_spectrum_tools(amplitude, H_traceless, n_omega, eta=0.2, xmax=4.0):
 #    ../demonstrations_v2/simulating_resonant_inelastic_x_ray_scattering/pennylane-demo-simulating-resonant-inelastic-xray-scattering-RIXSspectrum.png
 #    :align: center 
 #    :width: 500px 
-#    :alt: A plot depicting the simulation output
-#    of the target Hamiltonian.
+#    :alt: A plot depicting the simulation output of the target Hamiltonian.
 #
 #    *Simulated spectrum*
 #
