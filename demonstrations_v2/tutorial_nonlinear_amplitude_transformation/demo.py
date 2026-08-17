@@ -142,21 +142,6 @@ So how can you produce a nonlinear function on a quantum computer that can only 
 # A concrete block-encoding circuit (toy size)
 # --------------------------------------------
 # 
-# The previous section introduced the key primitive: a unitary :math:`U_\Psi` whose top-left block
-# encodes the diagonal operator
-# 
-# .. math::
-# 
-# 
-#    \Psi = \mathrm{diag}(\psi_0,\ldots,\psi_{N-1}),
-# 
-# where :math:`\psi_k` are the amplitudes of an input state
-# :math:`|\psi\rangle = \sum_k \psi_k |k\rangle` prepared by a state-preparation unitary :math:`U`.
-# 
-# This block-encoding is the bridge that makes QSVT applicable: once the amplitudes appear as a
-# spectrum (here, as the diagonal entries of :math:`\Psi`), a polynomial transform :math:`P(\Psi)`
-# corresponds to applying :math:`\psi_k \mapsto P(\psi_k)` in parallel (up to postselection).
-# 
 # Here, we build :math:`U_\Psi` explicitly for a small system (:math:`n=2`, so :math:`N=4`) to make
 # the construction tangible. The code below spells out the walk-style ingredients used in Guo et
 # al. (2024): a reflection :math:`R`, controlled applications of the state-preparation unitary and its
