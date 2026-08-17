@@ -329,7 +329,6 @@ def KineticStep(time_step, kinetic_coeffs, num_modes, state_wires, gradient_wire
         #Compute coefficients
         kin_coeff_raw = (kinetic_coeffs[i] * time_step * (2 ** b) / (2 * K))
         C = int(np.floor(kin_coeff_raw + 0.5))
-        print(C)
 
         C_binary = format(C, f'0{len(coeff_wires)}b')
 
