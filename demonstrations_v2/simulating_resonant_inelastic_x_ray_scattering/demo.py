@@ -671,6 +671,8 @@ def QAE():
 # the intended algorithm in full.
 
 def HighProbRIXSState(probs):
+
+    # Determine the number of wires involved
     wires = int(nQAE)
 
     # Extract the highest probability available and compute P_R
