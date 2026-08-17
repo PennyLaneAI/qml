@@ -33,7 +33,7 @@ is :math:`a = \bar{a}_{n-1} \dots \bar{a}_0` where :math:`\bar{a}_j \in \{ 0,1\}
 encodes the sign (depending on the endianness): 0 means a positive number while 1 means a negative number. 
 For example, :math:`a = -3 = 101` for :math:`n=3`. Quantum binary encoding of :math:`a`, then, is as simple as applying the Pauli X gate 
 on the appropriate qubit iff :math:`\bar{a}_j=1`. However, our goal here is to construct a block encoding of 
-the operation :math:`|a\rangle \rightarrow a | a \rangle` where :math:`a` is said integer. Note that, in practice, encoding a set of signed integers is ordinarily the goal, not just a single integer. 
+the operation :math:`|a\rangle \rightarrow a | a \rangle` where :math:`a` is said integer. Note that, in practice, encoding a superposition of signed integers is ordinarily the goal, not just a single integer. This naturally arises in first quantization due to the anti-symmetrization condition on the wavefunction.
 
 
 Circuit structure
