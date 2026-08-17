@@ -462,7 +462,7 @@ print(SEL_estimate.resource_decomp(10))
 # :math:`|p\rangle \rightarrow p |p\rangle` twice gives a block encoding of :math:`p^2`, and hence a direct route to the
 # kinetic energy operator for :doc:`chemistry simulations in first quantization <demos/tutorial_resource_estimation>`. 
 # But this construction leads to a better option than squaring. We can
-# build a walk operator :math:`U_p Z_\Pi`, where :math:`Z_\Pi` is a reflection about the block encoding subspace (see Ch. 7.1 of
+# build a walk operator :math:`U_p Z_\Pi`, where :math:`U_p` is the block encoding of the momentum operator that we've just detailed and :math:`Z_\Pi` is a reflection about the block encoding subspace (see Ch. 7.1 of
 # `Lin Lin's lecture notes <https://arxiv.org/abs/2201.08309>`__ [#linlin]_ for more details). Applying it twice :math:`U_p Z_\Pi U_p Z_\Pi`
 # encodes the second-order Chebyshev polynomial :math:`T(p) = 2p^2 - \mathbb I`. 
 # 
