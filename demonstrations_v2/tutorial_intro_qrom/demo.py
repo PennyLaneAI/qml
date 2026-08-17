@@ -107,7 +107,7 @@ target_wires = [3, 4]
 
 SINGLE_QUBIT_GATES = {qp.RX, qp.RY, qp.RZ, qp.T}
 TWO_QUBIT_GATES = {qp.CNOT}
-gate_set = SINGLE_QUBIT_GATES | TWO_QUBIT_GATES
+gate_set = SINGLE_QUBIT_GATES | TWO_QUBIT_GATES | {qp.GlobalPhase}
 
 
 @qp.decompose(gate_set=gate_set)
