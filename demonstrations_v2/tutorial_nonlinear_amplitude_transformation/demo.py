@@ -18,9 +18,9 @@ So how can you produce a nonlinear function on a quantum computer that can only 
 # operator. In many quantum machine learning settings - especially amplitude encoding - the data isn’t
 # stored in an operator at all. Instead, it lives directly in the amplitudes of a quantum state.
 # 
-# To transform these amplitudes nonlinearly, we need a generalized approach. The Nonlinear Amplitude
-# Transformation framework [#ntca]_,
-# [#importancesampling]_ enables us to map an input state
+# Nonlinear amplitude
+# transformation [#ntca]_,
+# [#importancesampling]_ closes that gap, mapping 
 # :math:`|\psi\rangle = \sum x_i |i\rangle` to a target state
 # :math:`|\phi\rangle \propto \sum f(x_i) |i\rangle`, using only unitary operations, ancillas, and
 # (typically) postselection. The key conceptual move is to convert “amplitudes-as-data” into a form
