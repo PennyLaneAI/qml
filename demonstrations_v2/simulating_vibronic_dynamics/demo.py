@@ -670,8 +670,10 @@ dt = 0.4
 width = len(regs["coefficients"])
 max_binary = 2 ** width
 Delta = np.sqrt(2 * np.pi / (2 ** k))
-alpha = 1 #Limiting to linear degree here
+alpha = 1 # Limiting to linear degree here
 
+
+# Scale coefficients and introduce time dependence
 multiplier = (dt / 2) * max_binary * (Delta ** alpha) / (2 * np.pi)
 v_array = np.round(coeff_array * multiplier).astype(int) % max_binary
 time_coeffs = [[f"{v:0{width}b}" for v in row] for row in v_array]   
