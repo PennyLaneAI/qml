@@ -761,7 +761,7 @@ plt.legend(loc='best', fontsize=10);
 # of interest that are known to be important to researchers, companies, and
 # individuals is an important first step. Vibronic simulation has the potential
 # to expand our capacity for material discovery, renewable energy expansion, and
-# drug exploration. 
+# drug exploration. Quantum computing has the potential to make this possible.
 #
 # PennyLane is continually building out `resources related to quantum chemistry simulations <https://docs.pennylane.ai/en/stable/code/qp_qchem.html>`_,
 # such as tools for :doc:`resource estimation of vibronic dynamic simulation <tutorial_resource_estimation_vibronic_dynamics>`. 
@@ -769,7 +769,7 @@ plt.legend(loc='best', fontsize=10);
 # at metallic surfaces" <https://arxiv.org/abs/2601.16264>`_, the authors
 # employ similar techniques to simulate vibronic dynamics using a GAN Hamiltonian. Take advantage of these
 # resources to explore the ways quantum computers could revolutionize the way we approach
-# theoretical chemistry.
+# theoretical chemistry. 
 #
 # .. _references:
 #
