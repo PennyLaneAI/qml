@@ -1,3 +1,3 @@
 # NOTE: pyqrack 1.1.0 broke compatibility with CPL
-# TODO: Restore compatibility when capacity is available
+# TODO: Restore compatibility when capacity is available, sc-127861
 pennylane-qrack<1.1.0
