@@ -785,11 +785,11 @@ plt.legend(loc='best', fontsize=10);
 # References
 # ----------
 # .. [#Motlagh2025] D.\ Motlagh, R. A. Lang, P. Jain, J. A.
-# Campos-Gonzalez-Angulo, W. Maxwell, T. Zeng, A. Aspuru-Guzik, and J. M.
-# Arrazola, "Quantum Algorithm for Vibronic Dynamics: Case Study on Singlet
-# Fission Solar Cell Design," 2025, `doi: 10.48550/arXiv.2411.13669
-# <https://doi.org/10.48550/arXiv.2411.13669>`_.
+#    Campos-Gonzalez-Angulo, W. Maxwell, T. Zeng, A. Aspuru-Guzik, and J. M.
+#    Arrazola, "Quantum Algorithm for Vibronic Dynamics: Case Study on Singlet
+#    Fission Solar Cell Design," 2025, `doi: 10.48550/arXiv.2411.13669
+#    <https://doi.org/10.48550/arXiv.2411.13669>`_.
 #
 # .. [#Lang2026] R.\ A. Lang, P. Jain, J. M. Arrazola, and D. Motlagh, "Quantum
-# Algorithm for Simulating Non-Adiabatic Dynamics at Metallic Surfaces," 2026,
-# `doi: 10.48550/arXiv.2601.16264 <https://doi.org/10.48550/arXiv.2601.16264>`_.
+#    Algorithm for Simulating Non-Adiabatic Dynamics at Metallic Surfaces," 2026,
+#    `doi: 10.48550/arXiv.2601.16264 <https://doi.org/10.48550/arXiv.2601.16264>`_.
