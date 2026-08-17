@@ -361,7 +361,7 @@ qp.matrix(be_circuit)(feature_vector, main_wires, ancilla_wires)[:4,:4]
 qp.draw_mpl(be_circuit)(feature_vector, main_wires, ancilla_wires)
 
 ######################################################################
-# Nonlinear amplitude transformation
+# Applying the nonlinearity
 # ----------------------------------
 # 
 # With the diagonal block encoding :math:`U_{\Psi}` in place, QSVT
