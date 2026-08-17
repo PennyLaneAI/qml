@@ -2,14 +2,11 @@ r"""Nonlinear amplitude transformation
 ===========================================
 
 
-The macroscopic world is inherently nonlinear. 
+There is no quantum gate that squares an unknown amplitude. 
 
-From the complex dynamics of financial markets to the activation functions in neural networks, nonlinear functions are the backbone of engineering, optimization, and machine learning. 
+Fundamentally, no such unitary exists; squaring is nonlinear but unitaries are not. Yet nonlinear functions frequently appear in finance, machine learning, and fluid dynamics, to name a few. 
 
-In contrast, quantum mechanics is fundamentally linear: the evolution of a closed system is always governed by unitary operators. 
-
-A central challenge in quantum algorithm design is bridging this gap to implement nonlinear transformations on a quantum computer.
-
+So how can you produce a nonlinear function on a quantum computer that can only implement linear ones? 
 """
 
 ######################################################################
