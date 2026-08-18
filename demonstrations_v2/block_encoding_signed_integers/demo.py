@@ -35,12 +35,14 @@ For example, :math:`a = -3 = 101` for :math:`n=3`. Quantum binary encoding of :m
 on the appropriate qubit iff :math:`\bar{a}_j=1`. However, our goal here is to construct a block encoding of 
 the operation :math:`|a\rangle \rightarrow a | a \rangle` where :math:`a` is said integer. Note that, in practice, encoding a superposition of signed integers is ordinarily the goal, not just a single integer. This naturally arises in first quantization due to the anti-symmetrization condition on the wavefunction.
 
+A helpful fact about the two's complement is that negation (aka finding the additive inverse) consists of two steps: 1) Bit flip all bits and 2) add :math:`+1`. For example, if :math:`a = -3 = 101`, then bit flipping yields :math:`010` and adding :math:`+1=001` yields :math:`011=+3`. 
 
 Circuit structure
 ---------------------------------
 
 This block encoding circuit consists of the standard two oracles from :doc:`Linear Combinations of Unitaries (LCU) <demos/tutorial_lcu_blockencoding>`: PREP and SEL. 
 In turn, PREP consists of :math:`\mathtt{amp}_n` to prepare a resource state :math:`|\sqrt{\mathtt{amp}_n}\rangle`. 
+
 This PREP technique had been previously described in a `paper <https://arxiv.org/abs/2105.12767>`__ by Su et al. [#Su]_, 
 but the explicit circuit constructions were not provided. In fact, the techniques introduced in the aforementioned paper largely inspired the constructions presented herein. The expert reader may recall that the discrete momentum encoding in that work is done in the sign-magnitude representation, which leads to a slight excess in the 1-norm of the kinetic energy operator. Not only is two's complement a more natural encoding for general arithmetic, it also avoids this artifact by exactly block encoding the momenta over the entire grid with no probability of failure.
 
@@ -193,8 +195,9 @@ def prepn():
 # Firstly, the CZ between :math:`|\mathtt{ctl}\rangle` and the sign qubit kicks back a :math:`-1`, giving the block-encoded amplitude the negative sign. 
 # 
 # Secondly, the CNOTs controlled on the sign bit flip the lower :math:`n-1` qubits in :math:`|a\rangle`. Now, :math:`\bar{a}_j` in this section denotes 
-# the bit-flipped values. This is the first step of negation in two's complement: performing the additive inverse. The more familiar 
-# reader may notice this is equivalent to taking the one's complement. 
+# the bit-flipped values. This is the first of two steps step to negate a two's complement integer: taking the one's complement of the magnitude. 
+# The additive inverse is only completed by the :math:`+1` that follows, which we obtain for free from the all-zeros branch below. 
+# The keen reader may observe that we exploited the helpful fact about negating two's complement mentioned in the "Signed integers" section of this demo. 
 # 
 # Just as in the unsigned case, the action of the following Toffolis and the CCZ gate is to retain the amplitude of the branch 
 # if :math:`\bar{a}_j = \bar{b}_{n-2-j} = 1` and delete the amplitude otherwise (see above). 
