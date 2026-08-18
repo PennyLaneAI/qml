@@ -475,7 +475,7 @@ print(SEL_estimate.resource_decomp(10))
 # Since the number of calls to the block encoding in a :doc:`qubitization <demos/tutorial_qubitization>` simulation is directly proportional to the 1-norm, this trick halves the simulation cost at almost negligible additional
 # circuit depth relative to the cost of block encoding the first-quantized Hamiltonian itself. 
 # 
-This demo discussed a method to block encode signed integers, and alluded to how it can enable a more efficient block encoding of the kinetic energy operator for quantum chemistry applications. But this is just one part of the end-to-end quantum algorithm to simulate the quantum dynamics of various molecules detailed in the paper by Pocrnic et al. [#pocrnic]_. Make sure to check out the paper for the details, like reducing the number of subroutine calls from :math:`O(\eta)` to :math:`O(1)` using swap networks (over :math:`\eta` particles), and how to encode the Coulomb interaction using destructive interference!
+# This demo discussed a method to block encode signed integers, and alluded to how it can enable a more efficient block encoding of the kinetic energy operator for quantum chemistry applications. But this is just one part of the end-to-end quantum algorithm to simulate the quantum dynamics of various molecules detailed in the paper by Pocrnic et al. [#pocrnic]_. Make sure to check out the paper for the details, like reducing the number of subroutine calls from :math:`O(\eta)` to :math:`O(1)` using swap networks (over :math:`\eta` particles), and how to encode the Coulomb interaction using destructive interference!
 #
 # 
 # References
