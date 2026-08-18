@@ -470,7 +470,7 @@ print(SEL_estimate.resource_decomp(10))
 # `Lin Lin's lecture notes <https://arxiv.org/abs/2201.08309>`__ [#linlin]_ for more details). Applying it twice :math:`U_p Z_\Pi U_p Z_\Pi`
 # encodes the second-order Chebyshev polynomial :math:`T(p) = 2p^2 - \mathbb I`. 
 # 
-# The identity commutes with the Hamiltonian, so it shifts the spectrum without affecting the dynamics and can thus be ignored. 
+# The identity commutes with the Hamiltonian, so it shifts the spectrum without affecting the dynamics and can thus be ignored. Note that since this construction shifts the kinetic energy to be centred upon zero, were this block encoding called in a phase estimation the shift would need to be accounted for by undoing it classically (similar to how phase estimation outputs :math:`\text{arccos}(\lambda)` and this is accounted for classically in most qubitized QPE workflows).
 # The leading factor of 2 lets us block encode the mass coefficients as :math:`1/4m` rather than :math:`1/2m` in the PREP circuit, halving the overall 1-norm of the kinetic energy operator. 
 # Since the number of calls to the block encoding in a :doc:`qubitization <demos/tutorial_qubitization>` simulation is directly proportional to the 1-norm, this trick halves the simulation cost at almost negligible additional
 # circuit depth relative to the cost of block encoding the first-quantized Hamiltonian itself. 
