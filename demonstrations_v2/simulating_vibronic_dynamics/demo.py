@@ -24,7 +24,7 @@ vibronics algorithm can be implemented in PennyLane for a toy example. We will a
 to simulate state evolution for a simple electronic system to demonstrate the functionality
 and utility of this algorithm.
 
-A Note on Born-Oppenheimer
+A note on Born-Oppenheimer
 --------------------------
 In theoretical chemistry, classical simulations tend to make the 
 `Born-Oppenheimer approximation
@@ -44,8 +44,8 @@ limits. This is especially true when we set out to simulate `vibronic systems <h
 which is concerned with vibrational
 interactions between electrons and nuclei.
 
-Motlagh et al. aim to enable beyond Born-Oppenheimer simulation,
-enabling the limits of classical computation in dynamic simulations
+Motlagh et al. aim to enable beyond Born-Oppenheimer simulation
+with the goal of allowing the limits of classical computation in dynamic simulations
 to be overcome.
 
 The Köppel-Domcke-Cederbaum Hamiltonian
@@ -96,7 +96,7 @@ spectroscopy and energy transfer dynamics. For this
 demonstration, we will aim to simulate electronic state evolution for a
 small, simple system. 
 
-Grid Encoding
+Grid encoding
 -------------
 To keep our operations efficient, it is important to select a space
 representation that allows for easy basis transformation. In classical 
@@ -127,7 +127,7 @@ for our implementation, letting :math:`x \in \{-\frac{K}{2}, -\frac{K}{2}+1, \do
 size of our space and the number of qubits required for our system. We will consistently integrate this representation and the defined
 grid convention throughout our variable and circuit definitions.
 
-Fragmentation and Diagonalization
+Fragmentation and diagonalization
 ---------------------------------
 The Motlagh et al. vibronics algorithm is, at its core, a :doc:`Trotterization algorithm <demos/exploring_trotterization>`.
 To review, Trotterization is a Hamiltonian
@@ -196,7 +196,7 @@ def DiagonalizationScheme(fragment, electron_wires):
 # terms and potential terms. As defined, each has its own specifications, so we will
 # treat them individually.
 #
-# The Kinetic Step
+# The kinetic step
 # ----------------
 # The kinetic energy fragment is, comparatively, simple to establish
 # and evolve in time, so we will deal with it first. 
@@ -357,7 +357,7 @@ def KineticStep(time_step, kinetic_coeffs, num_modes, state_wires, gradient_wire
         qp.X(wires = state_wires[mode][0])
         qp.adjoint(qp.QFT)(wires = state_wires[mode])
 ###############################################################################
-# The Potential Step
+# The potential step
 # ------------------
 # The goal of the potential energy step is to construct the full potential
 # energy operator for each electron state and coupled
@@ -392,7 +392,6 @@ def LoadCoeffsKDC(fragment, output, electron_wires, coeff_wires, scratch_wires):
         target_wires=coeff_wires, work_wires=scratch_wires)
 
 ###############################################################################
-#
 # As shown in our QVC representation of :math:`\textbf{W'}`, we are only
 # concerned with scenarios with one or two mode states. Thus, in the case our system 
 # is quadratic, we need to apply an :class:`~pennylane.OutPoly`
@@ -500,7 +499,7 @@ def KDCFrag(fragment, load_coeffs, mode_list, coeff_array, state_wires, electron
 # Now that we have the tools we need to carry out a system-wide time evolution,
 # how exactly do we execute?
 #
-# Assembling the Trotter Step
+# Assembling the Trotter step
 # ---------------------------
 # It is up to us whether what Trotterization order we implement. While first order
 # Trotterization is less resource intensive, second order allows for reduced
@@ -599,7 +598,7 @@ state_wires = [regs[f"mode_{i}"] for i in range(num_modes)]
 # Calculate total wires
 total_wires = n + (num_modes * k) + (3 * b + 1 + (2 * k))
 ###############################################################################
-# Initial State Definition
+# Initial state definition
 # ------------------------
 # In "Quantum Algorithm for Vibronic Dynamics", the initial state of the KDC
 # system is taken to be a simple vertical excitation represented in product form
