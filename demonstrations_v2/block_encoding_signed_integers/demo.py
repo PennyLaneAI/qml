@@ -472,10 +472,10 @@ print(SEL_estimate.resource_decomp(10))
 # 
 # The identity commutes with the Hamiltonian, so it shifts the spectrum without affecting the dynamics and can thus be ignored. 
 # The leading factor of 2 lets us block encode the mass coefficients as :math:`1/4m` rather than :math:`1/2m` in the PREP circuit, halving the overall 1-norm of the kinetic energy operator. 
-# Since the number of steps in a :doc:`qubitization <demos/tutorial_qubitization>` walk scales with the 1-norm, and the 1-norm is usually the dominant cost, this trick halves the simulation cost at almost negligible additional
-# circuit depth next to the :math:`4n-3` Toffolis of the block encoding itself. 
+# Since the number of calls to the block encoding in a :doc:`qubitization <demos/tutorial_qubitization>` simulation is directly proportional to the 1-norm, this trick halves the simulation cost at almost negligible additional
+# circuit depth relative to the cost of block encoding the first-quantized Hamiltonian itself. 
 # 
-# See for yourself: build the walk operator :math:`U_p Z_\Pi` and use qubitization to check the halved 1-norm against the squaring route. Then, cost out a complete algorithm with :doc:`qubitized quantum phase estimation <demos/tutorial_re_for_qubitizedQPE>`, where this block encoding becomes one component of a much larger budget. Read the full analysis at each step in the paper by Pocrnic et al. [#pocrnic]_.
+This demo discussed a method to block encode signed integers, and alluded to how it can enable a more efficient block encoding of the kinetic energy operator for quantum chemistry applications. But this is just one part of the end-to-end quantum algorithm to simulate the quantum dynamics of various molecules detailed in the paper by Pocrnic et al. [#pocrnic]_. Make sure to check out the paper for the details, like reducing the number of subroutine calls from :math:`O(\eta)` to :math:`O(1)` using swap networks (over :math:`\eta` particles), and how to encode the Coulomb interaction using destructive interference!
 #
 # 
 # References
