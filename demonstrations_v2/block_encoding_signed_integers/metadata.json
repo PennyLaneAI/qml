@@ -14,9 +14,9 @@
     "dateOfLastModification": "2026-08-14T16:36:00+00:00",
     "categories": [
         "Quantum Computing",
-        "Algorithms",
+        "Algorithms"
     ],
-    "tags": ["Quantum Chemistry"],
+    "tags": ["Algorithms"],
     "previewImages": [
         {
             "type": "thumbnail",
