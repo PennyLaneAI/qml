@@ -53,8 +53,9 @@ For this implementation, the following resource state is prepared by the PREP ro
 
 :math:`|\sqrt{\mathtt{amp}_n}\rangle = \frac{1}{2^{(n-1)/2}} \Big[|0\rangle^{n-1}|1\rangle_s + \sum_{b=0}^{n-2} 2^{b/2} |b\rangle |0\rangle_s \Big]`
 
-where :math:`b` denotes a one-hot encoding of integers. That is, :math:`|0\rangle = |0\dots 1\rangle`, :math:`|1\rangle = |0\dots 10\rangle`, and :math:`|n-2\rangle = |10\dots 0\rangle`. 
-The all-zero state is the only state marked by :math:`|1\rangle_s` which serves as a flag qubit to help us encode the negative sign later. 
+where :math:`b` denotes a one-hot encoding of integers. That is, :math:`|0\rangle = |0\dots 1\rangle`, :math:`|1\rangle = |0\dots 10\rangle`, and :math:`|n-2\rangle = |10\dots 0\rangle`. Note that the amplitude :math:`2^{b/2}` encodes the amplitude of the corresponding integer. 
+
+The all-zero state is the only state marked by :math:`|1\rangle_s` which serves as a flag qubit to help us encode the negative sign later because it has an amplitude of :math:`1`, up to normalization. As elucidated in the "Signed integers" section of this demo, this helps us to eventually negate a positive number. 
 
 The PREP operator prepares this :math:`|\sqrt{\mathtt{amp}_n}\rangle` state along with a non-entangled :math:`|h\rangle = |+\rangle` state to enable destructive interference for amplitudes equalling zero later. 
 
@@ -157,13 +158,13 @@ def prepn():
 # 
 # With all bitwise amplitudes loaded in the :math:`b` register, SEL must allow a branch to survive if :math:`\bar{a}_j = \bar{b}_{n-2-j} = 1`, 
 # and set up destructive interference otherwise. The adjoint of PREP will square the surviving amplitudes, the sum of which block 
-# encodes :math:`a/2^{n-1}` up to the sign kicked back by CZ.
+# encodes :math:`a/2^{n-1}` up to the sign kicked back by CZ. We first show how SEL meets this criterion for non-negative :math:`a`, then what changes when :math:`a` is negative. 
 # 
 # Unsigned case 
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# For ease of explanation, let's first consider the unsigned case when a is non-negative. The sign bit :math:`\bar a_{n-1}=0`, so the initial CZ and 
-# CNOTs do nothing. SEL must allow a branch to survive if :math:`\bar{a}_j = \bar{b}_{n-2-j} = 1`, and set up destructive interference otherwise. 
+# For ease of explanation, let's first consider the unsigned case when :math:`a` is non-negative. The sign bit :math:`\bar a_{n-1}=0`, so the initial CZ and 
+# CNOTs do nothing. 
 # The action of SEL is as follows: 
 # 
 # - A Toffoli checks if :math:`\bar{a}_j = \bar{b}_{n-2-j} = 1`, and sets the flag qubit to be :math:`1` if so. (See the Note below) 
