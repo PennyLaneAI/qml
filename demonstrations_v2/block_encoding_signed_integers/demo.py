@@ -90,7 +90,7 @@ For :math:`n=3`, this performs :math:`|000\rangle\rightarrow \Big(\frac{1}{\sqrt
 This effectively represents a unary encoding. To obtain the complementary encoding, we must flip the bits with X gates, as seen in :ref:`Figure 2 <fig-2-amp>`. 
 For our example, we have :math:`\Big(\frac{1}{\sqrt{2}}|11\rangle + \frac{1}{2}(|01\rangle + |00\rangle)\Big)|0\rangle.`
 
-The :math:`n^{\text{th}}` qubit is used to encode the sign. To do so, we entangle the :math:`n-1` qubit all-zero state with the :math:`n^{\text{th}}` qubit 
+The :math:`n^{\text{th}}` (bottom) qubit is used as a flag to encode the sign. To do so, we entangle the :math:`n-1` qubit all-zero state with the :math:`n^{\text{th}}` qubit 
 via an open-controlled CNOT gate. For our :math:`n=3` example, that is :math:`\frac{1}{\sqrt{2}}|11\rangle|0\rangle_s + \frac{1}{2}|01\rangle|0\rangle_s + \frac{1}{2}|00\rangle|1\rangle_s.`
 
 Finally, we want to convert this unary encoding to a one-hot encoding with a rising cascade of CNOTs. 
@@ -202,7 +202,7 @@ def prepn():
 # Contrary to the unsigned case, now, we must add :math:`+1` to complete negation in two's complement. That :math:`+1` comes from the all-zeros 
 # branch :math:`|0\dots0\rangle|1\rangle_s`. Ordinarily, some extra arithmetic must be done, but a clever way comes from the realization 
 # that the amplitude of the all-zeros branch is :math:`2^0 = +1`. No Toffolis fire for this branch, irrespective of :math:`a`, meaning that the 
-# flag qubit is :math:`|0\rangle`. That allows CCZ to apply a Z gate. We established above that this Z gate can lead to the elimination of 
+# target ancilla qubit (initialized as :math:`\ket 0`) is :math:`|0\rangle`. That allows CCZ to apply a Z gate. We established above that this Z gate can lead to the elimination of 
 # this branch’s amplitude. However, the CCCZ gate controlled on :math:`|\mathtt{ctl}\rangle`, :math:`|s\rangle` (the marker qubit in :math:`\mathtt{amp_n}`), and 
 # the sign qubit finally fires when :math:`a` is negative to apply another Z gate, cancelling the first Z gate from CCZ. Therefore, the 
 # amplitude is correctly retained, adding :math:`+1` during the adjoint of PREP. 
