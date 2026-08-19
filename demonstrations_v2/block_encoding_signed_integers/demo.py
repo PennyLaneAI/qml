@@ -196,7 +196,7 @@ def prepn():
 # Firstly, the CZ between :math:`|\mathtt{ctl}\rangle` and the sign qubit kicks back a :math:`-1`, giving the block-encoded amplitude the negative sign. 
 # 
 # Secondly, the CNOTs controlled on the sign bit flip the lower :math:`n-1` qubits in :math:`|a\rangle`. Now, :math:`\bar{a}_j` in this section denotes 
-# the bit-flipped values. This is the first of two steps step to negate a two's complement integer: taking the one's complement of the magnitude. 
+# the bit-flipped values. This is the first of two steps to negate a two's complement integer: taking the one's complement of the lower :math`n-1` bits. 
 # The additive inverse is only completed by the :math:`+1` that follows, which we obtain for free from the all-zeros branch below. 
 # The keen reader may observe that we exploited the helpful fact about negating two's complement mentioned in the "Signed integers" section of this demo. 
 # 
