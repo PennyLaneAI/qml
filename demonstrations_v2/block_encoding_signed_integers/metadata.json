@@ -28,7 +28,8 @@
             "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-block-encoding-signed-integers-large-thumbnail.png"
         }
     ],
-    "seoDescription": "Learn how to block encode signed integers and its application",
+    "seoDescription": "Learn how to block encode signed integers and how to use it.",
+``
     "doi": "",
     "references": [
         {
