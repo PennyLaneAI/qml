@@ -3,7 +3,9 @@ on: [status]
 
 jobs:
   artifact-comment:
-    runs-on: ubuntu-latest
+    runs-on:
+      group: 'PennyLaneAI-Static-IP-Runners'
+      labels: ['pl-2-core-gh-runner']
     name: Run CircleCI artifacts redirector
     steps:
       - uses: actions/checkout@v5
