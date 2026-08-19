@@ -147,7 +147,7 @@ We can take each Hamiltonian fragment to be expressed as the operator
    H_m = \sum_{j=0}^{N-1}|j\rangle \langle m \oplus j|\otimes V_{j,m\oplus j},
 
 where :math:`m` and :math:`j` are electronic state indices. 
-Since :math:`|j\rangle \langle m \oplus j|\otimes` constructs the matrix geometry of
+Since :math:`|j\rangle \langle m \oplus j|` constructs the matrix geometry of
 the fragment, the difference between :math:`j` and :math:`m\oplus j` (representing the `Hamming
 weight <https://en.wikipedia.org/wiki/Hamming_weight>`_ in this case) will describe a fragment's proximity
 to a diagonal configuration and 
