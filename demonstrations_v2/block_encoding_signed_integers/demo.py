@@ -21,7 +21,7 @@ This demo will show how to block encode a register of signed integers by the tec
 While the proof may be found in the `paper <https://arxiv.org/abs/2602.11272>`__, this demo details the action of each part of 
 the PREP and SEL operators, provides a working circuit, and details how :doc:`PennyLane can estimate the resources <demos/re_how_to_use_pennylane_for_resource_estimation>` of this block encoding. 
 
-Specifically, we shall show how to go from a superposition of integers :math:`a` in `two’s complement <https://en.wikipedia.org/wiki/Two%27s_complement>`__ form 
+Specifically, we shall show how to go from a superposition of integers :math:`a` in `two's complement <https://en.wikipedia.org/wiki/Two%27s_complement>`__ form 
 e.g., :math:`\sum_a c_a |a\rangle`, where :math:`c_a` is a normalization coefficient, to a block encoding of :math:`a` such that :math:`\sum_a c_a |a\rangle \rightarrow \frac{1}{2^{n-1}} \sum_a c_a a |a\rangle`, where :math:`n` is the number of qubits. 
 
 Signed integers
@@ -67,7 +67,7 @@ The PREP operator prepares this :math:`|\sqrt{\mathtt{amp}_n}\rangle` state alon
   :width: 95%
   :align: center
 
-  Figure 1: PREP oracle is composed of :math:`|\sqrt{\mathtt{amp}_n}\rangle` in the circuit above. “:math:`\mathtt{Had}`” refers to the Hadamard gate.
+  Figure 1: PREP oracle is composed of :math:`|\sqrt{\mathtt{amp}_n}\rangle` in the circuit above. :math:`\mathtt{Had}` refers to the Hadamard gate.
   
 
 For example, for :math:`n = 3`, :math:`|\sqrt{\mathtt{amp}_n}\rangle = \frac{1}{2}|00\rangle|1\rangle_s + \frac{1}{2} |01\rangle|0\rangle_s + \frac{1}{\sqrt{2}} |10\rangle |0\rangle_s`.
@@ -175,7 +175,7 @@ def prepn():
 # opposite endianness. Rather than applying SWAP gates to correct this, it is more resource efficient to just reinterpret the endianness of 
 # :math:`|b\rangle` such that we invert the order of the Toffoli gates on that register as written above. 
 # 
-# Let us consider the scenario when :math:`\bar{a}_j = \bar{b}_{n-2-j} = 1`. We’d like to add its weight :math:`2^j` to the block encoding. 
+# Let us consider the scenario when :math:`\bar{a}_j = \bar{b}_{n-2-j} = 1`. We'd like to add its weight :math:`2^j` to the block encoding. 
 # The CCZ gate does not fire, leaving :math:`|h\rangle=|+\rangle` untouched. When this encounters the outgoing :math:`\langle+|` from the 
 # adjoint of PREP later on, the result is :math:`\langle +|+ \rangle= 1`: the branch survives, contributing its weight to be added up with 
 # the other surviving branches' weights. 
@@ -207,15 +207,15 @@ def prepn():
 # branch :math:`|0\dots0\rangle|1\rangle_s`. Ordinarily, some extra arithmetic must be done, but a clever way comes from the realization 
 # that the amplitude of the all-zeros branch is :math:`2^0 = +1`. No Toffolis fire for this branch, irrespective of :math:`a`, meaning that the 
 # target ancilla qubit (initialized as :math:`\ket 0`) is :math:`|0\rangle`. That allows CCZ to apply a Z gate. We established above that this Z gate can lead to the elimination of 
-# this branch’s amplitude. However, the CCCZ gate controlled on :math:`|\mathtt{ctl}\rangle`, :math:`|s\rangle` (the marker qubit in :math:`\mathtt{amp_n}`), and 
+# this branch's amplitude. However, the CCCZ gate controlled on :math:`|\mathtt{ctl}\rangle`, :math:`|s\rangle` (the marker qubit in :math:`\mathtt{amp_n}`), and 
 # the sign qubit finally fires when :math:`a` is negative to apply another Z gate, cancelling the first Z gate from CCZ. Therefore, the 
 # amplitude is correctly retained, adding :math:`+1` during the adjoint of PREP. 
 # 
 # For example, if :math:`a=-6`, the two's complement binary encoding is :math:`|a\rangle = |1010\rangle`. Flipping all but the sign bit gives 
-# :math:`|1101\rangle`. Ignoring the sign qubit, the state is :math:`|101\rangle = |5\rangle` (note that :math:`5` is the one’s complement). 
+# :math:`|1101\rangle`. Ignoring the sign qubit, the state is :math:`|101\rangle = |5\rangle` (note that :math:`5` is the one's complement). 
 # The all-zeros branch adds :math:`+1` (:math:`5+1=6=|-6|`) while the CZ provides the minus sign. Thus, :math:`|a=-6\rangle = -6 |-6\rangle`, up to normalization. 
 # 
-# In total, the SEL operator requires :math:`2n+1` Toffoli gates [#pocrnic]_
+# In total, the SEL operator requires :math:`2n+1` Toffoli gates [#pocrnic]_.
 # 
 # The following constructs the SEL operator as well as performs state preparation of the list of integers to be encoded: 
 
@@ -259,8 +259,8 @@ def prep_amp(a_num):
 
 n = 3
 b = [f"b_{i}" for i in range(n - 1)]   # ['b_0','b_1']
-anm1 = "anm1" # '$a_{n-1}$’
-a = [f"a_{i}" for i in range(n - 1)]   # ['a_0','a_1’]
+anm1 = "anm1" # '$a_{n-1}$'
+a = [f"a_{i}" for i in range(n - 1)]   # ['a_0','a_1']
 s = "s"
 h = "h"
 flag = "f"
@@ -468,7 +468,7 @@ print(SEL_estimate.resource_decomp(10))
 # But this construction leads to a better option than squaring. We can
 # build a walk operator :math:`U_p Z_\Pi`, where :math:`U_p` is the block encoding of the momentum operator that we've just detailed and :math:`Z_\Pi` is a reflection about the block encoding subspace (see Ch. 7.1 of
 # `Lin Lin's lecture notes <https://arxiv.org/abs/2201.08309>`__ [#linlin]_ for more details). Applying it twice :math:`U_p Z_\Pi U_p Z_\Pi`
-# encodes the second-order Chebyshev polynomial :math:`T(p) = 2p^2 - \mathbb I`. 
+# encodes the second-order Chebyshev polynomial :math:`T_2(p) = 2p^2 - \mathbb I`. 
 # 
 # The identity commutes with the Hamiltonian, so it shifts the spectrum without affecting the dynamics and can thus be ignored. Note that since this construction shifts the kinetic energy to be centred upon zero, were this block encoding called in a phase estimation the shift would need to be accounted for by undoing it classically (similar to how performing phase estimation on the walk operator outputs :math:`\text{arccos}(\lambda)` and this is accounted for classically in most :doc:`qubitized QPE <demos/tutorial_re_for_qubitizedQPE>` workflows).
 # The leading factor of 2 lets us block encode the mass coefficients as :math:`1/4m` rather than :math:`1/2m` in the PREP circuit, halving the overall 1-norm of the kinetic energy operator. 
@@ -490,7 +490,7 @@ print(SEL_estimate.resource_decomp(10))
 # 
 #     L. Lin
 #     "Lecture Notes on Quantum Algorithms for Scientific Computation"
-#     `arXiv:2201.08309 <https://arxiv.org/abs/2201.08309>`__, 2021.
+#     `arXiv:2201.08309 <https://arxiv.org/abs/2201.08309>`__, 2022. 
 # 
 # .. [#Su]
 # 
