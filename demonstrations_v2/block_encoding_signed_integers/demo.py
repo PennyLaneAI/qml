@@ -14,7 +14,7 @@ Such block encodings are key for :doc:`chemistry simulations in first quantizati
 
 In said simulations, a block encoding of the momentum operator :math:`\ket p \to p \ket p` is the building block of the kinetic energy operator; applying the block encoding twice yields a block encoding of :math:`p^2`. However, when wrapped in a walk operator the same construction also has a less obvious payoff: it provides a halved 1-norm construction yielding a doubly efficient :doc:`qubitization <demos/tutorial_qubitization>` simulation. 
 
-Applying this walk operator twice encodes the 2nd-order Chebyshev polynomial of :math:`2p^2 -\mathbb I` rather than :math:`p^2` alone, and the leading factor of 2 in that polynomial lets us encode the mass coefficients as :math:`1/4m` instead of :math:`1/2m`, thereby halving the 1-norm of the kinetic energy operator :math:`p^2/2m` at almost no additional circuit depth.
+Applying this walk operator twice encodes the 2nd-order Chebyshev polynomial :math:`2p^2 -\mathbb I` rather than :math:`p^2` alone, and the leading factor of 2 in that polynomial lets us encode the mass coefficients as :math:`1/4m` instead of :math:`1/2m`, thereby halving the 1-norm of the kinetic energy operator :math:`p^2/2m` at almost no additional circuit depth.
 Since the 1-norm sets the cost of :doc:`qubitization <demos/tutorial_qubitization>` and is usually the bottleneck, this is a substantial saving. We return to it in the conclusion, once the circuit is in hand.
 
 This demo will show how to block encode a register of signed integers by the technique elucidated by Pocrnic et al. [#pocrnic]_. 
