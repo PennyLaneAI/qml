@@ -57,7 +57,7 @@ where :math:`b` denotes a one-hot encoding of integers. That is, :math:`|0\rangl
 
 The all-zero state is the only state marked by :math:`|1\rangle_s` which serves as a flag qubit to help us encode the negative sign later because it has an amplitude of :math:`1`, up to normalization. As elucidated in the "Signed integers" section of this demo, this helps us to eventually negate a positive number. 
 
-The PREP operator prepares this :math:`|\sqrt{\mathtt{amp}_n}\rangle` state along with a non-entangled :math:`|h\rangle = |+\rangle` state to enable destructive interference for amplitudes equalling zero later. 
+The PREP operator prepares this :math:`|\sqrt{\mathtt{amp}_n}\rangle` state along with a non-entangled :math:`|h\rangle = |+\rangle` state to enable destructive interference for amplitudes equalling zero later. The circuit is shown below, in :ref:`Figure 1 <fig-1-PREP-oracle>`
 
 
 .. _fig-1-PREP-oracle:
@@ -134,7 +134,7 @@ def prepn():
     qp.H(h)
 
 ##########################################
-# For `fault-tolerant quantum computing <https://pennylane.ai/topics/fault-tolerant-quantum-computing>`__, the non-Clifford gate cost 
+# For `fault-tolerant quantum computing <https://pennylane.ai/topics/fault-tolerant-quantum-computing>`__, the `non-Clifford gate <https://pennylane.ai/compilation/clifford-t-gate-set>`__ cost 
 # is typically the most burdensome. The sole non-Clifford gates are the controlled-Hadamard gates, which may be constructed by 
 # one :class:`~.pennylane.Toffoli` gate each [#pocrnic]_. Therefore, an :math:`n`-qubit PREP circuit uses :math:`n-2` controlled-Hadamard gates, 
 # and thus costs :math:`n-2` Toffolis. 
@@ -158,7 +158,7 @@ def prepn():
 # 
 # With all bitwise amplitudes loaded in the :math:`b` register, SEL must allow a branch to survive if :math:`\bar{a}_j = \bar{b}_{n-2-j} = 1`, 
 # and set up destructive interference otherwise. The adjoint of PREP will square the surviving amplitudes, the sum of which block 
-# encodes :math:`a/2^{n-1}` up to the sign kicked back by CZ. We first show how SEL meets this criterion for non-negative :math:`a`, then what changes when :math:`a` is negative. 
+# encodes :math:`a/2^{n-1}` up to the sign kicked back by CZ. We first show how SEL, whose circuit may be seen in :ref:`Figure 3 <fig-3-sel>`, meets this criterion for non-negative :math:`a`, then what changes when :math:`a` is negative. 
 # 
 # Unsigned case 
 # ~~~~~~~~~~~~~~~~~~~~~~~~
