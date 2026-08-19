@@ -41,7 +41,7 @@ realistic dynamics of a molecular system, we lose access to approximations that
 allow for a reduction in the number of simulation variables and, as a result,
 the size of the system will very quickly exceed standard computational
 limits. This is especially true when we set out to simulate `vibronic systems <https://en.wikipedia.org/wiki/Vibronic_coupling>`_, 
-which is concerned with vibrational
+which are concerned with vibrational
 interactions between electrons and nuclei.
 
 Motlagh et al. aim to enable beyond Born-Oppenheimer simulation
@@ -71,7 +71,7 @@ in a truncated quadratic vibronic coupling (QVC) model as
 
 We can interpret this expression by understanding :math:`\lambda^{(i,j)}`,
 :math:`a_r^{(i,j)}`, and :math:`b_{rr'}^{(i,j)}` as coupling coefficients and
-:math:`\vec{Q_r}` as mode-dependent position operators (with :math:`r` being a specific mode) [#Motlagh2025]_. 
+:math:`Q_r` as mode-dependent position operators (with :math:`r` being a specific mode) [#Motlagh2025]_. 
 In this truncation, we deal with only the linear and quadratic coordinate terms, which is 
 adequate to both reduce error and ensure implementability.
 
@@ -144,8 +144,7 @@ scheme for `block diagonalization
 We can take each Hamiltonian fragment to be expressed as the operator
 
 .. math:: 
-   H_m = \sum_{j=0}^{N-1}|j\rangle \langle m \oplus j|\otimes
-   V_{j,m\oplus j},
+   H_m = \sum_{j=0}^{N-1}|j\rangle \langle m \oplus j|\otimesV_{j,m\oplus j},
 
 where :math:`m` and :math:`j` are electronic state indices. 
 Since :math:`|j\rangle \langle m \oplus j|\otimes` constructs the matrix geometry of
@@ -184,12 +183,13 @@ def DiagonalizationScheme(fragment, electron_wires):
             weight += 1
             bits.append(j)
 
+    # Apply the diagonalization scheme according to Hamming weight
     if weight == 1:
         qp.Hadamard(wires = electron_wires[bits[0]])
     elif weight > 1:
         ctrl_wire = electron_wires[bits[0]]
         for bit in bits[1:]:
-            qp.CNOT([ctrl_wire, electron_wires[bit]])
+            qp.CNOT(wires=[ctrl_wire, electron_wires[bit]])
         qp.Hadamard(wires=ctrl_wire)
 ###############################################################################
 # In the KDC Hamiltonian, it is intuitive to fragment our expression into kinetic
@@ -264,7 +264,7 @@ def AddPhaseGradient(k, cache_wires, coeff_wires, gradient_wires, scratch_wires,
     # Control on the spatial state register
         ctrl_wire = [cache_wires[point]]
 
-         #Index to the current position in the register
+         # Index to the current position in the register
         weight = 2*k - 1 - point
         target_length = len(gradient_wires) - weight
 
@@ -314,35 +314,35 @@ def KineticStep(time_step, kinetic_coeffs, num_modes, state_wires, gradient_wire
     K = 2 ** k
     b = len(gradient_wires)
 
-    #Set function to be executed by OutPoly()
+    # Set function to be executed by OutPoly()
     def f(x):
-        return (x - K//2) ** 2 #Signed Integer Representation
+        return (x - K//2) ** 2 # Signed Integer Representation
 
-    #Perform basis transformation
+    # Perform basis transformation
     for mode in range(num_modes):
         qp.QFT(wires=state_wires[mode])
         qp.X(wires=state_wires[mode][0])
 
-    #Loop full computational procedure over all modes
+    # Loop full computational procedure over all modes
     for i in range(num_modes):
 
-        #Compute coefficients
+        # Compute coefficients
         kin_coeff_raw = (kinetic_coeffs[i] * time_step * (2 ** b) / (2 * K))
         C = int(np.floor(kin_coeff_raw + 0.5))
 
         C_binary = format(C, f'0{len(coeff_wires)}b')
 
-        #Encode coefficients
+        # Encode coefficients
         for j, bit in enumerate(C_binary):
             if bit == '1':
                 qp.X(wires=coeff_wires[j])
 
-        #Square state
+        # Square state
         qp.OutPoly(f, input_registers = [state_wires[i]], output_wires = cache_wires)
         
         AddPhaseGradient(k, cache_wires, coeff_wires, gradient_wires, scratch_wires)
 
-        #Uncompute
+        # Uncompute
         qp.adjoint(qp.OutPoly)(
             f, 
             input_registers=[state_wires[i]], 
@@ -419,7 +419,7 @@ def PotentialStepLinear(fragment, load_coeffs, mode, time_coeffs, state_wires,
     k = len(state_wires[mode])
     K = 2 ** k
 
-    #Load pre-determined, electron state dependent coefficients
+    # Load pre-determined, electron state dependent coefficients
     load_coeffs(fragment, time_coeffs, electron_wires, coeff_wires, scratch_wires)
 
     qp.OutPoly(
@@ -477,7 +477,6 @@ def PotentialStepQuadratic(fragment, load_coeffs, mode1, mode2, time_coeffs,
 # multiplication step of the quadratic function. ``KDCFrag()`` handles this
 # using simple evaluation logic.
 
-#Fragmentation Scheme
 def KDCFrag(fragment, load_coeffs, mode_list, coeff_array, state_wires, electron_wires, 
         gradient_wires, coeff_wires, cache_wires, scratch_wires):
     
@@ -501,7 +500,7 @@ def KDCFrag(fragment, load_coeffs, mode_list, coeff_array, state_wires, electron
 #
 # Assembling the Trotter step
 # ---------------------------
-# It is up to us whether what Trotterization order we implement. While first order
+# It is up to us which Trotterization order we implement. While first order
 # Trotterization is less resource intensive, second order allows for reduced
 # `Trotter error
 # <https://arxiv.org/html/2606.30738v1>`_
@@ -538,15 +537,15 @@ def TrotterStepKDC(dt, frag_list, coupler, PotentialStep, KineticStep, kinetic_a
     KineticStep(half_dt, *kinetic_args)
 
     for fragment in frag_list:
-        #Diagonalization function
+        # Diagonalization function
         coupler(fragment, *coupler_args)
-        #Pass a function that can handle the potential step in the linear or quadratic case
+        # Pass a function that can handle the potential step in the linear or quadratic case
         PotentialStep(fragment, *potential_args)
         qp.adjoint(coupler)(fragment, *coupler_args)
 
-    #Second-order, reversed potential step
+    # Second-order, reversed potential step
     for fragment in reversed(frag_list):
-        #Diagonalization function
+        # Diagonalization function
         coupler(fragment, *coupler_args)
         PotentialStep(fragment, *potential_args)
         qp.adjoint(coupler)(fragment, *coupler_args)
@@ -585,7 +584,7 @@ b = int(math.ceil(np.log2(1 / delta)))
 
 regs = qp.registers({
     "electrons": n,
-    "states": {f"mode_{i}": k for i in range(num_modes)},   # must stay a dict
+    "states": {f"mode_{i}": k for i in range(num_modes)}, 
     "gradient": b,
     "coefficients": b,
     "scratch": b + 1,
@@ -686,7 +685,7 @@ time_coeffs = [[f"{v:0{width}b}" for v in row] for row in v_array]
 ################################################################################
 # Now, at long last, we can carry out our time evolution. 
 
-#Define argument lists
+# Define argument lists
 kinetic_args = [omega, num_modes, state_wires, regs["gradient"], regs["coefficients"], 
     regs["scratch"], regs["cache"]]
 
