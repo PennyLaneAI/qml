@@ -144,7 +144,7 @@ scheme for `block diagonalization
 We can take each Hamiltonian fragment to be expressed as the operator
 
 .. math:: 
-   H_m = \sum_{j=0}^{N-1}|j\rangle \langle m \oplus j|\otimesV_{j,m\oplus j},
+   H_m = \sum_{j=0}^{N-1}|j\rangle \langle m \oplus j|\otimes V_{j,m\oplus j},
 
 where :math:`m` and :math:`j` are electronic state indices. 
 Since :math:`|j\rangle \langle m \oplus j|\otimes` constructs the matrix geometry of
