@@ -12,9 +12,9 @@ function of that quantum register, which can be loaded with :doc:`QROM <demos/tu
 
 Such block encodings are key for :doc:`chemistry simulations in first quantization <demos/tutorial_resource_estimation>`, where the system qubits encode a discrete grid storing the positions or momenta of the nuclei and electrons. 
 
-In said simulations, a block encoding of the momentum operator :math:`\ket p \to p \ket p` is the building block of the kinetic energy operator; applying the block encoding twice yields a block encoding of :math:`p^2`. As we will discuss in the conclusion, the same block encoding unlocks more efficient walk operator constructions for :doc:`qubitization <demos/tutorial_qubitization>`.
+In said simulations, a block encoding of the momentum operator :math:`\ket p \to p \ket p` is the building block of the kinetic energy operator; applying the block encoding twice yields a block encoding of :math:`p^2`. However, when wrapped in a walk operator the same construction also has a less obvious payoff; it provides a halved 1-norm construction yielding a doubly efficient :doc:`qubitization <demos/tutorial_qubitization>` simulation. 
 
-The same construction also has a less obvious payoff. Wrapped in a walk operator, it encodes the 2nd-order Chebyshev polynomial of :math:`2p^2 -\mathbb I` rather than :math:`p^2` alone, and the leading factor of 2 in that polynomial lets us encode the mass coefficients as :math:`1/4m` instead of :math:`1/2m`, thereby halving the 1-norm of the kinetic energy operator :math:`p^2/2m` at almost no additional circuit depth.
+Applying this walk operator twice encodes the 2nd-order Chebyshev polynomial of :math:`2p^2 -\mathbb I` rather than :math:`p^2` alone, and the leading factor of 2 in that polynomial lets us encode the mass coefficients as :math:`1/4m` instead of :math:`1/2m`, thereby halving the 1-norm of the kinetic energy operator :math:`p^2/2m` at almost no additional circuit depth.
 Since the 1-norm sets the cost of :doc:`qubitization <demos/tutorial_qubitization>` and is usually the bottleneck, this is a substantial saving. We return to it in the conclusion, once the circuit is in hand.
 
 This demo will show how to block encode a register of signed integers by the technique elucidated by Pocrnic et al. [#pocrnic]_. 
@@ -99,7 +99,7 @@ via an open-controlled CNOT gate. For our :math:`n=3` example, that is :math:`\f
 Finally, we want to convert this unary encoding to a one-hot encoding with a rising cascade of CNOTs. 
 This yields the desired state :math:`|\sqrt{\mathtt{amp}_n}\rangle`. For :math:`n=3`, :math:`\frac{1}{\sqrt{2}}|10\rangle|0\rangle_s + \frac{1}{2}|01\rangle|0\rangle_s + \frac{1}{2}|00\rangle|1\rangle_s.`
 
-Note that the endianness of this register has now been flipped, ie. :math:`|001\rangle = |0\rangle`, :math:`|1\rangle = |010\rangle`, :math:`|2\rangle = |100\rangle`, etc. 
+Note that the one-hot label runs in the opposite direction to the wire order: Label :math:`|k\rangle` places its single :math:`1` on wire :math:`b_{n-2-k}`. Continuing the :math:`n=3` example, :math:`|0\rangle=|01\rangle` and :math:`|1\rangle=|10\rangle`, while for :math:`n=4`, we would have :math:`|001\rangle = |0\rangle`, :math:`|1\rangle = |010\rangle`, and :math:`|2\rangle = |100\rangle`. 
 The all-zero state does not have a meaning in this one-hot encoding. Rather than applying swaps to restore the ordering, 
 it is more gate efficient to just reinterpret the endianness in the SEL circuit, inverting the ordering of operations on :math:`|b\rangle`. 
 
@@ -470,7 +470,7 @@ print(SEL_estimate.resource_decomp(10))
 # `Lin Lin's lecture notes <https://arxiv.org/abs/2201.08309>`__ [#linlin]_ for more details). Applying it twice :math:`U_p Z_\Pi U_p Z_\Pi`
 # encodes the second-order Chebyshev polynomial :math:`T(p) = 2p^2 - \mathbb I`. 
 # 
-# The identity commutes with the Hamiltonian, so it shifts the spectrum without affecting the dynamics and can thus be ignored. Note that since this construction shifts the kinetic energy to be centred upon zero, were this block encoding called in a phase estimation the shift would need to be accounted for by undoing it classically (similar to how phase estimation outputs :math:`\text{arccos}(\lambda)` and this is accounted for classically in most :doc:`qubitized QPE <demos/tutorial_re_for_qubitizedQPE>` workflows).
+# The identity commutes with the Hamiltonian, so it shifts the spectrum without affecting the dynamics and can thus be ignored. Note that since this construction shifts the kinetic energy to be centred upon zero, were this block encoding called in a phase estimation the shift would need to be accounted for by undoing it classically (similar to how performing phase estimation on the walk operator outputs :math:`\text{arccos}(\lambda)` and this is accounted for classically in most :doc:`qubitized QPE <demos/tutorial_re_for_qubitizedQPE>` workflows).
 # The leading factor of 2 lets us block encode the mass coefficients as :math:`1/4m` rather than :math:`1/2m` in the PREP circuit, halving the overall 1-norm of the kinetic energy operator. 
 # Since the number of calls to the block encoding in a :doc:`qubitization <demos/tutorial_qubitization>` simulation is directly proportional to the 1-norm, this trick halves the simulation cost at almost negligible additional
 # circuit depth relative to the cost of block encoding the first-quantized Hamiltonian itself. 
