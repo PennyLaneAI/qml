@@ -1,0 +1,85 @@
+{
+  "title": "Quantum algorithm for simulating resonant inelastic X-ray scattering",
+  "authors": [
+    {
+      "username": "emgem"
+    }
+  ],
+  "executable_stable": true,
+  "executable_latest": true,
+  "dateOfPublication": "2026-07-13T00:00:00+00:00",
+  "dateOfLastModification": "2026-07-13T00:00:00+00:00", 
+  "categories": ["Algorithms", "Quantum Chemistry"],
+  "tags": ["Algorithms", "Simulation", "Quantum Chemistry", "Battery Simulation"],
+  "previewImages": [
+    {
+      "type": "thumbnail",
+      "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-simulating-RIXS-thumbnail.png"
+    },
+     {
+      "type": "large_thumbnail",
+      "uri": "/_static/demo_thumbnails/large_demo_thumbnails/pennylane-demo-simulating-RIXS-large-thumbnail.png"
+    }
+  ],
+  "seoDescription": "Advanced material discovery and quantum simulation often relies on a strong understanding of molecular structure. Could quantum algorithms be the key to achieving this?",
+  "doi": "",
+  "references": [
+    {
+      "id": "Loaiza2026",
+      "type": "article",
+      "title": "Quantum algorithm for simulating resonant inelastic X-ray scattering in battery materials",
+      "authors": "Loaiza, Kunitsa, Fomichev, Motlagh, Dhawan, Jahangiri, Fuglsbjerg, Izmaylov, Wiebe, Abu-Lebdeh, Arrazola, Delgado",
+      "year": "2026",
+      "doi": "10.48550/arXiv.2602.20270",
+      "url": "https://doi.org/10.48550/arXiv.2602.20270"
+    },
+    {
+      "id": "Caesura2025",
+      "type": "article",
+      "title": "Faster quantum chemistry simulations simulations on a quantum computer with improved tensor factorization and active volume compilation",
+      "authors": "Caesura, Cortes, Pol, Sim, Steudtner, Anselmetti, Degroote, Moll, Santagati, Streif, and Tautermann",
+      "year": "2025",
+      "doi": "10.1103/yngp-5fpm",
+      "url": "https://link.aps.org/doi/10.1103/yngp-5fpm"
+    },
+    {
+      "id": "Lee2021",
+      "type": "article",
+      "title": "Even more efficient quantum computations of chemistry through tensor hypercontraction",
+      "authors": "Lee, Berry, Gidney, Huggins, McClean, Wiebe, and Babbush",
+      "year": "2021",
+      "doi": "10.1103/PRXQuantum.2.030305",
+      "url": "https://link.aps.org/doi/10.1103/PRXQuantum.2.030305"
+    },
+    {
+      "id": "Loaiza2024",
+      "type": "article",
+      "title": "Nonlinear Spectroscpy via Generalized Quantum Phase Estimation",
+      "authors": "Loaiza, Motlagh, Hejazi, Zini, Delgado, and Arrazola",
+      "year": "2024",
+      "doi": "10.22331/q-2025-08-07-1822",
+      "url": "https://doi.org/10.22331/q-2025-08-07-1822"
+    }
+  ],
+  "basedOnPapers": [
+    "10.48550/arXiv.2602.20270"
+  ],
+  "referencedByPapers": [],
+  "relatedContent": [
+    {
+      "type":"demonstration",
+      "id": "tutorial_estimator_hamiltonian_simulation_gqsp",
+      "weight": 1.0
+    },
+    {
+      "type":"demonstration",
+      "id": "tutorial_intro_amplitude_amplification",
+      "weight": 1.0
+    },
+    {
+      "type":"demonstration",
+      "id": "tutorial_qpe",
+      "weight": 1.0
+    }
+  ]
+}
