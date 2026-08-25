@@ -167,9 +167,9 @@ def prepn():
 # CNOTs do nothing. 
 # The action of SEL is as follows: 
 # 
-# - A Toffoli checks if :math:`\bar{a}_j = \bar{b}_{n-2-j} = 1`, and sets the SEL scratch qubit (the qubit initialised as :math:`|0\rangle`) to be :math:`1` if so. (See the Note below) 
-# - A CCZ gate targeting the :math:`|h\rangle=|+\rangle` qubit is controlled on the :math:`\mathtt{ctl}` qubit and open-controlled on this flag qubit. Only a branch that sets the SEL scratch qubit (the qubit initialised as :math:`|0\rangle`) to be :math:`0` leads to the CCZ gate firing. 
-# - The SEL scratch qubit (the qubit initialised as :math:`|0\rangle`) is uncomputed by another Toffoli
+# - A Toffoli checks if :math:`\bar{a}_j = \bar{b}_{n-2-j} = 1`, and sets the SEL scratch qubit (the qubit initialized as :math:`|0\rangle`) to be :math:`1` if so. (See the Note below) 
+# - A CCZ gate targeting the :math:`|h\rangle=|+\rangle` qubit is controlled on the :math:`\mathtt{ctl}` qubit and open-controlled on this flag qubit. Only a branch that sets the SEL scratch qubit to be :math:`0` leads to the CCZ gate firing. 
+# - The SEL scratch qubit is uncomputed by another Toffoli
 # 
 # Note: While it may seem like we would want to control on :math:`\bar{a}_j` and :math:`\bar{b}_j`, observe that the nature of PREP encodes :math:`|b\rangle` with the 
 # opposite endianness. Rather than applying SWAP gates to correct this, it is more resource efficient to just reinterpret the endianness of 
@@ -206,14 +206,14 @@ def prepn():
 # Contrary to the unsigned case, now, we must add :math:`+1` to complete negation in two's complement. That :math:`+1` comes from the all-zeros 
 # branch :math:`|0\dots0\rangle|1\rangle_s`. Ordinarily, some extra arithmetic must be done, but a clever way comes from the realization 
 # that the amplitude of the all-zeros branch is :math:`2^0 = +1`. No Toffolis fire for this branch, irrespective of :math:`a`, meaning that the 
-# target ancilla qubit (the SEL scratch qubit initialized as :math:`\ket 0`) is :math:`|0\rangle`. That allows CCZ to apply a Z gate. We established above that this Z gate can lead to the elimination of 
-# this branch's amplitude. However, the CCCZ gate controlled on :math:`|\mathtt{ctl}\rangle`, :math:`|s\rangle` (the marker qubit in :math:`\mathtt{amp_n}`), and 
+# target ancilla qubit (the SEL scratch qubit initialized as :math:`\ket 0`) remains as :math:`|0\rangle`. That allows CCZ to apply a Z gate. We established above that this Z gate can lead to the elimination of 
+# this branch's amplitude. However, the CCCZ gate controlled on :math:`|\mathtt{ctl}\rangle`, :math:`|s\rangle` (the :math:`s` qubit in :math:`\mathtt{amp_n}`), and 
 # the sign qubit finally fires when :math:`a` is negative to apply another Z gate, cancelling the first Z gate from CCZ. Therefore, the 
 # amplitude is correctly retained, adding :math:`+1` during the adjoint of PREP. 
 # 
 # For example, if :math:`a=-6`, the two's complement binary encoding is :math:`|a\rangle = |1010\rangle`. Flipping all but the sign bit gives 
 # :math:`|1101\rangle`. Ignoring the sign qubit, the state is :math:`|101\rangle = |5\rangle` (note that :math:`5` is the one's complement). 
-# The all-zeros branch adds :math:`+1` (:math:`5+1=6=|-6|`) while the CZ provides the minus sign. Thus, :math:`|a=-6\rangle = -6 |-6\rangle`, up to the :math:`2^{n-1}` normalization. 
+# The all-zeros branch adds :math:`+1` (:math:`5+1=6=|-6|`) while the CZ provides the minus sign. Thus, :math:`|a=-6\rangle \rightarrow -6 |-6\rangle`, up to the :math:`2^{n-1}` normalization. 
 # 
 # In total, the SEL operator requires :math:`2n+1` Toffoli gates [#pocrnic]_.
 # 
@@ -316,7 +316,7 @@ print("Is the +2 amplitude correct? ", np.allclose(output[index_010], correct_am
 import pennylane.estimator as qre
 
 class AmpNResOp(qre.ResourceOperator):
-    """
+    r"""
     For a given number of qubits n, calculates the resources required to prepare an |\sqrt{amp_n}> state with the amp_n circuit. 
     """
 
@@ -364,7 +364,7 @@ class AmpNResOp(qre.ResourceOperator):
         return gate_cost
 
 ##########################################
-# Next we build the SelAmp resource operator: 
+# Next we build the SelAmpResOp resource operator: 
 
 class SelAmpResOp(qre.ResourceOperator):
     """
