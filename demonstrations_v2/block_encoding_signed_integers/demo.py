@@ -53,7 +53,7 @@ For this implementation, the following resource state is prepared by the PREP ro
 
 :math:`|\sqrt{\mathtt{amp}_n}\rangle = \frac{1}{2^{(n-1)/2}} \Big[|0\rangle^{n-1}|1\rangle_s + \sum_{b=0}^{n-2} 2^{b/2} |b\rangle |0\rangle_s \Big]`
 
-where :math:`b` denotes a one-hot encoding of integers. That is, :math:`|0\rangle = |0\dots 1\rangle`, :math:`|1\rangle = |0\dots 10\rangle`, and :math:`|n-2\rangle = |10\dots 0\rangle`. Note that the amplitude :math:`2^{b/2}` encodes the amplitude of the corresponding integer. 
+where :math:`b` denotes a one-hot encoding of integers. That is, :math:`|0\rangle = |0\dots 1\rangle`, :math:`|1\rangle = |0\dots 10\rangle`, and :math:`|n-2\rangle = |10\dots 0\rangle`. Note that the amplitude :math:`2^{b/2}` is the square root of the weight :math:`2^b` carried by bit :math:`b`; the adjoint of PREP squares it back to :math:`2^b` later. 
 
 The all-zero state is the only state marked by :math:`|1\rangle_s` which serves as a flag qubit to help us encode the negative sign later because it has an amplitude of :math:`1`, up to normalization. As elucidated in the "Signed integers" section of this demo, this helps us to eventually negate a positive number. 
 
@@ -99,7 +99,7 @@ via an open-controlled CNOT gate. For our :math:`n=3` example, that is :math:`\f
 Finally, we want to convert this unary encoding to a one-hot encoding with a rising cascade of CNOTs. 
 This yields the desired state :math:`|\sqrt{\mathtt{amp}_n}\rangle`. For :math:`n=3`, :math:`\frac{1}{\sqrt{2}}|10\rangle|0\rangle_s + \frac{1}{2}|01\rangle|0\rangle_s + \frac{1}{2}|00\rangle|1\rangle_s.`
 
-Note that the one-hot label runs in the opposite direction to the wire order: Label :math:`|k\rangle` places its single :math:`1` on wire :math:`b_{n-2-k}`. Continuing the :math:`n=3` example, :math:`|0\rangle=|01\rangle` and :math:`|1\rangle=|10\rangle`, while for :math:`n=4`, we would have :math:`|001\rangle = |0\rangle`, :math:`|1\rangle = |010\rangle`, and :math:`|2\rangle = |100\rangle`. 
+Note that the one-hot label runs in the opposite direction to the wire order: Label :math:`|k\rangle` places its single :math:`1` on wire :math:`b_{n-2-k}`. Continuing the :math:`n=3` example, :math:`|0\rangle=|01\rangle` and :math:`|1\rangle=|10\rangle`, while for :math:`n=4`, we would have :math:`|0\rangle = |001\rangle`, :math:`|1\rangle = |010\rangle`, and :math:`|2\rangle = |100\rangle`. 
 The all-zero state does not have a meaning in this one-hot encoding. Rather than applying swaps to restore the ordering, 
 it is more gate efficient to just reinterpret the endianness in the SEL circuit, inverting the ordering of operations on :math:`|b\rangle`. 
 
@@ -167,9 +167,9 @@ def prepn():
 # CNOTs do nothing. 
 # The action of SEL is as follows: 
 # 
-# - A Toffoli checks if :math:`\bar{a}_j = \bar{b}_{n-2-j} = 1`, and sets the flag qubit to be :math:`1` if so. (See the Note below) 
-# - A CCZ gate targeting the :math:`|h\rangle=|+\rangle` qubit is controlled on the :math:`\mathtt{ctl}` qubit and open-controlled on this flag qubit. Only a branch that sets the flag qubit to be :math:`0` leads to the CCZ gate firing. 
-# - The flag is uncomputed by another Toffoli
+# - A Toffoli checks if :math:`\bar{a}_j = \bar{b}_{n-2-j} = 1`, and sets the SEL scratch qubit (the qubit initialised as :math:`|0\rangle`) to be :math:`1` if so. (See the Note below) 
+# - A CCZ gate targeting the :math:`|h\rangle=|+\rangle` qubit is controlled on the :math:`\mathtt{ctl}` qubit and open-controlled on this flag qubit. Only a branch that sets the SEL scratch qubit (the qubit initialised as :math:`|0\rangle`) to be :math:`0` leads to the CCZ gate firing. 
+# - The SEL scratch qubit (the qubit initialised as :math:`|0\rangle`) is uncomputed by another Toffoli
 # 
 # Note: While it may seem like we would want to control on :math:`\bar{a}_j` and :math:`\bar{b}_j`, observe that the nature of PREP encodes :math:`|b\rangle` with the 
 # opposite endianness. Rather than applying SWAP gates to correct this, it is more resource efficient to just reinterpret the endianness of 
@@ -200,20 +200,20 @@ def prepn():
 # The additive inverse is only completed by the :math:`+1` that follows, which we obtain for free from the all-zeros branch below. 
 # The keen reader may observe that we exploited the helpful fact about negating two's complement mentioned in the "Signed integers" section of this demo. 
 # 
-# Just as in the unsigned case, the action of the following Toffolis and the CCZ gate is to retain the amplitude of the branch 
-# if :math:`\bar{a}_j = \bar{b}_{n-2-j} = 1` and delete the amplitude otherwise (see above). 
+# Just as in the unsigned case, the following Toffolis and CCZ gate apply the same survival criterion, now to the
+# bit-flipped :math:`\bar{a}_j`.
 # 
 # Contrary to the unsigned case, now, we must add :math:`+1` to complete negation in two's complement. That :math:`+1` comes from the all-zeros 
 # branch :math:`|0\dots0\rangle|1\rangle_s`. Ordinarily, some extra arithmetic must be done, but a clever way comes from the realization 
 # that the amplitude of the all-zeros branch is :math:`2^0 = +1`. No Toffolis fire for this branch, irrespective of :math:`a`, meaning that the 
-# target ancilla qubit (initialized as :math:`\ket 0`) is :math:`|0\rangle`. That allows CCZ to apply a Z gate. We established above that this Z gate can lead to the elimination of 
+# target ancilla qubit (the SEL scratch qubit initialized as :math:`\ket 0`) is :math:`|0\rangle`. That allows CCZ to apply a Z gate. We established above that this Z gate can lead to the elimination of 
 # this branch's amplitude. However, the CCCZ gate controlled on :math:`|\mathtt{ctl}\rangle`, :math:`|s\rangle` (the marker qubit in :math:`\mathtt{amp_n}`), and 
 # the sign qubit finally fires when :math:`a` is negative to apply another Z gate, cancelling the first Z gate from CCZ. Therefore, the 
 # amplitude is correctly retained, adding :math:`+1` during the adjoint of PREP. 
 # 
 # For example, if :math:`a=-6`, the two's complement binary encoding is :math:`|a\rangle = |1010\rangle`. Flipping all but the sign bit gives 
 # :math:`|1101\rangle`. Ignoring the sign qubit, the state is :math:`|101\rangle = |5\rangle` (note that :math:`5` is the one's complement). 
-# The all-zeros branch adds :math:`+1` (:math:`5+1=6=|-6|`) while the CZ provides the minus sign. Thus, :math:`|a=-6\rangle = -6 |-6\rangle`, up to normalization. 
+# The all-zeros branch adds :math:`+1` (:math:`5+1=6=|-6|`) while the CZ provides the minus sign. Thus, :math:`|a=-6\rangle = -6 |-6\rangle`, up to the :math:`2^{n-1}` normalization. 
 # 
 # In total, the SEL operator requires :math:`2n+1` Toffoli gates [#pocrnic]_.
 # 
@@ -287,7 +287,7 @@ qp.draw_mpl(block_encoding)(a_value)
 
 
 ##########################################
-# To confirm the circuit works as expected, we calculate the correct amplitudes. We also  identify the relevant amplitude in the statevector, 
+# To confirm the circuit works as expected, we calculate the correct amplitudes. We also identify the relevant amplitude in the statevector, 
 # assuming the particular wire ordering shown in the above figure and that the 
 # auxiliary qubits must end as :math:`|0\rangle`. 
 
@@ -366,7 +366,7 @@ class AmpN_estimator(qre.ResourceOperator):
 ##########################################
 # Next we build the SelAmp resource operator: 
 
-class SelAmp(qre.ResourceOperator):
+class SelAmp_estimator(qre.ResourceOperator):
     """
     Given an amp state and an input state of size :math:`n`, calculates the resources required to apply the select operator that
     block encodes a signed integer.
@@ -440,7 +440,7 @@ print(PREP_estimate.resource_decomp(10))
 ##########################################
 # and for SEL, 
 
-SEL_estimate = SelAmp(10)
+SEL_estimate = SelAmp_estimator(10)
 print(SEL_estimate.resource_decomp(10))
 
 ##########################################
