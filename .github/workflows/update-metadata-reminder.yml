@@ -5,7 +5,9 @@ on:
 
 jobs:
   reminder:
-    runs-on: ubuntu-latest
+    runs-on:
+      group: 'PennyLaneAI-Static-IP-Runners'
+      labels: ['pl-2-core-gh-runner']
     steps:
     - uses: actions/github-script@v7
       with:
