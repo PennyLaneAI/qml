@@ -446,7 +446,7 @@ print(SEL_estimate.resource_decomp(10))
 ##########################################
 # Therefore, the total cost of PREP-SEL-PREP is :math:`2\times` PREP cost + SEL cost from above. 
 # 
-# In general, the total cost of this block encoding is :math:`4n-3` Toffoli gates. 
+# In general, the total cost of this block encoding is :math:`4n-3` Toffoli gates. Refer to the paper for the full details. If you'd like to count them up yourself, it's helpful to know that Adjoint(TemporaryAND) is free, otherwise you might count up :math:`4n-2`. 
 # 
 # Using this method allows block encoding of kinetic energy operators via a walk operator with a shifted spectrum, 
 # reducing the 1-norm by a factor of 2. See the paper by Pocrnic et al. [#pocrnic]_ for more details. 
