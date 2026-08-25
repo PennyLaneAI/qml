@@ -316,7 +316,7 @@ print("Is the +2 amplitude correct? ", np.allclose(output[index_010], correct_am
 import pennylane.estimator as qre
 
 class AmpNResOp(qre.ResourceOperator):
-    r"""
+    """
     For a given number of qubits n, calculates the resources required to prepare an |\sqrt{amp_n}> state with the amp_n circuit. 
     """
 
