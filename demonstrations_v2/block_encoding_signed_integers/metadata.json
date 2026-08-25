@@ -10,8 +10,8 @@
     ],
     "executable_stable": true,
     "executable_latest": true,
-    "dateOfPublication": "2026-08-20T16:30:00+00:00",
-    "dateOfLastModification": "2026-08-20T16:36:00+00:00",
+    "dateOfPublication": "2026-08-25T16:30:00+00:00",
+    "dateOfLastModification": "2026-08-25T16:36:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms",
@@ -75,7 +75,7 @@
         },
         {
             "type": "demonstration",
-            "id": "tutorial_xas",
+            "id": "tutorial_qubitization",
             "weight": 0.5
         }
     ]
