@@ -315,7 +315,7 @@ print("Is the +2 amplitude correct? ", np.allclose(output[index_010], correct_am
 
 import pennylane.estimator as qre
 
-class AmpN_estimator(qre.ResourceOperator):
+class AmpNResOp(qre.ResourceOperator):
     """
     For a given number of qubits n, calculates the resources required to prepare an |\sqrt{amp_n}> state with the amp_n circuit. 
     """
@@ -366,7 +366,7 @@ class AmpN_estimator(qre.ResourceOperator):
 ##########################################
 # Next we build the SelAmp resource operator: 
 
-class SelAmp_estimator(qre.ResourceOperator):
+class SelAmpResOp(qre.ResourceOperator):
     """
     Given an amp state and an input state of size :math:`n`, calculates the resources required to apply the select operator that
     block encodes a signed integer.
@@ -434,13 +434,13 @@ class SelAmp_estimator(qre.ResourceOperator):
 ##########################################
 # With these resource estimation operators, we can estimate the resource cost of PREP-SEL-PREP for :math:`n=10` to be: 
 
-PREP_estimate = AmpN_estimator(10)
+PREP_estimate = AmpNResOp(10)
 print(PREP_estimate.resource_decomp(10))
 
 ##########################################
 # and for SEL, 
 
-SEL_estimate = SelAmp_estimator(10)
+SEL_estimate = SelAmpResOp(10)
 print(SEL_estimate.resource_decomp(10))
 
 ##########################################
