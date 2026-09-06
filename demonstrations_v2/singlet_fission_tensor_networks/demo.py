@@ -407,9 +407,9 @@ def circuit():
 # Conclusion
 # ----------
 # 
-# In this demo, we simulated the vibronic dynamics of singlet fission — a quantum algorithm originally
-# designed for future quantum hardware — using classical tensor network methods on Qoro Quantum’s
-# Maestro simulator via PennyLane. The key takeaways:
+# In this demo, we simulated the active-space vibronic dynamics of singlet fission in an organic
+# chromophore using classical tensor network methods on Qoro Quantum’s Maestro simulator via PennyLane.
+# The key takeaways:
 # 
 # -  **Tensor networks can simulate quantum algorithms at scale.** The 60-qubit, 19-mode singlet
 #    fission circuit runs efficiently with MPS, enabling detailed convergence analysis and parameter
@@ -424,9 +424,11 @@ def circuit():
 #    advantage grows with :math:`\chi`, making GPU-accelerated MPS the practical choice for
 #    production-quality tensor network simulations.
 # 
-# -  **Classical baselines sharpen quantum advantage.** By pushing MPS simulation to its limits, we
-#    can identify exactly where classical methods fail — and where quantum hardware becomes essential.
-#    This is a critical step in building the case for practical quantum advantage in chemistry.
+# -  **Classical baselines sharpen quantum advantage.** By pushing MPS simulation to its limits on
+#    active spaces, we establish a rigorous classical baseline that clarifies the boundary for quantum
+#    computing: while GPU-accelerated tensor networks can efficiently tackle isolated molecules at
+#    ultrafast timescales, full condensed-phase environments and long-time transport remain the essential
+#    domain of fault-tolerant quantum hardware.
 # 
 # -  **PennyLane makes it seamless.** Switching between CPU and GPU backends requires changing a
 #    single parameter (``simulator_type``). The same PennyLane circuit code runs on statevector, CPU
