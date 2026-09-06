@@ -41,8 +41,9 @@ r"""Simulating Singlet Fission Dynamics with GPU-Accelerated Tensor Networks
 # The vibronic Hamiltonian
 # ------------------------
 # 
-# The system we’re simulating is an anthracene dimer — two anthracene molecules whose electronic
-# states are coupled to 19 vibrational (phonon) modes. The vibronic Hamiltonian takes the form [#quantumalgorithm]_:
+# The system we’re simulating is an ab initio active-space model of the :math:`\text{(NO)}_4\text{-anthracene}`
+# chromophore — an organic photovoltaic material whose 5 electronic states are coupled to 19 dominant
+# vibrational (phonon) modes. The vibronic Hamiltonian takes the form [#quantumalgorithm]_:
 # 
 # .. math::
 # 
@@ -356,33 +357,50 @@ def circuit():
 # 
 
 ######################################################################
-# Where classical simulation meets its limits
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Where classical simulation meets its limits — and where QPUs become essential
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# An important question emerges from these results: if MPS can simulate the 60-qubit vibronic dynamics
-# circuit efficiently, where does classical simulation *stop* working?
+# While GPU-accelerated MPS efficiently simulates this 60-qubit active-space model, classical tensor
+# networks face steep scaling limits. Quantum hardware becomes indispensable across three key frontiers:
 # 
-# In this demo we used :math:`n_q = 3` qubits per vibrational mode (8 grid points). The converged bond
-# dimension was :math:`\chi = 256` — large enough to require GPU acceleration, but ultimately
-# tractable. What happens when we push further?
+# -  **Simulation time**: Entanglement entropy grows linearly with time (:math:`S \propto t`), causing
+#    the required bond dimension to explode exponentially (:math:`\chi \propto e^{vt}`). MPS handles
+#    ultrafast dynamics (:math:`\le 100\text{ fs}`), but long-time dynamics (relaxation, transport)
+#    demand quantum computers, where circuit depth scales linearly (:math:`\mathcal{O}(t)`).
 # 
-# -  **Higher grid resolution** (:math:`n_q = 4`, 79 qubits): Doubling the Hilbert space per mode
-#    increases the number of Pauli rotation gates and deepens the entanglement generated per Trotter
-#    step. The required :math:`\chi` could grow significantly.
+# -  **System size & environment**: 19 modes capture the active space of an isolated chromophore. Modeling
+#    full donor-acceptor interfaces—such as the 246-mode Anthracene/:math:`\text{C}_{60}` system in Motlagh
+#    et al. [#quantumalgorithm]_ (1,053 qubits)—induces dense long-range entanglement beyond classical MPS reach.
 # 
-# -  **Longer evolution times**: Entanglement entropy typically grows with simulation time. Our 10
-#    a.u. evolution already shows :math:`\chi`-sensitivity — longer simulations may push bond
-#    dimension requirements beyond what even GPU-accelerated MPS can handle.
+# -  **Grid discretization**: Increasing resolution (:math:`n_q = 4`, 79 qubits) doubles the local
+#    Hilbert space, rapidly compounding entanglement per Trotter step.
 # 
-# -  **Larger molecular systems**: Multi-dimer or multi-chromophore systems introduce inter-molecular
-#    electronic couplings that create long-range entanglement across the MPS chain — precisely the
-#    regime where MPS compression breaks down.
+# .. list-table::
+#    :header-rows: 1
 # 
-# Establishing where this boundary lies — where the best classical methods fail — is valuable in its
-# own right. It defines the regime where quantum hardware offers a genuine advantage, and provides a
-# rigorous classical baseline against which quantum results can be validated. GPU-accelerated MPS
-# pushes that baseline as far as classical hardware allows, making the case for quantum advantage
-# stronger and more precise.
+#    * - Regime
+#      - Method
+#      - Qubits / Modes
+#      - Timescale
+#      - Bottleneck
+#    * - **Exact Statevector**
+#      - Classical CPU/GPU
+#      - < 30 qubits (:math:`M \le 6`)
+#      - Any
+#      - Memory (:math:`2^N`)
+#    * - **Active-Space MPS**
+#      - **Maestro + PennyLane**
+#      - **30–80 qubits (:math:`M \approx 19`)**
+#      - **Ultrafast (:math:`\le 100\text{ fs}`)**
+#      - **Bond dimension (:math:`\chi \propto e^t`)**
+#    * - **Full Interface / Bulk**
+#      - **Fault-Tolerant QPU**
+#      - **1,000+ qubits (:math:`M \ge 246`)**
+#      - **Long-time (ps+)**
+#      - **Physical gate depth / errors**
+# 
+# GPU-accelerated MPS pushes the classical baseline for molecular active spaces, clarifying exactly where
+# quantum advantage begins for full-scale material simulation.
 # 
 
 ######################################################################
