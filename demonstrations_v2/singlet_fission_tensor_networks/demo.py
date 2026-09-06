@@ -368,9 +368,10 @@ def circuit():
 #    ultrafast dynamics (:math:`\le 100\text{ fs}`), but long-time dynamics (relaxation, transport)
 #    demand quantum computers, where circuit depth scales linearly (:math:`\mathcal{O}(t)`).
 # 
-# -  **System size & environment**: 19 modes capture the active space of an isolated chromophore. Modeling
-#    full donor-acceptor interfaces—such as the 246-mode Anthracene/:math:`\text{C}_{60}` system in Motlagh
-#    et al. [#quantumalgorithm]_ (1,053 qubits)—induces dense long-range entanglement beyond classical MPS reach.
+# -  **System size & environment**: 19 modes capture the active space of an isolated chromophore.
+#    Scaling to 50+ modes (~150–200+ qubits) to capture secondary vibrational couplings and environmental
+#    baths rapidly overwhelms 1D tensor networks with dense long-range entanglement, with full interfaces
+#    reaching hundreds of modes (such as the 246-mode, 1,053-qubit system in Motlagh et al. [#quantumalgorithm]_).
 # 
 # -  **Grid discretization**: Increasing resolution (:math:`n_q = 4`, 79 qubits) doubles the local
 #    Hilbert space, rapidly compounding entanglement per Trotter step.
@@ -393,9 +394,9 @@ def circuit():
 #      - **30–80 qubits (~19 modes)**
 #      - **Ultrafast (<= 100 fs)**
 #      - **Bond dimension growth**
-#    * - **Full Interface / Bulk**
+#    * - **Complex Systems / Bulk**
 #      - **Fault-Tolerant QPU**
-#      - **1,000+ qubits (>= 246 modes)**
+#      - **150 to 1,000+ qubits (50+ modes)**
 #      - **Long-time (ps+)**
 #      - **Physical gate depth / errors**
 # 
