@@ -385,17 +385,17 @@ def circuit():
 #      - Bottleneck
 #    * - **Exact Statevector**
 #      - Classical CPU/GPU
-#      - < 30 qubits (:math:`M \le 6`)
+#      - < 30 qubits (<= 6 modes)
 #      - Any
-#      - Memory (:math:`2^N`)
+#      - Memory (2^N)
 #    * - **Active-Space MPS**
 #      - **Maestro + PennyLane**
-#      - **30–80 qubits (:math:`M \approx 19`)**
-#      - **Ultrafast (:math:`\le 100\text{ fs}`)**
-#      - **Bond dimension (:math:`\chi \propto e^t`)**
+#      - **30–80 qubits (~19 modes)**
+#      - **Ultrafast (<= 100 fs)**
+#      - **Bond dimension growth**
 #    * - **Full Interface / Bulk**
 #      - **Fault-Tolerant QPU**
-#      - **1,000+ qubits (:math:`M \ge 246`)**
+#      - **1,000+ qubits (>= 246 modes)**
 #      - **Long-time (ps+)**
 #      - **Physical gate depth / errors**
 # 
