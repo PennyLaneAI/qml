@@ -197,9 +197,11 @@ dev_gpu = qp.device(
 #
 # .. note::
 #
-#     The simulation results shown below are precomputed — running the full 60-qubit circuit
-#     requires Maestro's MPS backend and takes several hours on GPU. The gate-counting code
-#     above executes live to verify the algorithm structure.
+#     The simulation results shown below are precomputed from dedicated benchmark runs — while
+#     Maestro's GPU backend completes the full 60-qubit simulation at :math:`\chi = 256` in just
+#     23 minutes (and under 10 minutes at :math:`\chi \le 64`), running on a CPU takes over 6 hours,
+#     exceeding standard documentation build limits. The circuit definition and gate-counting
+#     code above execute live to verify the algorithm structure.
 #
 
 n_steps = 10
