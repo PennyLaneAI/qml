@@ -29,7 +29,7 @@ r"""Simulating Singlet Fission Dynamics with GPU-Accelerated Tensor Networks
 # 1. The vibronic dynamics algorithm from [#quantumalgorithm]_ can be efficiently simulated at scale using MPS methods
 # 2. Bond dimension convergence analysis reveals the entanglement structure of the singlet fission
 #    process
-# 3. **GPU-accelerated MPS** delivers up to **6.2× speedup** over CPU at the bond dimensions required
+# 3. **GPU-accelerated MPS** delivers up to **16.3× speedup** over CPU at the bond dimensions required
 #    for converged physics
 # 
 # Along the way, we’ll see how PennyLane’s resource estimation tools can quantify the computational
@@ -204,6 +204,7 @@ dev_gpu = qp.device(
 
 n_steps = 10
 dt = 1.0
+sample_steps = set(range(1, n_steps + 1))
 state_projectors = [electronic_pop_observable(s) for s in range(5)]
 
 
@@ -212,35 +213,56 @@ def circuit():
     # Initialize in S₁ (singlet excited state)
     qp.PauliX(wires=2)
 
-    # Time evolution via second-order Trotter
-    for _ in range(n_steps):
+    # Time evolution via second-order Trotter with intermediate snapshots
+    for step in range(1, n_steps + 1):
         # Forward half-step: potential + coupling
         for _, coeff, pauli_word, wires in pot_coup_terms:
-            qp.PauliRot(coeff * dt, pauli_word, wires=wires)
+            if abs(coeff * dt) > 1e-8:
+                qp.PauliRot(coeff * dt, pauli_word, wires=wires)
 
         # Full kinetic step in momentum basis
         for mode_wires, ke_terms in kinetic_modes:
             qp.QFT(wires=mode_wires)
             qp.PauliX(wires=mode_wires[0])
             for coeff, pauli_word, wires in ke_terms:
-                qp.PauliRot(2 * coeff * dt, pauli_word, wires=wires)
+                if abs(2 * coeff * dt) > 1e-8:
+                    qp.PauliRot(2 * coeff * dt, pauli_word, wires=wires)
             qp.PauliX(wires=mode_wires[0])
             qp.adjoint(qp.QFT)(wires=mode_wires)
 
         # Backward half-step: potential + coupling (reversed)
         for _, coeff, pauli_word, wires in reversed(pot_coup_terms):
-            qp.PauliRot(coeff * dt, pauli_word, wires=wires)
+            if abs(coeff * dt) > 1e-8:
+                qp.PauliRot(coeff * dt, pauli_word, wires=wires)
+
+        # Capture intermediate populations without rebuilding circuits
+        if step in sample_steps:
+            for s, projector in enumerate(state_projectors):
+                qp.Snapshot(f"step_{step}_s{s}", measurement=qp.expval(projector))
 
     # Measure electronic state populations
     return [qp.expval(projector) for projector in state_projectors]
 
 ######################################################################
-# To execute the circuit on the Maestro MPS backend:
+# .. note::
+#
+#     **PennyLane Snapshot Acceleration**: In conventional simulation workflows, measuring dynamics
+#     at :math:`K` intermediate time points requires running :math:`K` separate circuits from :math:`t=0`,
+#     causing total gates to scale quadratically as :math:`\mathcal{O}(N^2)`. By embedding ``qp.Snapshot``
+#     inside the Trotter loop, ``pennylane-maestro`` automatically executes the evolution via Maestro's
+#     persistent-state simulation engine, keeping the MPS in memory and achieving true linear
+#     :math:`\mathcal{O}(N)` scaling.
+#
+# To execute all time points in a single pass on the Maestro MPS backend:
 #
 # .. code-block:: python
 #
-#     results = circuit()
-#     for label, pop in zip(["S₀", "S₁", "¹TT", "T₁T₁", "CS"], results):
+#     # Execute all time points via Maestro persistent evolution
+#     results = qp.snapshots(circuit)()
+#
+#     # Extract populations at final step (t = 10)
+#     final_pops = [results[f"step_{n_steps}_s{s}"] for s in range(5)]
+#     for label, pop in zip(["S₀", "S₁", "¹TT", "T₁T₁", "CS"], final_pops):
 #         print(f"{label}: {pop:.4f}")
 
 ######################################################################
@@ -262,18 +284,22 @@ def circuit():
 # 
 # The results tell a clear story:
 # 
-# ============ =================== ======================== ==========
+# ============ =================== ======================== ===================
 # :math:`\chi` :math:`S_1` (final) :math:`{}^1(TT)` (final) Converged?
-# ============ =================== ======================== ==========
-# 32           0.429               0.276                    ✗
-# 64           0.324               0.280                    ✗
-# 128          0.299               0.268                    ~
-# 256          0.289               0.263                    ✓
-# ============ =================== ======================== ==========
+# ============ =================== ======================== ===================
+# 32           0.502               0.289                    ✗
+# 64           0.388               0.288                    ✗
+# 128          0.325               0.278                    ~
+# 256          0.299               0.266                    :math:`t \le 4`
+# ============ =================== ======================== ===================
 # 
-# At :math:`\chi = 32`, the :math:`S_1` population is **50% higher** than the converged value — a
-# qualitatively wrong picture of the singlet fission dynamics. The populations only stabilize at
-# :math:`\chi \geq 128`, with the :math:`\chi = 128 \to 256` change dropping below 0.01.
+# At :math:`\chi = 32`, the :math:`S_1` population is **~68% higher** than the :math:`\chi=256` value — a
+# qualitatively wrong picture of the singlet fission dynamics. With :math:`\chi = 256`, the dynamics
+# are strictly converged for the initial fission event (:math:`t \le 4` a.u., where differences from
+# :math:`\chi=128` remain :math:`< 0.002`). At later times (:math:`t > 6` a.u.), ongoing entanglement
+# growth leaves a modest residual drift (:math:`\Delta S_1 \approx 0.026` between :math:`\chi=128` and
+# :math:`\chi=256`), providing qualitative stability while highlighting where tensor networks begin to
+# encounter the entanglement barrier.
 # 
 # This makes physical sense: the vibronic coupling tensors :math:`\kappa_m` have off-diagonal elements
 # that entangle the electronic register with all 19 mode registers simultaneously. Combined with the
@@ -295,13 +321,11 @@ def circuit():
 # ============ ======== ======== =================
 # :math:`\chi` CPU Time GPU Time GPU Speedup
 # ============ ======== ======== =================
-# 32           19 min   1.0 h    0.3× (CPU faster)
-# 64           63 min   1.4 h    0.7×
-# 128          5.3 h    2.3 h    **2.3×**
-# 256          ~27 h\*  4.3 h    **6.2×**
+# 32           3.0 min  6.6 min  0.5× (CPU faster)
+# 64           13.6 min 9.3 min  **1.5×**
+# 128          1.1 h    13.8 min **4.8×**
+# 256          6.3 h    23.0 min **16.3×**
 # ============ ======== ======== =================
-# 
-# *\*CPU χ = 256 estimated from scaling trend (5.1× per doubling for χ ≥ 128).*
 # 
 # The hardware used for this experiment was based on standard VMs on Google Cloud:
 # 
@@ -311,18 +335,18 @@ def circuit():
 # .. figure:: ../_static/demonstration_assets/singlet_fission_tensor_networks/vibronic_cpu_vs_gpu.png
 #    :alt: CPU vs GPU comparison
 # 
-# *CPU vs GPU wall-clock time comparison across bond dimensions. GPU becomes faster at χ ≥ 128,
-# reaching 6.2× speedup at χ = 256.*
+# *CPU vs GPU wall-clock time comparison across bond dimensions. GPU becomes faster already at χ = 64,
+# reaching 16.3× speedup at χ = 256.*
 # 
-# The crossover happens between :math:`\chi = 64` and :math:`\chi = 128`. Below that, CPU wins because
+# The crossover happens between :math:`\chi = 32` and :math:`\chi = 64`. Below that, CPU wins because
 # the tensor operations are too small to justify GPU overhead. Above it, GPU advantage grows rapidly:
 # 
 # -  **CPU scales ~5× per doubling** of :math:`\chi` (approaching the :math:`O(\chi^3)` theoretical
 #    cost)
-# -  **GPU scales ~2× per doubling** of :math:`\chi` (parallelism absorbs the cubic growth)
+# -  **GPU scales ~1.6× per doubling** of :math:`\chi` (parallelism absorbs the cubic growth)
 # 
-# At :math:`\chi = 256` — the bond dimension needed for converged physics — GPU turns a **~27-hour CPU
-# job into a 4-hour GPU run**. For research workflows where you need to iterate on parameters, run
+# At :math:`\chi = 256` — the bond dimension needed for converged physics — GPU turns a **6.3-hour CPU
+# job into a 23-minute GPU run** (**16.3× speedup**). For research workflows where you need to iterate on parameters, run
 # convergence studies, or explore different molecular systems, this speedup becomes essential.
 # 
 
@@ -330,7 +354,7 @@ def circuit():
 # Singlet fission dynamics
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# Putting it all together, the converged simulation (:math:`\chi = 256`) reveals the following
+# Putting it all together, the high-precision simulation (:math:`\chi = 256`) reveals the following
 # dynamics of singlet fission in the anthracene dimer:
 # 
 # .. figure:: ../_static/demonstration_assets/singlet_fission_tensor_networks/vibronic_gpu_populations.png
@@ -349,11 +373,11 @@ def circuit():
 #    charge-separated state :math:`CS` gradually accumulates population.
 # 
 # 3. **Quasi-equilibrium** (6–10 a.u.): The system approaches a quasi-steady state with
-#    :math:`S_1 \approx 0.29`, :math:`{}^1(TT) \approx 0.26`, and significant population in
+#    :math:`S_1 \approx 0.30`, :math:`{}^1(TT) \approx 0.27`, and significant population in
 #    :math:`CS \approx 0.22`.
 # 
-# The trace (sum of all populations) is preserved to better than :math:`\Sigma = 0.9995` throughout,
-# confirming the accuracy of the MPS simulation.
+# The trace (sum of all populations) is preserved to better than :math:`\Sigma = 0.9997` throughout
+# (reaching :math:`\Sigma = 0.9998` at :math:`t = 10`), confirming the accuracy of the MPS simulation.
 # 
 
 ######################################################################
@@ -364,9 +388,11 @@ def circuit():
 # networks face steep scaling limits. Quantum hardware becomes indispensable across three key frontiers:
 # 
 # -  **Simulation time**: Entanglement entropy grows linearly with time (:math:`S \propto t`), causing
-#    the required bond dimension to explode exponentially (:math:`\chi \propto e^{vt}`). MPS handles
-#    ultrafast dynamics (:math:`\le 100\text{ fs}`), but long-time dynamics (relaxation, transport)
-#    demand quantum computers, where circuit depth scales linearly (:math:`\mathcal{O}(t)`).
+#    the required bond dimension to explode exponentially (:math:`\chi \propto e^{vt}`). We observe this
+#    directly in our convergence data: while :math:`\chi = 256` strictly converges the initial fission event
+#    (:math:`t \le 4` a.u.), ongoing entanglement growth introduces residual drift at later times.
+#    Pushing to longer timescales (relaxation, transport) demands quantum computers, where circuit depth
+#    scales linearly (:math:`\mathcal{O}(t)`).
 # 
 # -  **System size & environment**: 19 modes capture the active space of an isolated chromophore.
 #    Scaling to 50+ modes (~150–200+ qubits) to capture secondary vibrational couplings and environmental
@@ -417,11 +443,12 @@ def circuit():
 #    exploration that would be impractical with exact statevector methods.
 # 
 # -  **Bond dimension matters.** The vibronic coupling structure of singlet fission generates enough
-#    entanglement to require :math:`\chi \geq 128` for converged results — low bond dimension gives
-#    qualitatively incorrect dynamics.
+#    entanglement to require :math:`\chi \geq 128` for qualitatively sound dynamics, with :math:`\chi = 256`
+#    achieving strict convergence for the initial fission transition (:math:`t \le 4` a.u.) — low bond
+#    dimension gives qualitatively incorrect dynamics.
 # 
 # -  **GPU acceleration is essential at high bond dimension.** At :math:`\chi = 256`, Maestro’s GPU
-#    backend delivers 6.2× speedup over CPU, reducing simulation time from ~27 hours to ~4 hours. The
+#    backend delivers 16.3× speedup over CPU, reducing simulation time from 6.3 hours to 23 minutes. The
 #    advantage grows with :math:`\chi`, making GPU-accelerated MPS the practical choice for
 #    production-quality tensor network simulations.
 # 
