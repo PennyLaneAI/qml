@@ -20,7 +20,9 @@ jobs:
   # Step 1: Prepare the build context
   prepare-build-context:
     if: github.event.workflow_run.conclusion == 'success'
-    runs-on: ubuntu-latest
+    runs-on:
+      group: 'PennyLaneAI-Static-IP-Runners'
+      labels: ['pl-2-core-gh-runner']
     steps:
       - name: Download Build Context
         uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
