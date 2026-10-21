@@ -7,8 +7,8 @@
   ],
   "executable_stable": true,
   "executable_latest": true,
-  "dateOfPublication": "2026-06-16T00:00:00+00:00",
-  "dateOfLastModification": "2026-06-17T00:00:00+00:00",
+  "dateOfPublication": "2026-10-22T00:00:00+00:00",
+  "dateOfLastModification": "2026-10-22T00:00:00+00:00",
   "categories": [
     "Algorithms",
     "How-to",
@@ -23,7 +23,11 @@
   "previewImages": [
     {
       "type": "thumbnail",
-      "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/thumbnail_placeholder.png"
+      "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-implementing-gqsp-in-pennylane-thumbnail.png"
+    },
+    {
+      "type": "thumbnail",
+      "uri": "/_static/demo_thumbnails/regular_demo_thumbnails/pennylane-demo-implementing-gqsp-in-pennylane-large-thumbnail.png"
     }
   ],
   "seoDescription": "Learn how to simulate exp(-iHt) by block-encoding H as a qubitization walk and applying a single Jacobi-Anger polynomial of that walk with qp.GQSP, then verify against scipy.linalg.expm.",
